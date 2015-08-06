@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="transactionInfoDomain" type="com.cy.dctms.common.domain.TransactionInfoDomain"/>
+	
+	
+	<resultMap class="transactionInfoDomain" id="transaction_info_domain_result">
+		<result property="id" column="ID"/>
+		<result property="orderNumber" column="order_number"/>
+		<result property="cargoId" column="cargo_id"/>
+		<result property="driverId" column="driver_id"/>
+		<result property="deployUserid" column="deploy_userid"/>
+		<result property="companyId" column="company_id"/>
+		<result property="tradeFair" column="trade_fair"/>
+		<result property="tradeStart" column="trade_start"/>
+		<result property="tradeStartTime" column="trade_start_time"/>
+		<result property="orderStart" column="order_start"/>
+		<result property="remark" column="remark"/>
+		<result property="tradeCancelOrigin" column="trade_cancel_origin"/>
+		<result property="createTime" column="create_time" />
+		<result property="modifyTime" column="modify_time" />
+		<result property="cargoName" column="cargo_name"/>
+		<result property="driverCode" column="driver_code"/>
+		<result property="driverName" column="driver_name"/>
+		<result property="userCode" column="user_code"/>
+		<result property="userName" column="user_name"/>
+		<result property="companyName" column="company_name"/>
+		<result property="requestEndTime" column="request_end_time"/>
+	</resultMap>
+	
+	<select id="query_transaction_info_count"  resultClass="Integer">
+		select count(t.id)
+		  from t_transaction_info t,
+			   t_driver_user_info t1,
+			   t_web_user_info t2,
+			   t_order_cargo_info t4,
+			   t_company_info t5
+			where
+				t.deploy_userid = t2.id
+			and t.driver_id = t1.id
+			and t.cargo_id = t4.id 
+			and t.company_id = t5.id
+		  
+		   <isNotEmpty prepend="and" property="orderNumber">   
+                t.order_number like concat('%', #orderNumber# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="cargoId">   
+                t.cargo_id = #cargoId#   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="driverId">   
+                t.driver_id = #driverId# 
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="userId">   
+                t.deploy_userid = #deployUserid#  
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="companyId">   
+                t.company_id like concat('%', #companyId# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="tradeFair">   
+                t.trade_fair like concat('%', #tradeFair# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="tradeStart">   
+                t.trade_start like concat('%', #tradeStart# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="tradeStartTime">   
+                t.trade_start_time like concat('%', #tradeStartTime# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="orderStart">   
+                t.order_start like concat('%', #orderStart# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="remark">   
+                t.remark like concat('%', #remark# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="tradeCancelOrigin">   
+                t.trade_cancel_origin like concat('%', #tradeCancelOrigin# ,'%')   
+         </isNotEmpty>		
+          <isNotEmpty prepend="and" property="cargoName">   
+                t4.cargo_name like concat('%', #cargoName# ,'%')   
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="driverCode">   
+                t1.code = #driverCode# 
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="driverName">   
+                t1.name like concat('%', #driverName# ,'%')   
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="userCode">   
+                t2.code = #userCode#   
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="userName">   
+                t2.name like concat('%', #userName# ,'%')   
+         </isNotEmpty>
+         <isNotEmpty prepend="and" property="queryTimeQ">   
+                <![CDATA[t.create_time >= #queryTimeQ#  ]]>   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="queryTimeZ">   
+                <![CDATA[t.create_time <= date_sub(#queryTimeZ#,interval -1 day) ]]> 
+         </isNotEmpty>	
+	</select>
+	
+	<select id="query_transaction_info_by_page" parameterClass="java.util.Map" resultMap="transaction_info_domain_result">
+		select t.id,
+		       t.order_number,
+		       t.cargo_id,
+		       t.driver_id,
+		       t.deploy_userid,
+		       t.company_id,
+		       t.trade_fair,
+		       t.trade_start,
+		       t.trade_start_time,
+		       t.order_start,
+		       t.remark,
+		       t.trade_cancel_origin,
+		       t.create_time,
+		       t.modify_time,
+		       t4.cargo_name,
+		       t4.request_end_time,
+		       t5.company_name,
+				t1. code as driver_code,
+				t1. name as driver_name,
+				t2. code as user_code,
+				t2. name as user_name
+		  from t_transaction_info t,
+			   t_driver_user_info t1,
+			   t_web_user_info t2,
+			   t_order_cargo_info t4,
+			   t_company_info t5
+			where
+				t.deploy_userid = t2.id
+			and t.driver_id = t1.id
+			and t.cargo_id = t4.id 
+			and t.company_id = t5.id
+		  
+		     <isNotEmpty prepend="and" property="orderNumber">   
+                t.order_number like concat('%', #orderNumber# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="cargoId">   
+                t.cargo_id = #cargoId#   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="driverId">   
+                t.driver_id = #driverId# 
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="userId">   
+                t.deploy_userid = #deployUserid#  
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="companyId">   
+                t.company_id like concat('%', #companyId# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="tradeFair">   
+                t.trade_fair like concat('%', #tradeFair# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="tradeStart">   
+                t.trade_start like concat('%', #tradeStart# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="tradeStartTime">   
+                t.trade_start_time like concat('%', #tradeStartTime# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="orderStart">   
+                t.order_start like concat('%', #orderStart# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="remark">   
+                t.remark like concat('%', #remark# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="tradeCancelOrigin">   
+                t.trade_cancel_origin like concat('%', #tradeCancelOrigin# ,'%')   
+         </isNotEmpty>		
+          <isNotEmpty prepend="and" property="cargoName">   
+                t4.cargo_name like concat('%', #cargoName# ,'%')   
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="driverCode">   
+                t1.code = #driverCode# 
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="driverName">   
+                t1.name like concat('%', #driverName# ,'%')   
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="userCode">   
+                t2.code = #userCode#   
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="userName">   
+                t2.name like concat('%', #userName# ,'%')   
+         </isNotEmpty>
+         <isNotEmpty prepend="and" property="queryTimeQ">   
+                <![CDATA[t.create_time >= #queryTimeQ#  ]]>   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="queryTimeZ">   
+                <![CDATA[t.create_time <= date_sub(#queryTimeZ#,interval -1 day) ]]> 
+         </isNotEmpty>	
+         
+         order by t.id desc
+         
+		  limit  #start#,#pageSize#
+	</select>
+	
+	<select id="export_transaction_info" parameterClass="java.util.Map" resultMap="transaction_info_domain_result">
+		select t.id,
+		       t.order_number,
+		       t.cargo_id,
+		       t.driver_id,
+		       t.deploy_userid,
+		       t.company_id,
+		       t.trade_fair,
+		       t.trade_start,
+		       t.trade_start_time,
+		       t.order_start,
+		       t.remark,
+		       t.trade_cancel_origin,
+		       t.create_time,
+		       t.modify_time,
+		       t4.cargo_name,
+		       t4.request_end_time,
+		       t5.company_name,
+				t1. code as driver_code,
+				t1. name as driver_name,
+				t2. code as user_code,
+				t2. name as user_name
+		  from t_transaction_info t,
+			   t_driver_user_info t1,
+			   t_web_user_info t2,
+			   t_order_cargo_info t4,
+			   t_company_info t5
+			where
+				t.deploy_userid = t2.id
+			and t.driver_id = t1.id
+			and t.cargo_id = t4.id 
+			and t.company_id = t5.id
+		  
+		    <isNotEmpty prepend="and" property="orderNumber">   
+                t.order_number like concat('%', #orderNumber# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="cargoId">   
+                t.cargo_id = #cargoId#   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="driverId">   
+                t.driver_id = #driverId# 
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="userId">   
+                t.deploy_userid = #deployUserid#  
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="companyId">   
+                t.company_id like concat('%', #companyId# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="tradeFair">   
+                t.trade_fair like concat('%', #tradeFair# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="tradeStart">   
+                t.trade_start like concat('%', #tradeStart# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="tradeStartTime">   
+                t.trade_start_time like concat('%', #tradeStartTime# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="orderStart">   
+                t.order_start like concat('%', #orderStart# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="remark">   
+                t.remark like concat('%', #remark# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="tradeCancelOrigin">   
+                t.trade_cancel_origin like concat('%', #tradeCancelOrigin# ,'%')   
+         </isNotEmpty>		
+          <isNotEmpty prepend="and" property="cargoName">   
+                t4.cargo_name like concat('%', #cargoName# ,'%')   
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="driverCode">   
+                t1.code = #driverCode# 
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="driverName">   
+                t1.name like concat('%', #driverName# ,'%')   
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="userCode">   
+                t2.code = #userCode#   
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="userName">   
+                t2.name like concat('%', #userName# ,'%')   
+         </isNotEmpty>
+         <isNotEmpty prepend="and" property="queryTimeQ">   
+                <![CDATA[t.create_time >= #queryTimeQ#  ]]>   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="queryTimeZ">   
+                <![CDATA[t.create_time <= date_sub(#queryTimeZ#,interval -1 day) ]]> 
+         </isNotEmpty>	
+         order by t.id desc
+	</select>
+	
+	<select id="query_transaction_info_by_id" parameterClass="String" resultMap="transaction_info_domain_result">
+		select t.id,
+		       t.order_number,
+		       t.cargo_id,
+		       t.driver_id,
+		       t.deploy_userid,
+		       t.company_id,
+		       t.trade_fair,
+		       t.trade_start,
+		       t.trade_start_time,
+		       t.order_start,
+		       t.remark,
+		       t.trade_cancel_origin,
+		       t.create_time,
+		       t.modify_time,
+		       t4.cargo_name,
+		       t4.request_end_time,
+		       t5.company_name,
+				t1. code as driver_code,
+				t1. name as driver_name,
+				t2. code as user_code,
+				t2. name as user_name
+		  from t_transaction_info t,
+			   t_driver_user_info t1,
+			   t_web_user_info t2,
+			   t_order_cargo_info t4,
+			   t_company_info t5
+			where
+				t.deploy_userid = t2.id
+			and t.driver_id = t1.id
+			and t.cargo_id = t4.id 
+			and t.company_id = t5.id
+		  where id = #id# 
+	</select>
+	
+	<!-- 保存司机评论信息 -->
+	<update id="modify_transaction_info" parameterClass="com.cy.dctms.common.bo.TransactionInfo">
+		update t_transaction_info t
+		   set 
+		   	t.order_number = #orderNumber#,
+		   	t.cargo_id = #cargoId#,
+		   	t.driver_id = #driverId#,
+		   	t.deploy_userid = #deployUserid#,
+		   	t.company_id = #companyId#,
+		   	t.trade_fair = #tradeFair#,
+		   	t.trade_start = #tradeStart#,
+		   	t.trade_start_time = #tradeStartTime#,
+		   	t.order_start = #orderStart#,
+		   	t.remark = #remark#,
+		   	t.trade_cancel_origin = #tradeCancelOrigin#,
+			t.modify_time = now()
+		 where t.id = #id#
+	</update>	
+	
+	<update id="delete_transaction_info_by_id" parameterClass="String">
+		update t_transaction_info t
+		   set
+		   	t.delete_flag = 1,
+			t.modify_time = now()
+		 where t.id = #id#
+	</update>
+	
+</sqlMap>

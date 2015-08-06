@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cy.dctms.entity.DriverUserInfoDomain">
+
+    <resultMap type="com.cy.dctms.entity.DriverUserInfoDomain" id="DriverUserInfoDomain">
+		<result property="id" column="ID"/>
+		<result property="name" column="NAME"/>
+		<result property="telephone" column="TELEPHONE"/>
+		<result property="carNumber" column="CAR_NUMBER"/>
+		<result property="carTypes" column="CAR_TYPES"/>
+	</resultMap>
+	
+	<select id="iBatisSelectDriverUserInfo" parameterType="java.util.Map" resultMap="DriverUserInfoDomain">
+		SELECT
+			t1.ID,t1.`NAME`,t1.TELEPHONE,t1.CAR_NUMBER,t1.CAR_TYPES
+		FROM
+			t_driver_line_info t2
+		LEFT JOIN t_driver_user_info t1 ON t1.ID = t2.DRIVER_ID
+		where t2.START_PROVINCE = #{startProvince} and t2.START_CITY = #{startCity}
+			and t2.END_PROVINCE = #{endProvince} and t2.END_CITY = #{endCity}
+			and t2.`START` = 0 and t1.DELETE_FLAG = 0 and t1.FREEZE_FLAG = 0
+		union
+		SELECT
+			t4.ID,t4.`NAME`,t4.TELEPHONE,t4.CAR_NUMBER,t4.CAR_TYPES
+		FROM
+			t_driver_business_line_info t3 
+		LEFT JOIN t_driver_user_info t4 ON t4.ID = t3.DRIVER_ID
+		where t3.START_PROVINCE = #{startProvince} and t3.START_CITY = #{startCity}
+			and t3.END_PROVINCE = #{endProvince} and t3.END_CITY = #{endCity}
+			and t3.`START` = 0 and t4.DELETE_FLAG = 0 and t4.FREEZE_FLAG = 0
+	</select>
+</mapper>

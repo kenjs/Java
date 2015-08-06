@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/Project/!svn/ver/10915/exchange/branches/exchange-contractV2.2.1/src/tf56/exchange/services
+END
+InvoiceDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/Project/!svn/ver/10734/exchange/branches/exchange-contractV2.2.1/src/tf56/exchange/services/InvoiceDao.java
+END
+BillService.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/Project/!svn/ver/10734/exchange/branches/exchange-contractV2.2.1/src/tf56/exchange/services/BillService.java
+END
+ToPartyDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/Project/!svn/ver/10734/exchange/branches/exchange-contractV2.2.1/src/tf56/exchange/services/ToPartyDao.java
+END
+InternalWriteScoreDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svn/Project/!svn/ver/10734/exchange/branches/exchange-contractV2.2.1/src/tf56/exchange/services/InternalWriteScoreDao.java
+END
+CarDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/Project/!svn/ver/10734/exchange/branches/exchange-contractV2.2.1/src/tf56/exchange/services/CarDao.java
+END
+LogisticsCommunityDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svn/Project/!svn/ver/10734/exchange/branches/exchange-contractV2.2.1/src/tf56/exchange/services/LogisticsCommunityDao.java
+END
+MesInterfaceDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/Project/!svn/ver/10734/exchange/branches/exchange-contractV2.2.1/src/tf56/exchange/services/MesInterfaceDao.java
+END
+ElectronichubDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/Project/!svn/ver/10734/exchange/branches/exchange-contractV2.2.1/src/tf56/exchange/services/ElectronichubDao.java
+END
+MjDriverPreferenService.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/Project/!svn/ver/10734/exchange/branches/exchange-contractV2.2.1/src/tf56/exchange/services/MjDriverPreferenService.java
+END
+AccountService.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/Project/!svn/ver/10734/exchange/branches/exchange-contractV2.2.1/src/tf56/exchange/services/AccountService.java
+END
+ContractService.java
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/Project/!svn/ver/10954/exchange/branches/exchange-contractV2.2.1/src/tf56/exchange/services/ContractService.java
+END

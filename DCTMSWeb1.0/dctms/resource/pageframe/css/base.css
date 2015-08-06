@@ -1,0 +1,96 @@
+@charset "gb2312";
+/* CSS Document */
+
+/*css reset*/
+html,body {color:#000; background:#fff;}
+body,h1,h2,h3,h4,h5,h6,hr,p,blockquote,dl,dt,dd,ul,ol,li,pre,form,fieldset,legend,button,input {margin:0; padding:0;}
+body,button,input,select,textarea,li,dt,dd,td,p,span {font:12px/1.5 SimSun,tahoma,arial,SimSun;}
+h1,h2,h3,h4,h5,h6 {font-size:100%; font-weight:normal;}
+address,cite,dfn,em,var {font-style:normal;}
+code,kbd,pre,samp {font-family:courier new,courier,monospace;}
+ul,ol {list-style:none outside none;}
+a:link,a:visited {color:#000; text-decoration:none;}
+a:hover,a:active {color:#000; text-decoration:none;}
+legend {color:#333;}
+fieldset,img {border:none;}
+button,input,select,textarea {font-size:12px; margin:0; outline:0 none; padding:0; vertical-align:middle;}
+button {cursor:pointer;}
+table {border-collapse:collapse; border-spacing:0;}
+/*黄色字体*/
+.font_yellow {color:#ffff00;}
+/*红色字体*/
+.font_red {color:#ff0000;}
+/*黑色字体*/
+.font_black {color:#000;}
+/*蓝色字体*/
+.font_blue {color:#0000ff;}
+
+/*14号字体*/
+.font_14 {font-size:14px;}
+
+/*鼠标指针为手型*/
+.pointer {cursor:pointer;}
+
+/*日期框*/
+.ymdate {width:80px; height:20px; line-height:20px; padding-left:2px; border:1px solid #999; background:url(../images/datePicker.gif) no-repeat right #fff; cursor:pointer;}
+.ymonth,.year,.month,.time {width:80px; height:20px; line-height:20px; padding-left:2px; border:1px solid #999;background:url(../images/datePicker.gif) no-repeat right #fff; cursor:pointer;}
+.ymdatetime {width:185px; height:20px; line-height:20px; padding-left:2px; border:1px solid #999; background:url(../images/datePicker.gif) no-repeat right #fff; cursor:pointer;}
+
+/*链接文字蓝色*/
+a.font_blue {color:#0000ff; text-decoration:none;}
+a.font_blue:hover {color:#0000ff; text-decoration:none;}
+
+
+/*控件相关样式*/
+.select {width:100%;}
+.select_long {width:95%;}
+.selects {width:230px;}
+.input {width:100%;}
+.inputs {width:95%;}
+.textarea {width:100%;}
+.noborder {border:0px;}
+
+/*input框内容右对齐*/
+.inputright {text-align:right;}
+.inputcenter {text-align:center;}
+
+/*去除select框线*/
+.movesborder {border:0; display:block; position:absolute; overflow:hidden;}
+.movesborder select {margin:-2px;}
+
+/*输入框背景色*/
+.bgstyle_required {background-color:#fff;} /*必需录入项*/
+.bgstyle_readonly {background-color:#efefef;} /*只读项*/
+.bgstyle_optional {background-color:#fff;} /*可选录入项*/
+/*下划线输入框*/
+.bbottom {border:0px; border-bottom:1px solid #000;}
+
+/*表格标题*/
+.tab_title {padding:8px 0px 0px 0px; font-size:18px; font-weight:bold; text-align:center;} /*居中表格标题*/
+.tab_ltitle {padding-top:8px; display:block;} /*居左表格小标题*/
+
+/*表格外面大框线*/
+.b_tbborder {width:649px; margin:5px auto; padding:5px; border:2px solid #229dd1;}
+
+/*表格里嵌套表格去边框*/
+.tab_noborder td {border:0;}
+
+/*table边框线去除*/
+
+
+/*按钮相关样式*/
+
+/*表格相关样式*/
+
+
+.ui-icon-newwin {width:16px; height:16px; background:url(../images/ui-icons_excel.jpg) !important;}
+/*奇偶行背景色*/
+.ui-row-ltr {background:#F3FFFA;}
+.ui-priority-secondary {background:#E3FDF9;}
+
+/* 打印 */
+@media print {
+	body, #main, #container { color: #000 !important; }/*所有打印信息去除颜色信息，保留黑色*/
+	a, a:link, a:visited { color: #000 !important; text-decoration:none !important;}/*链接在打印过程中消除下划线并置为黑色*/
+	 .noprint, .hide { display: none !important; }/*定义不被打印的样式*/
+}

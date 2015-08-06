@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.hygl.dao.JsKpsqMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectJsKpsqByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.JsKpsqDomain">
+		select a.KPSQ_DJXH as kpsqDjxh,a.KPSQFS_DM as kpsqfsDm,
+	    a.KH_DJXH as khDjxh,
+	    (SELECT KH.KHMC FROM QY_KH_DJXX KH WHERE KH.KH_DJXH = a.KH_DJXH) khMc,
+	    a.SQ_KPJE_HJ as sqKpjeHj,a.SQ_KPRQ as sqKprq,
+	    a.BZSM as bzsm,
+	    a.DJR_CZY_DJXH as djrCzyDjxh,
+	    (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=a.DJR_CZY_DJXH) cjrMc,
+	    a.DJRQ as djrq,
+	    a.DJ_JGBM as djJgbm,
+	    (SELECT JG.JC FROM QY_ZZJG JG WHERE JG.JGBM= a.DJ_JGBM) bmMc, 
+	    a.SS_JGBM as ssJgbm,
+	    (SELECT JG.JC FROM QY_ZZJG JG WHERE JG.JGBM = a.SS_JGBM) dwMc,
+	    a.YXBZ as yxbz,a.SPBZ as spbz,a.WSSPZT_DM as wsspztDm,a.WS_SPXH as wsSpxh,a.YKP_QDHX as ykpQdhx,
+	    a.KPDW_JGBM as kpDwJgbm,
+	    a.FPKJBZ as fpkjbz,a.FPKJJE as fpkjJe,a.shf AS shf,a.shf_sbh AS shfSbh,
+	    a.fhf AS fhf,a.fhf_sbh AS fhfSbh,a.ydrq AS ydrq,a.dj AS dj,a.sl AS sl,a.mc AS mc,a.dkf AS dkf,
+	    a.KPDW_JGMC as kpDwJgMc 
+	    from JS_KPSQ a  where a.KPSQ_DJXH=#kpsqDjxh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertJsKpsq"  parameterClass="com.cy.common.bo.JsKpsq">
+		insert into JS_KPSQ(KPSQ_DJXH,KPSQFS_DM,KH_DJXH,SQ_KPJE_HJ,SQ_KPRQ,
+		BZSM,DJR_CZY_DJXH,DJRQ,DJ_JGBM,SS_JGBM,
+		YXBZ,SPBZ,WSSPZT_DM,WS_SPXH,YKP_QDHX,
+		KPDW_JGBM,FPKJBZ,FPKJJE,SHF,SHF_SBH,FHF,FHF_SBH,YDRQ,DJ,MC,SL,DKF,KPDW_JGMC)
+		values(#kpsqDjxh:NUMERIC#,#kpsqfsDm:NUMERIC#,#khDjxh:NUMERIC#,#sqKpjeHj:NUMERIC#,to_date(#sqKprq:DATE#,'yyyy-MM-dd'),
+		#bzsm:VARCHAR#,#djrCzyDjxh:NUMERIC#,to_date(#djrq:DATE#,'yyyy-MM-dd'),#djJgbm:NUMERIC#,#ssJgbm:NUMERIC#,
+		#yxbz:VARCHAR#,#spbz:VARCHAR#,#wsspztDm:NUMERIC#,#wsSpxh:NUMERIC#,#ykpQdhx:VARCHAR#,
+		#kpDwJgbm:NUMERIC#,#fpkjbz:VARCHAR#,#fpkjJe:NUMERIC#,#shf:VARCHAR#,#shfSbh:VARCHAR#,#fhf:VARCHAR#,#fhfSbh:VARCHAR#,
+		to_date(#ydrq:DATE#,'yyyy-MM-dd'),#dj:NUMERIC#,#mc:VARCHAR#,#sl:NUMERIC#,#dkf:VARCHAR#,#kpDwJgMc:VARCHAR#)
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateJsKpsqByKey" parameterClass="com.cy.common.bo.JsKpsq">
+        update JS_KPSQ set KPSQ_DJXH=#kpsqDjxh#,KPSQFS_DM=#kpsqfsDm#,KH_DJXH=#khDjxh#,SQ_KPJE_HJ=#sqKpjeHj#,SQ_KPRQ=to_date(#sqKprq#, 'YYYY-MM-DD'),
+		BZSM=#bzsm#,DJR_CZY_DJXH=#djrCzyDjxh#,DJRQ=to_date(#djrq#, 'YYYY-MM-DD'),DJ_JGBM=#djJgbm#,SS_JGBM=#ssJgbm#,
+		YXBZ=#yxbz#,SPBZ=#spbz#,WSSPZT_DM=#wsspztDm#,WS_SPXH=#wsSpxh#,YKP_QDHX=#ykpQdhx#,
+		KPDW_JGBM=#kpDwJgbm#,FPKJBZ=#fpkjbz#,FPKJJE=#fpkjJe#,SHF=#shf#,SHF_SBH=#shfSbh#,FHF=#fhf#,FHF_SBH=#fhfSbh#,
+		YDRQ=to_date(#ydrq#, 'YYYY-MM-DD'),DJ=#dj#,MC=#mc#,SL=#sl#,DKF=#dkf#,KPDW_JGMC=#kpDwJgMc# where KPSQ_DJXH=#kpsqDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteJsKpsqByKey" parameterClass="java.util.Map">
+		update JS_KPSQ set yxbz='N' where KPSQ_DJXH=#kpsqDjxh#
+    </delete>
+    
+    <!--根据主键取DOMAIN-->
+	<select id="selectJsKpsqMxByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.JsKpsqDomain">
+		select a.KPSQMX_DJXH as kpsqmxDjxh,a.KPSQ_DJXH as kpsqDjxh,a.KPSQ_MXFL_DM as kpsqMxflDm,
+		a.YW_DJXH as qdDjxh,a.SQ_KPJE as sqKpje,a.BZSM as bzsm, 
+		b.QDMC as qdmc,b.HE_JE as heJe,b.YSQ_KPJE as ysqKpJe,b.WSQ_KPJE as wsqKpJe 
+		from JS_KPSQ_MX a,JS_SRDZ_QD b 
+		where a.YW_DJXH=b.QD_DJXH 
+		and a.yxbz='Y'
+		and a.KPSQMX_DJXH=#kpsqmxDjxh# 
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertJsKpsqMx"  parameterClass="com.cy.common.bo.JsKpsqMx">
+		<selectKey keyProperty="kpsqmxDjxh" resultClass="string" type="pre"> 
+			select SEQ_KPSQMX_DJXH.nextval as kpsqmxDjxh from dual 
+		</selectKey> 
+		insert into JS_KPSQ_MX(KPSQMX_DJXH,KPSQ_DJXH,KPSQ_MXFL_DM,YW_DJXH,SQ_KPJE,
+		BZSM,YXBZ)
+		values(#kpsqmxDjxh:NUMERIC#,#kpsqDjxh:NUMERIC#,#kpsqMxflDm:NUMERIC#,#ywDjxh:NUMERIC#,#sqKpje:NUMERIC#,
+		#bzsm:VARCHAR#,#yxbz:VARCHAR#)
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateJsKpsqMxByKey" parameterClass="com.cy.common.bo.JsKpsqMx">
+        update JS_KPSQ_MX set KPSQMX_DJXH=#kpsqmxDjxh#,KPSQ_DJXH=#kpsqDjxh#,KPSQ_MXFL_DM=#kpsqMxflDm#,YW_DJXH=#ywDjxh#,SQ_KPJE=#sqKpje#,
+		BZSM=#bzsm#,YXBZ=#yxbz# where KPSQMX_DJXH=#kpsqmxDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：软删除-->
+	<delete id="deleteJsKpsqMxByKey" parameterClass="java.util.Map">
+		update JS_KPSQ_MX set yxbz='N' where KPSQMX_DJXH=#kpsqmxDjxh#
+    </delete>
+    <select id="selectJsKpsqMxByXh" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.JsKpsqDomain">
+		select a.KPSQMX_DJXH as kpsqmxDjxh,a.KPSQ_DJXH as kpsqDjxh,a.KPSQ_MXFL_DM as kpsqMxflDm,a.YW_DJXH as qdDjxh,a.SQ_KPJE as sqKpje
+		from JS_KPSQ_MX a
+		where a.YW_DJXH=#qdDjxh# 
+		and a.yxbz='Y'
+		and a.KPSQ_DJXH=#kpsqDjxh# 
+    </select>
+    
+    <!--根据主键取DOMAIN-->
+	<select id="selectJsKpsqMxTempByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.JsKpsqDomain">
+		select a.KPSQMX_DJXH as kpsqmxDjxh,a.KPSQ_DJXH as kpsqDjxh,a.KPSQ_MXFL_DM as kpsqMxflDm,
+		a.YW_DJXH as qdDjxh,a.SQ_KPJE as sqKpje,a.BZSM as bzsm, 
+		b.QDMC as qdmc,b.HE_JE as heJe,b.YSQ_KPJE as ysqKpJe,b.WSQ_KPJE as wsqKpJe 
+		from JS_KPSQ_MX_TEMP a,JS_SRDZ_QD b 
+		where a.YW_DJXH=b.QD_DJXH 
+		and a.yxbz='Y'
+		and a.KPSQMX_DJXH=#kpsqmxDjxh# 
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertJsKpsqMxTemp"  parameterClass="com.cy.common.bo.JsKpsqMx">
+		<selectKey keyProperty="kpsqmxDjxh" resultClass="string" type="pre"> 
+			select SEQ_KPSQMX_DJXH.nextval as kpsqmxDjxh from dual 
+		</selectKey> 
+		insert into JS_KPSQ_MX_TEMP(KPSQMX_DJXH,KPSQ_DJXH,KPSQ_MXFL_DM,YW_DJXH,SQ_KPJE,
+		BZSM,YXBZ,CZRQ)
+		values(#kpsqmxDjxh:NUMERIC#,#kpsqDjxh:NUMERIC#,#kpsqMxflDm:NUMERIC#,#ywDjxh:NUMERIC#,#sqKpje:NUMERIC#,
+		#bzsm:VARCHAR#,#yxbz:VARCHAR#,to_date(#czrq:DATE#,'yyyy-MM-dd'))
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateJsKpsqMxTempByKey" parameterClass="com.cy.common.bo.JsKpsqMx">
+        update JS_KPSQ_MX_TEMP set KPSQMX_DJXH=#kpsqmxDjxh#,KPSQ_DJXH=#kpsqDjxh#,KPSQ_MXFL_DM=#kpsqMxflDm#,YW_DJXH=#ywDjxh#,SQ_KPJE=#sqKpje#,
+		BZSM=#bzsm#,YXBZ=#yxbz#,CZRQ=to_date(#czrq#, 'YYYY-MM-DD') where KPSQMX_DJXH=#kpsqmxDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：软删除-->
+	<delete id="deleteJsKpsqMxTempByKey" parameterClass="java.util.Map">
+		update JS_KPSQ_MX_TEMP set yxbz='N' where KPSQMX_DJXH=#kpsqmxDjxh#
+    </delete>
+    
+    <insert id="insertJsKpsqMxByTemp"  parameterClass="java.util.Map">
+		insert into JS_KPSQ_MX(KPSQMX_DJXH,KPSQ_DJXH,KPSQ_MXFL_DM,YW_DJXH,SQ_KPJE,BZSM,YXBZ)
+		SELECT TEM.KPSQMX_DJXH,TEM.KPSQ_DJXH,TEM.KPSQ_MXFL_DM,TEM.YW_DJXH, TEM.SQ_KPJE,TEM.BZSM,TEM.YXBZ
+		FROM JS_KPSQ_MX_TEMP TEM
+		WHERE TEM.KPSQ_DJXH=#kpsqDjxh#
+		AND TEM.YXBZ='Y'
+	</insert>
+	
+	<delete id="deleteJsKpsqMxTemp" parameterClass="java.util.Map">
+		delete from JS_KPSQ_MX_TEMP where KPSQ_DJXH=#kpsqDjxh#
+    </delete>
+    
+    <select id="selectJsKpsqMxTempByXh" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.JsKpsqDomain">
+		select a.KPSQMX_DJXH as kpsqmxDjxh,a.KPSQ_DJXH as kpsqDjxh,a.KPSQ_MXFL_DM as kpsqMxflDm,a.YW_DJXH as qdDjxh,a.SQ_KPJE as sqKpje
+		from JS_KPSQ_MX_TEMP a
+		where a.YW_DJXH=#qdDjxh# 
+		and a.yxbz='Y'
+		and a.KPSQ_DJXH=#kpsqDjxh# 
+    </select>
+	
+</sqlMap>

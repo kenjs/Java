@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+  <typeAlias alias="PactDriverInfo" type="com.cy.dcts.common.bo.PactDriverInfo"/><!-- 企业合同车源信息 -->
+  <typeAlias alias="PactDriverInfoDomain" type="com.cy.dcts.common.domain.PactDriverInfoDomain"/>
+  <resultMap class="PactDriverInfo" id="pact_driver_info_result">
+    <result property="id" column="ID"/>
+    <result property="driverId" column="DRIVER_ID"/>
+    <result property="userId" column="USER_ID"/>
+    <result property="pactStartTime" column="PACT_START_TIME"/>
+    <result property="pactEndTime" column="PACT_END_TIME"/>
+    <result property="createTime" column="CREATE_TIME"/>
+    <result property="modifyTime" column="MODIFY_TIME"/>
+    <result property="deletedFlag" column="DELETED_FLAG"/>
+    <result property="pactValidDay" column="PACT_VALID_DAY"/>
+  </resultMap>
+  
+  <resultMap class="PactDriverInfoDomain" id="pact_driver_info_domain_result">
+    <result property="id" column="ID"/>
+    <result property="driverId" column="DRIVER_ID"/>
+    <result property="userId" column="USER_ID"/>
+    <result property="pactStartTime" column="PACT_START_TIME"/>
+    <result property="pactEndTime" column="PACT_END_TIME"/>
+    <result property="createTime" column="CREATE_TIME"/>
+    <result property="modifyTime" column="MODIFY_TIME"/>
+    <result property="deletedFlag" column="DELETED_FLAG"/>
+    <result property="pactValidDay" column="PACT_VALID_DAY"/>
+    
+    <result property="code" column="code"/>
+    <result property="name" column="name"/>
+    <result property="carNumber" column="car_number"/>
+    <result property="carTypes" column="car_types"/>
+    <result property="lastLocation" column="lastLocation"/>
+    <result property="driverLine" column="driverLine"/>
+  </resultMap>
+  
+  <!-- 查询合同司机信息——不分页 -->
+  <select id="query_pact_driver_info" parameterClass="Map" resultMap="pact_driver_info_domain_result">
+  SELECT t.id,
+   t.driver_id,
+   t.user_id,
+   date_format(t.pact_start_time,'%Y-%c-%d') pact_start_time,
+   date_format(t.pact_end_time,'%Y-%c-%d') pact_end_time,
+   t.create_time,
+   t.modify_time,
+   t.deleted_flag,
+   t.pact_valid_day,
+   d.code,
+   d.name,
+   d.car_number,
+   d.car_types,
+   (SELECT GROUP_CONCAT(CONCAT(REPLACE(start_province,'全部',''),REPLACE(start_city,'全部',''),'——',
+		REPLACE(end_province,'全部',''),REPLACE(end_city,'全部','')))
+     	FROM t_driver_line_info WHERE driver_id = d.id and start=0 ) driverLine,
+   (SELECT c.location FROM t_location_collect_last_info c where c.driver_id = d.id 
+		 ORDER BY c.modify_time DESC LIMIT 1 ) lastLocation 
+	FROM t_pact_driver_info t,t_driver_user_info d  
+	WHERE d.id = t.driver_id AND t.deleted_flag = #deletedFlag# AND t.user_id = #userId# 
+	<dynamic prepend="AND">
+	  <isNotEmpty property="code" prepend="AND"> d.code = #code# </isNotEmpty>
+	  <isNotEmpty property="carNumber" prepend="AND"> d.car_number = #carNumber# </isNotEmpty>
+	  <isNotEmpty property="name" prepend="AND"> d.name = #name# </isNotEmpty>
+	  <isNotEmpty property="pactStartTime" prepend="AND"> UNIX_TIMESTAMP(date_format(t.pact_start_time,'%Y-%c-%d')) <![CDATA[>=]]>  UNIX_TIMESTAMP(#pactStartTime#)</isNotEmpty>
+	  <isNotEmpty property="pactEndTime" prepend="AND"> UNIX_TIMESTAMP(date_format(t.pact_end_time,'%Y-%c-%d')) <![CDATA[<=]]>  UNIX_TIMESTAMP(#pactEndTime#)</isNotEmpty>
+	  
+	             <!-- 根据营业路线查询 -->
+					      <!-- 起始地路线-省 不为空,目的地路线-省 为空 -->
+					  	   <isEmpty property="endProvince">
+							<isNotEmpty property="startProvince" prepend="and ">
+							  EXISTS (select 1 from t_driver_line_info f where  f.start=0 and f.start_province = #startProvince# 
+							     <isNotEmpty property="startCity" prepend="and">
+							       f.start_city = #startCity# 
+							     </isNotEmpty> 
+							   AND f.driver_id=d.id) 
+							</isNotEmpty>
+							</isEmpty>
+							 <!-- 目的地路线-省 不为空,起始地路线-省 为空 -->
+							<isEmpty property="startProvince">
+					  		<isNotEmpty property="endProvince" prepend="and ">
+					  		   EXISTS (select 1 from t_driver_line_info f where f.start=0 and f.end_province = #endProvince#  
+					  		   <isNotEmpty property="endCity" prepend="and">
+					  		      f.end_city = #endCity# 
+					  		   </isNotEmpty>
+					  		   AND f.driver_id=d.id 
+					  		   )
+					  		</isNotEmpty> 
+					  		</isEmpty>
+					  <!-- 起始地路线-省 不为空and 目的地路线-省 不为空(单向查询) -->
+					  	<isNotEmpty property="startProvince" >
+					  		   <isNotEmpty property="endProvince" prepend="and ">
+					  		     EXISTS (select 1 from t_driver_line_info f where f.start=0 and f.start_province = #startProvince# and f.end_province = #endProvince#  
+					  		       <isNotEmpty property="startCity" prepend="and">
+					  		          f.start_city= #startCity# 
+					  		       </isNotEmpty>
+					  		       <isNotEmpty property="endCity" prepend="and">
+					  		       f.end_city = #endCity# 
+					  		       </isNotEmpty> 
+					  		       AND f.driver_id=d.id 
+					  		      ) 
+					  		 </isNotEmpty> 
+					 </isNotEmpty> 
+	</dynamic>
+	ORDER BY t.create_time DESC   
+  </select>
+  
+    <!-- 查询合同司机信息——分页 -->
+  <select id="query_pact_driver_info_byPage" parameterClass="Map" resultMap="pact_driver_info_domain_result">
+  SELECT t.id,
+   t.driver_id,
+   t.user_id,
+   date_format(t.pact_start_time,'%Y-%c-%d') pact_start_time,
+   date_format(t.pact_end_time,'%Y-%c-%d') pact_end_time,
+   t.create_time,
+   t.modify_time,
+   t.deleted_flag,
+   t.pact_valid_day,
+   d.code,
+   d.name,
+   d.car_number,
+   d.car_types,
+   (SELECT GROUP_CONCAT(CONCAT(REPLACE(start_province,'全部',''),REPLACE(start_city,'全部',''),'——',
+		REPLACE(end_province,'全部',''),REPLACE(end_city,'全部','')))
+     	FROM t_driver_line_info WHERE driver_id = d.id and start=0 ) driverLine,
+   (SELECT c.location FROM t_location_collect_last_info c where c.driver_id = d.id 
+		 ORDER BY c.modify_time DESC LIMIT 1 ) lastLocation  
+	FROM t_pact_driver_info t,t_driver_user_info d  
+	WHERE d.id = t.driver_id AND t.deleted_flag = #deletedFlag#  AND t.user_id = #userId# 
+	<dynamic prepend="AND">
+	  <isNotEmpty property="code" prepend="AND"> d.code = #code# </isNotEmpty>
+	  <isNotEmpty property="carNumber" prepend="AND"> d.car_number = #carNumber# </isNotEmpty>
+	  <isNotEmpty property="name" prepend="AND"> d.name = #name# </isNotEmpty>
+	  <isNotEmpty property="pactStartTime" prepend="AND"> UNIX_TIMESTAMP(date_format(t.pact_start_time,'%Y-%c-%d')) <![CDATA[>=]]>  UNIX_TIMESTAMP(#pactStartTime#)</isNotEmpty>
+	  <isNotEmpty property="pactEndTime" prepend="AND"> UNIX_TIMESTAMP(date_format(t.pact_end_time,'%Y-%c-%d')) <![CDATA[<=]]>  UNIX_TIMESTAMP(#pactEndTime#)</isNotEmpty>
+	
+	            <!-- 根据营业路线查询 -->
+					      <!-- 起始地路线-省 不为空,目的地路线-省 为空 -->
+					  	   <isEmpty property="endProvince">
+							<isNotEmpty property="startProvince" prepend="and ">
+							  EXISTS (select 1 from t_driver_line_info f where  f.start=0 and f.start_province = #startProvince# 
+							     <isNotEmpty property="startCity" prepend="and">
+							       f.start_city = #startCity# 
+							     </isNotEmpty> 
+							   AND f.driver_id=d.id) 
+							</isNotEmpty>
+							</isEmpty>
+							 <!-- 目的地路线-省 不为空,起始地路线-省 为空 -->
+							<isEmpty property="startProvince">
+					  		<isNotEmpty property="endProvince" prepend="and ">
+					  		   EXISTS (select 1 from t_driver_line_info f where f.start=0 and f.end_province = #endProvince#  
+					  		   <isNotEmpty property="endCity" prepend="and">
+					  		      f.end_city = #endCity# 
+					  		   </isNotEmpty>
+					  		   AND f.driver_id=d.id 
+					  		   )
+					  		</isNotEmpty> 
+					  		</isEmpty>
+					  <!-- 起始地路线-省 不为空and 目的地路线-省 不为空(单向查询) -->
+					  	<isNotEmpty property="startProvince" >
+					  		   <isNotEmpty property="endProvince" prepend="and ">
+					  		     EXISTS (select 1 from t_driver_line_info f where f.start=0 and f.start_province = #startProvince# and f.end_province = #endProvince#  
+					  		       <isNotEmpty property="startCity" prepend="and">
+					  		          f.start_city= #startCity# 
+					  		       </isNotEmpty>
+					  		       <isNotEmpty property="endCity" prepend="and">
+					  		       f.end_city = #endCity# 
+					  		       </isNotEmpty> 
+					  		       AND f.driver_id=d.id 
+					  		      ) 
+					  		 </isNotEmpty> 
+					 </isNotEmpty> 
+	</dynamic>
+	ORDER BY t.create_time DESC 
+	LIMIT #beginNum#,#endNum#  
+  </select>
+  
+   <!-- 查询合同司机信息总记录数-->
+  <select id="query_pact_driver_info_count" parameterClass="Map" resultClass="java.lang.Integer">
+  SELECT COUNT(*)  
+	FROM t_pact_driver_info t,t_driver_user_info d  
+	WHERE d.id = t.driver_id AND t.deleted_flag = #deletedFlag#  AND t.user_id = #userId# 
+	<dynamic prepend="AND">
+	  <isNotEmpty property="code" prepend="AND"> d.code = #code# </isNotEmpty>
+	  <isNotEmpty property="carNumber" prepend="AND"> d.car_number = #carNumber# </isNotEmpty>
+	  <isNotEmpty property="name" prepend="AND"> d.name = #name# </isNotEmpty>
+	  <isNotEmpty property="pactStartTime" prepend="AND"> UNIX_TIMESTAMP(date_format(t.pact_start_time,'%Y-%c-%d')) <![CDATA[>=]]>  UNIX_TIMESTAMP(#pactStartTime#)</isNotEmpty>
+	  <isNotEmpty property="pactEndTime" prepend="AND"> UNIX_TIMESTAMP(date_format(t.pact_end_time,'%Y-%c-%d')) <![CDATA[<=]]>  UNIX_TIMESTAMP(#pactEndTime#)</isNotEmpty>
+	
+		<!-- 根据营业路线查询 -->
+					      <!-- 起始地路线-省 不为空,目的地路线-省 为空 -->
+					  	   <isEmpty property="endProvince">
+							<isNotEmpty property="startProvince" prepend="and ">
+							  EXISTS (select 1 from t_driver_line_info f where  f.start=0 and f.start_province = #startProvince# 
+							     <isNotEmpty property="startCity" prepend="and">
+							       f.start_city = #startCity# 
+							     </isNotEmpty> 
+							   AND f.driver_id=d.id) 
+							</isNotEmpty>
+							</isEmpty>
+							 <!-- 目的地路线-省 不为空,起始地路线-省 为空 -->
+							<isEmpty property="startProvince">
+					  		<isNotEmpty property="endProvince" prepend="and ">
+					  		   EXISTS (select 1 from t_driver_line_info f where f.start=0 and f.end_province = #endProvince#  
+					  		   <isNotEmpty property="endCity" prepend="and">
+					  		      f.end_city = #endCity# 
+					  		   </isNotEmpty>
+					  		   AND f.driver_id=d.id 
+					  		   )
+					  		</isNotEmpty> 
+					  		</isEmpty>
+					  <!-- 起始地路线-省 不为空and 目的地路线-省 不为空(单向查询) -->
+					  	<isNotEmpty property="startProvince" >
+					  		   <isNotEmpty property="endProvince" prepend="and ">
+					  		     EXISTS (select 1 from t_driver_line_info f where f.start=0 and f.start_province = #startProvince# and f.end_province = #endProvince#  
+					  		       <isNotEmpty property="startCity" prepend="and">
+					  		          f.start_city= #startCity# 
+					  		       </isNotEmpty>
+					  		       <isNotEmpty property="endCity" prepend="and">
+					  		       f.end_city = #endCity# 
+					  		       </isNotEmpty> 
+					  		       AND f.driver_id=d.id 
+					  		      ) 
+					  		 </isNotEmpty> 
+					 </isNotEmpty> 
+	</dynamic>  
+  </select>
+  <!-- 删除合同司机信息即修改删除标志 -->
+  <update id="delete_pact_driver_info" parameterClass="Map">
+     UPDATE t_pact_driver_info 
+		SET deleted_flag = #deletedFlag#,modify_time = SYSDATE()  
+	WHERE id = #id#  
+  </update>
+ <!-- 添加合同司机信息 -->
+  <insert id="insert_pact_driver_info" parameterClass="PactDriverInfoDomain">
+     INSERT INTO t_pact_driver_info(
+  driver_id,user_id,pact_start_time,pact_end_time,create_time,
+  modify_time,deleted_flag,pact_valid_day) VALUES(
+  #driverId#,#userId#,#pactStartTime#,#pactEndTime#,SYSDATE(),SYSDATE(),#deletedFlag#,#pactValidDay#
+  )
+  
+  <selectKey resultClass="String" keyProperty="id">
+   			select last_insert_id() as id
+  </selectKey>
+  </insert>
+</sqlMap>

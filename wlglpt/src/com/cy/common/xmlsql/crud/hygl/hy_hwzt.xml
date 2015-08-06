@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.hygl.dao.HyHwztMapper">
+
+	<!--登记-->
+    <update id="updateThbzToY" parameterClass="com.cy.common.bo.Hwzt">
+       UPDATE HY_HWZT HWZT SET HWZT.JBR_CZY_DJXH = #jbrCzyDjxh#, HWZT.THRQ = to_date(#thrq#, 'yyyy-MM-dd'),
+       HWZT.BZSM = #bzsm#, HWZT.XGR_CZY_DJXH = #xgrCzyDjxh#, HWZT.XGRQ = to_date(#xgrq#, 'yyyy-MM-dd'), HWZT.THBZ = #thbz#, 
+       HWZT.THRMC = #thrMc#, HWZT.THR_LXDH = #thrLxdh#, HWZT.THR_SFZH = #thrSfzh#
+       WHERE HWZT.HWZT_DJXH = #hwztDjxh#
+    </update>
+
+	<!--撤销-->
+    <update id="updateThbzToN" parameterClass="com.cy.hygl.domain.HwztDomain">
+       UPDATE HY_HWZT HWZT SET HWZT.JBR_CZY_DJXH = #jbrCzyDjxh#, HWZT.THRQ = to_date(#thrq#, 'yyyy-MM-dd'),
+       HWZT.BZSM = #bzsm#, HWZT.XGR_CZY_DJXH = #xgrCzyDjxh#, HWZT.XGRQ = to_date(#xgrq#, 'yyyy-MM-dd'), HWZT.THBZ = #thbz#, 
+       HWZT.THRMC = #thrMc#, HWZT.THR_LXDH = #thrLxdh#, HWZT.THR_SFZH = #thrSfzh#
+       WHERE HWZT.HWZT_DJXH = #hwztDjxh#
+    </update>
+    
+    <select id="checkHwZtDjByDjxh" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+    	SELECT COUNT(*)
+			FROM CW_YSYF YSF 
+			WHERE YSF.YSYFZT_DM = 21
+  			AND YSF.KMXL_DM = 104
+  			AND YSF.YW_DJXH = #ZT_DJXH#
+    </select>
+    
+    <insert id="insertHyHwzt" parameterClass="com.cy.common.bo.Hwzt">
+    	<selectKey keyProperty="hwztDjxh" type="pre" resultClass="string">
+    		select SEQ_HWZT_DJXH.nextval as hwztDjxh from dual
+    	</selectKey>
+    	INSERT INTO HY_HWZT(HWZT_DJXH,WFH_DJXH,DD_DJXH,XH,THBZ,
+		YXBZ,CJR_CZY_DJXH,CJRQ,XGR_CZY_DJXH,XGRQ)
+		VALUES(#hwztDjxh:NUMBERIC#,#wfhDjxh:NUMBERIC#,#ddDjxh:NUMBERIC#,#xh:NUMBERIC#,
+		#thbz:VARCHAR#,#yxbz:VARCHAR#,#cjrCzyDjxh:NUMBERIC#, to_date(#cjrq:DATE#,'yyyy-MM-dd'),#xgrCzyDjxh:NUMBERIC#,
+		to_date(#xgrq:DATE#,'yyyy-MM-dd'))
+    </insert>
+</sqlMap>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.framework.dao.XtLogExceptionMapper">
+
+	<!--插入数据-->
+	<insert id="insertXtLogException"  parameterClass="com.cy.common.bo.XtLogException">
+		<selectKey keyProperty="logXh" resultClass="long" type="pre"> 
+			select SEQ_LOG_XH.nextval as logXh from dual 
+		</selectKey> 
+		insert into XT_LOG_EXCEPTION(LOG_XH,XTYHFL_DM,CZY_DJXH,XTML_XH,GNMK_DM,ACTION,CSSJ,CWXX,
+		SERVERIP,SERVERPORT,QTXX)
+		values(#logXh:NUMERIC#,#xtyhflDm:VARCHAR#,#czyDjXh:VARCHAR#,#xtmlXh:NUMERIC#,#gnmkDm:VARCHAR#,#action:VARCHAR#,
+		to_date(#cssj:DATE#,'yyyy-MM-dd HH24:MI:SS'),#cwxx:VARCHAR#,
+		#serverip:VARCHAR#,#serverport:VARCHAR#,#qtxx:VARCHAR#)
+	</insert>
+
+</sqlMap>

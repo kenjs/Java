@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="driverSurviveRateDomain" type="com.cy.dctms.common.domain.DriverSurviveRateDomain"/>
+	
+	
+	<resultMap class="driverSurviveRateDomain" id="driverSurviveRate_info_domain_result">
+		<result property="id" column="ID"/>
+		<result property="queryTime" column="query_time"/>
+		<result property="registerCount" column="register_count"/>
+		<result property="foreRegisterCount" column="fore_register_count"/>
+		<result property="surviveCount" column="survive_count"/>
+		<result property="surviveRate" column="survive_rate"/>
+		<result property="activeCount" column="active_count"/>
+		<result property="activeRate" column="active_rate"/>
+		<result property="goodFindNum" column="good_find_num"/>
+		<result property="appointNum" column="appoint_num"/>
+		<result property="phoneCallNum" column="phone_call_num"/>
+	</resultMap>
+	
+	<select id="query_driverSurviveRate_info" parameterClass="java.util.Map" resultMap="driverSurviveRate_info_domain_result">
+		select t.id,
+		       t.query_time,
+		       t.register_count,
+		       t.fore_register_count,
+		       t.survive_count,
+		       t.survive_rate,
+		       t.active_count,
+		       t.active_rate,
+		       t.good_find_num,
+		       t.appoint_num,
+		       t.phone_call_num
+		  from t_manager_driver_survive_rate t
+		  where 1=1
+		  <isNotEmpty prepend="and" property="queryTimeQ">   
+                t.query_time >= #queryTimeQ# 
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="queryTimeZ">   
+                <![CDATA[ t.query_time <=#queryTimeZ#]]> 
+         </isNotEmpty>	
+		    order by t.id desc
+	</select>
+	
+</sqlMap>

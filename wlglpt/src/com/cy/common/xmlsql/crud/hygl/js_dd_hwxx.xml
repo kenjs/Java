@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.hygl.dao.JsDdHwxxMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectJsDdHwxxByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.JsDdHwxxDomain">
+		select a.JS_DJXH as jsDjxh,a.DD_DJXH as ddDjxh,a.XH as xh,a.HWMC as hwmc,a.HW_DJXH as hwDjxh,
+		a.HWXH_DJXH as hwxhDjxh,a.HW_BZ_HLDW_DM as hwBzHldwDm,a.HW_SL as hwSl,a.HW_SL_JLDW_DM as hwSlJldwDm,a.HW_ZL as hwZl,
+		a.HW_ZL_JLDW_DM as hwZlJldwDm,a.HW_TJ as hwTj,a.HW_TJ_JLDW_DM as hwTjJldwDm,a.JS_SL as jsSl,a.JS_JLDW_DM as jsJldwDm,
+		a.JS_JLDW_FL_DM as jsJldwFlDm,a.HDBH as hdbh,a.SFD_XZQH_DM as sfdXzqhDm,a.MDD_XZQH_DM as mddXzqhDm,a.DZ_SR as dzSr,
+		a.DZ_YJ as dzYj,a.DZ_WJ as dzWj,a.YXBZ as yxbz,a.DCJSBZ as dcjsbz,a.QC_DZ_DJXH as qcDzDjxh,
+		a.DZZT_DM as dzztDm,a.DZ_DJXH as dzDjxh from JS_DD_HWXX a  where a.JS_DJXH=#jsDjxh#
+    </select>
+    
+	<!--插入数据-->
+	<insert id="insertJsDdHwxx"  parameterClass="com.cy.common.bo.JsDdHwxx">
+		<selectKey keyProperty="jsDjxh" resultClass="java.lang.String" type="pre"> 
+			select SEQ_JS_DJXH.nextval as jsDjxh from dual 
+		</selectKey> 
+		insert into JS_DD_HWXX(JS_DJXH,DD_DJXH,XH,HWMC,HW_DJXH,
+		HWXH_DJXH,HW_BZ_HLDW_DM,HW_SL,HW_SL_JLDW_DM,HW_ZL,
+		HW_ZL_JLDW_DM,HW_TJ,HW_TJ_JLDW_DM,JS_SL,JS_JLDW_DM,
+		JS_JLDW_FL_DM,HDBH,SFD_XZQH_DM,MDD_XZQH_DM,DZ_SR,
+		DZ_YJ,DZ_WJ,YXBZ,DCJSBZ,QC_DZ_DJXH,
+		DZZT_DM,DZ_DJXH)
+		values(#jsDjxh:NUMERIC#,#ddDjxh:NUMERIC#,#xh:NUMERIC#,#hwmc:VARCHAR#,#hwDjxh:NUMERIC#,
+		#hwxhDjxh:NUMERIC#,#hwBzHldwDm:VARCHAR#,#hwSl:NUMERIC#,#hwSlJldwDm:VARCHAR#,#hwZl:NUMERIC#,
+		#hwZlJldwDm:VARCHAR#,#hwTj:NUMERIC#,#hwTjJldwDm:VARCHAR#,#jsSl:NUMERIC#,#jsJldwDm:VARCHAR#,
+		#jsJldwFlDm:VARCHAR#,#hdbh:VARCHAR#,#sfdXzqhDm:VARCHAR#,#mddXzqhDm:VARCHAR#,#dzSr:NUMERIC#,
+		#dzYj:NUMERIC#,#dzWj:NUMERIC#,#yxbz:VARCHAR#,#dcjsbz:VARCHAR#,#qcDzDjxh:NUMERIC#,
+		#dzztDm:NUMERIC#,#dzDjxh:NUMERIC#)
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateJsDdHwxxByKey" parameterClass="com.cy.common.bo.JsDdHwxx">
+        update JS_DD_HWXX set JS_DJXH=#jsDjxh#,DD_DJXH=#ddDjxh#,XH=#xh#,HWMC=#hwmc#,HW_DJXH=#hwDjxh#,
+		HWXH_DJXH=#hwxhDjxh#,HW_BZ_HLDW_DM=#hwBzHldwDm#,HW_SL=#hwSl#,HW_SL_JLDW_DM=#hwSlJldwDm#,HW_ZL=#hwZl#,
+		HW_ZL_JLDW_DM=#hwZlJldwDm#,HW_TJ=#hwTj#,HW_TJ_JLDW_DM=#hwTjJldwDm#,JS_SL=#jsSl#,JS_JLDW_DM=#jsJldwDm#,
+		JS_JLDW_FL_DM=#jsJldwFlDm#,HDBH=#hdbh#,SFD_XZQH_DM=#sfdXzqhDm#,MDD_XZQH_DM=#mddXzqhDm#,DZ_SR=#dzSr#,
+		DZ_YJ=#dzYj#,DZ_WJ=#dzWj#,YXBZ=#yxbz#,DCJSBZ=#dcjsbz#,QC_DZ_DJXH=#qcDzDjxh#,
+		DZZT_DM=#dzztDm#,DZ_DJXH=#dzDjxh# where JS_DJXH=#jsDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteJsDdHwxxByKey" parameterClass="java.util.Map">
+		update JS_DD_HWXX set yxbz='N' where JS_DJXH=#jsDjxh#
+    </delete>
+</sqlMap>

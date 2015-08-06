@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+  <typeAlias alias="LocationCollectLastInfo" type="com.cy.dcts.common.bo.LocationCollectLastInfo"/><!-- 车辆当前位置信息表 -->
+  <typeAlias alias="LocationCollectLastInfoDomain" type="com.cy.dcts.common.domain.LocationCollectLastInfoDomain"/>
+  <resultMap class="LocationCollectLastInfo" id="location_collect_last_info_result">
+     <result property="id" column="ID"/>
+     <result property="driverId" column="DRIVER_ID"/>
+     <result property="longitude" column="LONGITUDE"/>
+     <result property="latitude" column="LATITUDE"/>
+     <result property="province" column="PROVINCE"/>
+     <result property="city" column="CITY"/>
+     <result property="county" column="COUNTY"/>
+     <result property="town" column="TOWN"/>
+     <result property="location" column="LOCATION"/>
+     <result property="lastTime" column="LAST_TIME"/>
+     <result property="lastTime" column="CREATE_TIME"/>
+     <result property="createTime" column="MODIFY_TIME"/>
+  </resultMap>
+ 
+ <resultMap class="LocationCollectLastInfoDomain" id="location_collect_last_domain_info_result">
+     <result property="id" column="ID"/>
+     <result property="driverId" column="DRIVER_ID"/>
+     <result property="longitude" column="LONGITUDE"/>
+     <result property="latitude" column="LATITUDE"/>
+     <result property="province" column="PROVINCE"/>
+     <result property="city" column="CITY"/>
+     <result property="county" column="COUNTY"/>
+     <result property="town" column="TOWN"/>
+     <result property="location" column="LOCATION"/>
+     <result property="lastTime" column="LAST_TIME"/>
+     <result property="lastTime" column="CREATE_TIME"/>
+     <result property="createTime" column="MODIFY_TIME"/>
+     
+     <result property="name" column="NAME"/>
+     <result property="code" column="CODE"/>
+     <result property="carNumber" column="CAR_NUMBER"/>
+  </resultMap>
+  <select id="query_location_collect_last_by_driverId" parameterClass="String" resultClass="LocationCollectLastInfo">
+  SELECT id,
+		driver_id,
+		longitude,
+		latitude,
+		province,
+		city,
+		county,
+		town,
+		location,
+		last_time,
+		create_time,
+		modify_time 
+   FROM t_location_collect_last_info 
+   WHERE driver_id = #driverId#
+  </select>
+  
+ <select id="query_location_collect_last_domain_by_driverId" parameterClass="String" resultMap="location_collect_last_domain_info_result">
+  SELECT c.id,
+		c.driver_id,
+		c.longitude,
+		c.latitude,
+		c.province,
+		c.city,
+		c.county,
+		c.town,
+		c.location,
+		c.last_time,
+		c.create_time,
+		c.modify_time,
+		t.code,
+		t.car_number,
+		t.name 
+   FROM t_location_collect_last_info c ,t_driver_user_info t 
+   WHERE driver_id = #driverId# and c.driver_id = t.id 
+  </select>
+</sqlMap>

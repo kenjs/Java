@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.swp.dao.MarketingNoteRecordDao">
+
+	<resultMap type="MarketingNoteRecordInfo" id="marketing_note_record_info_result">
+		<result property="id" column="ID"/>
+		<!-- 被发送手机号码 -->
+		<result property="mobilephone" column="MOBILEPHONE"/>
+		<!-- 发送内容 -->
+		<result property="content" column="CONTENT"/>
+		<!-- 发送时间 -->
+		<result property="sendTime" column="SEND_TIME"/>
+		<!-- 操作人id（营销人员） -->
+		<result property="userId" column="USER_ID"/>
+		<!-- 短信发送日志记录Id -->
+		<result property="noteLogId" column="NOTE_LOG_ID"/>
+	</resultMap>
+
+	<resultMap type="PushSendRecord" id="push_send_record_result">
+		<result property="id" column="ID"/>
+		<!-- 0 不区分子系统,系统级 1 营销平台 2 快到网网站 3 app服务端 4 经管系统' -->
+		<result property="eventFrom" column="event_from"/>
+		<!-- 司机id -->
+		<result property="driverId" column="driver_id"/>
+		<!-- pk-t_push_log_info.id -->
+		<result property="pushId" column="push_id"/>
+		<!-- 标题 -->
+		<result property="pushTitle" column="push_title"/>
+		<!-- 推送内容 -->
+		<result property="pushContent" column="push_content"/>
+		<!-- 目标类型： 0 货源 1 订单 -->
+		<result property="targetType" column="target_type"/>
+		<!-- 目标id -->
+		<result property="targetId" column="target_id"/>
+		<!-- 推送接口发送返回状态 0 成功 1 失败 -->
+		<result property="returnStatus" column="return_status"/>
+		<!-- 用途 -->
+		<result property="userFor" column="user_for"/>
+		<!-- 创建时间 -->
+		<result property="createTime" column="create_time"/>
+	</resultMap>
+	
+    <!-- 新增营销短信发送记录 -->
+	<insert id="addMarketingNoteRecordInfo" parameterType="MarketingNoteRecordInfo" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_marketing_note_record_info(
+		MOBILEPHONE,
+		CONTENT,
+		SEND_TIME,
+		USER_ID,
+		NOTE_LOG_ID
+		)VALUES(
+		#{mobilephone},
+		#{content},
+		sysdate(),
+		#{userId},
+		#{noteLogId}
+		)
+	</insert>
+
+	<!-- 新增营销推送记录 -->
+	<insert id="addPushSendRecord" parameterType="PushSendRecord" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_push_send_record(
+		event_from,
+		driver_id,
+		push_id,
+		push_title,
+		push_content,
+		target_type,
+		target_id,
+		return_status,
+		use_for,
+		create_time
+		)VALUES(
+		#{eventFrom},
+		#{driverId},
+		#{pushId},
+		#{pushTitle},
+		#{pushContent},
+		#{targetType},
+		#{targetId},
+		#{returnStatus},
+		#{useFor},
+		sysdate()
+		)
+	</insert>
+</mapper>

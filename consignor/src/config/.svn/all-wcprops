@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/Project/!svn/ver/8304/consignor/trunk/consignor/src/config
+END
+sqlMapConfig.xml
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/Project/!svn/ver/7387/consignor/trunk/consignor/src/config/sqlMapConfig.xml
+END
+serviceHostNew.properties
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/Project/!svn/ver/8025/consignor/trunk/consignor/src/config/serviceHostNew.properties
+END
+serfj.properties
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/Project/!svn/ver/7387/consignor/trunk/consignor/src/config/serfj.properties
+END
+applicationContext-main.xml
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/Project/!svn/ver/7387/consignor/trunk/consignor/src/config/applicationContext-main.xml
+END
+serviceHost.properties
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/Project/!svn/ver/7387/consignor/trunk/consignor/src/config/serviceHost.properties
+END
+applicationContext-bean.xml
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/Project/!svn/ver/8304/consignor/trunk/consignor/src/config/applicationContext-bean.xml
+END
+log4j.properties
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/Project/!svn/ver/7387/consignor/trunk/consignor/src/config/log4j.properties
+END
+application.properties
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/Project/!svn/ver/8025/consignor/trunk/consignor/src/config/application.properties
+END

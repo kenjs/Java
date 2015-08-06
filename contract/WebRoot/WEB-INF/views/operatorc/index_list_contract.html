@@ -1,0 +1,205 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="pragma" content="no-cache"/>
+    <meta http-equiv="Cache-Control" content="no-cache,must-revalidate"/>
+    <title>传化物流-会员中心</title>
+    
+     <link href="../css/webui/main.css" rel="stylesheet" />	
+    <link href="../js/sys/ymPrompt/skin/ch/ymPrompt.css" rel="stylesheet" /> 		
+	<script src="../js/jquery/jquery-1.8.3.min.js" type=text/javascript></script>
+	<script src="../js/sys/webui/contract/header.js"></script>    	
+	<script src="../js/sys/webui/logo.js"></script>   	  
+	<script src="../js/sys/webui/contract/left.js"></script> 
+	
+ 	<script src="../js/sys/webui/hgrid.js"></script>  
+	<script src="../js/themes/operatorc/index_list.js"></script>
+    <script type="text/javascript">
+   
+    </script>
+<style>
+#main{width:998px;border:0px solid black;padding:0px;margin:0 auto;}
+
+
+/*按钮样式***************************/
+	#btnSearch{
+		float:right top;
+	}    
+	.btn-all{ 
+		border:none; text-decoration:none;
+		display: block; text-align: center; cursor:pointer;  position: relative; padding:4px; line-height:1.4em; white-space:nowrap; word-break:keep-all;
+		vertical-align:middle!important;
+	} 
+	.conner-all{
+		-moz-border-radius: .3em; 
+		-webkit-border-radius: .3em;
+		border-radius: .3em; 
+	}
+	.btn-gray, a.btn-gray:visited, a.btn-gray:hover{  color:#333; border:1px solid #aaa; font-weight:bold; box-shadow:0 0 1px rgba(255, 255, 255, 1) inset; background-color:#ebebeb;
+		background: -webkit-gradient(linear, left top, left bottom, from(#F5F5F5), to(#ccc));
+	    background: -webkit-linear-gradient(top, #F5F5F5, #ccc);
+	    background:    -moz-linear-gradient(top, #F5F5F5, #ccc);
+	    background:     -ms-linear-gradient(top, #F5F5F5, #ccc);
+	    background:      -o-linear-gradient(top, #F5F5F5, #ccc);
+	    background:         linear-gradient(top, #F5F5F5, #ccc);
+	    -pie-background:    linear-gradient(top, #F5F5F5, #ccc);
+	}
+	.btn-gray:active, a.btn-gray:active{ box-shadow:none;
+		background: -webkit-gradient(linear, left top, left bottom, from(#ccc), to(#F5F5F5));/* Chrome 10+, Saf5.1+ */
+	    background: -webkit-linear-gradient(top, #ccc, #F5F5F5);/* FF3.6 */
+	    background:    -moz-linear-gradient(top, #ccc, #F5F5F5);/* IE10 */
+	    background:     -ms-linear-gradient(top, #ccc, #F5F5F5); /* IE10 */
+	    background:      -o-linear-gradient(top, #ccc, #F5F5F5);/* Opera 11.10+ */
+	    background:         linear-gradient(top, #ccc, #F5F5F5);
+	    -pie-background:    linear-gradient(top, #ccc, #F5F5F5);
+	}
+	.btn-inline{ display: inline-block!important;}
+	.f12{ font-size:12px!important;}
+	.w60{ width:60px!important;}
+	.w80{ width:80px!important;}
+</style>
+<style type="text/css">
+
+/*style="font-weight:bold;text-decoration:none;"*/
+#main{width:998px;border:0px solid black;padding:0px;margin:0 auto;}
+.c-table-menu{width:159px;height:200px;margin:0px;border:0px;padding:0px;}
+.c-tr{width:159px;margin:0px;border:0px;padding:0px;}
+.c-tr a{color:#333333;}
+.c-td-title-first{width:159px;height:37px;background:url(../imgs/login/menu/left_menu.jpg) no-repeat;margin:0px;border-right:0px solid #999999;padding:5px 0px 0px 8px;;font-weight:bold;color:#3f3f3f;font-size:14px;}
+.c-td-title{width:159px;height:32px;background:url(../imgs/login/menu/left_menu.jpg) no-repeat;margin:0px;border-right:0px solid #999999;padding:5px 0px 0px 8px;font-weight:bold;font-size:14px;}
+.c-td-memu{width:159px;height:36px;margin:0px;border-right:0px solid #999999;padding:4px 15px 0px 35px;cursor:pointer;font-size:14px;}
+/*.c-table-trace{width:159px;height:100px;margin:10px 0px 0px 0px;border:0px;padding:0px;}*/
+
+/*表格*/
+#grid { width: 99%; }   
+.c-table{width:850px;background-color:#FCFCFC;margin:0px;padding:0px;}  
+span.hi-lite { color: red; }
+.tdcenter{font-size:12px;font-family:'微软雅黑','宋体',Arial;font-weight: normal;height: 36px;background-color: #e4e4e4;padding-top: 12px;border-bottom:1px solid #DDDDDD;text-align:left;padding-left: 6px;} 
+.tdcenter1{font-family:'微软雅黑','宋体',Arial; height:36px;border-top:0px solid #FDE6C3;border-right:0px solid #FDE6C3;border-bottom:1px solid #DDDDDD;font-size:12px;padding:6px 6px 6px 6px;color:#1c1c1c;text-align:left;}     
+
+#grid th.k-header { text-align: right } 
+.page_nav{clear:both; padding:15px 0; color:#666; font:normal 12px/24px Arial; text-align:center;}
+.page_nav a{outline:none;display:inline-block;height:24px; margin:0 0px; border:none; padding:0 4px; background:#fff;    color:#333; line-height:24px; text-decoration:none;}
+.page_nav strong {height:24px; margin:0 0px; border:none; padding:0 4px; background:#07519a; color:#fff; line-height:24px; text-decoration:none; }
+.page_nav a:hover{height:24px; margin:0 0px; border:solid 0px #dbe5ee; padding:0 4px; background:#07519a; color:#fff; line-height:24px; text-decoration:none;}
+.page_nav a.select{cursor:default;}  
+</style>
+<style>
+	.mya{
+		display:inline-block;
+		width:30px;
+		margin-left:10px;
+	}
+	.myaa{
+		display:inline-block;
+		margin-left:20px;
+		width:50px;
+	}
+</style>
+</head>
+ 
+<body>
+	<!-- 顶部 --开始  此处须由js动态加入-------------------------------------->
+	<div id="header" class="c-header" >
+	
+	</div>
+	<!-- 顶部 --结束------------------------------------->
+	
+	<!-- LOGON --开始   此处须由js动态加入------------------------------------->
+	<div id="logo" class="c-logo" >
+		
+	</div>
+	<!-- LOGON --结束------------------------------------->
+	
+	<!-- 工作区 --开始------------------------------------->
+	<div id="main">
+		<!-- 左侧菜单 --开始  此处须由js动态加入------------------------------------->
+  		<div id="left" class="c-left"> 
+		</div>
+		
+		<!-- 左侧菜单 --结束------------------------------------->
+			
+		<!-- 右侧工作区 --开始------------------------------------->
+  		<div id="right" class="c-right" >
+   					
+   			<div style="padding-left:25px;" id="adminpermission">
+				<div style="width:775px;padding-top:10px;">
+				<table border="0" style="width:775px;">
+				<tr style="width:100%;height:40px;">
+				<td style="width:85%;padding-top:8px;">
+				<label style="color:#3f3f3f;font-size:14px;font-weight:bold;">操作员管理</label>
+				</td>
+				<td style="width:15%;">
+				<a id="btnadd" href="javascript:f_add();" style="text-decoration:none;cursor:hand;"><div style="background-image:url('../imgs/login/btn/big4_buttom.jpg');width:95px;height:36px;color:#ffffff;text-align:center;"><div style="padding-top:7px;font-weight:bold;font-size:14px;">添加操作员</div></div></a>
+				</td>
+				</tr>
+				</table>
+					<div style="width:775px;height:5px;border-bottom:1px solid #dddddd;"></div>
+						<form id="frmSearch" style="margin-top:15px;">
+							<span style="font-size:12px;">子账号名：</span><input class="input-box w80" name="operator" id="operator" type="text"/>
+							<span style="font-size:12px;">姓名：</span><input name="realname" id="realname" class="input-box w80" type="text" />
+							<span style="font-size:12px;">手机：</span><input name="mobilenumber" id="mobilenumber" class="input-box w80" type="text" /> 
+							<span style="font-size:12px;">电话：</span><input name="telephonenumber" id="telephonenumber" class="input-box w100" type="text" />  
+				<a href="#" class="btn-all conner-all btn-gray btn-inline f12 w60" style="margin-left:20px;" id="btnSearch">搜索</a>
+				</form>		
+				</div>
+				
+				<div id="list" class="loadding">
+	        	<table id="hgrid" cellspacing="0" style="border: 1px solid white;" ></table>
+       			</div>
+   			</div>
+  		</div>
+  		<!-- 右侧工作区 --开始------------------------------------->
+	</div>
+	<!-- 工作区 --结束------------------------------------------------------------------------>
+	
+	<!-- 底部 --开始  此处须由js动态加入------------------------------------->
+	<div id="footer" class="c-footer">
+		
+	</div>
+	<!-- 底部 --结束------------------------------------->
+	
+  
+  
+</body>
+<script type="text/javascript">  
+javascript:window.history.forward(1);
+	$(function(){
+			$("#adminpermission").hide();
+	//初始化
+	  $.ajax({
+			   type : "GET",
+			   url : "../operatorcs/checkOperatocPermission?random="+Math.random(),
+			   dataType: "json",
+			   error : function(){alert("操作失败")},
+			   success : function(data) {
+			   		if(data.msg=='ok'){
+			   			//刷新页面
+			   			
+			   			$("#adminpermission").show();
+			       	}else{
+			       	alert("此账户不是主账号，没有此功能权限！");
+			       
+			       	}
+			   }
+	  		});
+		f_hgrid_ini();
+		$("#pagecode").val("1");
+		var url="";
+		f_hgrid_json(url);	//	
+		$("#btnSearch").click(function(){
+		$("#pagecode").val("1");
+		var url="";		
+		var operator=$("#operator").val();
+		var realname=$("#realname").val();
+		var mobilenumber=$("#mobilenumber").val();
+		var telephonenumber=$("#telephonenumber").val();
+		var url="operator="+operator+"&realname="+realname+"&mobilenumber="+mobilenumber+"&telephonenumber="+telephonenumber;
+	   
+	   	f_hgrid_json(url);	//
+		return false; 
+	});
+		});
+</script>
+</html>

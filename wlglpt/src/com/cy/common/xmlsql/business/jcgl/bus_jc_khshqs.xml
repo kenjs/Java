@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.jcgl.dao.BusJcKhShQsMapper">
+	<select id="queryKhJyqkList" resultClass="com.cy.jcgl.domain.JcKhShQsDomain" parameterClass="java.util.Map">
+		SELECT KHMC AS khMc,JC AS ssjgMc,YJ AS yj,FYJ AS fyj,SRDD AS srdd,XXF AS xxf,WLSSSR AS wlsssr,TH AS th,YS AS ys,PS AS ps,ZCDD AS zcdd,WLSSZC AS wlsszc,
+		       (NVL(YJ,0)+NVL(FYJ,0)+NVL(SRDD,0)+NVL(WLSSSR,0))-(NVL(TH,0)+NVL(YS,0)+NVL(PS,0)+NVL(ZCDD,0)+NVL(WLSSZC,0)) lr,
+		       rtrim(TO_CHAR((((NVL(YJ,0)+NVL(FYJ,0)+NVL(SRDD,0)+NVL(WLSSSR,0))-(NVL(TH,0)+NVL(YS,0)+NVL(PS,0)+NVL(ZCDD,0)+NVL(WLSSZC,0)))/(NVL(YJ,0)+NVL(FYJ,0)+NVL(SRDD,0)+NVL(WLSSSR,0))),'fm99999999999990.00'),'.')*100 || '%' lrR
+		FROM(
+		SELECT DD.KHMC,DD.SS_JGBM,
+		       (SELECT ZZ.JC FROM QY_ZZJG ZZ WHERE ZZ.JGBM = DD.SS_JGBM) JC,		  
+		        SUM(DDHW.SR_YJ) YJ, 
+	           SUM(NVL(DDHW.SR_XF,0)+NVL(DDHW.SR_HDF,0)+NVL(DDHW.SR_THF,0) + NVL(DDHW.SR_HF,0)) FYJ,
+	           SUM((SELECT SUM(NVL(FY.SRJE,0))FROM HY_FYDJ FY WHERE FY.DD_DJXH = DDHW.DD_DJXH AND FY.HWMXXH = DDHW.XH)) SRDD,
+	           SUM(NVL(PC.YF_XXF,0)+ NVL(PCHW.ZC_HK,0)) XXF,
+	           SUM((SELECT SUM(NVL(SSMX.JE, 0)) FROM HY_WLSSDJ WLSS, HY_WLSSDJ_MX SSMX WHERE WLSS.WLSS_DJXH = SSMX.WLSS_DJXH
+	                  AND WLSS.PC_DJXH = PC.PC_DJXH AND SSMX.WLSSCLFS_DM IN ('1', '3', '4', '5'))) WLSSSR,          
+	           SUM((SELECT SUM(NVL(HY.YF_HJ,0)+NVL(XX.ZC_HJ,0)+NVL(XX.ZC_HDF,0)+NVL(XX.ZC_THF,0)) FROM HY_PC HY,HY_PC_HWXX XX
+	                WHERE HY.PCFS_DM = 1 AND HY.PC_DJXH=XX.PC_DJXH(+) AND HY.PC_DJXH = PC.PC_DJXH)) TH, 
+	           SUM((SELECT SUM(NVL(HY.YF_HJ,0)+NVL(XX.ZC_HJ,0)+NVL(XX.ZC_HDF,0)+NVL(XX.ZC_THF,0)) FROM HY_PC HY,HY_PC_HWXX XX
+	                WHERE HY.PCFS_DM = 2 AND HY.PC_DJXH=XX.PC_DJXH(+) AND HY.PC_DJXH = PC.PC_DJXH)) YS,
+	           SUM((SELECT SUM(NVL(HY.YF_HJ,0)+NVL(XX.ZC_HJ,0)+NVL(XX.ZC_HDF,0)+NVL(XX.ZC_THF,0)) FROM HY_PC HY,HY_PC_HWXX XX
+	                WHERE HY.PCFS_DM = 3 AND HY.PC_DJXH=XX.PC_DJXH(+) AND HY.PC_DJXH = PC.PC_DJXH)) PS,
+	           SUM((SELECT SUM(NVL(FY.ZFJE,0)) FROM HY_FYDJ FY WHERE FY.DD_DJXH = DDHW.DD_DJXH AND FY.HWMXXH = DDHW.XH)) ZCDD,
+	           SUM((SELECT SUM(NVL(SSMX.JE, 0)) FROM HY_WLSSDJ WLSS, HY_WLSSDJ_MX SSMX WHERE WLSS.WLSS_DJXH = SSMX.WLSS_DJXH
+                    AND WLSS.PC_DJXH = PC.PC_DJXH AND SSMX.WLSSCLFS_DM = 2)) WLSSZC 
+	 FROM HY_PC PC, HY_PC_HWXX PCHW, HY_DD DD, HY_DD_HWMX DDHW
+		  WHERE PC.YXBZ='Y'
+		   AND PCHW.YXBZ='Y'
+		   AND DD.YXBZ='Y'
+		   AND DDHW.YXBZ='Y'
+		   AND PC.PC_DJXH=PCHW.PC_DJXH(+)
+		   AND PCHW.DD_DJXH=DD.DD_DJXH(+)
+		   AND DD.DD_DJXH=DDHW.DD_DJXH(+)
+		   AND DD.SS_JGBM=#ssJgbm#
+		   <dynamic>
+		   	<isNotEmpty prepend="and" property="rqq">
+		   		DD.XDRQ &gt;= TO_DATE(#rqq#, 'yyyy-MM-dd')
+		   	</isNotEmpty>
+		   	<isNotEmpty prepend="and" property="rqz">
+		   		DD.XDRQ &lt;= TO_DATE(#rqz#, 'yyyy-MM-dd')
+		   	</isNotEmpty>
+		   	<isNotEmpty prepend="and" property="fhrDjxh">
+		   		DD.KH_DJXH = #fhrDjxh#
+		   	</isNotEmpty>
+		   	<isNotEmpty prepend="and" property="fhrMc">
+		   		DD.KHMC LIKE '%' || #fhrMc# || '%'
+		   	</isNotEmpty>
+		   </dynamic>		 
+		   GROUP BY DD.KH_DJXH,DD.KHMC,DD.SS_JGBM)
+		
+	</select>
+	
+	<select id="queryKhJyqkList2" resultClass="com.cy.jcgl.domain.JcKhShQsDomain" parameterClass="java.util.Map">
+		SELECT KHMC AS khMc,JC AS ssjgMc,YJ AS yj,FYJ AS fyj,SRDD AS srdd,XXF AS xxf,WLSSSR AS wlsssr,TH AS th,YS AS ys,PS AS ps,ZCDD AS zcdd,WLSSZC AS wlsszc,
+		       (NVL(YJ,0)+NVL(FYJ,0)+NVL(SRDD,0)+NVL(WLSSSR,0))-(NVL(TH,0)+NVL(YS,0)+NVL(PS,0)+NVL(ZCDD,0)+NVL(WLSSZC,0)) lr,
+		       rtrim(TO_CHAR((((NVL(YJ,0)+NVL(FYJ,0)+NVL(SRDD,0)+NVL(WLSSSR,0))-(NVL(TH,0)+NVL(YS,0)+NVL(PS,0)+NVL(ZCDD,0)+NVL(WLSSZC,0)))/(NVL(YJ,0)+NVL(FYJ,0)+NVL(SRDD,0)+NVL(WLSSSR,0))),'fm99999999999990.00'),'.')*100 || '%' lrR
+		FROM(
+		SELECT DD.KHMC,DD.SS_JGBM,
+		       (SELECT ZZ.JC FROM QY_ZZJG ZZ WHERE ZZ.JGBM = DD.SS_JGBM) JC,		       
+		       SUM(DDHW.SR_YJ) YJ,
+		       SUM(NVL(DDHW.SR_XF,0)+NVL(DDHW.SR_HDF,0)+NVL(DDHW.SR_THF,0) + NVL(DDHW.SR_HF,0)) FYJ,
+		       SUM((SELECT SUM(NVL(FY.SRJE,0))FROM HY_FYDJ FY WHERE FY.DD_DJXH = DDHW.DD_DJXH AND FY.HWMXXH = DDHW.XH)) SRDD,
+		       SUM(NVL(PC.YF_XXF,0)+ NVL(PCHW.ZC_HK,0)) XXF,
+		       SUM((SELECT SUM(NVL(SSMX.JE, 0)) FROM HY_WLSSDJ WLSS, HY_WLSSDJ_MX SSMX WHERE WLSS.WLSS_DJXH = SSMX.WLSS_DJXH
+		              AND WLSS.PC_DJXH = PC.PC_DJXH AND SSMX.WLSSCLFS_DM IN ('1', '3', '4', '5'))) WLSSSR,		      
+		       CASE WHEN MAX(AB.YFBGBZ) = 'Y' THEN SUM(NVL(AB.YF_HJ,0)) ELSE 
+		       SUM((SELECT SUM(NVL(HY.YF_HJ,0)+NVL(XX.ZC_HJ,0)+NVL(XX.ZC_HDF,0)+NVL(XX.ZC_THF,0)) FROM HY_PC HY,HY_PC_HWXX XX
+		            WHERE HY.PCFS_DM = 1 AND HY.PC_DJXH=XX.PC_DJXH(+) AND HY.PC_DJXH = PC.PC_DJXH)) END TH,
+		       CASE WHEN MAX(AB.YFBGBZ) = 'Y' THEN SUM(NVL(AB.YF_HJ,0)) ELSE 
+		       SUM((SELECT SUM(NVL(HY.YF_HJ,0)+NVL(XX.ZC_HJ,0)+NVL(XX.ZC_HDF,0)+NVL(XX.ZC_THF,0)) FROM HY_PC HY,HY_PC_HWXX XX
+		            WHERE HY.PCFS_DM = 2 AND HY.PC_DJXH=XX.PC_DJXH(+) AND HY.PC_DJXH = PC.PC_DJXH)) END YS,
+		       CASE WHEN MAX(AB.YFBGBZ) = 'Y' THEN SUM(NVL(AB.YF_HJ,0)) ELSE 
+		       SUM((SELECT SUM(NVL(HY.YF_HJ,0)+NVL(XX.ZC_HJ,0)+NVL(XX.ZC_HDF,0)+NVL(XX.ZC_THF,0)) FROM HY_PC HY,HY_PC_HWXX XX
+		            WHERE HY.PCFS_DM = 3 AND HY.PC_DJXH=XX.PC_DJXH(+) AND HY.PC_DJXH = PC.PC_DJXH)) END PS,
+		       SUM((SELECT SUM(NVL(FY.ZFJE,0)) FROM HY_FYDJ FY WHERE FY.DD_DJXH = DDHW.DD_DJXH AND FY.HWMXXH = DDHW.XH)) ZCDD,
+		       SUM(((SELECT SUM(NVL(SSMX.JE, 0)) FROM HY_WLSSDJ WLSS, HY_WLSSDJ_MX SSMX WHERE WLSS.WLSS_DJXH = SSMX.WLSS_DJXH
+		                AND WLSS.PC_DJXH = PC.PC_DJXH AND SSMX.WLSSCLFS_DM = 2))) WLSSZC 
+		  FROM HY_PC PC, HY_PC_HWXX PCHW, HY_DD DD, HY_DD_HWMX DDHW,
+		       (SELECT A.PC_DJXH,B.YFBGBZ,B.YF_HJ FROM HY_PC A,HY_PC_XYDJ B WHERE A.PC_DJXH=B.PC_DJXH(+) AND B.YXBZ='Y') AB
+		 WHERE PC.YXBZ = 'Y'
+		   AND PCHW.YXBZ = 'Y'
+		   AND DD.YXBZ = 'Y'
+		   AND DDHW.YXBZ = 'Y'
+		   AND PC.PC_DJXH = AB.PC_DJXH(+)
+		   AND PC.PC_DJXH = PCHW.PC_DJXH(+)
+		   AND PCHW.DD_DJXH = DD.DD_DJXH(+)
+		   AND DD.DD_DJXH = DDHW.DD_DJXH(+)
+		   AND DD.SS_JGBM=#ssJgbm#
+		   <dynamic>
+		   	<isNotEmpty prepend="and" property="rqq">
+		   		DD.XDRQ &gt;= TO_DATE(#rqq#, 'yyyy-MM-dd')
+		   	</isNotEmpty>
+		   	<isNotEmpty prepend="and" property="rqz">
+		   		DD.XDRQ &lt;= TO_DATE(#rqz#, 'yyyy-MM-dd')
+		   	</isNotEmpty>
+		   	<isNotEmpty prepend="and" property="fhrDjxh">
+		   		DD.KH_DJXH = #fhrDjxh#
+		   	</isNotEmpty>
+		   	<isNotEmpty prepend="and" property="fhrMc">
+		   		DD.KHMC LIKE '%' || #fhrMc# || '%'
+		   	</isNotEmpty>
+		   </dynamic>		
+		 GROUP BY DD.KHMC, DD.SS_JGBM)
+		
+	</select>
+</sqlMap>

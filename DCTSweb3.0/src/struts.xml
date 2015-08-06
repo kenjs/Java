@@ -1,0 +1,424 @@
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.i18n.reload" value="true" />
+	<constant name="struts.configuration.xml.reload" value="true" />
+	<constant name="struts.objectFactory" value="spring" />
+	<constant name="struts.ui.theme" value="simple" />
+	<constant name="struts.i18n.encoding" value="UTF8" />
+	<constant name="struts.multipart.maxSize" value="16777216" />
+	<constant name="struts.custom.i18n.resources" value="/config/business" />
+	<constant name="struts.multipart.saveDir" value="D:\temp"/><!-- 20140709 -->
+	<!-- json返回 -->
+	<package name="web-main-action" extends="base-web-common" namespace="/">
+	   <!-- 查询首页的今日动态（没有交易时再查询今日新增司机） -->
+	    <action name="queryTodayDynamic" class="queryTodayDynamic"></action>
+		<!-- 主页当前车源 -->
+		<action name="realDriverCar" class="realDriverCarAction" />
+		<!-- 推荐当前车源 -->
+		<action name="recommendRealDiverCar" class="recommendRealDiverCarAction" />
+		<!-- 主页预约车源 -->
+		<action name="returnDriverCar" class="returnDriverCarAction" />
+		<!-- 主页最新货源 -->
+		<action name="newOrderCargoStart" class="newOrderCargoStartAction" />
+		<!-- 主页数据统计 主页统计交易信息记录数 20140708-->
+		<action name="trandeInfoCount" class="trandeInfoCount" />
+		<!-- 主页数据统计 -->
+		<action name="countDate" class="countDateAction" />
+		<!-- 根据司机ID查询预约线路 -->
+		<action name="driverBusinessLineById" class="driverBusinessLineByIdAction" />
+		<!-- 根据司机ID查询运营线路 -->
+		<action name="queryDriverLineById" class="queryDriverLineByIdAction" />
+		<!-- 根据用户code查询返回用户是否存在 -->
+		<action name="queryWebUserInfoCode" class="queryWebUserInfoCode" />
+		<!-- 根据手机号码mobilephone查询返回手机是否被绑定 -->
+		<action name="queryWebUserInfoMoblePhone" class="queryWebUserInfoMoblePhoneAction" />
+		<!-- 根据公司名称companyName查询公司是否存在 -->
+		<action name="queryCompanyByName" class="queryCompanyByNameAction" />
+		<!-- 用户注册发送短信 -->
+		<action name="sendNote" class="sendNoteAction" />
+		<!-- 用户快速登录  -->
+		<action name="loginUserInfo" class="loginUserInfoAction" />
+		<!-- 用户退出 -->
+		<action name="userLogout" class="webUserInfoLogoutAction" />
+		<!-- 用户找回密码 -->
+		<action name="retrieveUserPws" class="retrieveUserPwsAction" />
+		<!-- 获取访问者地区  -->
+		<action name="ipUserActio" class="ipUserActio" />
+		<!-- 根据登录人的id获取待发货货源(所有)  -->
+		<action name="queryOrderCargoQuote" class="queryOrderCargoQuoteAction" />
+		<!-- 根据id查询货物  -->
+		<action name="queryOrderCargoQuoteById" class="queryOrderCargoQuoteByIdAction" />
+		<!-- 根据货物Id查询货物报价列表  -->
+		<action name="queryQuoteList" class="queryQuoteListAction" />
+	 	<!-- 货源 -->
+	   	<!-- 新增自已公司货源 -->
+		<action name="addLocalOrderCargoInfo" class="addLocalOrderCargoInfo" />
+		<!-- 删除货源 -->
+		<action name="deleteLocalOrderCargoInfo" class="deleteLocalOrderCargoInfo" />
+		<!-- 货源订车查询司机信息 -->
+		<action name="queryDriverTheCarInfo" class="queryDriverTheCarInfoAction" />
+	 	<!-- 交易 -->
+	 	<!-- 导入订单换车（货主版） -->
+		<action name="modifyTransactionDriver" class="modifyTransactionDriver"></action>
+	    <!-- 取消交易（修改货源状态及交易状态，同时添加货源历史记录及交易历史记录 ）-->	
+		<action name="cancleTransaction" class="cancleTransaction"/>
+		<!-- 删除交易记录（修改交易删除状态） -->
+		<action name="modifyTransactionInfoOrderStart" class="modifyTransactionInfoOrderStart"></action>
+		<!-- 修改订单的发货时间和到货时间 -->
+		<action name="modifyDeliveryOrArrivalTime" class="modifyDeliveryOrArrivalTime"></action>
+		<!-- 添加订单记录 -->
+		<action name="addTransactionInfo" class="addTransactionInfo"></action>
+		<!-- 添加订车记录 -->
+		<action name="addTransactionCargoQuote" class="addTransactionCargoQuoteAction"></action>
+		<!-- 收藏司机 -->
+	    <action name="addUserDriver" class="addUserDriver"></action>
+	    <!-- 根据司机Id查询司机交易记录 -->
+	    <action name="queryDriverCarTransactionInfo" class="queryDriverCarTransactionInfoAction"></action>
+
+	    <!-- 根据driverId查询评价信息 -->
+	    <action name="queryUserDriverAssessInfodmList" class="queryUserDriverAssessInfodmList"></action>
+	    <!-- 根据driverId获取司机评价数量-->
+	    <action name="queryUserDrivrAssessCount" class="queryUserDrivrAssessCount"></action>
+	    <!-- 根据driverId获取物流公司评价数量-->
+	    <action name="queryDriverUserAssessCount" class="queryDriverUserAssessCountAction"></action>
+
+	    <!-- 添加货主对司机的评价 -->
+		<action name="saveUserDriverAssessInfo" class="saveUserDriverAssessInfo" />
+		
+		<!-- 百度云推送消息给司机 ，提醒司机有待确认订单 -->
+		<action name="pushMessageToDriver" class="pushMessageToDriver" />
+		<!-- 添加合同司机信息 -->
+		<action name="addPactDriverInfo" class="addPactDriverInfo"></action>
+		<!-- 删除合同司机信息即修改删除标志 -->
+		<action name="modifyPactDriverDeleteFlag" class="modifyPactDriverDeleteFlag"></action>
+		
+	</package>
+	
+	
+      
+	<package name="web-user-action" extends="base-web-common" namespace="/">
+		<!-- 保存用户注册信息-->
+		<action name="registerWebUserInfo" class="registerWebUserInfoAction" >
+		  <result name="success" >/dcts/user/RegisterSuccess.jsp</result>
+		  <result name="error">/dcts/user/Register.jsp</result>
+		</action>
+		<!-- 用户登录 -->
+		<action name="loginWebUserInfo" class="loginWebUserInfoAction" >
+		  <result name="success" >/index.jsp</result>
+		  <result name="error">/dcts/user/login.jsp</result>
+		  <result name="validateAgain" type="redirect">openValidateView?userId=${userId};mobilephone=${mobilephone}</result>
+		</action>
+
+		<action name="openValidateView" class="com.cy.dcts.webUser.action.OpenValidateViewAction">
+			<result name="success">/dcts/user/validateOldUser.jsp</result>
+		</action>
+		
+		<action name="validateUser" class="validateUserAction"></action>
+		
+		<action name="validateUserCode" class="validateUserCodeAction"></action>
+		
+		<!-- 维护子账号-->
+		<action name="registerSonWebUserInfo" class="registerSonWebUserInfoAction" >
+		  <result name="success" >/dcts/myClient/addClientUserInfoSuccess.jsp</result>
+		  <result name="error">/dcts/myClient/addClientUserInfo.jsp</result>
+		</action>
+		
+		<!-- 查询子账号分页-->
+		<action name="querySonWebUserInfo" class="querySonWebUserInfoAction" >
+		  <result name="success" >/dcts/myClient/queryClientUserInfoPage.jsp</result>
+		</action>
+		
+		<!-- 维护子账号页面 -->
+		<action name="addSonWebUserInfo" class="addSonWebUserInfoAction" >
+		  <result name="success" >/dcts/myClient/addClientUserInfo.jsp</result>
+		</action>
+		
+		<!-- 根据id查询子账号 -->
+		<action name="querySonWebUserInfoById" class="querySonWebUserInfoByIdAction" >
+		  <result name="selectSuccess" >/dcts/myClient/selectClientUserInfo.jsp</result>
+		  <result name="success" >/dcts/myClient/updateClientUserinfo.jsp</result>
+		</action>
+		
+		<!-- 身份证查询页面 -->
+		<action name="openIdetityVerifyPage" class="openIdetityVerifyPage">
+			<result name="success">
+				/dcts/web/identityVerifyPage.jsp
+			</result>
+		</action>
+		
+		<!-- 全国公民身份验证 -->
+		<action name="citizenshipVerificationAction" class="identityVerifyAction">
+			<result name="success">
+				/dcts/web/identityVerifyResultPage.jsp
+			</result>
+		</action>
+		
+		<!-- 修改子账号 -->
+		<action name="modifySonWebUserInfo" class="modifySonWebUserInfoAction" >
+		  <result name="success" >/dcts/myClient/updateClientUserInfoSuccess.jsp</result>
+		</action>
+	</package>
+	
+	
+	<package name="web-pactDriverinfo-action" extends="base-web-common" namespace="/">
+	 <!-- 查询合同司机信息 -->
+	   <action name="queryPactDriveInfo" class="queryPactDriveInfo">
+	     <result name="success">dcts/myCenter/pactDriver/pactDriverInfo.jsp</result>
+	   </action>
+	</package>
+	
+	<package name="web-driverCargoAssess-action" extends="base-web-common" namespace="/">
+	 <!-- 司机对货源的点评根据货源Id查询 -->
+	   <action name="queryDriverCargoAssessByCargoId" class="queryDriverCargoAssessByCargoId">
+	     <result name="success">dcts/myCenter/driverCar/queryDriverReplyCargoAssess.jsp</result>
+	   </action>
+	</package>
+	
+	<!-- BASE ACTION -->
+	<!-- 货源action -->
+	<package name="web-orderCargo-action" extends="base-web-common" namespace="/">
+	     	<!-- 打开修改自已公司货源信息页面 -->
+		<action name="openModifyLocalOrderCargoInfo" class="openModifyLocalOrderCargoInfo" >
+			<result name="success">/dcts/myCenter/cargo/modifyOrderCargo.jsp</result>
+		</action>
+		
+		<!-- 修改自已公司货源 (redirectAction ：重定向到一个Action ，跳转的页面中丢失传递的信息;chain：用来处理Action链，被跳转的action中仍能获取上个页面的值)-->
+		<action name="modifyLocalOrderCargoInfo" class="modifyLocalOrderCargoInfo" >
+			<result name="success" type="redirectAction">queryLocalOrderCargoInfo?orderCargoInfoDomain.menuAId=a_id_4</result>
+			<result name="error" >/dcts/myCenter/cargo/modifyOrderCargo.jsp</result>
+			
+		</action>
+	   	<!-- 打开新增公司货源信息页面 -->
+		<action name="openAddLocalOrderCargoInfo" class="openAddLocalOrderCargoInfo" >
+		    <result name="mainAdd">/dcts/cargo/addOrderCargoInfo.jsp</result>
+			<result name="mycenter">/dcts/myCenter/cargo/addOrderCargo.jsp</result>
+		</action>
+		<!-- 查询我的货源  -->
+		<action name="queryLocalOrderCargoInfo" class="queryLocalOrderCargoInfo">
+		   <result name="success">/dcts/myCenter/cargo/queryLocalOrderCargoInfo.jsp</result>
+		</action>
+		
+		<!-- 货源导入-下载Excel模板 -->
+		<action name="downloadOrderCargoFileTemplate" class="downloadOrderCargoFileAction">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream;charset=ISO8859-1</param>  
+				<param name="inputName">fstream</param> 
+				<param name="contentDisposition">attachment;filename=orderCargo.xls</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+		
+		 <!-- 个人中心-货源导入-上传并导入Excel文件 -->
+		<action name="importOrderCargoFromFile" class="importOrderCargoFromFile">
+		   <result name="success" type="redirect">/dcts/myCenter/cargo/importOrderCargoFromFile.jsp?successMessage=${successMessage}</result>
+		   <result name="error">/dcts/myCenter/cargo/importOrderCargoFromFile.jsp</result>
+		</action> 
+		
+		<!-- 首页-货源导入-上传并导入Excel文件 -->
+		<action name="homeImportOrderCargoFromFile" class="homeImportOrderCargoFromFile">
+		   <result name="success" type="redirect">/dcts/cargo/importCargoFromFile.jsp?successMessage=${successMessage}</result>
+		   <result name="error">/dcts/cargo/importCargoFromFile.jsp</result>
+		</action> 
+	</package>
+	
+	<!-- 车源action -->
+	<package name="web-driverUserCar-action" extends="base-web-common" namespace="/">
+	   	<!-- 查询自己所有的常用车辆 -->
+		<action name="queryLocalDriverUserCarInfo" class="queryLocalDriverUserCarInfo">
+			<result name="success">/dcts/myCenter/driverCar/queryLocalDriverUserCarInfo.jsp</result>
+		</action>
+		
+	    <!-- 展示司机竞价详情 -->
+		<action name="queryDriverQuoteInfo" class="queryDriverQuoteInfo" >
+			<result name="success">/dcts/myCenter/driverCar/queryDriverQuoteInfo.jsp</result>
+		</action>
+		
+		 <!-- 更多当前车源 -->
+		<action name="queryMoreRealDriverInfo" class="queryMoreRealDriverInfoAction" >
+			<result name="success">/dcts/web/queryMoreRealDriverCarInfo.jsp</result>
+		</action>
+		 <!-- 更多预约车源 -->
+		<action name="queryMoreReturnDriverInfo" class="queryMoreReturnDriverInfoAction" >
+			<result name="success">/dcts/web/queryMoreReturnDriverCarInfo.jsp</result>
+		</action>
+		 <!-- 更多货源 -->
+		<action name="queryOrderCargoList" class="queryOrderCargoListAction" >
+			<result name="success">/dcts/web/queryCargoInfo.jsp</result>
+		</action>
+		<!-- 司机详细页面 -->
+		<action name="openDriverDetailed" class="openDriverDetailedAction" >
+			<result name="success">/dcts/web/queryDriverDetailed.jsp</result>
+		</action>
+	</package>
+	
+	
+	<!-- 收集位置信息action -->
+	<package name="web-driverLocation-action" extends="base-web-common" namespace="/">
+	   	<!-- 查询某个司机的历史轨迹及当前位置（跟踪） -->
+		<action name="queryLocationInfo" class="queryLocationInfo" >
+			<result name="success">/dcts/myCenter/location/queryLocationInfo.jsp</result>
+		</action>
+	</package>
+	
+	<!-- 成交记录 -->
+	<package name="web-transaction-action" extends="base-web-common" namespace="/">
+	<!-- 查询回单和发货单上传的图片 -->
+	 <action name="queryReceiptOrShipperOrderPath" class="queryReceiptOrShipperOrderPath">
+		    <result name="success" >/dcts/myCenter/transaction/showImages.jsp</result>
+		    <result name="error">/dcts/myCenter/transaction/showImages.jsp</result>
+		</action>
+		
+	   <!-- 保存导入订单货源信息 -->
+	 <action name="saveImportTrandeCargo" class="saveImportTrandeCargo">
+	        <result name="yesSuccess" type="redirectAction">queryTransactionInfo?transactionInfoDomain.menuAId=a_id_5</result>
+		    <result name="success" >/dcts/myCenter/transaction/showImportTransactionCargo.jsp</result>
+		     <result name="error">/dcts/myCenter/transaction/showImportTransactionCargo.jsp</result>
+		</action>
+	
+	   <!-- 导入订单货源信息 -->
+		<action name="importTransactionInfos" class="importTransactionInfos">
+		    <result name="success" >/dcts/myCenter/transaction/showImportTransactionCargo.jsp</result>
+		     <result name="error">/dcts/myCenter/transaction/importTransactionOrderCargo.jsp</result>
+		</action>
+	
+	   <!-- 订单货源导入（货主版）-下载Excel模板 -->
+		<action name="downloadTransactionCargoFile" class="downloadTransactionCargoFile">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream;charset=ISO8859-1</param>  
+				<param name="inputName">fstream</param> 
+				<param name="contentDisposition">attachment;filename=transactionOrderCargo.xls</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+	 
+	    <!--修改 导入订单的信息  -->
+	    <action name="modifyImportTransactionInfo" class="modifyImportTransactionInfo">
+			<result name="success" type="redirectAction">queryTransactionInfo?transactionInfoDomain.menuAId=a_id_5</result>
+			<result name="error">/dcts/myCenter/transaction/modifyImportTransactionInfo.jsp</result>
+		</action>
+	
+	  	<!--  打开修改 导入订单的信息  根据Id查询导入订单的信息 返回domain  (货主版) -->
+		<action name="openModifyImportTransactionInfo" class="openModifyImportTransactionInfo" >
+			<result name="success">/dcts/myCenter/transaction/modifyImportTransactionInfo.jsp</result>
+		</action>
+		
+	   	<!-- 查询我的订单 -->
+		<action name="queryTransactionInfo" class="queryTransactionInfo" >
+			<result name="success">/dcts/myCenter/transaction/queryTransactionInfo.jsp</result>
+		</action>
+		
+		<!-- 查询订单（订单）详情 -->
+		<action name="queryTransactionDetail" class="queryTransactionDetail" >
+		    <result name="error">/dcts/myCenter/transaction/queryTransactionDetailError.jsp</result>
+			<result name="success">/dcts/myCenter/transaction/queryTransactionDetail.jsp</result>
+			<result name="successArrived">/dcts/myCenter/transaction/queryTransactionDtailArrived.jsp</result>
+			<result name="transactionDetail">/dcts/myCenter/transaction/queryTransactionDetail2.jsp</result>
+		</action>
+		<!-- 修改交易状态及（货源已送达-订单完成）评价 -->
+		<action name="modifyTransactionStart" class="modifyTransactionStart">
+		   <result name="success" type="redirectAction">queryTransactionDetail?transactionInfo.id=${transactionInfo.id}&amp;driverUserInfoDomain.transactionStep=${transactionInfoDomain.tradeStart}</result>
+		</action>
+		
+		<!-- 查询成功或失败的订单（交易记录）,待交易订单（个人中心首页） -->
+		<action name="querySuccessCloseTransactionInfo" class="querySuccessCloseTransactionInfo" >
+			<result name="successCloseTrande">/dcts/myCenter/transaction/querySuccessCloseTransactionInfo.jsp</result>
+			<result name="success">/dcts/myCenter/myCenter.jsp</result>
+		</action>
+	</package>
+	
+	<!-- 公司action -->
+	<package name="web-company-action" extends="base-web-common" namespace="/">
+	<!-- 从本地文件夹中读出文件显示到jsp页面  class="com.cy.dcts.company.action.OutputImageAction"必须这样写-->
+       <action name="outputImage" class="com.cy.dcts.company.action.OutputImageAction"></action>
+       
+	   	<!--打开企业认证 -->
+		<action name="openCompanyAuthentication" class="openCompanyAuthentication" >
+			<result name="success">/dcts/myCenter/company/companyAuthentication.jsp</result>
+		</action>
+			<!--提交企业认证信息 -->
+		<action name="saveCompanyAuthentication" class="saveCompanyAuthentication" >
+		    <!-- <param name="filePath">
+					E:/apache-tomcat-6.0.37/file
+		     </param>
+				<interceptor-ref name="fileUpload">
+					<param name="allowedTypes">
+						image/pjpeg,image/bmp,image/png,image/gif,image/jpeg,image/jpg,image/x-png					
+					</param>
+				</interceptor-ref> -->
+				<interceptor-ref name="defaultStack" />
+			<result name="success" type="redirect">/dcts/myCenter/company/saveCompangyAuthenticationSuccess.jsp</result>
+			<result name="error">/dcts/myCenter/company/companyAuthentication.jsp</result>
+		</action>
+	</package>
+	
+	<!-- 个人中心action -->
+	<package name="web-myCenter-action" extends="base-web-common" namespace="/">
+		<!-- 个人中心初始化 -->
+		<action name="openMyCenterInforAction" class="com.cy.dcts.webUser.action.OpenMyCenterInforAction">
+			<result name="success">/dcts/myCenter/myCenter.jsp</result>
+		</action>
+		<!-- 账户管理  修改密码 begin -->
+		<action name="accountManagementAction" class="accountManagementAction">
+			<result name="success">/dcts/myCenter/user/accountManagement.jsp</result>
+		</action>
+		<action name="openUpdatePwdView" class="com.cy.dcts.webUser.action.OpenUpdatePwdViewAction">
+			<result name="success">/dcts/myCenter/user/updatePwd.jsp</result>
+		</action>
+		<action name="updatePwdAction" class="updatePwdAction" />
+		<!-- 账户管理  修改密码 end -->
+		<!-- 账户管理 手机修改 begin -->
+		<action name="openUpdateTelephoneView" class="com.cy.dcts.webUser.action.OpenUpdateTelephoneViewAction">
+			<result name="success">/dcts/myCenter/user/updateTelephone.jsp</result>
+		</action>
+		<action name="checkPhoneNumber" class="checkPhoneNumberAction" />
+		<action name="updateTelephoneAction" class="updateTelephoneAction"></action>
+		<!-- 账户管理 手机修改 end -->
+		<!-- 个人中心 评价管理 -->
+		<action name="openEvaluationManagementAction" class="com.cy.dcts.webUser.action.OpenEvaluationManagementAction">
+			<result name="success">/dcts/myCenter/user/evaluationManagement.jsp</result>
+		</action>
+		<!-- 个人中心 完善信息 -->
+		<action name="accountManagementUpdateAction" class="accountManagementUpdateAction">
+			<result name="success" type="redirectAction">accountManagementAction</result>
+		</action>		
+		<!-- 评价管理 -->
+		<action name="loadUserDriverEvaluation" class="loadUserDriverEvaluation">
+		   <result name="success">/dcts/myCenter/user/evaluationManagement.jsp</result>			
+		</action>
+		<action name="loadDriverUserEvaluation" class="loadDriverUserEvaluation">	
+		   		<result name="success">/dcts/myCenter/user/evaluationManagement.jsp</result>
+		</action>
+	</package>
+	
+	<!-- 地区字典 -->
+	<package name="web-dict-action" extends="base-web-common" namespace="/">
+		<action name="getAreaDict" class="com.cy.dcts.dict.action.AreaDictInfoAction" /><!-- 地区 -->
+		<action name="getCarBarTypeDict" class="com.cy.dcts.dict.action.CarBarTypeDictInfoAction" /><!-- 数据字典-车辆-栏 -->
+		<action name="getCarLengthDict" class="com.cy.dcts.dict.action.CarLengthDictInfoAction" /><!-- 数据字典-车辆-长 -->
+		<action name="getCarPlateTypeDict" class="com.cy.dcts.dict.action.CarPlateTypeDictInfoAction" /><!-- 数据字典-车辆-板 -->
+	</package>
+	<package name="base-web-common" extends="struts-default,json-default" namespace="/" abstract="true">
+		<!-- 操作日志拦截 -->
+		<interceptors>
+			<interceptor name="operationLogInterceptor" class="com.cy.dcts.common.interceptor.DCTSOperationLogInterceptor" />
+			<interceptor-stack name="operationLogSatck">
+				<interceptor-ref name="operationLogInterceptor" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="operationLogSatck" /> 
+		<global-results>
+			<result name="login">/dcts/user/login.jsp</result>
+			<result name="pageSuccess">*.jsp</result>
+			<result name="pageError">/common/error.jsp</result>
+			<result name="success" type="json"></result>
+			<result name="error" type="json"></result>
+		</global-results>
+	</package>
+	
+	
+</struts>

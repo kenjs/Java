@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="driver" default="all" basedir="../">
+	<property name="app-name" value="DriverService3.0" />
+	<property name="app-short-name" value="DriverService" />
+	<property name="app-dir" value="${basedir}/${app-name}" />
+
+	<property name="thirdpath" value="${app-dir}/DriverService/WEB-INF/lib" />
+	<property name="classes.dir" value="${app-dir}/DriverService/WEB-INF/classes" />
+	<!--lib-->
+	<property name="lib.dir" value="${thirdpath}" />
+	<path id="project.class.path">
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+
+	</path>
+
+	<!--********src-->
+	<property name="module.src.dir" value="${app-dir}/src" />
+	<!--<property name="module.src.dir.gensrc" value="${app-dir}/gensrc" />-->
+	<!--end-->
+	<property name="dist.dir" value="${app-dir}/dist" />
+	<!--项目属徿 -->
+	<property name="project.provider.name" value="DriverService" />
+	<property name="project.name" value="DriverService" />
+	<property name="project.version" value="2.1.1" />
+	<!--时间属性定䷿ -->
+	<tstamp>
+		<format property="datestamp" pattern="yyyy-MM-dd-HH-mm-ss" />
+	</tstamp>
+
+
+
+	<!--资源文件过滤设置，在copy的时候引用，即只拷贝指定的资源文件 -->
+	<property name="compiler.args" value="-encoding utf-8" />
+	<patternset id="compiler.resources">
+		<include name="**/?*.properties" />
+		<include name="**/?*.xml" />
+	</patternset>
+
+	<!--加入配置文件
+	<patternset id="compiler.resources">
+		<include name="**/?*.properties" />
+	</patternset>-->
+	<!--==================================-->
+	<!-- 初始化dist目录				      -->
+	<!--==================================-->
+	<target name="init">
+		<delete dir="${classes.dir}" />
+
+		<mkdir dir="${classes.dir}" />
+		
+		<delete dir="${dist.dir}" />
+
+		<mkdir dir="${dist.dir}" />
+	</target>
+	
+	<!--编译-->
+
+	<target name="javasrc-compile">
+		<echo message="${module.src.dir}" />
+		<javac srcdir="${module.src.dir}" source="1.7" destdir="${classes.dir}" debug="true" encoding="utf-8" failonerror="false">
+			<classpath>
+				<fileset dir="${classes.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+			<classpath refid="project.class.path" />
+		</javac>
+
+	</target>
+	<!--打jar包文件 -->
+	<target name="createFile" depends="init" description="createFile">
+	</target>
+	
+	<!-- copy jar  delete classes -->
+	<target name="copy_jar" depends="createFile,javasrc-compile" description=" copy jar to lib">
+		<echo level="info">copy</echo>
+		<copy todir="${app-dir}/DriverService/WEB-INF/classes" overwrite="true">
+			<fileset dir="${app-dir}/src" excludes="**/*.java" />
+		</copy>
+	</target>
+
+	<!--打war包-->
+	<target name="build" depends="createFile,javasrc-compile,copy_jar" description="create Coss Web App File">
+		<echo level="info">打包</echo>
+		<war destfile="${app-dir}/dist/${app-short-name}.war" webxml="${app-dir}/DriverService/WEB-INF/web.xml">
+			<fileset dir="${app-dir}/DriverService">
+				<exclude name="**/CVS" />
+				<exclude name="**/cvs" />
+				<exclude name="**/.svn"/>
+				<exclude name="**/.SVN"/>
+				<exclude name="**/*.log" />
+				<exclude name="**/*.bak" />
+				<exclude name="**/*.bak/**" />
+				<exclude name="**/Thumbs.db" />
+			</fileset>
+		</war>
+		
+		<zip destfile="${app-dir}/dist/${app-short-name}-${project.version}-${datestamp}.zip">
+				<fileset dir="${app-dir}/dist"></fileset>
+		</zip>
+		<delete file="${app-dir}/dist/${app-short-name}.war" />
+	</target>
+
+	<target name="all" depends="createFile,javasrc-compile,copy_jar,build" description="gen jar file">
+	</target>
+</project>

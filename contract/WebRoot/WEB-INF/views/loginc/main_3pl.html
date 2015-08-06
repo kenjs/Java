@@ -1,0 +1,277 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"/>
+    <meta http-equiv="pragma" content="no-cache"/>
+    <meta http-equiv="Cache-Control" content="no-cache,must-revalidate"/>
+    <title>传化物流-会员中心</title>
+    <link rel="stylesheet" href="../js/themes/trade/css/style2.css"/>
+    <link type="text/css" rel="stylesheet" href="../css/reg/passport.base.css"/>
+    <link type="text/css" rel="stylesheet" href="../css/reg/regist.personal.css"/>
+    <script type="text/javascript" src="../js/themes/regc/jquery-1.2.6.pack.js"></script>
+    <script src="../js/sys/sys.js"></script>    
+    <script type="text/javascript">
+    javascript:window.history.forward(1);
+    var params;
+     javascript:window.history.forward(1);
+    $(document).ready(function(){
+    
+	     $("#btnSubmit").click(function()
+	     {  params="toconsignornumber="+$("#tracetrade").val()+"&random="+Math.random();
+	    	window.open("../tradecs/trade_trace?"+params);
+	    });	
+	});
+	function logout(){//退出
+		window.self.location = "logout";
+	}
+	
+	
+             //判断跳转3pl,货源管理,配送管理权限
+    function checkpremission(preimission)
+	{
+    	//alert(preimission);
+	  //window.open("../goodssourcemodelcs/modeldetail?id="+goodsSourceModelId);
+	  $.ajax({
+			   type : "post",
+			   url : "../partycs/checkPermission?random="+Math.random()+"&premission="+encodeURIComponent(encodeURIComponent(preimission)),
+			   dataType: "json",
+			   error : function(){alert("操作失败")},
+			   success : function(data) {
+			   		if(data.msg=='ok'){
+			   			//刷新页面
+			   			if(preimission=='3pl'){
+			   				window.location="../logincs/main_3pl";
+			   			}
+			   			if(preimission=='配送'){
+			   				window.location="../todispermissioncs/ordermanage";
+			   			}
+			   			if(preimission=='发布货源'){
+			   				window.location="../goodssourcecs/fastpub";
+			   			}
+			   			
+			   		
+			       	}else{
+			       	alert("你还没有使用这个功能的权限，请申请！！");
+			       	}
+			   }
+	  		});
+	}
+	
+    </script>
+<style type="text/css">
+/*banner*/
+.c-div-banner{width:100%;height:100px;;background-color:#f8f8f8;margin:0px;border:0px;border-right:0px solid #999999;border-bottom:2px solid #ec6110;text-align:center;}
+.c-table-banner{width:1000px;height:100px;margin:0px auto;border:0px;border:0px solid #999999;text-align:center;}
+.c-table-banner .c-td-pic{width:80px;height:"100px";text-algin:center;margin:0px;padding:0px 24px 0px 0px;border:0px solid red;}
+
+.c-main{width:990px;height:900px;border:0px solid black;padding:0px;margin:0 auto;float:left;}
+.c-left{width:159px;background-color:#f5f5f5;margin-top:2px;margin-left:0px;border:0px solid #999999;padding:0px;float:left;}
+.c-right{width:800px;height:850px;padding-left:10px;margin-top:2px;border-top:1px solid #dddddd;border-bottom:1px solid #dddddd;padding:0px;float:left;}
+.c-table-menu{width:159px;height:200px;margin:0px;border:0px;padding:0px;}
+.c-tr{width:159px;margin:0px;border:0px;padding:0px;}
+.c-tr a{color:#333333;}
+.c-td-title-first{width:159px;height:37px;background:url(../imgs/login/menu/left_menu.jpg) no-repeat;margin:0px;border-right:0px solid #999999;padding:5px 0px 0px 8px;;font-weight:bold;color:#3f3f3f;font-size:14px;}
+.c-td-title{width:159px;height:32px;background:url(../imgs/login/menu/left_menu.jpg) no-repeat;margin:0px;border-right:0px solid #999999;padding:5px 0px 0px 8px;font-weight:bold;font-size:14px;}
+.c-td-memu{width:159px;height:36px;margin:0px;border-right:0px solid #999999;padding:4px 15px 0px 35px;cursor:pointer;font-size:14px;float:left;}
+.c-table-trace{width:150px;height:100px;margin:10px 0px 0px 0px;border:0px;padding:0px;}
+
+/*服务模块*/
+.c-div-service{width:159px;height:200px;margin:0px;border:0px;border-right:0px solid #999999;}
+
+/*左边菜单选中*/
+.clicked{width:159px;height:36px;margin:0px;border:0px solid red;font-size:14px;font-weight:bold;color:#ec6110;background:url(../imgs/login/menu/left_menu_hover.jpg) no-repeat 25px 0px;}
+.noclicked{width:159px;height:36px;margin:0px;border-right:0px solid #999999;font-size:14px;font-weight:normal;color:#3f3f3f;}
+
+
+.c-iframe{width:800px;height:600px;margin-top:0px;border:0px solid black;padding:0px;float:left;}
+</style>
+</head>
+ 
+<body>
+	<div id="shortcut">
+		<div class="w">
+			<ul class="fr lh">
+				<li class="fore1 ld" style="width:300px;margin-right:350px;border:0px solid red;" id="loginbar"><span id="username" style="width:200px;border:0px solid red;"></span> 您好！欢迎来到传化物流！</li>
+				<li class="fore2 menu" data-widget="dropdown">
+					<dl>
+						<dt class="ld"><a href="#" target="_blank">友情链接<b></b></a></dt>
+						<dd>
+							<div><a href="http://bus.tf56.com" target="_blank">路港快线<b></b></a></div>
+							<div><a href="http://www.tf56.com" target="_blank">传化物流<b></b></a></div>
+						</dd>
+					</dl>
+				</li>
+				 <!--<li class="fore4 menu" data-widget="dropdown">
+					<dl>
+						<dt class="ld"><a href="http://bus.tf56.com" target="_blank">路港快线<b></b></a></dt>
+					</dl>
+				</li>
+				<li class="fore5 menu" data-widget="dropdown">
+					<dl>
+						<dt class="ld"><a href="http://www.tf56.com" target="_blank">传化物流<b></b></a></dt>
+					</dl>
+				</li> -->
+				<!-- <li class="fore5 menu" data-widget="dropdown">
+					<dl>
+						<dt class="ld"><a href="#" target="_blank">我是货主<b></b></a></dt>
+						<dd>
+							<div><a href="#" onclick="f_open('../logincs/main_goodssource','')" target="_blank">我要发货</a></div>
+						</dd>
+					</dl>
+				</li>-->
+				<li class="fore5 menu" data-widget="dropdown">
+					<dl>
+						<dt class="ld"><a href="#" target="_blank">用户设置</a></dt>
+						<dd>
+							<div><a href="../logincs/main_partycenter" target="_self">帐号管理</a></div>
+						</dd>
+					</dl>
+				</li>
+				<li class="fore6 menu" data-widget="dropdown">
+					<dl>
+						<dt class="ld"><a href="#" target="_blank">交易中心</a></dt>
+						<dd>
+							<div><a href="../logincs/main_3pl" target="_self">收发货管理</a></div>
+						</dd>
+					</dl>
+				</li> 
+				<li class="fore1 ld"><span id="logout"></span></li>
+			</ul>
+			<span class="clr"></span>
+		</div>
+	</div><!--shortcut end-->
+	<div class="c-div-banner" id="login-logo">
+		<table class="c-table-banner">
+			<tr><td colspan="4" style="width:100%;height:10px;"></td></tr>
+			<tr>
+				<td >
+					<a href="#"><img src="../imgs/login/newlogin/logo.png" alt="传化物流" width="287px" height="62px"/></a>
+				</td>
+				<td style="width: 473px;margin:0px;border:0px solid red;"></td>
+				<td id="00" width="80px" height="90px" class="c-td-pic">
+					<a href="../logincs/main_3pl" target="_self" style="width:80px;height:90px;">
+						<img src="../imgs/login/banner/menu2_icon_hover.png" alt="" />
+					</a>
+				</td>
+				<td id="01" width="80px" height="90px" class="c-td-pic" >
+					<a href="#" target="_self" style="width:80px;height:90px;" onclick="checkpremission('发布货源')">
+						<img src="../imgs/goodssourcec/menu5_icon_link.png" alt="" />
+					</a>
+				</td>
+				
+				<td id="02" width="80px" height="90px" class="c-td-pic" >
+					<a href="../logincs/main_partycenter" target="_self" style="width:80px;height:90px;">
+						<img src="../imgs/login/banner/menu1_icon.png" alt="" />
+					</a>
+				</td>
+				
+				<td id="03" width="80px" height="90px" class="c-td-pic" >
+					  <a href="#" target="_self" style="width:80px;height:90px;" onclick="checkpremission('配送')">
+							<img src="../imgs/login/banner/menu3_icon.png" alt="" />
+					  </a>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div style="width:100%;height:25px;"></div>
+	<div class="w" id="regist">
+	<div class="mc">
+		<!--  <ul class="tab">
+		    <span style="font-size:15px;color:red;">3PL下单</span>
+		</ul>-->
+   		<div id="main" class="c-main">
+   			<div id="left" class="c-left">
+				<table class="c-table-menu">
+					<tr class="c-tr"><td class="c-td-title-first"><div style="width:150px;height:22px;margin-top:5px;border:0px;padding:0px 0px 0px 15px;font-weight:bold;float:left;">交易管理</div></td></tr>
+					<tr class="c-tr"><td id="0" ot="0" url="../tradecs/consignee_list" class="c-td-memu" style="padding-top:5px;">我要收货</td></tr> 
+					<tr class="c-tr"><td id="1" ot="0" url="../tradecs/consignor_list" class="c-td-memu">我要发货</td></tr>
+					<tr class="c-tr"><td id="2" ot="0" url="../consignorconsigneecs/list" class="c-td-memu">收发人管理</td></tr>
+					<tr class="c-tr"><td class="c-td-title"><div style="width:150px;height:22px;margin-top:5px;border:0px;padding:0px 0px 0px 15px;font-weight:bold;float:left;">统计数据</div></td></tr>
+					<tr class="c-tr"><td id="4" ot="0" url="../tradecs/statistica_trade_list" class="c-td-memu">收货统计表</td></tr>
+					<!-- <tr class="c-tr"><td id="5" ot="0" url="../tradecs/statistica_tradeamount_list" class="c-td-memu" style="padding-top:5px;">运费明细表</td></tr> -->
+				</table>
+				<table class="c-table-trace" style="margin-top:20px;">
+					<tr><td style="width:140px;text-algin:left;">
+		            <h3 class="side-title conner-all">
+			        <span class="side-title-icon t-links"></span>快速追踪运单</h3></td></tr>
+					<tr><td style="width:140px;height:10px;"></td></tr>
+					<tr>
+						<td><textarea name="tracetrade" id="tracetrade"  style="width:140px;height:60px;resize:none"></textarea></td>
+					</tr>
+					<tr>
+						<td style="width:140px;height:15px;padding-top:15px;"><input type="button" id="btnSubmit" class="btn-all conner-all btn-green btn-inline f12 w80" value="查询" /></td>
+					</tr>
+					<tr>
+						<td style="width:140px;height:15px;padding-top:15px;border-bottom:1px solid #dddddd;"></td>
+					</tr>
+				</table>
+                <div class="c-div-service">
+               		<img src="../imgs/login/menu/left_tel.jpg" border="0"/>
+				</div>
+			</div>
+   			<div id="right" class="c-right">
+   				<iframe id="right-iframe" scrolling="no" class="c-iframe" frameborder="no" border="0" src="../logincs/main_welcome.html"></iframe>
+   			</div>
+   		</div>
+	</div>
+</div> 
+<div class="w">
+    <div id="footer">
+    </div>
+</div><!-- footer end -->
+  <script type="text/javascript"> 
+    (function($) {
+    	//调节高度start
+    	AdjustColumnsHeight = function(obj1,obj2){ 
+			 var h1 = $(obj1).outerHeight(); 
+			 var h2 = $(obj2).outerHeight(); 
+			 var mh = Math.max( h1, h2); 
+			 $(obj1).height(mh); 
+			 $(obj2).height(mh-1); 
+		}
+    	AdjustColumnsHeight(".c-left",".c-right");
+    	//调节高度end
+    	var arr=new Array('00','01');
+    	$.ajax({
+    		url:"../logincs/getInit?random="+Math.random(),
+    		dataType:"json",
+    		contentType: "application/json",
+	      	type:'get',
+	      	//timeout:1000,  
+	      	//data:params, //后台不能接收 
+	      	success:function(data){ 
+	      		$("#username").html("<a title="+data.username_all+" style='cursor:pointer;color:#6A6AFF;' size=2>"+data.username_part+"&nbsp;</a>,");
+				$("#logout").html("<a href=\"javascript:logout()\">[退出]</a>");
+	      	}, 
+	      	error:function(XMLHttpRequest, textStatus, errorThrown) {
+               //alert(XMLHttpRequest.status);
+              // alert(XMLHttpRequest.readyState);
+               //alert(textStatus); 
+	   		}
+    	});
+        $("#shortcut .menu").Jdropdown({delay: 50});
+      
+        $("td").each(function(){//注册事件
+			var id=$(this).attr("id");
+				if(id.length>0&&id.length==1){//注册左边菜单
+					$("#"+id).bind("click",function(){
+						$('td[id!='+id+']').removeClass("clicked").addClass("noclicked");
+						$('td[id='+id+']').removeClass("noclicked").addClass("clicked");
+						if($(this).attr("ot")=='0'){//刷新iframe
+							document.getElementById("right-iframe").src=$(this).attr("url");   
+						}else{//弹出页面
+							f_open($(this).attr("url"),id);
+						}
+					});
+				}
+		});
+		
+    })(jQuery);
+	</script>
+</body>
+</html>
+ 
+ 
+

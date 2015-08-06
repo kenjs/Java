@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="GBK"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.xtgl.dao.BusQyZzjgZgsWhMapper">
+
+    <!--根据企业组织序号取DOMAIN-->
+	<select id="selectQyZzjgByQyzcxh" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.QyZzjgDomain">
+		select Q.Jgbm as jgbm,
+	       Q.MC as mc,
+	       Q.JC as jc,
+	       (select DJ.JGLB_MC from Dm_Jglb DJ where DJ.JGLB_DM=Q.JGLB_DM) as jglbMc,
+	       Q.Jcbm as jcbm,
+	       Q.Jbdm as jbdm,
+	       Q.Sj_Jgbm as sjJgbm,
+	       Q.Qy_Zcxh as qyZcxh,
+	       Q.Dz as dz,
+	       Q.Dh as dh,
+	       Q.Yb as yb,
+	       Q.Fzr as fzr,
+	       (select QR.MC from Qy_Rydj QR where QR.CZY_DJXH=Q.Cjr_Czy_Djxh) as cjrMc,
+	       Q.Cjrq as cjrq,
+	       (select QR.MC from Qy_Rydj QR where QR.CZY_DJXH=Q.Xgr_Czy_Djxh) as xgrMc,
+	       Q.Xgrq as xgrq,
+	       Q.Pyjx as pyjx,
+	       Q.Pyqp as pyqp,
+	       G.Qybm as qybm,
+	       (select DX.XZQH_MC from Dm_Xzqh DX where DX.XZQH_DM=G.Xzqh_Dm) as xzqhMc
+	  from Qy_Zzjg Q,GL_QYZC G
+	  where Q.QY_ZCXH=G.QY_ZCXH
+	  and Q.Yxbz='Y'
+		<dynamic>
+			<isNotEmpty property="qyzcxh" prepend="and">		
+				Q.QY_ZCXH=#qyzcxh#
+			</isNotEmpty>
+		</dynamic>
+
+    </select>
+    
+    <!--根据主键和名称取符合条件的DOMAIN的个数-->
+	<select id="selectQyZzjgnumByKeymc" parameterClass="java.util.Map"
+		resultClass="int">
+		select count(a.JGBM) as jgbm from QY_ZZJG a  
+		where a.YXBZ='Y'
+		<dynamic>
+			<isNotEmpty property="mc" prepend="and">
+				a.MC=#mc#
+			</isNotEmpty>
+		</dynamic>
+		<dynamic>
+			<isNotEmpty property="jgbm" prepend="and">
+				<![CDATA[a.JGBM<>#jgbm#]]>
+			</isNotEmpty>
+		</dynamic>
+    </select>
+
+	
+    
+</sqlMap>

@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+	<typeHandler jdbcType="CLOB" javaType="java.lang.String" callback="org.springframework.orm.ibatis.support.ClobStringTypeHandler" />
+	<typeHandler jdbcType="BLOB" javaType="[B" callback="org.springframework.orm.ibatis.support.BlobByteArrayTypeHandler" />
+	<!-- 决策管理模块start -->
+	<sqlMap resource="com/cy/common/xmlsql/business/jcgl/bus_jc_tydgl.xml"/>  
+	<sqlMap resource="com/cy/common/xmlsql/business/jcgl/bus_jc_pcxxgl.xml"/>  
+	
+	<sqlMap resource="com/cy/common/xmlsql/business/jcgl/bus_jc_shqktj.xml"/> 
+
+	<sqlMap resource="com/cy/common/xmlsql/business/jcgl/bus_jc_shhwhz.xml"/> 
+
+	
+	<sqlMap resource="com/cy/common/xmlsql/business/jcgl/bus_jc_khshmx.xml"/> 
+	
+	<sqlMap resource="com/cy/common/xmlsql/business/jcgl/bus_jc_yxsjb.xml"/> 
+	<sqlMap resource="com/cy/common/xmlsql/business/jcgl/bus_jc_ml.xml"/> 
+	
+	<sqlMap resource="com/cy/common/xmlsql/business/jcgl/bus_jc_khshqs.xml"/> 
+	
+	<sqlMap resource="com/cy/common/xmlsql/business/jcgl/bus_jc_fcqktj.xml"/>
+	<!-- 决策管理模块end --> 
+</sqlMapConfig>

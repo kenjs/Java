@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.zygl.dao.BusQyxxzjdjxxMapper">
+	<select id="selectQyXxzjDjxxPage" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyXxzjDjxxDomain">
+		SELECT A.XXZJ_DJXH AS xxzjDjxh,
+		       A.SS_JGBM AS ssJgbm,
+		       A.XXZJMC AS xxzjmc,
+		       A.XXZJJC AS xxzjjc,
+		       A.PYQC AS pyqc,
+		       A.PYJC AS pyjc,
+		       (SELECT RY.XZQH_MC from DM_XZQH RY WHERE RY.XZQH_DM=A.XZQH_DM) qhStr,
+		       A.DZ AS dz,
+		       A.DH AS dh,
+		       A.YB AS yb,
+		       A.FZR AS fzr,
+		       A.XXZJ_QYBM AS xxzjQybm,
+		       A.BZ AS bz,
+		       A.DJ_JGBM AS djJgbm,
+		       A.DJR_CZY_DJXH AS djrCzyDjxh,
+		       A.DJRQ AS djrq,
+		       A.QYBZ AS qybz,
+		       A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM QY_XXZJ_DJXX A 
+		  WHERE A.YXBZ='Y' and A.SS_JGBM=#jgbm#
+		  <dynamic>
+		  		<isNotEmpty prepend="and" property="mc">
+		  			A.XXZJMC like #mc#
+		  		</isNotEmpty>
+		  </dynamic>
+		  $orderStr$
+    </select>
+    
+    	<select id="selectQyXxzjDjxxAll" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyXxzjDjxxDomain">
+		SELECT A.XXZJ_DJXH AS xxzjDjxh,
+		       A.SS_JGBM AS ssJgbm,
+		       A.XXZJMC AS xxzjmc,
+		       A.XXZJJC AS xxzjjc,
+		       A.PYQC AS pyqc,
+		       A.PYJC AS pyjc,
+		       (SELECT RY.XZQH_MC from DM_XZQH RY WHERE RY.XZQH_DM=A.XZQH_DM) qhStr,
+		       A.DZ AS dz,
+		       A.DH AS dh,
+		       A.YB AS yb,
+		       A.FZR AS fzr,
+		       A.XXZJ_QYBM AS xxzjQybm,
+		       A.BZ AS bz,
+		       A.DJ_JGBM AS djJgbm,
+		       A.DJR_CZY_DJXH AS djrCzyDjxh,
+		       A.DJRQ AS djrq,
+		       A.QYBZ AS qybz,
+		       A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM QY_XXZJ_DJXX A 
+		  WHERE A.YXBZ='Y' and A.SS_JGBM=#jgbm#
+		  <dynamic>
+		  		<isNotEmpty prepend="and" property="mc">
+		  			A.XXZJMC like #mc#
+		  		</isNotEmpty>
+		  </dynamic>
+		ORDER by A.XXZJ_DJXH ASC
+    </select>
+
+	<select id="getQyXxzjDjxxRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.XXZJ_DJXH) 
+		  FROM QY_XXZJ_DJXX A 
+		   WHERE A.YXBZ='Y' and A.SS_JGBM=#jgbm#
+		  <dynamic>
+		  		<isNotEmpty prepend="and" property="mc">
+		  			A.XXZJMC like #mc#
+		  		</isNotEmpty>
+		  </dynamic> 
+	</select>
+	
+	<select id="checkQyXxZjMc" parameterClass="com.cy.common.bo.QyXxzjDjxx" resultClass="java.lang.Integer">
+		select count(A.XXZJ_DJXH)
+		 from QY_XXZJ_DJXX A
+		  where A.SS_JGBM=#ssJgbm# and A.XXZJMC=#xxzjmc#
+		  	and A.YXBZ='Y'
+		  	 <dynamic>
+		  	 	<isNotEmpty prepend="and" property="xxzjDjxh">
+		  	 		 <![CDATA[ A.XXZJ_DJXH <> #xxzjDjxh# ]]>
+		  	 	</isNotEmpty>
+		  	 </dynamic>
+	</select>
+</sqlMap>

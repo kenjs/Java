@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<!-- 位置信息上传 -->
+	<insert id="iBatisInsertCollentInfoLocation" parameterClass="com.cy.common.bo.LocationCollectLastInfoBo">
+		INSERT INTO t_location_collect_info (
+			DRIVER_ID,
+			LONGITUDE,
+			LATITUDE,
+			PROVINCE,
+			CITY,
+			COUNTY,
+			TOWN,
+			LOCATION,
+			COLLECT_TIME,
+			CREATE_TIME
+		)
+		VALUES
+			(
+			#driverId#,
+			#longitude#,
+			#latitude#,
+			#province#,
+			#city#,
+			#county#,
+			#town#,
+			#location#,
+			sysdate(),
+			sysdate())
+		<selectKey keyProperty="id" resultClass="Integer">
+			select last_insert_id() as id
+		</selectKey>
+	</insert>
+</sqlMap>

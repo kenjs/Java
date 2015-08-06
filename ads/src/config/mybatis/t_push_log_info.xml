@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.driver.dao.PushLogInfoDao">
+
+    <update id="updatePushLogInfoById" parameterType="PushLogInfo">
+        UPDATE t_push_log_info
+        <set>
+            <if test="isClicked != null and isClicked != ''">
+                is_clicked = 1,
+            </if>
+            <if test="clickedTime != null and clickedTime != ''">
+                clicked_time = #{clickedTime}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

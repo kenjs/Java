@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.hygl.dao.QyXlwhMapper">
+
+	<!--根据主键取DOMAIN-->
+	<select id="selectQyXlwhByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyXlwhDomain">
+		select a.SS_JGBM as ssJgbm,a.SFD_XZQH_DM as sfdXzqhDm,a.MDD_XZQH_DM as mddXzqhDm,a.LCS as lcs,a.DDTS as ddts,
+		 (SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = a.SFD_XZQH_DM) fhrXzqhMc,
+		  (SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = a.MDD_XZQH_DM) shrXzqhMc,
+		  (SELECT JC FROM QY_ZZJG  WHERE JGBM = a.SS_JGBM) sjMc,
+		a.YXBZ as yxbz,a.CJR_CZY_DJXH as cjrCzyDjxh,a.CJRQ as cjrq,a.XGR_CZY_DJXH as xgrCzyDjxh,a.XGRQ as xgrq from QY_XLWH a  where a.SS_JGBM=#ssJgbm# and a.SFD_XZQH_DM=#sfdXzqhDm# and a.MDD_XZQH_DM=#mddXzqhDm#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertQyXlwh"  parameterClass="com.cy.common.bo.QyXlwh">
+		insert into QY_XLWH(SS_JGBM,SFD_XZQH_DM,MDD_XZQH_DM,LCS,DDTS,
+		YXBZ,CJR_CZY_DJXH,CJRQ,XGR_CZY_DJXH,XGRQ)
+		values(#ssJgbm:NUMERIC#,#sfdXzqhDm:VARCHAR#,#mddXzqhDm:VARCHAR#,#lcs:NUMERIC#,#ddts:NUMERIC#,
+		#yxbz:VARCHAR#,#cjrCzyDjxh:NUMERIC#,to_date(#cjrq:DATE#,'yyyy-MM-dd'),#xgrCzyDjxh:NUMERIC#,to_date(#xgrq:DATE#,'yyyy-MM-dd'))
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateQyXlwhByKey" parameterClass="com.cy.common.bo.QyXlwh">
+        update QY_XLWH set SS_JGBM=#ssJgbm#,SFD_XZQH_DM=#fhrXzqhDm#,MDD_XZQH_DM=#shrXzqhDm#,LCS=#lcs#,DDTS=#ddts#,
+		YXBZ=#yxbz#,CJR_CZY_DJXH=#cjrCzyDjxh#,CJRQ=to_date(#cjrq#, 'YYYY-MM-DD'),XGR_CZY_DJXH=#xgrCzyDjxh#,XGRQ=to_date(#xgrq#, 'YYYY-MM-DD') where SS_JGBM=#ssJgbm# and SFD_XZQH_DM=#sfdXzqhDm# and MDD_XZQH_DM=#mddXzqhDm#
+    </update>
+    
+	<!--根据主键删除表数据：软删除-->
+	<delete id="deleteQyXlwhByKey" parameterClass="java.util.Map">
+		update QY_XLWH set yxbz='N' where SS_JGBM=#ssJgbm# and SFD_XZQH_DM=#sfdXzqhDm# and MDD_XZQH_DM=#mddXzqhDm#
+    </delete>
+</sqlMap>

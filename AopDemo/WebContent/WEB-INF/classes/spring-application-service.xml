@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:flex="http://www.springframework.org/schema/flex"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context   
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+	http://www.springframework.org/schema/flex	http://www.springframework.org/schema/flex/spring-flex-1.0.xsd
+   http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
+	
+	<aop:config>    
+        <aop:aspect id="aspect" ref="aspectBean">     
+            <aop:pointcut id="logService" expression="execution(* com.test.*.*(..))" />    
+            <aop:before pointcut-ref="logService" method="doBefore"/>    
+            <aop:after pointcut-ref="logService" method="doAfter"/>    
+            <aop:around pointcut-ref="logService" method="doAround"/>    
+        </aop:aspect>    
+    </aop:config>
+    
+    <bean id="aspectBean" class="com.test.Aspect" />    
+    <bean id="testService" class="com.test.TestServiceImpl" />    
+    
+</beans>

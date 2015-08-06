@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="DriverBusinessLineInfo" type="com.cy.common.bo.DriverBusinessLineInfo"/>
+	<!-- 新增预约 -->
+	<insert id="iBatisInsertDriverBusinessLineInfo" parameterClass="DriverBusinessLineInfo">
+		insert into t_driver_business_line_info(DRIVER_ID,START_TIME,END_TIME,START_PROVINCE,
+			START_CITY,START_COUNTY,END_PROVINCE,END_CITY,END_COUNTY,QUOTE_FAIR,QUOTE_TYPE,START,
+			CREATE_TIME,MODIFY_TIME)
+		values(#driverId#,#startTime#,#endTime#,#startProvince#,#startCity#,#startCounty#,#endProvince#,
+			#endCity#,#endCounty#,#quoteFair#,#quoteType#,0,sysdate(),sysdate())
+		<selectKey resultClass="Integer" keyProperty="id">
+			select last_insert_id() as id
+		</selectKey>
+	</insert>	
+	<!-- 修改预约 -->
+	<update id="iBatisUpdateDriverBusinessLineInfo" parameterClass="DriverBusinessLineInfo">
+		update t_driver_business_line_info set 
+		<dynamic>
+			<isNotEmpty property="startTime">
+				START_TIME = #startTime#,
+			</isNotEmpty>
+			<isNotEmpty property="endTime">
+				END_TIME = #endTime#,
+			</isNotEmpty>
+			<isNotEmpty property="startProvince">
+				START_PROVINCE = #startProvince#,
+			</isNotEmpty>
+			<isNotEmpty property="startCity">
+				START_CITY = #startCity#,
+			</isNotEmpty>
+			<isNotEmpty property="startCounty">
+				START_COUNTY = #startCounty#,
+			</isNotEmpty>
+			<isNotEmpty property="endProvince">
+				END_PROVINCE = #endProvince#,
+			</isNotEmpty>
+			<isNotEmpty property="endCity">
+				END_CITY = #endCity#,
+			</isNotEmpty>
+			<isNotEmpty property="endCounty">
+				END_COUNTY = #endCounty#,
+			</isNotEmpty>
+			<isNotEmpty property="quoteFair">
+				QUOTE_FAIR = #quoteFair#,
+			</isNotEmpty>
+			<isNotEmpty property="quoteType">
+				QUOTE_TYPE = #quoteType#,
+			</isNotEmpty>			
+		</dynamic>
+		MODIFY_TIME = sysdate()
+		where ID = #id#
+	</update>
+	<!-- 删除预约 -->
+	<delete id="iBatisDeleteDriverBusinessLineInfo" parameterClass="String">
+		update t_driver_business_line_info set START = 1 where ID = #id#
+	</delete>
+	<!-- 预约查询 -->
+	<select id="iBatisSelectDriverBusinessLineInfo" parameterClass="String" resultClass="com.cy.driver.order.domain.DriverBusinessLineInfoDomain">
+		select ID as id,
+			 DRIVER_ID as driverId,
+		   	 START_PROVINCE as startProvince,
+			 START_CITY as startCity,
+			 END_PROVINCE as endProvince,
+			 END_CITY as endCity,
+			 START_TIME as startTime,
+			 END_TIME as endTime,
+			 QUOTE_FAIR as quoteFair
+ 		from t_driver_business_line_info 
+ 			where DRIVER_ID = #driverId# 			
+ 			and START = 0
+ 			and END_TIME <![CDATA[>=]]> DATE_FORMAT(SYSDATE(),'%Y-%m-%d')
+ 			order by END_TIME DESC
+	</select>
+	<!-- 检索司机添加的预约数目 -->
+	<select id="iBatisSelectBusinessLineInfoCount" parameterClass="String" resultClass="Integer">
+		select count(id) from t_driver_business_line_info where DRIVER_ID = #driverId# and END_TIME  <![CDATA[>=]]> sysdate() and START = 0
+	</select>
+</sqlMap>

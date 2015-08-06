@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.zygl.dao.BusZyglQythshdzMapper">
+	<select id="selectQyThShdzPage" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyThShdzDomain">
+		SELECT A.WH_XH AS whXh,
+		       A.SS_JGBM AS ssJgbm,
+		       A.DZ AS dz,
+		       A.DH AS dh,
+		       A.XZQH_DM AS fhrXzqhDm,
+		       A.YXBZ AS yxbz,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.FZR AS fzr,
+		       A.XGRQ AS xgrq,
+		       (select QZ.MC from QY_ZZJG QZ WHERE QZ.JGBM=A.SS_JGBM) ssJgmc, 
+		       (select DX.XZQH_MC from DM_XZQH DX WHERE DX.XZQH_DM=A.XZQH_DM) fhrXzqhMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM QY_TH_SHDZ A 
+		  WHERE A.YXBZ='Y' 
+		  AND A.SS_JGBM=#ssJgbm#
+		  $orderStr$
+    </select>
+    
+    <select id="selectQyThShdzAll" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyThShdzDomain">
+		SELECT A.WH_XH AS whXh,
+		       A.SS_JGBM AS ssJgbm,
+		       A.DZ AS dz,
+		       A.DH AS dh,
+		       A.XZQH_DM AS fhrXzqhDm,
+		       A.YXBZ AS yxbz,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.FZR AS fzr,
+		       A.XGRQ AS xgrq,
+		       (select QZ.MC from QY_ZZJG QZ WHERE QZ.JGBM=A.SS_JGBM) ssJgmc, 
+		       (select DX.XZQH_MC from DM_XZQH DX WHERE DX.XZQH_DM=A.XZQH_DM) fhrXzqhMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM QY_TH_SHDZ A 
+		  WHERE A.YXBZ='Y' 
+		  AND A.SS_JGBM=#ssJgbm#
+		  ORDER by A.WH_XH ASC
+    </select>
+
+	<select id="getQyThShdzRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.WH_XH) 
+		  FROM QY_TH_SHDZ A 
+		  WHERE A.YXBZ='Y' 
+		  AND A.SS_JGBM=#ssJgbm#
+    </select>
+</sqlMap>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.hygl.dao.BusHyhwxxshfsbgzbMapper">
+	<select id="selectHyHwxxShfsbgZbPage" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyHwxxShfsbgZbDomain">
+		SELECT A.SHBG_DJXH AS shbgDjxh,
+		       A.PC_DJXH AS pcDjxh,
+		       A.WFH_DJXH AS wfhDjxh,
+		       A.DD_DJXH AS ddDjxh,
+		       A.XH AS xh,
+		       A.BSPSF AS bspsf,
+		       A.SS_JGBM AS ssJgbm,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM HY_HWXX_SHFSBG_ZB A 
+
+		  $orderStr$
+    </select>
+    
+    <select id="selectHyHwxxShfsbgZbAll" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyHwxxShfsbgZbDomain">
+		SELECT A.SHBG_DJXH AS shbgDjxh,
+		       A.PC_DJXH AS pcDjxh,
+		       A.WFH_DJXH AS wfhDjxh,
+		       A.DD_DJXH AS ddDjxh,
+		       A.XH AS xh,
+		       A.BSPSF AS bspsf,
+		       A.SS_JGBM AS ssJgbm,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM HY_HWXX_SHFSBG_ZB A 
+
+		  ORDER by A.SHBG_DJXH ASC,A.PC_DJXH ASC
+    </select>
+
+	<select id="getHyHwxxShfsbgZbRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.SHBG_DJXH) 
+		  FROM HY_HWXX_SHFSBG_ZB A 
+
+    </select>
+</sqlMap>

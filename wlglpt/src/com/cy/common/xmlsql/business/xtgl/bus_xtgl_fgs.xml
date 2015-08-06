@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.xtgl.dao.BusXtglQyzzjgMapper">
+	
+	 <!--启用-->
+	<update id="startQyzzFgsUser" parameterClass="com.cy.xtgl.domain.QyZzjgDomain">
+		 update QY_ZZJG set qybz='Y' where JGBM=#jgbm#
+    </update>
+    
+     <!--停用-->
+    <update id="stopQyzzFgsUser" parameterClass="java.util.Map">
+         update QY_ZZJG set qybz='N' where  JGBM = #jgbm#
+    </update>
+	 
+	 <!--获取分公司最大的级别代码-->
+     <select id="getQyzzFgsMaxJbdm" parameterClass="com.cy.common.bo.QyZzjg" resultClass="java.lang.String" >
+         select max(jbdm) from  QY_ZZJG where sj_jgbm =#sjJgbm#
+	 </select>
+	
+	<!--检查是否用重名-->
+	<select id="checkQyzzFgsMc" parameterClass="com.cy.common.bo.QyZzjg" resultClass="java.lang.Integer" >
+         select count(*) from  QY_ZZJG where SJ_JGBM=#sjJgbm# and MC=#mc# and yxbz='Y'
+       	<dynamic>
+       		<isNotEmpty prepend="and" property="jgbm">
+       			 <![CDATA[JGBM <> #jgbm# ]]>
+       		</isNotEmpty>
+       	</dynamic>
+    </select>
+    
+    <!--删除数据-->
+	<update id="deleteQyZzFgsByKey" parameterClass="com.cy.xtgl.domain.QyZzjgDomain">
+        update QY_ZZJG set yxbz='N' where JGBM = #jgbm#
+	</update>
+     
+     <select id="selectQyZzjgFgsAll" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.QyZzjgDomain">
+		SELECT A.JGBM AS jgbm,
+		       A.MC AS mc,
+		       A.JC AS jc,
+		       A.DZ AS dz,
+		       A.DH AS dh,
+		       A.YB AS yb,
+		       A.FZR AS fzr,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc,
+		       nvl(A.BYJ,0) AS byj
+		  FROM QY_ZZJG A 
+		  where A.yxbz='Y' and (A.JGLB_DM='1' OR A.JGLB_DM='2')
+   	  	<dynamic>
+   			<isNotEmpty prepend="and" property="sjJgbm">
+   				A.sj_jgbm=#sjJgbm#
+   	     	</isNotEmpty>
+   	   	</dynamic>
+   	 		order by A.jgbm asc
+   </select>  
+   
+   <select id="selectQyZzjgFgsPage" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.QyZzjgDomain">
+		SELECT A.JGBM AS jgbm,
+			   A.MC AS mc,
+		       A.JC AS jc,
+		       (SELECT B.JGLB_MC FROM dm_jglb B WHERE B.JGLB_DM=A.JGLB_DM) AS lbMc,
+		       (SELECT B.JC FROM QY_ZZJG B WHERE B.JGBM=A.SJ_JGBM) AS sjMc,
+		       (SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = A.XZQH_DM) as fhrXzqhMc,
+		       A.DZ AS dz,
+		       A.DH AS dh,
+		       A.JBDM AS jbdm,
+		       A.YB AS yb,
+		       A.FZR AS fzr,
+		       A.QYBZ AS qybz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc,
+		      nvl(A.BYJ,0) AS byj
+		  FROM QY_ZZJG A 
+		  where A.yxbz='Y' and (A.JGLB_DM='1' OR A.JGLB_DM='2')
+   	  	<dynamic>
+   			<isNotEmpty prepend="and" property="sj">
+   				A.sj_jgbm=#sj#
+   	     	</isNotEmpty>
+   	   	</dynamic>
+   	   		$orderStr$
+   </select>
+   
+   <select id="getQyZzjgFgsCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.JGBM) 
+		  FROM QY_ZZJG A 
+		  WHERE A.YXBZ='Y' and (A.JGLB_DM='1' OR A.JGLB_DM='2')
+		  <dynamic> 
+			<isNotEmpty property="sj" prepend="and">
+				A.SJ_JGBM =#sj#
+			</isNotEmpty>
+		  </dynamic>
+    </select>
+    
+    <select id="selectQyzzjgFgsMcByJgbm" resultClass="com.cy.xtgl.domain.QyZzjgDomain" parameterClass="java.util.Map">
+    	select mc from QY_ZZJG where jgbm=#jgbm#
+    </select>
+</sqlMap>

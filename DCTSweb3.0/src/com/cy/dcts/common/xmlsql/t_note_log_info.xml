@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="NoteLogInfo" type="com.cy.dcts.common.bo.NoteLogInfo"/><!-- 用户表 -->
+	<resultMap class="NoteLogInfo" id="note_log_info_result">
+		<result property="id" column="ID"/>
+		<result property="mobilephone" column="MOBILEPHONE"/>
+		<result property="noteCode" column="NOTE_CODE"/>
+		<result property="sendStart" column="SEND_START"/>
+		<result property="returnedValue" column="RETURNED_VALUE"/>
+		<result property="visitIp" column="VISIT_IP"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="sndeTime" column="SNDE_TIME"/>
+	</resultMap>
+	
+	 <!-- 新增web用户信息 -->
+	<insert id="insert_note_log_info" parameterClass="NoteLogInfo">
+		INSERT INTO t_note_log_info(
+			MOBILEPHONE,NOTE_CODE,SEND_START,RETURNED_VALUE,VISIT_IP,SNDE_TIME,CREATE_TIME
+		)VALUES(
+			#mobilephone#,
+			#noteCode#,
+			#sendStart#,
+			#returnedValue#,
+			#visitIp#,
+			sysdate(),
+			sysdate()
+		)
+		<selectKey resultClass="String" keyProperty="id">
+   			select last_insert_id() as id
+  		</selectKey>
+	</insert>	
+</sqlMap>

@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="wlglpt" default="all" basedir="../">
+	<property name="app-name" value="wlglpt" />
+	<property name="app-short-name" value="wlglpt" />
+	<property name="app-dir" value="${basedir}/${app-name}" />
+
+	<property name="thirdpath" value="${app-dir}/wlglpt/WEB-INF/lib" />
+	<property name="classes.dir" value="${app-dir}/wlglpt/WEB-INF/classes" />
+	<property name="classes.common.dir" value="com/wasu/${app-short-name}/common/" />
+	<property name="classes.dto.dir" value="com/wasu/${app-short-name}/dto/" />
+	<property name="classes.entity.dir" value="com/wasu/${app-short-name}/entity" />
+	<property name="classes.impl.dir" value="com/wasu/${app-short-name}/imp/" />
+	<property name="classes.web.dir" value="com/wasu/${app-short-name}/web/" />
+	<property name="classes.interf.dir" value="com/wasu/${app-short-name}/interf/" />
+	<!--lib-->
+	<property name="lib.dir" value="${thirdpath}" />
+	<path id="project.class.path">
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+
+	</path>
+
+	<!--********src-->
+	<property name="module.src.dir" value="${app-dir}/src" />
+	<!--<property name="module.src.dir.gensrc" value="${app-dir}/gensrc" />-->
+	<!--end-->
+	<property name="dist.dir" value="${app-dir}/dist" />
+	<!--项目属徿 -->
+	<property name="project.provider.name" value="wlglpt" />
+	<property name="project.name" value="wlglpt" />
+	<property name="project.common.name" value="common" />
+	<property name="project.dto.name" value="dto" />
+	<property name="project.entity.name" value="entity" />
+	<property name="project.impl.name" value="impl" />
+	<property name="project.interf.name" value="interf" />
+	<property name="project.web.name" value="web" />
+	<property name="project.author" value="hjh" />
+	<property name="project.version" value="1.0.0" />
+	<!--打包文件县 -->
+	<property name="project.dist.common.file" value="${project.provider.name}-${project.name}-${project.common.name}-${project.version}" />
+	<property name="project.dist.dto.file" value="${project.provider.name}-${project.name}-${project.dto.name}-${project.version}" />
+	<property name="project.dist.entity.file" value="${project.provider.name}-${project.name}-${project.entity.name}-${project.version}" />
+	<property name="project.dist.impl.file" value="${project.provider.name}-${project.name}-${project.impl.name}-${project.version}" />
+	<property name="project.dist.interf.file" value="${project.provider.name}-${project.name}-${project.interf.name}-${project.version}" />
+	<property name="project.dist.web.file" value="${project.provider.name}-${project.name}-${project.web.name}-${project.version}" />
+	<!--时间属性定䷿ -->
+	<tstamp>
+		<format property="datestamp" pattern="yyyy-MM-dd-HH-mm-ss" />
+	</tstamp>
+
+
+
+	<!--资源文件过滤设置，在copy的时候引用，即只拷贝指定的资源文件 -->
+	<property name="compiler.args" value="-encoding GBK" />
+	<patternset id="compiler.resources">
+		<include name="**/?*.properties" />
+		<include name="**/?*.xml" />
+	</patternset>
+
+	<!--加入配置文件
+	<patternset id="compiler.resources">
+		<include name="**/?*.properties" />
+	</patternset>-->
+	<!--==================================-->
+	<!-- 初始化dist目录				      -->
+	<!--==================================-->
+	<target name="init">
+		<delete dir="${classes.dir}" />
+
+		<mkdir dir="${classes.dir}" />
+		
+		<delete dir="${dist.dir}" />
+
+		<mkdir dir="${dist.dir}" />
+	</target>
+	
+	<!--编译-->
+	<target name="entity_compile">
+		<!--<javac srcdir="${module.src.dir.gensrc}" source="1.5" destdir="${classes.dir}" debug="true" encoding="GBK" failonerror="false">
+			<classpath>
+				<fileset dir="${classes.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+			<classpath refid="project.class.path" />
+		</javac>-->
+	</target>
+	
+
+	<target name="javasrc-compile">
+		<echo message="${module.src.dir}" />
+		<javac srcdir="${module.src.dir}" source="1.6" destdir="${classes.dir}" debug="true" encoding="GBK" failonerror="false">
+			<classpath>
+				<fileset dir="${classes.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+			<classpath refid="project.class.path" />
+		</javac>
+
+	</target>
+	<!--打jar包文件 -->
+	<target name="createFile" depends="init" description="createFile">
+	</target>
+	
+	<!-- copy jar  delete classes -->
+	<target name="copy_jar" depends="createFile,entity_compile,javasrc-compile" description=" copy jar to lib">
+		<echo level="info">copy</echo>
+		<!--<copy todir="${app-dir}/wlglpt/WEB-INF/lib/" overwrite="true">
+			<fileset dir="${dist.dir}" includes="*.jar" />
+		</copy>-->
+		<copy todir="${app-dir}/wlglpt/WEB-INF/classes" overwrite="true">
+			<fileset dir="${app-dir}/src" excludes="**/*.java" />
+		</copy>
+		<!--<delete dir="${app-dir}/wlglpt/WEB-INF/classes/com" />
+		<delete dir="${dist.dir}" />
+		<mkdir dir="${dist.dir}" />-->
+	</target>
+
+	<!--打war包-->
+	<target name="build" depends="createFile,entity_compile,javasrc-compile,copy_jar" description="create Coss Web App File">
+		<echo level="info">打包</echo>
+		<war destfile="${app-dir}/dist/${project.name}.war" webxml="${app-dir}/wlglpt/WEB-INF/web.xml">
+			<fileset dir="${app-dir}/wlglpt">
+				<exclude name="**/CVS" />
+				<exclude name="**/cvs" />
+				<exclude name="**/.svn"/>
+				<exclude name="**/.SVN"/>
+				<exclude name="**/*.log" />
+				<exclude name="**/*.bak" />
+				<exclude name="**/*.bak/**" />
+				<exclude name="**/Thumbs.db" />
+			</fileset>
+		</war>
+		<zip destfile="${app-dir}/dist/${project.name}-${project.version}-${datestamp}.zip">
+						<fileset dir="${app-dir}/dist"></fileset>
+				</zip>
+				<delete file="${app-dir}/dist/${project.name}.war" />
+	</target>
+
+
+	<target name="all" depends="createFile,entity_compile,javasrc-compile,copy_jar,build" description="gen jar file">
+	</target>
+</project>

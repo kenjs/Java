@@ -1,0 +1,15 @@
+@charset "gbk";
+/* CSS Document */
+
+*{margin:0; padding:0; font-size:14px;}
+li{list-style:none;}
+a{text-decoration:none;}
+.top{height:50px; padding:10px 30px; background:url(../images/topBg.png) left center repeat-x; margin-bottom:20px;}
+.top img,h2{float:left;}
+.topRight{float:right;}
+h2{line-height:50px; padding-left:20px; color:#004f96; font-size:24px;}
+.topRight ul{overflow:hidden;}
+.topRight ul li{float:left; padding-left:20px; line-height:24px; padding-right:10px;}
+.topRight ul li a{color:#004f96;}
+.topRight ul li a:hover{color:red;}
+.topRight div{text-align:right; line-height:24px; height:24px;color:#004f96;}

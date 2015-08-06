@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.zygl.dao.QyRyGwMapper">
+
+	<!--根据主键取DOMAIN-->
+	<select id="selectQyRyGwByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.QyRyGwDomain">
+		select a.CZY_DJXH as czyDjxh,a.GW_DJXH as oldGwDjxh,a.SS_JGBM as ssJgbm,a.ZJBZ as zjbz,a.QX_JGBM as qxJgbm from QY_RY_GW a  where a.CZY_DJXH=#czyDjxh# and a.GW_DJXH=#oldGwDjxh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertQyRyGw"  parameterClass="com.cy.common.bo.QyRyGw">
+		insert into QY_RY_GW(CZY_DJXH,GW_DJXH,SS_JGBM,ZJBZ,QX_JGBM)
+		values(#czyDjxh:NUMERIC#,#gwDjxh:NUMERIC#,#ssJgbm:NUMERIC#,#zjbz:VARCHAR#,#qxJgbm:NUMERIC#)
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateQyRyGwByKey" parameterClass="java.util.Map">
+        update QY_RY_GW set CZY_DJXH=#czyDjxh#,GW_DJXH=#gwDjxh#,SS_JGBM=#ssJgbm#,ZJBZ=#zjbz#,QX_JGBM=#qxJgbm# where CZY_DJXH=#czyDjxh# and GW_DJXH=#oldGwDjxh#
+    </update>
+    
+    <!--根据主键更新该表中其它所有字段-->
+    <update id="updateQyRyGwByKeyNew" parameterClass="com.cy.common.bo.QyRyGw">
+        update QY_RY_GW set CZY_DJXH=#czyDjxh#,GW_DJXH=#gwDjxh#,SS_JGBM=#ssJgbm#,ZJBZ=#zjbz#,QX_JGBM=#qxJgbm# where CZY_DJXH=#czyDjxh# and GW_DJXH=#gwDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：软删除-->
+	<delete id="deleteQyRyGwByKey" parameterClass="java.util.Map">
+		delete from QY_RY_GW where CZY_DJXH=#czyDjxh# and GW_DJXH=#oldGwDjxh#
+    </delete>
+    
+    <!--根据主键删除表数据：软删除-->
+	<delete id="deleteQyRyGwByKeyNew" parameterClass="java.util.Map">
+		delete from QY_RY_GW where CZY_DJXH=#czyDjxh# and GW_DJXH=#gwDjxh#
+    </delete>
+</sqlMap>

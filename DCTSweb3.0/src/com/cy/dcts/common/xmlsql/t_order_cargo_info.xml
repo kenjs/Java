@@ -1,0 +1,606 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+    <typeAlias alias="OrderCargoInfo" type="com.cy.dcts.common.bo.OrderCargoInfo"/><!-- 货源表 -->
+    <typeAlias alias="OrderCargoInfoDomain" type="com.cy.dcts.common.domain.OrderCargoInfoDomain"/>
+    <resultMap class="OrderCargoInfo" id="order_cargoInfo_result">
+        <result property="id" column="ID"/>
+        <result property="cargoName" column="CARGO_NAME"/>
+        <result property="cargoType" column="CARGO_TYPE"/>
+        <result property="cargoWeight" column="CARGO_WEIGHT"/>
+        <result property="cargoCubage" column="CARGO_CUBAGE"/>
+        <result property="requestCarLength" column="REQUEST_CAR_LENGTH"/>
+        <result property="requestCarBarType" column="REQUEST_CAR_BAR_TYPE"/>
+		<result property="requestCarPlateType" column="REQUEST_CAR_PLATE_TYPE"/>
+        <result property="freight" column="FREIGHT"/>
+        <result property="requestStartTime" column="REQUEST_START_TIME"/>
+        <result property="requestEndTime" column="REQUEST_END_TIME"/>
+        <result property="startProvince" column="START_PROVINCE"/>
+        <result property="startCity" column="START_CITY"/>
+        <result property="startCounty" column="START_COUNTY"/>
+        <result property="startTown" column="START_TOWN"/>
+        <result property="endProvince" column="END_PROVINCE"/>
+        <result property="endCity" column="END_CITY"/>
+        <result property="endCounty" column="END_COUNTY"/>
+        <result property="endTown" column="END_TOWN"/>
+        <result property="contactName" column="CONTACT_NAME"/>
+        <result property="contactMobilephone" column="CONTACT_MOBILEPHONE"/>
+        <result property="contactTelephone" column="CONTACT_TELEPHONE"/>
+        <result property="remark" column="REMARK"/>
+        <result property="deployUserid" column="DEPLOY_USERID"/>
+        <result property="modifyUserid" column="MODIFY_USERID"/>
+        <result property="companyId" column="COMPANY_ID"/>
+        <result property="cargoFlag" column="CARGO_FLAG"/>
+        <result property="deletedFlag" column="DELETED_FLAG"/>
+        <result property="cargoFlagTime" column="CARGO_FLAG_TIME"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="modifyTime" column="MODIFY_TIME"/>
+        <!--20140808(货主版新增字段1个 )  插入标识（0发布货源、1导入订单货源）-->
+		<result property="cargoOrigin" column="CARGO_ORIGIN" />
+    </resultMap>
+    
+    <resultMap class="OrderCargoInfoDomain" id="order_cargoInfoDomain_result">
+        <result property="id" column="ID"/>
+        <result property="cargoName" column="CARGO_NAME"/>
+        <result property="cargoType" column="CARGO_TYPE"/>
+        <result property="cargoWeight" column="CARGO_WEIGHT"/>
+        <result property="cargoCubage" column="CARGO_CUBAGE"/>
+        <result property="requestCarLength" column="REQUEST_CAR_LENGTH"/>
+        <result property="requestCarBarType" column="REQUEST_CAR_BAR_TYPE"/>
+		<result property="requestCarPlateType" column="REQUEST_CAR_PLATE_TYPE"/>
+        <result property="freight" column="FREIGHT"/>
+        <result property="cargoFlag" column="CARGO_FLAG"/><!-- 这里cargoFlag货源状态必须放到requestStartTime要求的装货时间前 为了domain里cargoFlagVal存值失效 -->
+        <result property="requestStartTime" column="REQUEST_START_TIME_FM"/>
+        <result property="requestEndTime" column="REQUEST_END_TIME_FM"/>
+        <result property="startProvince" column="START_PROVINCE"/>
+        <result property="startCity" column="START_CITY"/>
+        <result property="startCounty" column="START_COUNTY"/>
+        <result property="startTown" column="START_TOWN"/>
+        <result property="endProvince" column="END_PROVINCE"/>
+        <result property="endCity" column="END_CITY"/>
+        <result property="endCounty" column="END_COUNTY"/>
+        <result property="endTown" column="END_TOWN"/>
+        <result property="contactName" column="CONTACT_NAME"/>
+        <result property="contactMobilephone" column="CONTACT_MOBILEPHONE"/>
+        <result property="contactTelephone" column="CONTACT_TELEPHONE"/>
+        <result property="remark" column="REMARK"/>
+        <result property="deployUserid" column="DEPLOY_USERID"/>
+        <result property="modifyUserid" column="MODIFY_USERID"/>
+        <result property="companyId" column="COMPANY_ID"/>
+        <result property="deletedFlag" column="DELETED_FLAG"/>
+        <result property="cargoFlagTime" column="CARGO_FLAG_TIME"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="modifyTime" column="MODIFY_TIME"/>
+        <result property="startProCityCounty" column="STARTPROCITYCOUNTY"/>
+        <result property="endProCityCounty" column="ENDPROCITYCOUNTY"/>
+        <result property="quoteCount" column="QUOTE_COUNT"/><!-- 司机报价数 -->
+        <result property="isExpire" column="IS_EXPIRE"/><!-- 货源是否过期（要求的发货时间是否超过的当前时间） -->
+        <result property="cargoAssessCount" column="cargo_assess_count"/>
+        <!-- <result property="companyName" column="COMPANY_NAME"/> -->
+    </resultMap>
+    
+    <resultMap class="OrderCargoInfoDomain" id="order_cargoInfoDomain_start_result">
+        <result property="id" column="ID"/>
+        <result property="cargoName" column="CARGO_NAME"/>
+        <result property="cargoWeight" column="CARGO_WEIGHT"/>
+        <result property="cargoCubage" column="CARGO_CUBAGE"/>
+        <result property="requestStartTime" column="REQUEST_START_TIME"/>
+        <result property="startProvince" column="START_PROVINCE"/>
+        <result property="startCity" column="START_CITY"/>
+        <result property="startCounty" column="START_COUNTY"/>
+        <result property="endProvince" column="END_PROVINCE"/>
+        <result property="endCity" column="END_CITY"/>
+        <result property="endCounty" column="END_COUNTY"/>
+        <result property="companyName" column="COMPANY_NAME"/>
+    </resultMap>
+    
+    <!-- 用车查看货源 状态为：待发货-->
+    <resultMap class="OrderCargoInfoDomain" id="order_cargoInfoDomain_quote_result">
+        <result property="id" column="ID"/>
+        <result property="cargoName" column="CARGO_NAME"/><!-- 货源名称 -->
+        <result property="cargoType" column="CARGO_TYPE"/><!-- 货源类型 -->
+        <result property="requestStartTime" column="REQUEST_START_TIME"/><!-- 发货时间 -->
+        <result property="startProvince" column="START_PROVINCE"/><!--  -->
+        <result property="startCity" column="START_CITY"/>
+        <result property="startCounty" column="START_COUNTY"/>
+        <result property="startTown" column="START_TOWN"/>
+        <result property="endProvince" column="END_PROVINCE"/>
+        <result property="endCity" column="END_CITY"/>
+        <result property="endCounty" column="END_COUNTY"/>
+        <result property="endTown" column="END_TOWN"/>
+        <result property="remark" column="REMARK"/>
+        <result property="cargoFlag" column="CARGO_FLAG"/>
+        <result property="quoteCount" column="QUOTE_COUNT"/><!-- 司机报价数 -->
+        <result property="startProCityCounty" column="STARTPROCITYCOUNTY"/>
+        <result property="endProCityCounty" column="ENDPROCITYCOUNTY"/>
+    	<result property="requestEndTime" column="REQUEST_END_TIME_FM"/>
+        <result property="cargoWeight" column="CARGO_WEIGHT"/><!-- 货物重量 -->
+        <result property="cargoCubage" column="CARGO_CUBAGE"/><!-- 货物体积 -->
+		<result property="requestCarLength" column="REQUEST_CAR_LENGTH"/><!-- 车型要求（车 长） -->
+		<result property="requestCarBarType" column="REQUEST_CAR_BAR_TYPE"/><!-- 车型要求（车 栏） -->
+		<result property="requestCarPlateType" column="REQUEST_CAR_PLATE_TYPE"/><!-- 板-平板、高低板 -->
+        <result property="contactName" column="CONTACT_NAME"/><!-- 联系人 -->
+        <result property="contactMobilephone" column="CONTACT_MOBILEPHONE"/><!-- 手机号码 -->
+        <result property="contactTelephone" column="CONTACT_TELEPHONE"/><!-- 联系电话 -->
+    </resultMap>
+    
+    <!-- 用车查看货源 状态为：待发货 -->
+	<select id="query_orderCargoInfo_quote_domain_list" parameterClass="java.util.HashMap" resultMap="order_cargoInfoDomain_quote_result">
+		select t.id,t.CARGO_NAME,t.CARGO_TYPE,t.CONTACT_TELEPHONE,t.CONTACT_MOBILEPHONE,t.CONTACT_NAME,
+		t.START_PROVINCE,t.START_CITY,t.START_COUNTY,t.START_TOWN,
+		t.END_PROVINCE,t.END_CITY,t.END_COUNTY,t.END_TOWN,
+		t.REMARK,t.CARGO_FLAG,
+		(select count(a.id) from t_quote_info a where a.CARGO_ID = t.id) as QUOTE_COUNT,
+		(CASE WHEN start_county is NOT  NULL AND start_county != '' THEN CONCAT(start_province,'-',start_city,'-',start_county) 
+		WHEN start_city IS NOT  NULL AND start_city != '' THEN CONCAT(start_province,'-',start_city)
+		 ELSE start_province 
+		END) startProCityCounty,
+		(CASE WHEN end_county is NOT  NULL AND t.end_county != '' THEN CONCAT(end_province,'-',end_city,'-',end_county) 
+		WHEN end_city IS NOT  NULL AND end_city != '' THEN CONCAT(end_province,'-',end_city)
+		 ELSE end_province 
+		END) endProCityCounty,
+		DATE_FORMAT(t.REQUEST_START_TIME,'%Y-%m-%d') as REQUEST_START_TIME,
+		date_format(request_end_time,'%Y-%c-%d') request_end_time_fm,
+		t.REQUEST_CAR_LENGTH,t.REQUEST_CAR_BAR_TYPE,t.REQUEST_CAR_PLATE_TYPE,
+		t.CARGO_WEIGHT,t.CARGO_CUBAGE
+		from t_order_cargo_info t 
+		where 
+		DATE_FORMAT(t.REQUEST_START_TIME,'%Y-%m-%d') <![CDATA[>=]]> DATE_FORMAT(CURRENT_DATE(),'%Y-%m-%d')
+		<dynamic prepend="and ">
+		  <isNotEmpty property="id" prepend="AND "> t.ID = #id# </isNotEmpty>
+		  <isNotEmpty property="deployUserid" prepend="AND "> t.DEPLOY_USERID = #deployUserid# </isNotEmpty>
+		  <isNotEmpty property="cargoFlag" prepend="AND "> t.CARGO_FLAG = #cargoFlag# </isNotEmpty>
+		  <isNotEmpty property="deletedFlag" prepend="AND "> t.DELETED_FLAG = #deletedFlag# </isNotEmpty>
+		</dynamic> 
+	</select>
+    
+	
+	<!-- 每日新增货源或货源新增总量 -->
+	<select id="query_orderCargoInfo_by_time_count" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+		select count(t.id) from t_order_cargo_info t 
+		<dynamic prepend="WHERE ">
+		 	<isNotEmpty property="createTime" prepend="and ">date_format(t.CREATE_TIME,'%Y-%m-%d') = date_format(#createTime#,'%Y-%m-%d')</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<!-- 主页货源查询 -->
+	<select id="query_start_deploy_orderCargoInfo_domain" parameterClass="java.util.HashMap" resultMap="order_cargoInfoDomain_start_result">
+		select 
+		t.id,
+		t.CARGO_NAME,
+		(select a.COMPANY_NAME from t_company_info a where a.id=t.COMPANY_ID) as COMPANY_NAME,
+		t.START_PROVINCE,
+		t.START_CITY,
+		t.START_COUNTY,
+		t.END_PROVINCE,
+		t.END_CITY,
+		t.END_COUNTY,
+		t.CARGO_WEIGHT,
+		t.CARGO_CUBAGE,
+		DATE_FORMAT(t.REQUEST_START_TIME,'%Y-%m-%d') as REQUEST_START_TIME
+		from t_order_cargo_info t 
+		where t.CARGO_FLAG = #cargoFlag# and t.DELETED_FLAG = #deletedFlag# 
+		and 
+		date_format(t.REQUEST_START_TIME,'%Y-%m-%d') <![CDATA[>=]]> date_format(SYSDATE(),'%Y-%m-%d') 
+		order by t.id desc LIMIT $curPage$,$pageSize$
+	</select>
+	
+	<!-- 更多货源查询(总数) -->
+	<select id="query_start_deploy_orderCargoInfo_domain_count" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+		select 
+		count(*)
+		from t_order_cargo_info t 
+		where t.CARGO_FLAG = #cargoFlag# and t.DELETED_FLAG = #deletedFlag# 
+		and 
+		date_format(t.REQUEST_START_TIME,'%Y-%m-%d') <![CDATA[>=]]> date_format(SYSDATE(),'%Y-%m-%d') 
+	</select>
+	
+	<!-- 货源总条数 -->
+	<select id="query_orderCargoInfo_domain_by_page_count" parameterClass="map" resultClass="java.lang.Integer">
+	 	select COUNT(t.id)
+		from t_order_cargo_info t
+	</select>
+
+	<!-- 根据Id查询我的货源 -->
+    <select id="query_orderCargo_info_byId" parameterClass="String" resultMap="order_cargoInfo_result">
+		SELECT id,
+		cargo_name,
+		cargo_type,
+		cargo_weight,
+		cargo_cubage,
+		request_car_length,
+		request_car_bar_type,
+		request_car_plate_type,
+		freight,
+		request_start_time,
+		request_end_time,
+		start_province,
+		start_city,
+		start_county,
+		start_town,
+		end_province,
+		end_city,
+		end_county,
+		end_town,
+		contact_name,
+		contact_mobilephone,
+		contact_telephone,
+		remark,
+		deploy_userid,
+		modify_userid,
+		company_id,
+		cargo_flag,
+		deleted_flag,
+		cargo_flag_time,
+		cargo_origin,
+		create_time,
+		modify_time 
+		FROM t_order_cargo_info 
+		WHERE id = #id#
+    </select>
+
+<!-- 根据Id查询我的货源 结果是domain -->
+    <select id="query_orderCargo_domain_info_byId" parameterClass="String" resultMap="order_cargoInfoDomain_result">
+		SELECT id,
+		cargo_name,
+		cargo_type,
+		cargo_weight,
+		cargo_cubage,
+		request_car_length,
+		request_car_bar_type,
+		request_car_plate_type,
+		freight,
+		date_format(request_start_time,'%Y-%c-%d') request_start_time_fm,
+		date_format(request_end_time,'%Y-%c-%d') request_end_time_fm,
+		start_province,
+		start_city,
+		start_county,
+		start_town,
+		end_province,
+		end_city,
+		end_county,
+		end_town,
+		contact_name,
+		contact_mobilephone,
+		contact_telephone,
+		remark,
+		deploy_userid,
+		modify_userid,
+		company_id,
+		cargo_flag,
+		deleted_flag,
+		cargo_flag_time,
+		create_time,
+		modify_time,
+		(CASE WHEN start_county is NOT  NULL AND start_county != '' THEN CONCAT(start_province,'-',start_city,'-',start_county) 
+		WHEN start_city IS NOT  NULL AND start_city != '' THEN CONCAT(start_province,'-',start_city)
+		 ELSE start_province 
+		END) startProCityCounty,
+		(CASE WHEN end_county is NOT  NULL AND end_county != '' THEN CONCAT(end_province,'-',end_city,'-',end_county) 
+		WHEN end_city IS NOT  NULL AND end_city != '' THEN CONCAT(end_province,'-',end_city)
+		 ELSE end_province 
+		END) endProCityCounty,
+		null as quote_count,
+		null as cargo_assess_count,
+		null as is_expire 
+		FROM t_order_cargo_info 
+		WHERE id = #id#
+    </select>
+    
+	<!-- 查询我的货源——不分页 -->
+    <select id="query_orderCargoInfo_domain" parameterClass="map" resultMap="order_cargoInfoDomain_result">
+    SELECT t.*,(SELECT COUNT(*) FROM t_quote_info WHERE cargo_id = t.id) quote_count,
+    (SELECT COUNT(*) FROM t_driver_cargo_assess_info da WHERE da.cargo_id = t.id) cargo_assess_count,
+     (CASE WHEN UNIX_TIMESTAMP(request_start_time_fm) <![CDATA[<]]>UNIX_TIMESTAMP(CURRENT_DATE()) THEN #isExpireTure#  else #isExpireFalse#  END) is_expire 
+     FROM(
+		SELECT id,
+		cargo_name,
+		cargo_type,
+		cargo_weight,
+		cargo_cubage,
+		request_car_length,
+		request_car_bar_type,
+		request_car_plate_type,
+		freight,
+		cargo_flag,
+		date_format(request_start_time,'%Y-%c-%d') request_start_time_fm,
+		date_format(request_end_time,'%Y-%c-%d') request_end_time_fm,
+		start_province,
+		start_city,
+		start_county,
+		start_town,
+		end_province,
+		end_city,
+		end_county,
+		end_town,
+		contact_name,
+		contact_mobilephone,
+		contact_telephone,
+		remark,
+		deploy_userid,
+		modify_userid,
+		company_id,
+		deleted_flag,
+		cargo_flag_time,
+		create_time,
+		modify_time,
+		(CASE WHEN start_county is NOT  NULL AND start_county != '' THEN CONCAT(start_province,'-',start_city,'-',start_county) 
+		WHEN start_city IS NOT  NULL AND start_city != '' THEN CONCAT(start_province,'-',start_city)
+		 ELSE start_province 
+		END) startProCityCounty,
+		(CASE WHEN end_county is NOT  NULL AND end_county != '' THEN CONCAT(end_province,'-',end_city,'-',end_county) 
+		WHEN end_city IS NOT  NULL AND end_city != '' THEN CONCAT(end_province,'-',end_city)
+		 ELSE end_province 
+		END) endProCityCounty   
+		FROM t_order_cargo_info 
+		WHERE cargo_origin = 0 AND deploy_userid = #deployUserid#  
+		AND deleted_flag = #deletedFlag# )t 
+		<dynamic prepend="WHERE">
+		  <isNotEmpty property="cargoName" prepend="AND"> t.cargo_name = #cargoName# </isNotEmpty>
+		  <isNotEmpty property="cargoType" prepend="AND"> t.cargo_type = #cargoType# </isNotEmpty>
+		  <isNotEmpty property="cargoFlag" >
+		      <!-- cargoFlag不等于 失效3（数据库中货源状态3个值没有失效）-->
+		      <isLessThan property="cargoFlag" compareValue="3"  prepend="AND">
+		          t.cargo_flag = #cargoFlag# 
+		          <!-- cargoFlag等于待交易（待交易0且未过期的）-->
+			      <isLessThan property="cargoFlag" compareValue="1"  prepend="AND">
+		              UNIX_TIMESTAMP(t.request_start_time_fm) <![CDATA[>=]]>  UNIX_TIMESTAMP(date_format(sysdate(),'%Y-%c-%d'))
+		            </isLessThan>
+		      </isLessThan>
+		      <!-- cargoFlag等于 失效3（待交易0且过期的）-->
+		     <isGreaterEqual property="cargoFlag" compareValue="3"  prepend="AND">
+		          t.cargo_flag = 0 AND 
+		          UNIX_TIMESTAMP(t.request_start_time_fm) <![CDATA[<]]>  UNIX_TIMESTAMP(date_format(sysdate(),'%Y-%c-%d')) 
+		     </isGreaterEqual>
+		   </isNotEmpty>
+		  <isNotEmpty property="startTime" prepend="AND"> UNIX_TIMESTAMP(t.request_start_time_fm) <![CDATA[>=]]>  UNIX_TIMESTAMP(#startTime#)</isNotEmpty>
+		  <isNotEmpty property="endTime" prepend="AND"> UNIX_TIMESTAMP(t.request_start_time_fm) <![CDATA[<=]]>  UNIX_TIMESTAMP(#endTime#)</isNotEmpty>
+		  <isNotEmpty property="startProCityCounty" prepend="AND"> t.startProCityCounty like CONCAT(#startProCityCounty#,'%') </isNotEmpty>
+		  <isNotEmpty property="endProCityCounty" prepend="AND"> t.endProCityCounty like CONCAT(#endProCityCounty#,'%') </isNotEmpty>
+		 </dynamic> 
+		ORDER BY t.create_time DESC 
+    </select>
+    
+	<!-- 查询我的货源——分页 -->
+	<select id="query_orderCargoInfo_domain_by_page" parameterClass="map" resultMap="order_cargoInfoDomain_result">
+		SELECT t.*,(SELECT COUNT(*) FROM t_quote_info WHERE cargo_id = t.id) quote_count ,
+		(SELECT COUNT(*) FROM t_driver_cargo_assess_info WHERE cargo_id = t.id) cargo_assess_count,
+		(CASE WHEN UNIX_TIMESTAMP(request_start_time_fm) <![CDATA[<]]>UNIX_TIMESTAMP(CURRENT_DATE()) THEN #isExpireTure#  else #isExpireFalse#  END) is_expire  
+		FROM(
+		SELECT id,
+		cargo_name,
+		cargo_type,
+		cargo_weight,
+		cargo_cubage,
+		request_car_length,
+		request_car_bar_type,
+		request_car_plate_type,
+		freight,
+		cargo_flag,
+		date_format(request_start_time,'%Y-%c-%d') request_start_time_fm,
+		date_format(request_end_time,'%Y-%c-%d') request_end_time_fm,
+		start_province,
+		start_city,
+		start_county,
+		start_town,
+		end_province,
+		end_city,
+		end_county,
+		end_town,
+		contact_name,
+		contact_mobilephone,
+		contact_telephone,
+		remark,
+		deploy_userid,
+		modify_userid,
+		company_id,
+		deleted_flag,
+		cargo_flag_time,
+		create_time,
+		modify_time,
+		(CASE WHEN start_county is NOT  NULL AND start_county != '' THEN CONCAT(start_province,'-',start_city,'-',start_county) 
+		WHEN start_city IS NOT  NULL AND start_city != '' THEN CONCAT(start_province,'-',start_city)
+		 ELSE start_province 
+		END) startProCityCounty,
+		(CASE WHEN end_county is NOT  NULL AND end_county != '' THEN CONCAT(end_province,'-',end_city,'-',end_county) 
+		WHEN end_city IS NOT  NULL AND end_city != '' THEN CONCAT(end_province,'-',end_city)
+		 ELSE end_province 
+		END) endProCityCounty   
+		FROM t_order_cargo_info 
+		WHERE cargo_origin = 0 AND  deploy_userid = #deployUserid#  
+		AND deleted_flag = #deletedFlag# )t
+		<dynamic prepend="WHERE">
+		  <isNotEmpty property="cargoName" prepend="AND"> t.cargo_name = #cargoName# </isNotEmpty>
+		  <isNotEmpty property="cargoType" prepend="AND"> t.cargo_type = #cargoType# </isNotEmpty>
+		  <isNotEmpty property="cargoFlag" >
+		      <!-- cargoFlag不等于 失效3（数据库中货源状态3个值没有失效）-->
+		      <isLessThan property="cargoFlag" compareValue="3"  prepend="AND">
+		           t.cargo_flag = #cargoFlag# 
+		            <!-- cargoFlag等于待交易（待交易0且未过期的）-->
+		            <isLessThan property="cargoFlag" compareValue="1"  prepend="AND">
+		              UNIX_TIMESTAMP(t.request_start_time_fm) <![CDATA[>=]]>  UNIX_TIMESTAMP(date_format(sysdate(),'%Y-%c-%d'))
+		            </isLessThan>
+		      </isLessThan>
+		    
+		      <!-- cargoFlag等于 失效3（待交易0且过期的）-->
+		     <isGreaterEqual property="cargoFlag" compareValue="3"  prepend="AND">
+		          t.cargo_flag = 0 AND 
+		          UNIX_TIMESTAMP(t.request_start_time_fm) <![CDATA[<]]>  UNIX_TIMESTAMP(date_format(sysdate(),'%Y-%c-%d')) 
+		     </isGreaterEqual>
+		   </isNotEmpty>
+		  <isNotEmpty property="startTime" prepend="AND"> UNIX_TIMESTAMP(t.request_start_time_fm) <![CDATA[>=]]>  UNIX_TIMESTAMP(#startTime#)</isNotEmpty>
+		  <isNotEmpty property="endTime" prepend="AND"> UNIX_TIMESTAMP(t.request_start_time_fm) <![CDATA[<=]]>  UNIX_TIMESTAMP(#endTime#)</isNotEmpty>
+		  <isNotEmpty property="startProCityCounty" prepend="AND"> t.startProCityCounty like CONCAT(#startProCityCounty#,'%') </isNotEmpty>
+		  <isNotEmpty property="endProCityCounty" prepend="AND"> t.endProCityCounty like CONCAT(#endProCityCounty#,'%') </isNotEmpty>
+		 </dynamic>  
+		ORDER BY t.create_time DESC 
+		LIMIT #beginNum#,#endNum# 
+	</select>
+    <!-- 查询我的货源的记录数 -->
+    <select id="query_orderCargoInfo_domain_count"  parameterClass="map" resultClass="java.lang.Integer">
+    SELECT COUNT(*) FROM(
+		SELECT id,
+		cargo_name,
+		cargo_type,
+		request_car_length,
+		request_car_bar_type,
+		request_car_plate_type,
+		cargo_flag,
+		date_format(request_start_time,'%Y-%c-%d') request_start_time_fm,
+		date_format(request_end_time,'%Y-%c-%d') request_end_time_fm,
+		start_province,
+		start_city,
+		start_county,
+		start_town,
+		end_province,
+		end_city,
+		end_county,
+		end_town,
+		contact_name,
+		contact_mobilephone,
+		contact_telephone,
+		deploy_userid,
+		company_id,
+		deleted_flag,
+		(CASE WHEN start_county is NOT  NULL AND start_county != '' THEN CONCAT(start_province,'-',start_city,'-',start_county) 
+		WHEN start_city IS NOT  NULL AND start_city != '' THEN CONCAT(start_province,'-',start_city)
+		 ELSE start_province 
+		END) startProCityCounty,
+		(CASE WHEN end_county is NOT  NULL AND end_county != '' THEN CONCAT(end_province,'-',end_city,'-',end_county) 
+		WHEN end_city IS NOT  NULL AND end_city != '' THEN CONCAT(end_province,'-',end_city)
+		 ELSE end_province 
+		END) endProCityCounty   
+		FROM t_order_cargo_info 
+		WHERE cargo_origin = 0 AND  deploy_userid = #deployUserid#  
+		AND deleted_flag = #deletedFlag# )t  
+		<dynamic prepend="WHERE">
+		  <isNotEmpty property="cargoName" prepend="AND"> t.cargo_name = #cargoName# </isNotEmpty>
+		  <isNotEmpty property="cargoType" prepend="AND"> t.cargo_type = #cargoType# </isNotEmpty>
+		  <isNotEmpty property="cargoFlag" >
+		      <!-- cargoFlag不等于 失效3（数据库中货源状态3个值没有失效）-->
+		      <isLessThan property="cargoFlag" compareValue="3"  prepend="AND">
+		          t.cargo_flag = #cargoFlag# 
+		           <!-- cargoFlag等于待交易（待交易0且未过期的）-->
+		       <isLessThan property="cargoFlag" compareValue="1"  prepend="AND">
+		              UNIX_TIMESTAMP(t.request_start_time_fm) <![CDATA[>=]]>  UNIX_TIMESTAMP(date_format(sysdate(),'%Y-%c-%d'))
+		        </isLessThan>
+		      </isLessThan>
+		      <!-- cargoFlag等于 失效3（待交易0且过期的）-->
+		     <isGreaterEqual property="cargoFlag" compareValue="3"  prepend="AND">
+		          t.cargo_flag = 0 AND 
+		          UNIX_TIMESTAMP(t.request_start_time_fm) <![CDATA[<]]>  UNIX_TIMESTAMP(date_format(sysdate(),'%Y-%c-%d')) 
+		     </isGreaterEqual>
+		   </isNotEmpty>
+		  <isNotEmpty property="startTime" prepend="AND"> UNIX_TIMESTAMP(t.request_start_time_fm) <![CDATA[>=]]>  UNIX_TIMESTAMP(#startTime#)</isNotEmpty>
+		  <isNotEmpty property="endTime" prepend="AND"> UNIX_TIMESTAMP(t.request_start_time_fm) <![CDATA[<=]]>  UNIX_TIMESTAMP(#endTime#)</isNotEmpty>
+		  <isNotEmpty property="startProCityCounty" prepend="AND"> t.startProCityCounty like CONCAT(#startProCityCounty#,'%') </isNotEmpty>
+		  <isNotEmpty property="endProCityCounty" prepend="AND"> t.endProCityCounty like CONCAT(#endProCityCounty#,'%') </isNotEmpty>
+		 </dynamic> 
+    </select>
+    <!-- 添加货源 -->
+    <insert id="insert_order_cargo_info" parameterClass="OrderCargoInfo">
+    INSERT INTO t_order_cargo_info (
+   cargo_name,
+		cargo_type,
+		cargo_weight,
+		cargo_cubage,
+		request_car_length,
+		request_car_bar_type,
+		request_car_plate_type,
+		freight,
+		request_start_time,
+		request_end_time,
+		start_province,
+		start_city,
+		start_county,
+		start_town,
+		end_province,
+		end_city,
+		end_county,
+		end_town,
+		contact_name,
+		contact_mobilephone,
+		contact_telephone,
+		remark,
+		deploy_userid,
+		modify_userid,
+		company_id,
+		cargo_flag,
+		deleted_flag,
+		cargo_flag_time,
+		cargo_origin,
+		create_time,
+		modify_time ) VALUES (
+		#cargoName#,#cargoType#,#cargoWeight#,#cargoCubage#,#requestCarLength#,
+		#requestCarBarType#,#requestCarPlateType#,#freight#,#requestStartTime#,#requestEndTime#,
+		#startProvince#,#startCity#,#startCounty#,#startTown#,#endProvince#,#endCity#,
+		#endCounty#,#endTown#,#contactName#,#contactMobilephone#,#contactTelephone#,
+		#remark#,#deployUserid#,#modifyUserid#,
+		#companyId#,#cargoFlag#,#deletedFlag#,sysdate(),#cargoOrigin#,sysdate(),sysdate()) 
+		<selectKey resultClass="String" keyProperty="id">
+	    SELECT last_insert_id() as id
+	   </selectKey>
+    </insert>
+    <!-- 修改货源 信息-->
+    <update id="update_order_cargo_info" parameterClass="OrderCargoInfo">
+      UPDATE t_order_cargo_info SET 
+		cargo_name = #cargoName#,
+		cargo_type = #cargoType#,
+		cargo_weight = #cargoWeight#,
+		cargo_cubage = #cargoCubage#,
+		request_car_length = #requestCarLength#,
+		request_car_bar_type = #requestCarBarType#,
+		request_car_plate_type = #requestCarPlateType#,
+		freight = #freight#,
+		request_start_time = #requestStartTime#,
+		request_end_time = #requestEndTime#,
+		start_province = #startProvince#,
+		start_city = #startCity#,
+		start_county = #startCounty#,
+		start_town = #startTown#,
+		end_province = #endProvince#,
+		end_city = #endCity#,
+		end_county = #endCounty#,
+		end_town = #endTown#,
+		contact_name = #contactName#,
+		contact_mobilephone = #contactMobilephone#,
+		contact_telephone = #contactTelephone#,
+		remark = #remark#,
+		modify_userid = #modifyUserid#,
+		modify_time = sysdate()  
+    WHERE ID=#id#
+    </update>
+    
+    <!-- 修改货源状态 -->
+    <update id="update_order_cargo_flag" parameterClass="map" >
+		UPDATE t_order_cargo_info SET 
+		cargo_flag = #cargoFlag#,modify_userid = #modifyUserid#,
+		modify_time = sysdate(),cargo_flag_time = sysdate()
+		 where id=#id#
+	</update>
+	
+	<!-- 修改货源删除状态 -->
+    <update id="update_order_deleted_flag" parameterClass="map">
+		UPDATE t_order_cargo_info SET 
+		deleted_flag = #deletedFlag#,modify_userid = #modifyUserid#,
+		modify_time = sysdate() 
+		 where id=#id#
+	</update>
+	
+	<!-- 修改导入的订单货源信息（货主版） -->
+	<update id="update_import_cargo_info" parameterClass="OrderCargoInfo">
+	    UPDATE t_order_cargo_info SET 
+		cargo_name = #cargoName#,
+		start_province = #startProvince#,
+		start_city = #startCity#,
+		start_county = #startCounty#,
+		end_province = #endProvince#,
+		end_city = #endCity#,
+		end_county = #endCounty#,
+		modify_userid = #modifyUserid#,
+		modify_time = sysdate()  
+     WHERE ID=#id# 
+	</update>
+</sqlMap>

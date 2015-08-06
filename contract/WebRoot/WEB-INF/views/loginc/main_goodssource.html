@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"/>
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache,must-revalidate">
+    <title>会员中心</title>
+    <link type="text/css" rel="stylesheet" href="../css/reg/passport.base.css"/>
+    <link type="text/css" rel="stylesheet" href="../css/reg/regist.personal.css"/>
+    <script type="text/javascript" src="../js/themes/regc/jquery-1.2.6.pack.js"></script>
+    <script src="../js/sys/sys.js"></script>
+    <script type="text/javascript">
+	function logout(){//退出
+		window.self.location = "logout";
+	}
+    </script>
+<style type="text/css">
+.c-main{width:950px;height:900px;border:0px solid black;padding:0px;margin:0 auto;}
+.c-left{width:150px;height:200px;margin-top:2px;margin-right:20px;margin-left:0px;border:1px solid black;padding:0px;float:left;}
+.c-right{width:770px;height:850px;margin-top:2px;border:0px solid black;padding:0px;float:left;}
+.c-table{width:150px;height:200px;margin:0px;border:0px;padding:0px;}
+.c-tr{width:150px;height:15px;margin:0px;border:0px;padding:0px;text-align:center;}
+.c-td-title-first{width:150px;height:20px;background-color:#F0F0F0;margin:0px;border-bottom:1px solid black;padding:0px;font-weight:bold;}
+.c-td-title{width:150px;height:20px;background-color:#F0F0F0;margin:0px;border-top:1px solid black;border-bottom:1px solid black;padding:0px;font-weight:bold;}
+.c-td-memu{width:150px;height:20px;margin:0px;border:0px;padding:0px;cursor:pointer;}
+.c-iframe{width:770px;height:850px;margin-top:0px;border:0px solid black;padding:0px;float:left;}
+</style>
+</head>
+ 
+<body>
+	<div id="shortcut">
+		<div class="w">
+			<ul class="fr lh">
+				<li class="fore1 ld" style="margin-right:500px;" id="loginbar"><span id="username"></span> 您好！欢迎来到传化物流！</li>
+				<li class="fore5 menu" data-widget="dropdown">
+					<dl>
+						<dt class="ld"><a href="#" target="_blank">我是货主<b></b></a></dt>
+						<dd>
+							<div><a href="f_open(../logincs/main_goodssource,'')" target="_blank">我要发货</a></div>
+						</dd>
+					</dl>
+				</li>
+				<li class="fore6 menu" data-widget="dropdown">
+					<dl>
+						<dt class="ld"><a href="#" target="_blank">客户服务<b></b></a></dt>
+						<dd>
+							<div><a href="#" target="_blank">常见问题</a></div>
+							<div><a href="#" target="_blank">售后服务</a></div>
+						</dd>
+					</dl>
+				</li>
+				<li class="fore1 ld"><span id="logout"></span></li>
+			</ul>
+			<span class="clr"></span>
+		</div>
+	</div><!--shortcut end-->
+	<div class="w" id="login-logo">
+		<table>
+			<tr>
+			    <td style="width:900px;text-align:center">
+					<img src="../js/themes/trade/header.jpg" border="0"/>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="w" id="regist">
+	<div class="mc">
+		<ul class="tab">
+		    <span style="font-size:15px;color:red;">货源发布</span>
+		</ul>
+   		<div id="main" class="c-main">
+   			<div id="left" class="c-left">
+				<table class="c-table">
+					<tr class="c-tr"><td class="c-td-title-first">发货管理</td></tr>
+					<tr class="c-tr"><td id="0" ot="0" url="../goodssourcecs/list_spub">已发布货盘</td></tr>
+					<tr class="c-tr"><td id="1" ot="0" url="../goodssourcecs/list_sremove" class="c-td-memu">已撤下货盘</td></tr>
+					<tr class="c-tr"><td id="2" ot="0" url="../goodssourcecs/list_sfinish" class="c-td-memu">已成交货盘</td></tr>
+					<tr class="c-tr"><td id="3" ot="0" url="../goodssourcecs/list" class="c-td-memu">历史数据</td></tr>
+					<tr class="c-tr"><td class="c-td-title">帐号管理</td></tr>
+					<tr class="c-tr"><td id="4" ot="1" url="../personcs/edit" class="c-td-memu">信息完善</td></tr>
+					<tr class="c-tr"><td id="5" ot="1" url="../operatorcs/edit" class="c-td-memu">密码修改</td></tr>
+				</table>
+			</div>
+   			<div id="right" class="c-right">
+   				<iframe id="right-iframe" scrolling="no" class="c-iframe" frameborder="no" border="0" src="../goodssourcecs/list_spub"></iframe>
+   			</div>
+   		</div>
+	</div>
+</div> 
+<div class="w">
+    <div id="footer">ss
+    </div>
+</div><!-- footer end -->
+  <script type="text/javascript"> 
+  javascript:window.history.forward(1);
+    (function($) {
+    	$.ajax({
+    		url:"../logincs/getInit",
+    		dataType:"json",
+    		contentType: "application/json",
+	      	type:'get',
+	      	//timeout:1000,  
+	      	//data:params, //后台不能接收 
+	      	success:function(data){ 
+	      		$("#username").html("<font style='cursor:pointer;color:red;' size=2>"+data.msg+"&nbsp;&nbsp;&nbsp;</font>,");
+				$("#logout").html("<a href=\"javascript:logout()\">[退出]</a>");
+	      	}, 
+	      	error:function(XMLHttpRequest, textStatus, errorThrown) {
+               //alert(XMLHttpRequest.status);
+              // alert(XMLHttpRequest.readyState);
+               //alert(textStatus); 
+	   		}
+    	});
+        $("#shortcut .menu").Jdropdown({delay: 50});
+      
+        $("td").each(function(){//注册事件
+			var id=$(this).attr("id");
+			$("#"+id).bind("click",function(){
+				if($(this).attr("ot")=='0'){//刷新iframe
+					document.getElementById("right-iframe").src=$(this).attr("url");   
+				}else{//弹出页面
+					f_open($(this).attr("url"),id);
+				}
+			});
+		});
+		
+    })(jQuery);
+	</script>
+</body>
+</html>
+ 
+ 
+

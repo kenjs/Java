@@ -1,0 +1,30 @@
+@CHARSET "UTF-8";
+@CHARSET "UTF-8";
+#right {
+	font-family:inherit;
+    font-family:"宋体",Arial,sans-serif;
+    font-size: 12px;
+}
+.sub_top{width: 900px;border-bottom: 1px solid #d3d7d4;font-size: 14px;
+    font-weight: bold;
+    padding-bottom: 5px;
+    margin-left: 15px;
+    }
+.hgrid{margin-left: 15px;width: 890px;}
+#hgrid{width: 890px;table-layout:auto;}
+.sub_center{width: 900px;margin-top: 0px; margin-left: 15px;}
+#pactnumber{width: 120px;height: 28px;margin-left: 5px;line-height: 26px;color: #999999;}
+#signdate{width: 120px;margin-left: 5px;color: #999999; height: 28px;
+    line-height: 26px;}
+.tab_query{width: 900px;border: none;}
+#partyname{width: 120px;height: 28px;margin-left: 5px;line-height: 26px;color: #999999;}
+#btnadd{margin-right: 32px;width: 100px;height: 27px;color:white; line-height: 24px;cursor: pointer;background-color: #ec6110;font-weight: bold;border: none;}
+.btn{    border-radius: 2px 2px 2px 2px;
+    display: inline-block;
+    font: bold 12px/25px Arial,sans-serif;
+    margin: 10px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.22);}
+#state{width:100;margin-left:10px;height: 25px;}

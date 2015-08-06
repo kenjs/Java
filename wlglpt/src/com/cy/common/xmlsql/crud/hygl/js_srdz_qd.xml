@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.hygl.dao.JsSrdzQdMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectJsSrdzQdByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.JsSrdzQdDomain">
+		select a.QD_DJXH as qdDjxh,
+		a.KH_DJXH as khDjxh,(SELECT KH.KHMC FROM QY_KH_DJXX KH WHERE KH.KH_DJXH = A.KH_DJXH) khMc,
+		a.QDMC as qdmc,a.DZQD_HZFS_DM as dzqdHzfsDm,a.HE_JE as heJe,
+		a.YF_JE as yfJe,a.WF_JE as wfJe,a.YSQ_KPJE as ysqKpJe,a.WSQ_KPJE as wsqKpJe,
+		a.DJR_CZY_DJXH as djrCzyDjxh,(SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.DJR_CZY_DJXH) cjrMc,
+		a.DJRQ as djrq,
+		a.DJ_JGBM as djJgbm,(SELECT JG.JC FROM QY_ZZJG JG WHERE JG.JGBM= A.DJ_JGBM) bmMc, 
+		a.SS_JGBM as ssJgbm,(SELECT JG.JC FROM QY_ZZJG JG WHERE JG.JGBM = A.SS_JGBM) dwMc,
+		a.YXBZ as yxbz,a.SFKPBZ as sfKpBz,a.JSDW as jsdw from JS_SRDZ_QD a  where a.QD_DJXH=#qdDjxh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertJsSrdzQd"  parameterClass="com.cy.common.bo.JsSrdzQd">
+		insert into JS_SRDZ_QD(QD_DJXH,KH_DJXH,QDMC,DZQD_HZFS_DM,HE_JE,
+		YF_JE,WF_JE,YSQ_KPJE,WSQ_KPJE,DJR_CZY_DJXH,DJRQ,DJ_JGBM,
+		SS_JGBM,YXBZ,SFKPBZ,JSDW)
+		values(#qdDjxh:NUMERIC#,#khDjxh:NUMERIC#,#qdmc:NUMERIC#,#dzqdHzfsDm:NUMERIC#,#heJe:NUMERIC#,
+		#yfJe:NUMERIC#,#wfJe:NUMERIC#,#ysqKpJe:NUMERIC#,#wsqKpJe:NUMERIC#,#djrCzyDjxh:NUMERIC#,
+		to_date(#djrq:DATE#,'yyyy-MM-dd'),#djJgbm:NUMERIC#,#ssJgbm:NUMERIC#,#yxbz:VARCHAR#,#sfKpBz:VARCHAR#,#jsdw:VARCHAR#)
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateJsSrdzQdByKey" parameterClass="com.cy.common.bo.JsSrdzQd">
+        update JS_SRDZ_QD set QD_DJXH=#qdDjxh#,KH_DJXH=#khDjxh#,QDMC=#qdmc#,DZQD_HZFS_DM=#dzqdHzfsDm#,HE_JE=#heJe#,
+		YF_JE=#yfJe#,WF_JE=#wfJe#,YSQ_KPJE=#ysqKpJe#,WSQ_KPJE=#wsqKpJe#,DJR_CZY_DJXH=#djrCzyDjxh#,DJRQ=to_date(#djrq#, 'YYYY-MM-DD'),DJ_JGBM=#djJgbm#,
+		SS_JGBM=#ssJgbm#,YXBZ=#yxbz#,SFKPBZ=#sfKpBz#,JSDW=#jsdw# where QD_DJXH=#qdDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteJsSrdzQdByKey" parameterClass="java.util.Map">
+		update JS_SRDZ_QD set yxbz='N' where QD_DJXH=#qdDjxh#
+    </delete>
+    
+    <!--根据主键取DOMAIN-->
+	<select id="selectJsSrdzQdMxByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.JsSrdzQdDomain">
+		select a.QD_DJXH as qdDjxh,a.YW_DJXH as ywDjxh, a.YW_MX_XH as ywMxXh, a.YW_LYDM ywLydm
+		from JS_SRDZ_QD_MX a  
+		where a.QD_DJXH=#qdDjxh# 
+		and a.YW_DJXH=#ywDjxh#
+		and a.YW_MX_XH = #ywMxXh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertJsSrdzQdMx"  parameterClass="com.cy.common.bo.JsSrdzQdMx">
+		insert into JS_SRDZ_QD_MX(QD_DJXH,YW_DJXH,YW_MX_XH,YW_LYDM)
+		values(#qdDjxh:NUMERIC#,#ywDjxh:NUMERIC#,#ywMxXh:NUMERIC#,#ywLydm:NUMERIC#)
+	</insert>
+
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteJsSrdzQdMxByKey" parameterClass="java.util.Map">
+		delete from JS_SRDZ_QD_MX 
+		where QD_DJXH=#qdDjxh# and YW_DJXH=#ywDjxh# 
+		and YW_MX_XH = #ywMxXh#
+    </delete>
+    
+    <!--根据主键取DOMAIN-->
+	<select id="selectJsSrdzQdMxTempByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.JsSrdzQdDomain">
+		select a.QD_DJXH as qdDjxh,a.YW_DJXH as ywDjxh, a.YW_MX_XH as ywMxXh, a.YW_LYDM ywLydm
+		from JS_SRDZ_QD_MX_TEMP a  
+		where a.QD_DJXH=#qdDjxh# 
+		and a.YW_DJXH=#ywDjxh#
+		and a.YW_MX_XH = #ywMxXh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertJsSrdzQdMxTemp"  parameterClass="com.cy.common.bo.JsSrdzQdMx">
+		insert into JS_SRDZ_QD_MX_TEMP(QD_DJXH,YW_DJXH,YW_MX_XH,YW_LYDM,CZRQ)
+		values(#qdDjxh:NUMERIC#,#ywDjxh:NUMERIC#,#ywMxXh:NUMERIC#,#ywLydm:NUMERIC#,to_date(#czRq:DATE#,'yyyy-MM-dd'))
+	</insert>
+
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteJsSrdzQdMxTempByKey" parameterClass="java.util.Map">
+		delete from JS_SRDZ_QD_MX_TEMP where QD_DJXH=#qdDjxh# and YW_DJXH=#ywDjxh#
+		AND YW_MX_XH = #ywMxXh#
+    </delete>
+    
+    <insert id="saveQdMxDomainByTemp"  parameterClass="java.util.Map">
+		insert into JS_SRDZ_QD_MX(QD_DJXH,YW_DJXH,YW_MX_XH,YW_LYDM)
+		SELECT TEM.QD_DJXH,TEM.YW_DJXH,TEM.YW_MX_XH,TEM.YW_LYDM 
+		FROM JS_SRDZ_QD_MX_TEMP TEM
+		WHERE TEM.QD_DJXH=#qdDjxh#
+	</insert>
+	
+	<delete id="deleteDzQdMxTempByQdDjxh" parameterClass="java.util.Map">
+		delete from JS_SRDZ_QD_MX_TEMP where QD_DJXH=#qdDjxh#
+    </delete>
+    
+    <update id="updateJsSrDzDd" parameterClass="java.util.Map">
+    	UPDATE JS_SRDZ DZ SET DZ.QD_DJXH = #qdDjxh#
+		WHERE EXISTS (
+		     SELECT 1 FROM JS_SRDZ_QD_MX QDMX
+		     WHERE QDMX.YW_DJXH = DZ.DZ_DJXH
+		     AND QDMX.QD_DJXH = #qdDjxh#
+		)
+    </update>
+    
+    <update id="deleteDzQdMxUpdateSrDzDdOfIsNull" parameterClass="java.util.Map">
+      UPDATE JS_SRDZ DD SET DD.QD_DJXH = null
+	  	WHERE DD.Yxbz='Y' AND DD.DZ_DJXH=#ywDjxh#
+    </update>
+    
+</sqlMap>

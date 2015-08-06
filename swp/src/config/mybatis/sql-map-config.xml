@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <settings>
+        <setting name="cacheEnabled" value="true"/>
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <setting name="aggressiveLazyLoading" value="false"/>
+        <setting name="defaultStatementTimeout" value="50000"/>
+    </settings>
+
+    <typeAliases>
+    
+        <!-- domain -->
+        <typeAlias alias="DriverUserInfoDomain" type="com.cy.swp.domain.DriverUserInfoDomain"/>
+        <typeAlias alias="OrderCargoInfoDomain" type="com.cy.swp.domain.OrderCargoInfoDomain"/>
+
+        <!-- 司机客户资料表domain -->
+        <typeAlias alias="MarketingDriverInfoDomain" type="com.cy.swp.domain.MarketingDriverInfoDomain"/>
+        <!-- 客户维护记录表Domain -->
+        <typeAlias alias="MarketingMaintainRecordDomain" type="com.cy.swp.domain.MarketingMaintainRecordDomain"/>
+        <typeAlias alias="MarketingAssisterApplyDomain" type="com.cy.swp.domain.MarketingAssisterApplyDomain"/>
+        <typeAlias alias="MarketingDriverBusinessLineDomain" type="com.cy.swp.domain.MarketingDriverBusinessLineDomain"/>
+        <!-- 历史轨迹表 -->
+        <typeAlias alias="LocationCollectInfoDomain" type="com.cy.swp.domain.LocationCollectInfoDomain"/>
+        <!-- 用户表 -->
+        <typeAlias alias="MarketingUserInfoDomain" type="com.cy.swp.domain.MarketingUserInfoDomain"/>
+        <!-- 用户表 -->
+        <typeAlias alias="MatchingDriverInfoDomain" type="com.cy.swp.domain.MatchingDriverInfoDomain"/>
+        <!--统计分析-->
+        <typeAlias alias="StatisticalAnalyseDomain" type="com.cy.swp.domain.StatisticalAnalyseDomain"/>
+
+        <!-- bo -->
+        <typeAlias alias="MarketingCargoAssist" type="com.cy.swp.bo.MarketingCargoAssist"/>
+        <typeAlias alias="MarketingCargoCompanyContacts" type="com.cy.swp.bo.MarketingCargoCompanyContacts"/>
+        <typeAlias alias="MarketingCargoDriverContacts" type="com.cy.swp.bo.MarketingCargoDriverContacts"/>
+        <typeAlias alias="MarketingUserInfo" type="com.cy.swp.bo.MarketingUserInfo"/>
+        <typeAlias alias="MarketingNoteRecordInfo" type="com.cy.swp.bo.MarketingNoteRecordInfo"/>
+        <typeAlias alias="SystemNoteTemplateInfo" type="com.cy.swp.bo.SystemNoteTemplateInfo"/>
+        <typeAlias alias="OrderCargoInfo" type="com.cy.swp.bo.OrderCargoInfo"/>
+        <typeAlias alias="DriverUserInfo" type="com.cy.swp.bo.DriverUserInfo"/>
+        <typeAlias alias="CompanyInfo" type="com.cy.swp.bo.CompanyInfo"/>
+        <typeAlias alias="WebUserInfo" type="com.cy.swp.bo.WebUserInfo"/>
+        <typeAlias alias="NoteSendRecord" type="com.cy.swp.bo.NoteSendRecord"/>
+        <typeAlias alias="MarketingDistributRecord" type="com.cy.swp.bo.MarketingDistributRecord"/>
+
+
+
+
+        <!-- 企业客户资料表 -->
+        <typeAlias alias="MarketingCompanyInfo" type="com.cy.swp.bo.MarketingCompanyInfo"/>
+        <!-- 客户司机等级变更记录表(非客户类别，而是指real_level) -->
+        <typeAlias alias="MarketingDriverLevelChangeRecord" type="com.cy.swp.bo.MarketingDriverLevelChangeRecord"/>
+        <!-- 客户维护记录表 -->
+        <typeAlias alias="MarketingMaintainRecord" type="com.cy.swp.bo.MarketingMaintainRecord"/>
+        <!-- 司机客户资料表 -->
+        <typeAlias alias="MarketingDriverInfo" type="com.cy.swp.bo.MarketingDriverInfo"/>
+        <!-- 客户分配申请表 -->
+        <typeAlias alias="MarketingAssisterApply" type="com.cy.swp.bo.MarketingAssisterApply"/>
+        <!-- 客户司机运营线路表 -->
+        <typeAlias alias="MarketingDriverLine" type="com.cy.swp.bo.MarketingDriverLine"/>
+        <!-- 客户司机预约线路表 -->
+        <typeAlias alias="MarketingDriverBusinessLine" type="com.cy.swp.bo.MarketingDriverBusinessLine"/>
+        <!-- 司机预约线路表 -->
+        <typeAlias alias="DriverBusinessLineInfo" type="com.cy.swp.bo.DriverBusinessLineInfo"/>
+        <!-- 司机运营线路表 -->
+        <typeAlias alias="DriverLineInfo" type="com.cy.swp.bo.DriverLineInfo"/>
+        <!-- 推送记录表 -->
+        <typeAlias alias="PushSendRecord" type="com.cy.swp.bo.PushSendRecord"/>
+        <typeAlias alias="DaySendMsgcounter" type="com.cy.swp.bo.DaySendMsgcounter"/>
+
+
+
+
+
+    </typeAliases>
+</configuration>

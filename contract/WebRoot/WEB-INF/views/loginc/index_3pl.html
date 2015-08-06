@@ -1,0 +1,357 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"/>
+    <meta http-equiv="pragma" content="no-cache"/>
+    <meta http-equiv="Cache-Control" content="no-cache,must-revalidate"/>
+    <title>传化物流-会员中心</title>
+      <link href="../css/webui_3pl/main.css" rel="stylesheet" />	
+    <link href="../js/sys/ymPrompt/skin/ch/ymPrompt.css" rel="stylesheet" /> 		
+	<script src="../js/jquery/jquery-1.8.3.min.js" type=text/javascript></script>
+	<script src="../js/sys/webui_3pl/header.js"></script>    	
+	<script src="../js/sys/webui_3pl/logo.js"></script>   	  
+	<script src="../js/sys/webui_3pl/left.js"></script> 
+	<script src="../js/themes/tradec/trade.js"></script>
+ 	<script src="../js/sys/webui_3pl/hgrid.js"></script>  
+ 	<script src="../js/sys/ymPrompt/ymPrompt.js" type=text/javascript></script>
+ 	  
+    <script type="text/javascript">
+    javascript:window.history.forward(1);
+    var params;
+     javascript:window.history.forward(1);
+    $(document).ready(function(){
+    
+	     $("#btnSubmit").click(function()
+	     {
+	       if($("#tracetrade").val()=="输入运单号查询"){
+	       
+	       	return ;
+	       }
+	       params="toconsignornumber="+$("#tracetrade").val()+"&random="+Math.random();
+	    	window.open("../tradecs/trade_trace?"+params);
+	    });	
+	      $("#onscreen_click").click(function()
+	     {
+	     	window.location="../goodssourcecs/index_goodssource_onscreen";
+	     });
+	     $("#remover_click").click(function()
+	     {
+	     	window.location="../goodssourcecs/index_goodssource_removed";
+	     });
+	      $("#trading_click").click(function()
+	     {
+	     	window.location="../tradecs/vtrade";
+	     });
+	});
+	 //打开在屏货源
+	function goodsdetail(){
+		
+	};
+	function logout(){//退出
+		window.self.location = "../logincs/logout?random="+Math.random();
+	}
+	
+	
+             //判断跳转3pl,货源管理,配送管理权限
+    function checkpremission(preimission)
+	{
+    	//alert(preimission);
+	  //window.open("../goodssourcemodelcs/modeldetail?id="+goodsSourceModelId);
+	  $.ajax({
+			   type : "post",
+			   url : "../partycs/checkPermission?random="+Math.random()+"&premission="+encodeURIComponent(encodeURIComponent(preimission)),
+			   dataType: "json",
+			   error : function(){alert("操作失败")},
+			   success : function(data) {
+			   		if(data.msg=='ok'){
+			   			//刷新页面
+			   			if(preimission=='3pl'){
+			   				window.location="../logincs/main_3pl";
+			   			}
+			   			if(preimission=='配送'){
+			   				window.location="../todispermissioncs/ordermanage";
+			   			}
+			   			if(preimission=='发布货源'){
+			   				window.location="../goodssourcecs/fastpub";
+			   			}
+			   			
+			   		
+			       	}else{
+			       	alert("你还没有使用这个功能的权限，请申请！！");
+			       	}
+			   }
+	  		});
+	}
+	
+    </script>
+
+ <script type="text/javascript"> 
+    javascript:window.history.forward(1);
+		 $(document).ready(function(){
+		 var param="random="+Math.random();
+         $.ajax({   
+	      url:'../tradecs/tradeStatusCount',
+	      dataType:'json',
+	      type:'post',
+	      data:param,
+	      success:function(data){       
+	      $("#dfhyd").text(data.count1);
+	      $("#dcysslyd").text(data.count2);
+	      }
+	  }); 
+	    $.ajax({   
+	      url:'../goodssourcecs/goodsStatusCount',
+	      dataType:'json',
+	      type:'post',
+	      data:param,
+	      success:function(data){      
+	      $("#onscreennum").text(data.onscreennum);
+	      $("#tradingnum").text(data.tradingnum);
+	      }
+	  });   
+	  
+	    $.ajax({   
+	      url:'../logincs/initparty',
+	      dataType:'json',
+	      type:'post',
+	      data:param,
+	      success:function(data){       
+	      /* if(data.partytype=="")
+	       {
+	        $("#partyimage").attr("src","../imgs/login/wel/wrzhy_menber.png");
+	       }
+	       if(data.partytype=="个人")
+	       {
+	        $("#partyimage").attr("src","../imgs/login/wel/grzh_menber.png");
+	       }
+	       if(data.partytype=="企业")
+	       {
+	        $("#partyimage").attr("src","../imgs/login/wel/qyzh_menber.png");
+	       }*/
+	       $("#partyimage").attr("src","../imgs/login/wel/3pl-pic.jpg");
+	       $("#welname").text(data.welname);
+	       if(data.email=="")
+	       {
+	         $("#email").text("尚无邮箱信息");
+	       }
+	       else{
+	       $("#email").text(data.email);
+	       }
+	       if(data.mobilenumber=="")
+	       {
+	         $("#mobilenumber").text("尚无联系方式");
+	       }
+	       else{
+	       $("#mobilenumber").text(data.mobilenumber);
+	       }
+	      }
+	  }); 
+		 });
+    
+    </script>
+    <style>
+    	.c-iframe{width:800px;height:600px;margin-top:0px;border:0px solid black;padding:0px;float:left;}
+		* {margin:0;padding:0} 
+		#middle_div {margin:0 auto;} 
+		#middle_div ul {width:799px;height:165px;list-style:none} 
+		#middle_div li {font-weight:bold;font-size:14px;background-color:#e3e3e3;border-left:1px solid #ccc;border-top:1px solid #ccc;float:left;width:378px;height:33px;text-align:center;line-height:33px} 
+		#middle_div li.b {border-bottom:1px solid #ccc;background-color:#ffffff;height: 111px;} 
+		#middle_div li.r {border-right:1px solid #ccc;} 
+		#middle_div li.h {margin-left: 40px;}
+		#middle_div li.b.m {margin-left: 40px;}
+		#middle_div ul li div{margin-left:0px;font-size:14px;padding-top:30px;}
+		#middle_div ul li div span{color:#e96131;letter-spacing: 0px;font-size: 14px;}
+		#middle_div ul li div span.b{margin-left:18px;color: black;font-weight: normal; }
+		#middle_div ul li div span.r{margin-left:1px; }
+		#bottom_div{margin:0 auto;}
+		#bottom_div ul{width:799px;height:165px;list-style:none}
+		#bottom_div li{margin-left: 40px;float:left;font-size:14px;border:1px solid #ccc;width:756px;height:72px;line-height:72px;}
+		#bottom_div ul li div{margin-left: 15px;width: 325px;height: 30px;float: left;}
+		#bottom_div li div lable{padding-left: 8px;font-size:13px;}
+		#bottom_div li div input{width: 220px;height: 27px;line-height: 27px;}
+		#bottom_div ul li div.a{background-image: url('../imgs/goodssourcec/bt-search.jpg'); width: 80px;height: 30px;margin-top: 21px;margin-left: 0px; cursor: pointer;}
+		#onscreen_click{cursor: pointer;}
+		#trading_click{cursor: pointer;}
+		#dfhyd_click{cursor: pointer;}
+		#dcysslyd_click{cursor: pointer;}
+		.c-wel{width:800px;height:600px;}
+		#main{width:998px;border:0px solid black;padding:0px;margin:0 auto;}
+		.tdcenter2{width: 100px;border: 0px solid red;}
+    </style>
+</head>
+ 
+<body>
+<!-- 顶部 --开始  此处须由js动态加入-------------------------------------->
+	<div id="header" class="c-header" >
+	
+	</div>
+	<!-- 顶部 --结束------------------------------------->
+	
+	<!-- LOGON --开始   此处须由js动态加入------------------------------------->
+	<div id="logo" class="c-logo" >
+		
+	</div>
+	<!-- LOGON --结束------------------------------------->
+		<!-- 工作区 --开始------------------------------------->
+	<div id="main">
+		<!-- 左侧菜单 --开始  此处须由js动态加入------------------------------------->
+  		<div id="left" class="c-left"> 
+		</div>
+		
+		<!-- 左侧菜单 --结束------------------------------------->
+			
+		<!-- 右侧工作区 --开始------------------------------------->
+  		<div id="right" class="c-right" >
+  			
+   				<!--<iframe id="right-iframe" scrolling="no" class="c-iframe" frameborder="no" border="0" src="../logincs/main_welcome.html"></iframe>-->
+   				     <div id="wel" class="c-wel" style="text-align:left;">
+						<div style="width:720px;height:162px;">
+						<table border="0" style="width:720px;">
+						<tr style="height:47px;"></tr>
+						<tr style="height:85px;">
+						<td style="width:40px;"></td>
+						<td style="width:123px;">
+						<img src="" border="0" id="partyimage"></img>
+						</td>
+						<td width="557px;">
+				
+						<table style="width:557px;" border="0">
+						<tr style="height:28px;">
+						<td style="width:20px"></td>
+						<td style="width:537px" ><span  id="welname" style="color:#e96131;margin-right: 5px;"></span><span >欢迎您！</span></td>				
+						</tr>
+						</table>
+						<table style="width:557px;" border="0">
+						<tr style="height:28px;">
+						<td style="width:20px"></td>
+						<td style="width:20px"><img src="../imgs/login/wel/mail.png" border="0"></img></td>
+						<td style="width:10px"></td>
+						<td style="width:100px" id="email"></td>
+						<td style="width:20px"></td>
+						<td style="width:20px"><img src="../imgs/login/wel/tel.png" border="0"></img></td>
+						<td style="width:100px" id="mobilenumber"></td>
+						<td style="width:267px"></td>
+						</tr>
+						</table>
+						<table style="width:557px;">
+						<tr style="height:29px;">
+						<td style="width:20px"></td>
+						<!--<td style="width:80px"><a href="../personcs/index_edit" target="_top" style="text-decoration: none;color:rgb(36,148,243);">完善会员信息</a></td>
+						-->
+						<td style="width:80px"><a href="../goodssourcecs/index_fastpub" target="_top" style="text-decoration: none;color:rgb(36,148,243);">发布货源信息</a></td>
+						<td style="width:10px"></td>
+						<td style="width:60px"><a href="../tradecs/index_consignee_list" target="_self" style="text-decoration: none;color:rgb(36,148,243);">立即收货</a></td>
+						<td style="width:10px"></td>
+						<td style="width:105px"><a href="../consignorconsigneecs/index_list" target="_self"  style="text-decoration: none;color:rgb(36,148,243);">添加收发货人信息</a></td>
+						<td style="width:10px"></td>
+						<td style="width:105px" id="score"></td>  
+						<td style="width:10px"></td>
+						<td style="width:147px;"></td>
+						</tr>
+						</table>
+						</td>
+						</tr>
+						<tr style="height:30px;"></tr>
+						</table>
+						</div>
+						<div id="middle_div"> 
+							<ul> 
+								<li class="h">易配货</li> 
+								<li class="r">零担货</li> 
+								<li class="b m">
+									<div >
+										  <span class="b" >在屏货源</span><span id="onscreen_click"  class="onscreen_click"><span class="r">【<span id="onscreennum" >0</span>】</span></span>
+				        				  <span class="b" >近一月成交</span><span id="trading_click" class="trading_click"><span class="r">【<span id="tradingnum" >0</span>】</span></span>
+				        			</div>
+								</li> 
+								<li class="b r">
+									<div >
+										  <span class="b">待发货运单</span><span id="dfhyd_click" class="dfhyd_click"><span class="r">【<span id="dfhyd" >0</span>】</span></span>
+				        				  <span class="b">待承运商受理运单</span ><span id="dcysslyd_click" class="dcysslyd_click"><span class="r">【<span id="dcysslyd" >0</span>】</span></span>
+				        			</div>
+								</li>
+							</ul> 
+						</div> 
+				        <div id="bottom_div" style="display: none;">
+				        	<ul>
+				        		<li>
+				        			<div>
+					        			<label>运单查询：</label>
+					        			<input type="text" id="tracetrade" class="a" name="tracetrade" value="输入运单号查询" onfocus="if(this.value == '输入运单号查询') this.value = ''" onblur="if(this.value =='') this.value = '输入运单号查询'"/>
+				        			</div>
+				        			<div class="a"  id="btnSubmit">
+				        			</div>
+				        		</li>
+				        	</ul>
+				        </div>
+					</div>
+   			</div>
+  		</div>
+  		<!-- 右侧工作区 --结束------------------------------------->
+	
+	<!-- 工作区 --结束------------------------------------------------------------------------>
+	<!-- 底部 --开始  此处须由js动态加入------------------------------------->
+	<div id="footer" class="c-footer">
+		
+	</div>
+	<!-- 底部 --结束------------------------------------->
+	
+	
+   			
+   
+  <script type="text/javascript"> 
+    (function($) {
+    	//调节高度start
+    	AdjustColumnsHeight = function(obj1,obj2){ 
+			 var h1 = $(obj1).outerHeight(); 
+			 var h2 = $(obj2).outerHeight(); 
+			 var mh = Math.max( h1, h2); 
+			 $(obj1).height(mh); 
+			 $(obj2).height(mh-1); 
+		}
+    	AdjustColumnsHeight(".c-left",".c-right");
+    	//调节高度end
+    	var arr=new Array('00','01');
+    	$.ajax({
+    		url:"../logincs/getInit?random="+Math.random(),
+    		dataType:"json",
+    		contentType: "application/json",
+	      	type:'get',
+	      	//timeout:1000,  
+	      	//data:params, //后台不能接收 
+	      	success:function(data){ 
+	      		$("#username").html("<a title="+data.username_all+" style='cursor:pointer;color:#6A6AFF;' size=2>"+data.username_part+"&nbsp;</a>,");
+				var partyName=data.username_all.split("/");
+				$("#logout").html("<a href=\"javascript:logout()\">[退出]</a>");
+				$("#score").html("<a href=\"http://119.6.78.179:8080/ScoreDate/sourcemanagerScore.action?userid="+partyName[0]+"\" target=\"_blank\"  style=\"text-decoration: none;color:rgb(36,148,243);\">我的积分</a>");
+	      	}, 
+	      	error:function(XMLHttpRequest, textStatus, errorThrown) {
+               //alert(XMLHttpRequest.status);
+              // alert(XMLHttpRequest.readyState);
+               //alert(textStatus); 
+	   		}
+    	});
+        $("#shortcut .menu").Jdropdown({delay: 50});
+        $("td").each(function(){//注册事件
+			var id=$(this).attr("id");
+				if(id.length>0&&id.length==1){//注册左边菜单
+					$("#"+id).bind("click",function(){
+						$('td[id!='+id+']').removeClass("clicked").addClass("noclicked");
+						$('td[id='+id+']').removeClass("noclicked").addClass("clicked");
+						if($(this).attr("ot")=='0'){//刷新iframe
+							document.getElementById("right-iframe").src=$(this).attr("url");   
+						}else{//弹出页面
+							f_open($(this).attr("url"),id);
+						}
+					});
+				}
+		});
+		
+    })(jQuery);
+   </script>
+</body>
+</html>
+ 
+ 
+

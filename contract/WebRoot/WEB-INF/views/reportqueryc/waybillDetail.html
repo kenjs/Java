@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>托运单明细表</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="pragma" content="no-cache"/>
+    <meta http-equiv="Cache-Control" content="no-cache,must-revalidate"/>
+    
+	<link href="../css/webui/main.css" rel="stylesheet" />
+	<link href="../css/webui/hgrid.css" rel="stylesheet" />
+	<link href="../js/sys/CityPicker/cityLayout.css" rel="stylesheet" type="text/css" />
+	<link href="../js/sys/CityPicker/buju.css" rel="stylesheet" type="text/css" />
+	<link href="../css/themes/reportqueryc/reportQuery.css" rel="stylesheet" />
+	
+	<script src="../js/jquery/jquery-1.8.3.min.js" type=text/javascript></script>
+    <script src="../js/sys/webui/contract/header.js"></script>    	
+    <script src="../js/sys/webui/logo.js"></script>   	 
+    <script src="../js/sys/webui/contract/left.js"></script> 
+	<script src="../js/sys/webui/hgrid.js" type="text/javascript"></script>
+	<script src="../js/sys/system.js" type="text/javascript"></script>
+	<script src="../js/sys/DatePicker/WdatePicker.js" type="text/javascript"></script>
+	<script src="../js/themes/reportqueryc/reportQuery.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		$(function(){
+			f_hgrid_ini();
+			$("#pagecode").val("1");
+			f_hgrid_json("");
+			$(".page_nav").next().remove();
+			$(".page_nav").insertAfter("#hgrid_div");
+			$("#hgrid_div .page_nav").remove();
+			$(".page_nav").css("text-align","right");
+			$(".page_nav").css("margin-top","10px");
+		})
+	</script>	
+  </head>
+  
+  <body>
+    <!-- 顶部 --开始  此处须由js动态加入-->
+	<div id="header" class="c-header" >
+	
+	</div>
+	<!-- 顶部 --结束-->
+	
+	<!-- LOGON --开始   此处须由js动态加入-->
+	<div id="logo" class="c-logo" >
+		
+	</div>
+	<!-- LOGON --结束-->
+
+	<div id="main" class="c-main">
+		
+  		<div id="left" class="c-left">
+			<div id="accordion"> 
+				
+			</div>  
+		</div>
+			
+  		<div id="right" class="c-right">
+  			<div id="list">
+  				<div style="text-align:left;margin-bottom:7px">
+  					<img style="margin-bottom:1px;margin-right:7px" src="../imgs/sys/home-icon.jpg"/>
+  					<a style="margin-right:7px;color:#1560ea" href="../logincs/index_main">首页</a>
+  					<span style="margin-right:7px">&gt;</span>
+  					<!--<a style="margin-right:7px;color:#1560ea" href="javascript:void(0)">报表查询</a>
+  					<span style="margin-right:7px">&gt;</span>
+  					--><span style="font-weight:bold">托运单明细表</span>
+  				</div>
+  				<div style="width:100%;padding:0px;border-width:1px 0px 0px 0px;border-style:solid;border-color:#C7C7C7"></div>
+				<table id="conditionTable">
+					<tr>
+						<td class="tdright"><span>运单号</span></td>
+						<td class="tdleft">
+							<input id="waybillnumber" type="text" />
+						</td>
+						<td class="tdright"><span>运单状态</span></td>
+						<td class="tdleft">
+							<select id="status" style="width:110px;height:25px;padding:auto">
+								<option value ="全部">全部</option>
+							  	<option value ="待分派">待分派</option>
+							  	<option value ="待配载">待配载</option>
+							  	<option value="已配载">已配载</option>
+							  	<option value="已装车">已装车</option>
+							  	<option value="已发车">已发车</option>
+							  	<option value="已到达">已到达</option>
+							  	<option value="已签收">已签收</option>
+							</select>
+						</td>
+						<td class="tdright"><span>分包商</span></td>
+						<td class="tdleft">
+							<input id="consignee" type="text" />
+						</td>
+						<td>&nbsp;</td>
+						<td class="tdright"><span>发货方</span></td>
+						<td class="tdleft">
+							<input id="consignor" type="text" style="width:120px"/>
+						</td>
+						<td class="tdright">
+							<span>毛利率</span>
+							<select id="grossmargin" style="height:25px;padding:auto">
+								<option value="全部">全部</option>
+								<option value="正常">正常</option>
+								<option value="异常">异常</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td class="tdright"><span>发货地</span></td>
+						<td class="tdleft">
+							<input id="consignoraddress" type="text" autocomplete="off" style="width:110px;height:25px;margin:auto;padding-left:0px;" value="" class="city_input inputFocus proCityQueryAll proCitySelAll" ov="请选择/输入城市名称"/>
+						</td>
+						<td class="tdright"><span>收货地</span></td>
+						<td class="tdleft">
+							<input id="consigneeaddress" type="text" autocomplete="off" style="width:110px;height:25px;margin:auto;padding-left:0px;" value="" class="city_input inputFocus proCityQueryAll proCitySelAll" ov="请选择/输入城市名称"/>
+						</td>
+						<td class="tdright"><span>托运日期</span></td>
+						<td colspan="4" class="tdleft">
+							<input type="text" id="startdate" class="Wdate w80" style="border-color:#C7C7C7" onFocus="WdatePicker({firstDayOfWeek:1})"/>
+							<span style="margin:auto 5px">~</span>
+							<input type="text" id="enddate" class="Wdate w80" style="border-color:#C7C7C7" onFocus="WdatePicker({firstDayOfWeek:1})"/>
+							<input type="button" class="btn" value="查询" onclick="search()" style="width:55px;margin:0px;padding:0px;border:1px solid #999999;background-color:white;color:#666666"/>
+						</td>
+						<td class="tdright">
+							<a class="btn" href="#" onclick="exportExcel(this)" style="width:90px;margin:0px;padding:0px;border-width:0px;background-color:#ec6110;color:white">EXCEL导出</a>
+						</td>
+					</tr>
+				</table>
+	        	<div id="hgrid_div" style="border:1px solid #eeeeee;padding:0px">
+	        		<table id="hgrid" style="width:1500px;height:480px"></table>
+	        	</div>
+       		</div>
+  		</div>
+  		
+	</div>
+	<div class="provinceCityAll">
+	  <div class="tabs clearfix">
+	    <ul class="">
+	      <li><a href="javascript:" class="current" tb="hotCityAll">热门城市</a></li>
+	      <li><a href="javascript:" tb="provinceAll">省份</a></li>
+	      <li><a href="javascript:" tb="cityAll" id="cityAll">城市</a></li>
+	      <li><a href="javascript:" tb="countyAll" id="countyAll">区县</a></li>
+	    </ul>
+	  </div>
+	  <div class="con">
+	    <div class="hotCityAll invis">
+	      <div class="pre"><a></a></div>
+	      <div class="list">
+	        <ul>
+	          <!-- 					<li><a href="javascript:"  class="current">南京</a></li> -->
+	        </ul>
+	      </div>
+	      <div class="next"><a class="can"></a></div>
+	    </div>
+	    <div class="provinceAll invis">
+	      <div class="pre"><a></a></div>
+	      <div class="list">
+	        <ul>
+	          <!-- 					<li><a href="javascript:"  class="current">江西省</a></li> -->
+	        </ul>
+	      </div>
+	      <div class="next"><a class="can"></a></div>
+	    </div>
+	    <div class="cityAll invis">
+	      <div class="pre"><a></a></div>
+	      <div class="list">
+	        <ul>
+	          <!-- 					<li><a href="javascript:"  class="current">南京</a></li> -->
+	        </ul>
+	      </div>
+	      <div class="next"><a class="can"></a></div>
+	    </div>
+	    <div class="countyAll invis">
+	      <div class="pre"><a></a></div>
+	      <div class="list">
+	        <ul>
+	        </ul>
+	      </div>
+	      <div class="next"><a class="can"></a></div>
+	    </div>
+	  </div>
+	</div>
+	<script src="../js/sys/CityPicker/public.js"></script>
+  </body>
+</html>

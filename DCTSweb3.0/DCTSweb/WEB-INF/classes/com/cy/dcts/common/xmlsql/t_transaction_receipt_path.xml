@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="TransactionReceiptPath" type="com.cy.dcts.common.bo.TransactionReceiptPath"/><!-- 回单上传表 -->
+	<resultMap class="TransactionReceiptPath" id="t_transaction_receipt_path_result">
+	  <result property="id" column="ID"/>
+	   <result property="transactionId" column="TRANSACTION_ID"/><!-- 关联订单ID -->
+	   <result property="receiptPath" column="RECEIPT_PATH"/><!--回单上传图片路径  -->
+	   <result property="createTime" column="CREATE_TIME"/><!--创建时间  -->
+	   <result property="type" column="TYPE"/><!-- 标志：0回单 -->
+	</resultMap>
+	
+	<!-- 根据交易Id查询回单上传表 -->
+	<select id="query_transaction_receiptpath_ByTradeId" resultMap="t_transaction_receipt_path_result" parameterClass="java.util.HashMap">
+	  SELECT id,
+	   transaction_id,
+	   receipt_path,
+	   create_time,
+	   type 
+	  FROM t_transaction_receipt_path  
+	  WHERE type = #type# AND transaction_id = #transactionId# 
+	</select>	
+</sqlMap>

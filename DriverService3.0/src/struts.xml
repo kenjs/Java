@@ -1,0 +1,260 @@
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.i18n.reload" value="true" />
+	<constant name="struts.configuration.xml.reload" value="true" />
+	<constant name="struts.objectFactory" value="spring" />
+	<constant name="struts.ui.theme" value="simple" />
+	<constant name="struts.i18n.encoding" value="UTF8" />
+	<constant name="struts.multipart.maxSize" value="6291456" />
+	<!-- <constant name="struts.custom.i18n.resources" value="/config/business" />
+	<constant name="struts.multipart.saveDir" value="E:/apache-tomcat-6.0.37/temp" /> -->
+
+
+	<!-- JSON返回 -->
+<!-- 	<PACKAGE NAME="WEB-MAIN-ACTION" EXTENDS="BASE-WEB-COMMON" NAMESPACE="/"> -->
+<!-- 		<ACTION NAME="QUERYWEBUSERINFOCODE" CLASS="QUERYWEBUSERINFOCODEACTION" /> -->
+		
+<!-- 	</PACKAGE> -->
+
+	
+		<!-- BASE ACTION -->
+	<package name="base-web-common" extends="struts-default,json-default" namespace="" abstract="true">
+		<global-results>
+			<result name="login">/login.jsp</result>
+			<result name="pageSuccess">*.jsp</result>
+			<result name="pageError">/common/error.jsp</result>
+			<result name="success" type="json"></result>
+			<result name="error" type="json"></result>
+		</global-results>
+
+	</package>
+	
+	<!-- App登录action -->
+	<package name="driver-service-login" extends="base-web-common" namespace="/">
+		<!-- 登录 -->
+		<action name="loginUserInfoAction" class="loginUserInfoAction"></action>
+		<!-- 版本更新检查 -->
+		<action name="checkNewVersion" class="checkAppVersionAction"></action>
+		<!-- 版本下载 -->
+		<action name="downloadNewVersion" class="appDowloadAction"></action>
+		<!-- 注册 -->
+		<action name="register" class="register"></action>
+		<!-- 填写资料 -->
+		<action name="driverUserAddInfoAction" class="driverUserAddInfoAction"></action>
+		<!-- 修改手机号 -->
+		<action name="driverUserUpdateCode" class="driverUserUpdateCodeAction"></action>		
+		<!-- 上传身份证 -->
+		<action name="uploadIdentityNumber" class="uploadIdentityNumberAction"></action>
+		<action name="getSystemDateTime" class="com.cy.driver.user.action.GetSystemDateTime" />
+	</package>
+	
+	<!-- driver user -->
+	<package name="driver-business-line-info" extends="base-web-common" namespace="/">
+		<!-- 新增预约 -->
+		<action name="driverBusinessLineInfoAddAction" class="driverBusinessLineInfoAddAction"></action>
+		<!-- 修改预约 -->
+		<action name="driverBusinessLineInfoUpdateAction" class="driverBusinessLineInfoUpdateAction"></action>
+		<!-- 删除预约 -->
+		<action name="driverBusinessLineInfoDeleteAction" class="driverBusinessLineInfoDeleteAction"></action>
+		<!-- 查询预约 -->
+		<action name="driverBusinessLineInfoQueryAction" class="driverBusinessLineInfoQueryAction"></action>
+		<!-- 查询预约数目 -->
+		<action name="driverBusinessLineInfoNumQueryAction" class="driverBusinessLineInfoNumQueryAction"></action>
+		<!-- 附近货源量 -->
+		<action name="selectNearByCargoCountAction" class="selectNearByCargoCountAction"></action>
+		<!-- 符合预约的货源量 -->
+		<action name="selectOrderCargoCountAction" class="selectOrderCargoCountAction"></action>
+		<!-- 附近货源列表 -->
+		<action name="selectNearByCargoListAction" class="selectNearByCargoListAction"></action>
+		<!-- 符合预约的货列表 -->
+		<action name="selectCargoSuitOrderListAction" class="selectCargoSuitOrderListAction"></action>
+		<!-- 修改Driver信息 -->
+		<action name="updateDriverUserInfoAction" class="updateDriverUserInfoAction"></action>
+		<!-- 用户基本信息查询 -->
+		<action name="userBasicInformationQueryAction" class="userBasicInformationQueryAction"></action>
+		<!-- 手机验证码 -->
+		<action name="noteSendAction" class="noteSendAction"></action>
+		<!-- 消息列表查询 -->
+		<action name="queryDriverNotificationInfoListAction" class="queryDriverNotificationInfoListAction"></action>
+		<!-- 查找公司信息 -->
+		<action name="selectCompanyInfo" class="selectCompanyInfoAction" />
+		<!-- 用户信息修改 -->
+		<action name="driverUserInfoUpdate" class="driverUserInfoUpdate" />
+		<!-- 接收用户上传信息 -->
+		<action name="uploadFile" class="receiveUploadFileAction" />
+		
+		<!-- 百度云推送id -->
+		<action name="setBaiduPushId" class="setBaiduPushIdAction" />
+		
+		<!-- 货源消息提醒 -->
+		<action name="cargoInfoRemind" class="cargoInfoRemindAction" />
+		
+		<!-- 图片下载 -->
+		<action name="downloadImage" class="downloadImage">
+			<result name="success" type="stream">
+				<param name="contentType">image/jpg</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${downFileName}"</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+		
+		<!-- 获取文件名 -->
+		<action name="getFileName" class="getFileName"></action>
+		
+		<!-- 修改老用户信息 -->
+		<action name="updateOldUserInfo" class="updateOldUserInfoAction" />
+		
+		<action name="imageCode" class="com.cy.driver.user.action.ImageCodeAction" />
+	</package>
+	
+	<!-- web user -->
+	<package name="web-user-info" extends="base-web-common" namespace="/">
+		<!-- 根据parentId和encoded查询 -->
+		<action name="selectWebuserInfoByParentIdAndEncoded" class="selectWebuserInfoByParentIdAndEncoded" />
+	</package>
+	
+	<!-- driver line -->
+	<package name="driver-line-info" extends="base-web-common" namespace="/">
+		<!-- 新增营运线路 -->
+		<action name="driverLineInfoAdd" class="driverLineInfoAddAction"></action>
+		<!-- 删除营运线路 -->
+		<action name="driverLineInfoDelete" class="driverLineInfoDeleteAction"></action>
+		<!-- 修改营运线路 -->
+		<action name="driverLineInfoUpdate" class="driverLineInfoUpdateAction"></action>
+		<!-- 查询营运线路 -->
+		<action name="driverLineInfoSelect" class="driverLineInfoSelectAction"></action>
+	</package>
+	
+	<!-- cargo -->
+	<package name="cargo-info" extends="base-web-common" namespace="/">
+		<!-- 搜索找货 -->
+		<action name="selectCargoListAction" class="selectCargoListAction"></action>
+		<!-- 根据司机线路查找符合条件的货物数量 -->
+		<action name="selectCargoNumByDriverLineAction" class="selectCargoNumByDriverLineAction"></action>
+		<!-- 根据司机线路查找符合条件的货物 -->
+		<action name="selectCargoListByDriverLineAction" class="selectCargoListByDriverLineAction"></action>
+		<!-- 货源详情 -->
+		<action name="selectOrderCargoDetailAction" class="selectOrderCargoDetailAction"></action>
+		<!-- 关注货源 -->
+		<action name="attentionCargoInfoAction" class="attentionCargoInfoAction"></action>
+		<!-- 点评货源 -->
+		<action name="commentCargoInfoAction" class="commentCargoInfoAction"></action>
+	</package>
+	
+	<!-- transaction info -->
+	<package name="transaction-info" extends="base-web-common" namespace="/">
+		<!-- 企业用车订单条数 -->
+		<action name="transactionNumberWithComAction" class="transactionNumberWithComAction"></action>
+		<!-- 司机订单列表 -->
+		<action name="transactionInfoListAction" class="transactionInfoListAction"></action>
+		<!-- 订单详情 -->
+		<action name="transactionInfoDetailAction" class="transactionInfoDetailAction"></action>
+		<!-- 卸货动作 -->
+		<action name="unloadCargoAction" class="updateTransactionInfoById"></action>
+		<!-- 用车取消确认 -->
+		<action name="cancelConfirmUseCarAction" class="cancelConfirmUseCarAction"></action>
+		<!-- 已成交货源 -->
+		<action name="selectTransactionCargoList" class="selectTransactionCargoList"></action>
+		<!-- 新增交易状态历史 -->
+		<action name="addTransactionLastInfo" class="addTransactionLastInfo" />
+		<!-- 司机取消订单 -->
+		<action name="driverCancelTransaction" class="driverCancelTransactionAction" />
+		<!-- 待评价订单 -->
+		<action name="selecWaitEvaluationTransactionList" class="selecWaitEvaluationTransactionListAction" />
+		<!-- 我的订单数量 -->
+		<action name="selectMyOrderNum" class="selectOrderNumAction" />
+		<!-- 我的记录（已经成交的订单） -->
+		<action name="selectDealedTransactionInMyLog" class="selectDealedTransactionInMyLogAction" />
+		<!-- 根据 ‘发货单号’查询订单信息 -->
+		<action name="selectTransactionByShipperOrderNo" class="selectTransactionByShipperOrderNo" />
+	</package>
+	
+	<!-- quote info -->
+	<package name="quote-info" extends="base-web-common" namespace="/">
+		<!-- 所有报过价的订单列表 -->
+		<action name="selectQuoteTransactionListAction" class="selectQuoteTransactionListAction"></action>
+		<!-- 根据交易状态查找 -->
+		<action name="selecTransactionListByTradeStatAction" class="selecTransactionListByTradeStatAction"></action>
+		<!-- 新增报价 -->
+		<action name="addQuoteInfoAction" class="addQuoteInfoAction"></action>
+		<!-- 我关注的货源 -->
+		<action name="selectAttentionCargoListAction" class="selectAttentionCargoListAction"></action>
+		<!-- 根据货源id和司机id查找报价信息  -->
+		<action name="selectQuoteInfoByDriverAndCargoId" class="selectQuoteInfoByDriverAndCargoId" />
+		<!-- 我的记录（已经成交的导入的订单） -->
+		<action name="selectImportDealedTransactionList" class="selectImportDealedTransactionList" />
+		<!-- 查找导入的待装货订单 -->
+		<action name="selectWaittingLoadImportTransactionList" class="selectWaittingLoadImportTransactionList" />
+		<!-- 查找导入的待卸货订单 -->
+		<action name="selectWaittingUnloadImportTransactionList" class="selectWaittingUnloadImportTransactionList" />
+	</package>
+	
+	<!-- location-collect-last-info -->
+	<package name="location-info" extends="base-web-common" namespace="/">
+		<!-- 位置信息上传 -->
+		<action name="locationLastInfoInsertAction" class="locationLastInfoInsertAction"></action>
+	</package>
+	
+	<!-- assess -->
+	<package name="assess" extends="base-web-common" namespace="/">
+		<!-- 新增货源评价 -->
+		<action name="addNewDriverUserAssessAction" class="addNewDriverUserAssessAction"></action>
+		<!-- 修改货源评价 -->
+		<action name="updateDriverUserAssessAction" class="updateDriverUserAssessAction"></action>
+		<!-- 根据交易id查找用户对司机是否已评价 -->
+		<action name="selectUserDriverAssessById" class="selectUserDriverAssessById" />
+		<!-- 某条货源被多少次标注为货已走 -->
+		<action name="selectDriverCargoAssessNumByCargoId" class="selectDriverCargoAssessNumByCargoId"></action>
+		<!-- 查询用户对司机的评价信息 -->
+		<action name="selectUserDriverAssessNum" class="selectUserDriverAssessNum"></action>
+		<!-- 查询web端用户对司机的评价信息 -->
+		<action name="selectUserDriverAssessInfoList" class="selectUserDriverAssessInfoList"></action>
+	</package>
+	
+	<!-- baidu yun message push -->
+	<package name="baiduyunpushmessage" extends="base-web-common" namespace="/">
+		<!-- 单播消息推送 -->
+		<action name="pushUnicastMessage" class="pushUnicastMessageAction"></action>
+		
+		<!-- 组播消息推送 -->
+ 		<action name="pushTagMessage" class="pushTagMessageAction"></action>
+ 		
+ 		<!-- 广播消息推送 -->
+ 		<action name="pushBroadcastMessage" class="pushBroadcastMessageAction"></action>
+	</package>
+	
+	<!-- 回单 -->
+	<package name="receipt-upload" extends="base-web-common" namespace="/">
+		<!-- 新增回单 -->
+		<action name="receiptUpload" class="receiptUpload" />
+		<!-- 货单确认 -->
+		<action name="receiptVerify" class="receiptVerify" />
+		<!-- 回单删除 -->
+		<action name="receiptDelete" class="receiptDeleteAction"/>
+		<!-- 回单查询 -->
+		<action name="selectReceiptListByTransactionId" class="selectReceiptListByTransactionId" />
+		<action name="selectReceiptById" class="selectReceiptById" />
+		<!-- 下载回单上传图片 -->
+		<action name="receiptDownLoadImg" class="receiptDownLoadImg">
+			<result name="success" type="stream">
+				<param name="contentType">image/jpg</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${downFileName}"</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+	</package>
+	
+	<!-- 合同车源 -->
+	<package name="pact-driver" extends="base-web-common" namespace="/">
+		<!-- 查询 -->
+		<action name="queryPactDriverInfoByType" class="queryPactDriverInfoByType" />
+		<!-- 修改 -->
+		<action name="updatePactDriverInfo" class="updatePactDriverInfo" />
+	</package>
+</struts>

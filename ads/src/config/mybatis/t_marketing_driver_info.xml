@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.driver.dao.MarketingDriverInfoDao">
+
+    <resultMap id="marketingDriverInfoMap" type="MarketingDriverInfo">
+        <result column="id" property="id" />
+        <result column="mobile_phone" property="mobilePhone" />
+        <result column="driver_id" property="driverId" />
+        <result column="name" property="name" />
+        <result column="car_number" property="carNumber" />
+        <result column="car_length" property="carLength" />
+        <result column="car_plate_type" property="carPlateType" />
+        <result column="car_bar_type" property="carBarType" />
+        <result column="assister_id" property="assisterId" />
+    </resultMap>
+
+    <resultMap id="driverLineMap" type="MarketingDriverLine">
+        <result column="id" property="id" />
+        <result column="customer_driver_id" property="customerDriverId" />
+        <result column="start_province" property="startProvince" />
+        <result column="start_city" property="startCity" />
+        <result column="start_county" property="startCounty" />
+        <result column="end_province" property="endProvince" />
+        <result column="end_city" property="endCity" />
+        <result column="end_county" property="endCounty" />
+        <result column="line_type" property="lineType" />
+    </resultMap>
+
+    <resultMap id="marketingDriverBusinessLineMap" type="MarketingDriverBusinessLine">
+        <result column="customer_driver_id" property="customerDriverId" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime" />
+        <result column="start_province" property="startProvince" />
+        <result column="start_city" property="startCity" />
+        <result column="start_county" property="startCounty" />
+        <result column="end_province" property="endProvince" />
+        <result column="end_city" property="endCity" />
+        <result column="end_county" property="endCounty" />
+        <result column="quote_type" property="quoteType" />
+        <result column="quote_fair" property="quoteFair" />
+    </resultMap>
+
+    <select id="selectMarketingDriverInfoByMobile" parameterType="string" resultMap="marketingDriverInfoMap">
+        SELECT * FROM t_marketing_driver_info WHERE delete_flag = 0 AND mobile_phone = #{code} order by id desc limit 1
+    </select>
+
+    <insert id="addDriverFromMarketingDriver" parameterType="DriverUserInfoBo" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO t_driver_user_info(reg_from,code,name,car_number,car_length,car_weight,car_cubage,car_plate_type,car_bar_type,
+        car_types,create_time,modify_time)
+        VALUES (#{regFrom},#{code},#{name},#{carNumber},#{carLength},#{carWeight},#{carCubage},
+                #{carPlateType},#{carBarType},#{carTypes},sysdate(),sysdate())
+    </insert>
+
+    <select id="queryMarketingDriverLines" parameterType="string" resultMap="driverLineMap">
+        SELECT * FROM t_marketing_driver_line where customer_driver_id = #{customerDriverId} and delete_flag = 0
+    </select>
+
+    <insert id="addDriverLine" useGeneratedKeys="true" keyColumn="id">
+        INSERT INTO t_driver_line_info(driver_id, start_province, start_city, start_county, end_province, end_city, end_county, line_type, create_time, modify_time)
+        VALUES
+        <foreach collection="list" index="index" item="e" separator=",">
+            (#{e.driverId},#{e.startProvince},#{e.startCity},#{e.startCounty},#{e.endProvince},#{e.endCity},#{e.endCounty},#{e.lineType},sysdate(),sysdate())
+        </foreach>
+    </insert>
+
+    <select id="queryDriverUserInfoByCode" parameterType="string" resultType="DriverUserInfoDomain">
+        SELECT id as id FROM t_driver_user_info di where di.code =
+        (select mobile_phone from t_marketing_driver_info md where md.id = #{id})
+        and di.DELETE_FLAG = 0
+    </select>
+
+    <update id="updateMarketingDriverInfoById" parameterType="hashmap">
+        UPDATE t_marketing_driver_info
+        <set>
+            <if test="driverId != null and driverId != ''">
+                driver_id = #{driverId},
+            </if>
+            <if test="regThroughAssist != null and regThroughAssist != ''">
+                reg_through_assist = #{regThroughAssist}
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="queryMarketingDriverBusinessLines" parameterType="string" resultMap="marketingDriverBusinessLineMap">
+        SELECT * FROM t_marketing_driver_business_line WHERE delete_flag = 0 and date_format(end_time, '%Y-%m-%d') &gt;= curdate() and customer_driver_id = #{driverId}
+    </select>
+
+    <insert id="addDriverBusinessLineFromMarketing" useGeneratedKeys="true" keyColumn="id">
+        INSERT INTO t_driver_business_line_info (driver_id,start_time, end_time, start_province, start_city, start_county,
+        end_province, end_city, end_county, quote_type, quote_fair, create_time, modify_time) VALUES
+            <foreach collection="list" index="index" separator="," item="e">
+                (#{e.customerDriverId},#{e.startTime},#{e.endTime},#{e.startProvince},#{e.startCity},
+                #{e.startCounty}, #{e.endProvince},#{e.endCity},#{e.endCounty},#{e.quoteType},
+                #{e.quoteFair},sysdate(),sysdate())
+            </foreach>
+    </insert>
+
+    <insert id="addMarketingDriverInfo" parameterType="int" useGeneratedKeys="true" keyColumn="id">
+        INSERT INTO t_marketing_driver_info (mobile_phone, driver_id, create_time)
+        SELECT code, id, sysdate() FROM t_driver_user_info WHERE id = #{driverId}
+    </insert>
+
+    <!--                     短信营销司机                          -->
+    <select id="queryNoteOperateDriversByPhone" parameterType="string" resultType="int">
+        SELECT id FROM t_note_operate_drivers WHERE mobile_phone = #{phone} limit 1
+    </select>
+    <update id="updateNoteOperateDriversRegTime" parameterType="hashmap">
+        UPDATE t_note_operate_drivers SET reg_time = #{regTime} WHERE id = #{id}
+    </update>
+</mapper>

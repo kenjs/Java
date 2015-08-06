@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.swp.dao.MarketingUserInfoDao">
+
+	<resultMap type="MarketingUserInfo" id="marketing_user_info_result">
+		<result property="id" column="ID"/>
+		<result property="code" column="CODE"/>
+		<result property="password" column="PASSWORD"/>
+		<result property="name" column="NAME"/>
+		<result property="sex" column="SEX"/>
+		<result property="phoneNumber" column="PHONE_NUMBER"/>
+		<result property="contactNumber" column="CONTACT_NUMBER"/>
+		<result property="address" column="ADDRESS"/>
+		<result property="age" column="AGE"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="modifyTime" column="MODIFY_TIME"/>
+		<result property="deleteFlag" column="delete_flag"/>
+		<result property="position" column="position"/>
+		<result property="joinGroup" column="join_group"/>
+	</resultMap>
+
+	<resultMap type="MarketingUserInfoDomain" id="marketing_user_info_domain_result">
+		<result property="id" column="ID"/>
+		<result property="code" column="CODE"/>
+		<result property="password" column="PASSWORD"/>
+		<result property="name" column="NAME"/>
+		<result property="sex" column="SEX"/>
+		<result property="phoneNumber" column="PHONE_NUMBER"/>
+		<result property="contactNumber" column="CONTACT_NUMBER"/>
+		<result property="address" column="ADDRESS"/>
+		<result property="age" column="AGE"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="modifyTime" column="MODIFY_TIME"/>
+		<result property="deleteFlag" column="delete_flag"/>
+		<result property="position" column="position"/>
+		<result property="joinGroup" column="join_group"/>
+	</resultMap>
+
+    <!--统计分析数据-->
+    <resultMap id="statistical_analyse_domain" type="StatisticalAnalyseDomain">
+        <!--营销平台用户id-->
+        <result property="marketingUserId" column="marketingUserId"/>
+        <!--营销平台用户名称-->
+        <result property="name" column="name"/>
+        <!--营销平台用户 职务 0 高层管理 1 经理 2 主管 3 组长 4 专员-->
+        <result property="position" column="position"/>
+        <!--营销平台用户 所属组： 0 未分组1 营销一组 2 营销二组 3 营销三组-->
+        <result property="joinGroup" column="join_group"/>
+        <!--客户数量-->
+        <result property="customerNum" column="customerNum"/>
+        <!--呼出数量-->
+        <result property="callOutNum" column="callOutNum"/>
+        <!--有效电话量-->
+        <result property="validPhoneNum" column="validPhoneNum"/>
+        <!--司机注册量-->
+        <result property="driverRegNum" column="driverRegNum"/>
+        <!--司机认证量-->
+        <result property="driverAuthNum" column="driverAuthNum"/>
+    </resultMap>
+	
+	<!--  查询用户，返回用户对象 -->
+	<select id="queryMarketingUserInfo" parameterType="MarketingUserInfo"  resultMap="marketing_user_info_result">
+		SELECT 
+		t.ID,
+		t.CODE,
+		t.PASSWORD,
+		t.NAME,
+		t.SEX,
+		t.PHONE_NUMBER,
+		t.CONTACT_NUMBER,
+		t.ADDRESS,
+		t.AGE,
+		t.CREATE_TIME,
+		t.MODIFY_TIME,
+		t.delete_flag,
+		t.position,
+		t.join_group
+		FROM t_marketing_user_info t WHERE 1=1
+		<if test="null != id and '' != id">
+			and t.ID = #{id}
+		</if>
+		<if test="null != code and '' != code">
+			and t.CODE = #{code}
+		</if>
+		<if test="null != name and '' != name">
+			and t.NAME = #{name}
+		</if>
+		<if test="null != sex and '' != sex">
+			and t.SEX = #{sex}
+		</if>
+		<if test="null != phoneNumber and '' != phoneNumber">
+			and t.PHONE_NUMBER = #{phoneNumber}
+		</if>
+		<if test="null != contactNumber and '' != contactNumber">
+			and t.CONTACT_NUMBER = #{contactNumber}
+		</if>
+	</select>
+
+    <!--根据职务position 查询-->
+	<select id="queryByPosition" parameterType="MarketingUserInfo" resultMap="marketing_user_info_result">
+	select a.id ,a.name ,a.position ,a.join_group ,a.sex
+        ,a.phone_number ,a.contact_number ,a.age
+        from t_marketing_user_info a
+        where a.delete_flag = 0
+        and a.position >= #{position}
+        order by a.join_group asc,a.position asc,a.create_time desc
+    </select>
+
+
+	<!-- 修改密码 -->
+	<update id="updateUserPassword" parameterType="MarketingUserInfo">
+		UPDATE t_marketing_user_info SET
+		PASSWORD = #{password} ,
+		MODIFY_TIME = sysdate()
+		WHERE ID = #{id}
+	</update>
+
+
+
+
+
+	<select id="queryMarketingUserInfoCount" parameterType="map" resultType="Integer">
+		SELECT
+		count(*)
+		FROM t_marketing_user_info t WHERE t.code != 'admin'
+		<if test="null != id and '' != id">
+			and t.ID = #{id}
+		</if>
+		<if test="null != code and '' != code">
+			and t.CODE = #{code}
+		</if>
+		<if test="null != name and '' != name">
+			and t.NAME = #{name}
+		</if>
+		<if test="null != sex and '' != sex">
+			and t.SEX = #{sex}
+		</if>
+		<if test="null != phoneNumber and '' != phoneNumber">
+			and t.PHONE_NUMBER = #{phoneNumber}
+		</if>
+		<if test="null != contactNumber and '' != contactNumber">
+			and t.CONTACT_NUMBER = #{contactNumber}
+		</if>
+		<if test="null != position">
+			and t.position = #{position}
+		</if>
+		<if test="null != joinGroup">
+			and t.join_group = #{joinGroup}
+		</if>
+		<if test="null != deleteFlag">
+			and t.delete_flag = #{deleteFlag}
+		</if>
+	</select>
+
+	<select id="queryMarketingUserInfoDomainPage" parameterType="map" resultMap="marketing_user_info_domain_result">
+		SELECT
+		t.ID,
+		t.CODE,
+		t.PASSWORD,
+		t.NAME,
+		t.SEX,
+		t.PHONE_NUMBER,
+		t.CONTACT_NUMBER,
+		t.ADDRESS,
+		t.AGE,
+		date_format(t.CREATE_TIME,'%Y-%m-%d %T') as CREATE_TIME,
+		date_format(t.MODIFY_TIME,'%Y-%m-%d %T') as MODIFY_TIME,
+		t.delete_flag,
+		t.position,
+		t.join_group
+		FROM t_marketing_user_info t WHERE t.code != 'admin'
+		<if test="null != id and '' != id">
+			and t.ID = #{id}
+		</if>
+		<if test="null != code and '' != code">
+			and t.CODE like concat('%',#{code},'%')
+		</if>
+		<if test="null != name and '' != name">
+			and t.NAME like concat('%',#{name},'%')
+		</if>
+		<if test="null != sex and '' != sex">
+			and t.SEX = #{sex}
+		</if>
+		<if test="null != phoneNumber and '' != phoneNumber">
+			and t.PHONE_NUMBER = #{phoneNumber}
+		</if>
+		<if test="null != contactNumber and '' != contactNumber">
+			and t.CONTACT_NUMBER = #{contactNumber}
+		</if>
+		<if test="null != position">
+			and t.position = #{position}
+		</if>
+		<if test="null != joinGroup">
+			and t.join_group = #{joinGroup}
+		</if>
+		<if test="null != deleteFlag">
+			and t.delete_flag = #{deleteFlag}
+		</if>
+		ORDER BY t.CREATE_TIME DESC limit #{curPage},#{pageSize}
+	</select>
+
+	<select id="queryMarketingUserInfoDomainList" parameterType="map" resultMap="marketing_user_info_domain_result">
+		SELECT
+		t.ID,
+		t.CODE,
+		t.PASSWORD,
+		t.NAME,
+		t.SEX,
+		t.PHONE_NUMBER,
+		t.CONTACT_NUMBER,
+		t.ADDRESS,
+		t.AGE,
+		date_format(t.CREATE_TIME,'%Y-%m-%d %T') as CREATE_TIME,
+		date_format(t.MODIFY_TIME,'%Y-%m-%d %T') as MODIFY_TIME,
+		t.delete_flag,
+		t.position,
+		t.join_group
+		FROM t_marketing_user_info t WHERE t.code != 'admin'
+		<if test="null != id and '' != id">
+			and t.ID = #{id}
+		</if>
+		<if test="null != code and '' != code">
+			and t.CODE = #{code}
+		</if>
+		<if test="null != name and '' != name">
+			and t.NAME = #{name}
+		</if>
+		<if test="null != sex and '' != sex">
+			and t.SEX = #{sex}
+		</if>
+		<if test="null != phoneNumber and '' != phoneNumber">
+			and t.PHONE_NUMBER = #{phoneNumber}
+		</if>
+		<if test="null != contactNumber and '' != contactNumber">
+			and t.CONTACT_NUMBER = #{contactNumber}
+		</if>
+		<if test="null != position">
+			and t.position = #{position}
+		</if>
+		<if test="null != joinGroup">
+			and t.join_group = #{joinGroup}
+		</if>
+		<if test="null != deleteFlag">
+			and t.delete_flag = #{deleteFlag}
+		</if>
+	</select>
+
+	<!-- 修改密码 -->
+	<update id="updateMarketingUserInfo" parameterType="MarketingUserInfoDomain">
+		UPDATE t_marketing_user_info t SET
+		<if test="null != code and '' != code">
+			t.CODE = #{code},
+		</if>
+		<if test="null != name and '' != name">
+			t.NAME = #{name},
+		</if>
+		<if test="null != sex and '' != sex">
+			t.SEX = #{sex},
+		</if>
+		<if test="null != phoneNumber and '' != phoneNumber">
+			t.PHONE_NUMBER = #{phoneNumber},
+		</if>
+		<if test="null != contactNumber and '' != contactNumber">
+			t.CONTACT_NUMBER = #{contactNumber},
+		</if>
+		<if test="null != position">
+			t.position = #{position},
+		</if>
+		<if test="null != joinGroup">
+			t.join_group = #{joinGroup},
+		</if>
+		<if test="null != deleteFlag">
+			t.delete_flag = #{deleteFlag},
+		</if>
+		<if test="null != address and '' != address">
+			t.address = #{address},
+		</if>
+		<if test="null != age">
+			t.age = #{age},
+		</if>
+		MODIFY_TIME = sysdate()
+		WHERE ID = #{id}
+	</update>
+
+
+	<insert id="addMarketingUserInfo" parameterType="MarketingUserInfoDomain" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_marketing_user_info(
+		CODE,
+		PASSWORD,
+		NAME,
+		SEX,
+		PHONE_NUMBER,
+		CONTACT_NUMBER,
+		ADDRESS,
+		AGE,
+		CREATE_TIME,
+		MODIFY_TIME,
+		delete_flag,
+		position,
+		join_group
+		)VALUES(
+		#{code},
+		#{password},
+		#{name},
+		#{sex},
+		#{phoneNumber},
+		#{contactNumber},
+		#{address},
+		#{age},
+		sysdate(),
+		sysdate(),
+		#{deleteFlag},
+		#{position},
+		#{joinGroup}
+		)
+	</insert>
+
+    <!--统计分析查询-->
+    <select id="queryStatisticalAnalyse" parameterType="java.util.Map" resultMap="statistical_analyse_domain">
+        select
+        a.id as marketingUserId,a.name,a.position,a.join_group
+-- 统计客户数量
+        ,(select count(id)
+        from t_marketing_driver_info
+        where assister_id = a.id and delete_flag = 0) as customerNum
+-- 统计呼出总量（暂时没有 用0代替）
+        ,0 as callOutNum
+-- 统计有效电话量
+        ,(select count(distinct customer_id,customer_kind,date_format(action_time,'%Y-%m-%d'))
+        from t_marketing_maintain_record
+        where assister_id = a.id and is_valid_call = 1
+        and action_time between #{startNextDate} and #{endNextDate}) as validPhoneNum
+-- 统计司机注册量
+        ,(select count(distinct x.driver_id)
+        from t_marketing_driver_info x
+        left join t_driver_user_info y on x.driver_id = y.id
+        where x.assister_id = a.id and x.reg_through_assist = 1
+        and x.driver_id > 0 and x.delete_flag = 0
+        and y.create_time between #{startNextDate} and #{endNextDate}) as driverRegNum
+-- 统计司机认证量
+        ,(select count(distinct x.driver_id)
+        from t_marketing_driver_info x
+        left join t_driver_user_info y on x.driver_id = y.id
+        where x.assister_id = a.id and x.auth_through_assist = 1
+        and x.driver_id > 0 and x.delete_flag = 0
+        and y.audit_time between #{startNextDate} and #{endNextDate}) as driverAuthNum
+
+        from t_marketing_user_info a
+        where a.position >= #{position}
+        and a.delete_flag = 0
+        <if test="joinGroup == -1">
+            and a.join_group >= 0
+        </if>
+        <if test="joinGroup != -1">
+            and a.join_group = #{joinGroup}
+        </if>
+        order by a.join_group asc,a.position asc,a.create_time desc
+    </select>
+</mapper>

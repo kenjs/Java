@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.driver.dao.AppReleasesDao">
+    <resultMap id="appReleasesDomainMap" type="AppReleasesDomain">
+        <result property="id" column="id" />
+        <result property="downCount" column="down_count" />
+    </resultMap>
+
+    <!-- 查 -->
+    <select id="queryAppReleaseMaxId" parameterType="integer" resultType="long">
+        SELECT max(id) FROM t_app_releases
+    </select>
+
+    <select id="queryAppReleaseDownByMaxId" parameterType="long" resultType="integer">
+        SELECT down_count FROM t_app_releases WHERE id = #{id}
+    </select>
+
+    <!-- 改 -->
+    <update id="updateAppReleaseDownById" parameterType="map">
+        update t_app_releases set down_count = #{downCount} where id = #{id}
+    </update>
+
+    <resultMap id="appReleaseMap" type="AppReleasesDomain">
+        <result property="id" column="id" />
+        <result property="filename" column="filename" />
+        <result property="filemd5" column="filemd5" />
+        <result property="versionNo" column="version_no" />
+        <result property="innerVersion" column="inner_version" />
+        <result property="databaseUpdate" column="database_update" />
+        <result property="versionConstraint" column="version_constraint" />
+        <result property="type" column="type" />
+        <result property="releaseDate" column="release_date" />
+        <result property="releaseUserId" column="release_user_id" />
+        <result property="downCount" column="down_count" />
+        <result property="meta" column="meta" />
+    </resultMap>
+
+    <!-- 查找最新的版本发布信息 -->
+    <select id="queryLatestAppVersionInfo" resultMap="appReleaseMap" parameterType="int">
+        select * from t_app_releases where type = #{_parameter} ORDER BY inner_version DESC limit 1
+    </select>
+    
+    <select id="queryForceAppInfo" parameterType="int" resultMap="appReleaseMap">
+        select * from t_app_releases where type = 1 and inner_version &gt; #{innerVersion} and inner_version &lt;=
+        (select max(inner_version) from t_app_releases where type= 1)
+    </select>
+</mapper>

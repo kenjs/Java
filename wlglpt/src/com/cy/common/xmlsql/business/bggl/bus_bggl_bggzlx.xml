@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.bggl.dao.Bus_bgglBggzlxMapper">
+	<select id="selectBgGzlxPage" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgGzlxDomain">
+		SELECT A.ZT AS zt,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc,
+		       A.GZLX_XH AS gzlxXh
+		  FROM BG_GZLX A 
+		  WHERE A.YXBZ='Y' AND BCBZ_DM='2'
+		  <dynamic>
+		  	<isNotEmpty property="czyDjxh" prepend="AND">
+		  	 	A.CJR_CZY_DJXH = #czyDjxh#
+		  	</isNotEmpty>
+		  	<isNotEmpty property="rqQ" prepend="AND">
+		  		A.CJRQ >= TO_DATE(#rqQ#,'yyyy-MM-dd')
+		  	</isNotEmpty>
+		  	<isNotEmpty property="rqZ" prepend="AND">
+		  		A.CJRQ &lt; TO_DATE(#rqZ#,'yyyy-MM-dd')
+		  	</isNotEmpty>
+		  </dynamic>	    
+		  $orderStr$
+    </select>
+    
+    <select id="selectBgGzlxPageForSjx" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgGzlxDomain">
+		SELECT 
+			   B.CKBZ AS ckbz,
+			   B.CKRQ AS ckrq,
+			   A.ZT AS zt,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc,
+		       A.GZLX_XH AS gzlxXh
+		  FROM BG_GZLX A, BG_GZLX_JSR B
+		  WHERE A.YXBZ='Y' AND B.XTYHFL_DM='2' AND A.BCBZ_DM='2'
+		  		AND A.GZLX_XH=B.GZLX_XH
+		  <dynamic>
+		  	<isNotEmpty property="czyDjxh" prepend="AND">
+		  	 	B.CZY_DJXH = #czyDjxh#
+		  	</isNotEmpty>
+		  	<isNotEmpty property="rqQ" prepend="AND">
+		  		A.CJRQ >= TO_DATE(#rqQ#,'yyyy-MM-dd')
+		  	</isNotEmpty>
+		  	<isNotEmpty property="rqZ" prepend="AND">
+		  		A.CJRQ &lt; TO_DATE(#rqZ#,'yyyy-MM-dd')
+		  	</isNotEmpty>
+		  </dynamic>	    
+		  $orderStr$
+    </select>
+    
+	<select id="selectBgGzlxPageForCgx" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgGzlxDomain">
+		SELECT 
+			   A.ZT AS zt,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc,
+		       A.GZLX_XH AS gzlxXh
+		  FROM BG_GZLX A
+		  WHERE A.YXBZ='Y' AND A.BCBZ_DM='1' 
+		  <dynamic>
+		  	<isNotEmpty property="czyDjxh" prepend="AND">
+		  	 	A.CJR_CZY_DJXH = #czyDjxh#
+		  	</isNotEmpty>
+		  	<isNotEmpty property="rqQ" prepend="AND">
+		  		A.CJRQ >= TO_DATE(#rqQ#,'yyyy-MM-dd')
+		  	</isNotEmpty>
+		  	<isNotEmpty property="rqZ" prepend="AND">
+		  		A.CJRQ &lt; TO_DATE(#rqZ#,'yyyy-MM-dd')
+		  	</isNotEmpty>
+		  </dynamic>	    
+		  $orderStr$
+    </select>
+    
+    
+    <select id="selectBgGzlxAll" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgGzlxDomain">
+		SELECT A.ZT AS zt,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM BG_GZLX A 
+		  WHERE A.YXBZ='Y' AND BCBZ_DM='2'
+		  <dynamic>
+		  	<isNotEmpty property="czyDjxh" prepend="AND">
+		  	 	A.CJR_CZY_DJXH = #czyDjxh#
+		  	</isNotEmpty>
+		  	<isNotEmpty property="rqQ" prepend="AND">
+		  		A.CJRQ >= TO_DATE(#rqQ#,'yyyy-MM-dd')
+		  	</isNotEmpty>
+		  	<isNotEmpty property="rqZ" prepend="AND">
+		  		A.CJRQ &lt; TO_DATE(#rqZ#,'yyyy-MM-dd')
+		  	</isNotEmpty>
+		  </dynamic>	    
+
+		  ORDER by A.GZLX_XH ASC
+    </select>
+    
+    <select id="selectBgGzlxAllForSjx" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgGzlxDomain">
+		SELECT 
+			   B.CKBZ AS ckbz,
+			   B.CKRQ AS ckrq,
+			   A.ZT AS zt,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc,
+		       A.GZLX_XH AS gzlxXh
+		  FROM BG_GZLX A, BG_GZLX_JSR B
+		  WHERE A.YXBZ='Y' AND B.XTYHFL_DM='2' AND A.BCBZ_DM='2'
+		  		AND A.GZLX_XH=B.GZLX_XH
+		  <dynamic>
+		  	<isNotEmpty property="czyDjxh" prepend="AND">
+		  	 	B.CZY_DJXH = #czyDjxh#
+		  	</isNotEmpty>
+		  	<isNotEmpty property="rqQ" prepend="AND">
+		  		A.CJRQ >= TO_DATE(#rqQ#,'yyyy-MM-dd')
+		  	</isNotEmpty>
+		  	<isNotEmpty property="rqZ" prepend="AND">
+		  		A.CJRQ &lt; TO_DATE(#rqZ#,'yyyy-MM-dd')
+		  	</isNotEmpty>
+		  </dynamic>	    
+		  ORDER by A.GZLX_XH ASC
+    </select>
+    
+   <select id="selectBgGzlxAllForCgx" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgGzlxDomain">
+		SELECT 
+			   A.ZT AS zt,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc,
+		       A.GZLX_XH AS gzlxXh
+		  FROM BG_GZLX A
+		  WHERE A.YXBZ='Y' AND A.BCBZ_DM='1' 
+		  <dynamic>
+		  	<isNotEmpty property="czyDjxh" prepend="AND">
+		  	 	A.CJR_CZY_DJXH = #czyDjxh#
+		  	</isNotEmpty>
+		  	<isNotEmpty property="rqQ" prepend="AND">
+		  		A.CJRQ >= TO_DATE(#rqQ#,'yyyy-MM-dd')
+		  	</isNotEmpty>
+		  	<isNotEmpty property="rqZ" prepend="AND">
+		  		A.CJRQ &lt; TO_DATE(#rqZ#,'yyyy-MM-dd')
+		  	</isNotEmpty>
+		  </dynamic>	    
+		   ORDER by A.GZLX_XH ASC
+    </select>
+
+	<select id="getBgGzlxRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.GZLX_XH) 
+		  FROM BG_GZLX A 
+		  WHERE A.YXBZ='Y' AND BCBZ_DM='2'
+		  <dynamic>
+		  	<isNotEmpty property="czyDjxh" prepend="AND">
+		  	 	A.CJR_CZY_DJXH = #czyDjxh#
+		  	</isNotEmpty>
+		  	<isNotEmpty property="rqQ" prepend="AND">
+		  		A.CJRQ >= TO_DATE(#rqQ#,'yyyy-MM-dd')
+		  	</isNotEmpty>
+		  	<isNotEmpty property="rqZ" prepend="AND">
+		  		A.CJRQ &lt; TO_DATE(#rqZ#,'yyyy-MM-dd')
+		  	</isNotEmpty>
+		  </dynamic>	    
+    </select>
+    
+    <select id="getBgGzlxRowCountForSjx" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.GZLX_XH) 
+		  FROM BG_GZLX A, BG_GZLX_JSR B
+		  WHERE A.YXBZ='Y' AND B.XTYHFL_DM='2' AND A.BCBZ_DM='2'
+		  		AND A.GZLX_XH=B.GZLX_XH
+		  <dynamic>
+		  	<isNotEmpty property="czyDjxh" prepend="AND">
+		  	 	B.CZY_DJXH = #czyDjxh#
+		  	</isNotEmpty>
+		  	<isNotEmpty property="rqQ" prepend="AND">
+		  		A.CJRQ >= TO_DATE(#rqQ#,'yyyy-MM-dd')
+		  	</isNotEmpty>
+		  	<isNotEmpty property="rqZ" prepend="AND">
+		  		A.CJRQ &lt; TO_DATE(#rqZ#,'yyyy-MM-dd')
+		  	</isNotEmpty>
+		  </dynamic>	     
+    </select>
+    
+   <select id="getBgGzlxRowCountForCgx" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		  SELECT count(A.GZLX_XH) 
+		  FROM BG_GZLX A
+		  WHERE A.YXBZ='Y' AND A.BCBZ_DM='1' 
+		  <dynamic>
+		  	<isNotEmpty property="czyDjxh" prepend="AND">
+		  	 	A.CJR_CZY_DJXH = #czyDjxh#
+		  	</isNotEmpty>
+		  	<isNotEmpty property="rqQ" prepend="AND">
+		  		A.CJRQ >= TO_DATE(#rqQ#,'yyyy-MM-dd')
+		  	</isNotEmpty>
+		  	<isNotEmpty property="rqZ" prepend="AND">
+		  		A.CJRQ &lt; TO_DATE(#rqZ#,'yyyy-MM-dd')
+		  	</isNotEmpty>
+		  </dynamic>		     
+    </select>
+</sqlMap>

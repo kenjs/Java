@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.hygl.dao.BusCwfylbMapper">
+	<select id="selectCwFylbPage" parameterClass="java.util.Map"
+		resultClass="com.cy.cwgl.domain.CwFylbDomain">
+		SELECT A.CW_DJXH AS cwDjxh,
+		       A.SS_JGBM AS ssJgbm,
+		       (select jc from qy_zzjg where jgbm=A.SS_JGBM)as jgMc,
+		       A.FYLB_MC AS fylbMc,
+		       A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM CW_FYLB A 
+		  WHERE A.YXBZ='Y' and A.SS_JGBM=#zgs#
+			<dynamic>
+				<isNotEmpty property="lbmc" prepend="and">
+					A.FYLB_MC like #lbmc#
+				</isNotEmpty>
+			</dynamic>
+		  $orderStr$
+    </select>
+    
+    <select id="selectCwFylbAll" parameterClass="java.util.Map"
+		resultClass="com.cy.cwgl.domain.CwFylbDomain">
+	SELECT A.CW_DJXH AS cwDjxh,
+		       A.SS_JGBM AS ssJgbm,
+		       (select jc from qy_zzjg where jgbm=A.SS_JGBM)as jgMc,
+		       A.FYLB_MC AS fylbMc,
+		       A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM CW_FYLB A 
+			WHERE A.YXBZ='Y' and A.SS_JGBM=#zgs#
+			<dynamic>
+				<isNotEmpty property="lbmc" prepend="and">
+					A.FYLB_MC like #lbmc#
+				</isNotEmpty>
+			</dynamic>
+		  ORDER by A.CW_DJXH ASC
+    </select>
+
+	<select id="getCwFylbRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.CW_DJXH) 
+		  FROM CW_FYLB A 
+		  WHERE A.YXBZ='Y' and A.SS_JGBM=#zgs#
+			<dynamic>
+				<isNotEmpty property="lbmc" prepend="and">
+					A.FYLB_MC like #lbmc#
+				</isNotEmpty>
+			</dynamic>
+    </select>
+</sqlMap>

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.cwgl.dao.BusCwzzjxbMapper">
+    <parameterMap class="java.util.Map" id="CwZzjxbParMap">
+    	<parameter property="zgsbm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="rq" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	
+    	<parameter property="pageNum" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+    	<parameter property="pageSize" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+    	<parameter property="pageCount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+    	<parameter property="reccount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+    	<parameter property="dataList" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" resultMap="CwZzjxbResMap"/>
+    </parameterMap>
+
+    <resultMap class="com.cy.cwgl.domain.CwZzjxbDomain" id="CwZzjxbResMap">
+    	<result property="pageXh" column="PAGE_XH" />
+    	<result property="zjdbDjxh" column="ZJDB_DJXH" />
+    	<result property="jsDwDjxh" column="JGBM" />
+    	<result property="jsDwMc" column="GSMC" />
+    	
+    	<result property="jcHj" column="JC_HJ" />
+    	<result property="jcXj" column="JC_XJ" />
+    	<result property="jcYk" column="JC_YK" />
+    	<result property="jcCk" column="JC_CK" />
+    	<result property="zfHj" column="ZF_HJ" />
+    	<result property="zfYfk" column="ZF_YFK" />
+    	<result property="zfYk" column="ZF_YK" />
+    	<result property="zfBxfy" column="ZF_BXFY" />
+    	<result property="zfQt" column="ZF_QT" />
+    	
+    	<result property="zjxq" column="ZJXQ" />
+    	<result property="byj" column="BYJ" />
+    	<result property="xbje" column="XBJE" />
+    	<result property="bz" column="BZ" />
+    	<result property="xbrMc" column="XBR_MC" />
+    	<result property="xbrq" column="XBRQ" />
+    </resultMap>
+	<procedure id="selectCwZzjxbPage" parameterMap="CwZzjxbParMap" resultMap="CwZzjxbResMap">
+		{call P_CWGL_SFGL_ZZJXB(?,?,?,?,?,?,?)}
+	</procedure>
+	
+	
+    <select id="getCwZzjxbxxWhenAdd" parameterClass="java.util.Map"
+		resultClass="com.cy.cwgl.domain.CwZzjxbDomain">
+		  SELECT B.JGBM AS jsDwDjxh,B.GSMC AS jsDwMc, B.JC_HJ AS jcHj,B.JC_XJ AS jcXj,B.JC_CK AS jcCk,B.JC_YK AS jcYk,
+		         B.ZF_HJ AS zfHj,B.ZF_YFK AS zfYfk,B.ZF_YK AS zfYk,B.ZF_BXFY AS zfBxfy,B.ZF_QT AS zfQt,B.BYJ AS byj,B.ZJXQ AS zjxq
+		  FROM (SELECT ZZJ.JS_DW_DJXH JGBM, (SELECT JG.JC FROM QY_ZZJG JG WHERE JG.JGBM = ZZJ.JS_DW_DJXH) GSMC,
+		         ZZJ.JC_HJ,ZZJ.JC_XJ,ZZJ.JC_CK,ZZJ.JC_YK,
+		         ZZJ.ZF_HJ,ZZJ.ZF_YFK,ZZJ.ZF_YK,ZZJ.ZF_BXFY,ZZJ.ZF_QT,ZZJ.BYJ,ZZJ.ZJXQ         
+		      FROM CW_ZZJXB ZZJ
+		      WHERE ZZJ.YXBZ = 'Y'
+		      AND ZZJ.JS_DW_DJXH = #jgbm#
+		      AND ZZJ.RQ = TO_DATE(#rq#,'YYYY-MM-DD')
+		      AND ROWNUM = 1      
+		      UNION ALL  
+		      SELECT JGBM,GSMC,JC_HJ,JC_XJ,JC_CK,JC_YK,ZF_HJ,ZF_YFK,ZF_YK,ZF_BXFY,ZF_QT,BYJ,
+		             CASE WHEN ZF_HJ-(JC_HJ+NVL(BYJ,0)) &lt; 0 THEN 0 ELSE ZF_HJ-(JC_HJ+NVL(BYJ,0)) END ZJXQ             
+		      FROM (SELECT GS.JGBM,GS.JC GSMC, (NVL(ZCXJ.JE,0)+NVL(ZCCK.JE,0)+NVL(ZCYK.JE,0)) JC_HJ,
+		                   ZCXJ.JE JC_XJ,ZCCK.JE JC_CK,ZCYK.JE JC_YK,
+		             (NVL(YSFYFK.JE,0)+NVL(YSFYK.JE,0)+NVL(YSFBX.JE,0)+NVL(YSFQT.JE,0)) ZF_HJ,
+		             YSFYFK.JE ZF_YFK,YSFYK.JE ZF_YK,YSFBX.JE ZF_BXFY,YSFQT.JE ZF_QT,
+		             GS.BYJ
+		            FROM (SELECT XJ.SS_JGBM,SUM(XJ.JE) JE
+		                    FROM CW_HBZCYE XJ
+		                    WHERE XJ.ZCFL_DM = '11'
+		                      AND XJ.YXBZ = 'Y'
+		                    GROUP BY XJ.SS_JGBM) ZCXJ,
+		                 (SELECT CK.SS_JGBM,SUM(CK.JE) JE
+		                    FROM CW_HBZCYE CK
+		                    WHERE CK.ZCFL_DM = '12'
+		                      AND CK.YXBZ = 'Y'
+		                    GROUP BY CK.SS_JGBM) ZCCK,
+		                 (SELECT YK.SS_JGBM,SUM(YK.JE) JE
+		                    FROM CW_HBZCYE YK
+		                    WHERE YK.ZCFL_DM = '13'
+		                      AND YK.YXBZ = 'Y'
+		                    GROUP BY YK.SS_JGBM) ZCYK,
+		                  (SELECT YFK.SS_JGBM,SUM(YFK.WSF_JE) JE
+		                    FROM CW_YSYF YFK
+		                    WHERE YFK.YXBZ = 'Y'
+		                      AND YFK.KMDL_DM = '2'
+		                      AND YFK.KMXL_DM = '201'
+		                    GROUP BY YFK.SS_JGBM) YSFYFK,
+		                  (SELECT YK.SS_JGBM,SUM(YK.WSF_JE) JE
+		                    FROM CW_YSYF YK
+		                    WHERE YK.YXBZ = 'Y' AND YK.KMDL_DM = '2'
+		                      AND YK.KMXL_DM IN ('202','203')
+		                    GROUP BY YK.SS_JGBM) YSFYK,
+		                  (SELECT FYBX.SS_JGBM,SUM(FYBX.WSF_JE) JE
+		                    FROM CW_YSYF FYBX
+		                    WHERE FYBX.YXBZ = 'Y' AND FYBX.YSYFLY_DM = '31'
+		                      AND FYBX.KMXL_DM = '409'
+		                    GROUP BY FYBX.SS_JGBM) YSFBX,
+		                  (SELECT QT.SS_JGBM,SUM(QT.WSF_JE) JE
+		                    FROM CW_YSYF QT
+		                    WHERE QT.YXBZ = 'Y' AND QT.KMXL_DM IN ('211','212','213','214','402','403')
+		                    GROUP BY QT.SS_JGBM) YSFQT,
+		                    QY_ZZJG GS
+		            WHERE ZCXJ.SS_JGBM(+) = GS.JGBM
+		              AND ZCCK.SS_JGBM(+) = GS.JGBM
+		              AND ZCYK.SS_JGBM(+) = GS.JGBM
+		              AND YSFYFK.SS_JGBM(+) = GS.JGBM
+		              AND YSFYK.SS_JGBM(+) = GS.JGBM
+		              AND YSFBX.SS_JGBM(+) = GS.JGBM
+		              AND YSFQT.SS_JGBM(+) = GS.JGBM
+		              AND GS.JGBM = #jgbm#
+		      )A
+		        WHERE NOT EXISTS (
+		          SELECT 1 FROM CW_ZZJXB ZZJ
+		          WHERE ZZJ.JS_DW_DJXH = A.JGBM
+		          AND ZZJ.YXBZ = 'Y'
+		          AND ZZJ.RQ(+) = TO_DATE(#rq#,'YYYY-MM-DD')
+		        )  
+		      ) B 
+    </select>
+
+	<select id="getCwZzjxbRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.ZJDB_DJXH) 
+		  FROM CW_ZZJXB A 
+		  WHERE A.YXBZ='Y' 
+    </select>
+    
+     <parameterMap class="java.util.Map" id="zzjxbHxMap">
+		<parameter property="zjdbDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="jgbm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="czyDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>	
+		<parameter property="rtnCode" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+		<parameter property="rtnMess" javaType="java.lang.String" jdbcType="VARCHAR" mode="OUT"/>	
+	</parameterMap>
+	
+	<procedure id="callPCwglZzjxbHxcl" parameterMap="zzjxbHxMap">
+		{call P_CWGL_SFGL_ZZJXB_HXCL(?,?,?,?,?)}
+	</procedure>
+</sqlMap>

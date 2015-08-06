@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.hygl.dao.HyMbTydHwmxMapper">
+
+    <!--根据主键取DOMAIN-->
+		<select id="selectHyMbTydHwmxByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyMbTydHwmxDomain">
+		select 
+		<dynamic>
+			<isEqual property="tableName" compareValue="HY_DD_HWMX_TEMP">
+				A.DD_DJXH as mbDjxh,
+			</isEqual>
+			<isEqual property="tableName" compareValue="HY_MB_DD_HWMX">
+				A.MB_DJXH as mbDjxh,
+			</isEqual>
+		</dynamic>
+		a.XH as xh,a.HWMC as hwmc,a.HW_DJXH as hwDjxh,a.HWXH_DJXH as hwxhDjxh,
+		a.HW_BZ_HLDW_DM as hwBzHldwDm,DECODE(a.HW_SL,0,NULL,a.HW_SL) as hwSl,a.HW_SL_JLDW_DM as hwSlJldwDm,
+		DECODE(a.HW_ZL,0,NULL,a.HW_ZL) as hwZl,a.HW_ZL_JLDW_DM as hwZlJldwDm,
+		DECODE(a.HW_TJ,0,NULL,a.HW_TJ) as hwTj,a.HW_TJ_JLDW_DM as hwTjJldwDm,
+		a.YXBZ as yxbz,a.HWFL_DM as hwflDm,
+		a.JS_JLDW_DM jsJldwDm,a.JS_JLDW_FL_DM jsJldwFlDm,a.hdbh as hdbh,
+		a.SR_HJ as srHj,a.SR_YJ as srYj,a.SR_XF as srXf,a.SR_HDF as srHdf,a.SR_THF as srThf,a.SR_HF as srHf,a.SR_HK as srHk,
+		a.FHR_DJXH as fhrDjxh,a.FHR_MC as fhrMc,a.FHR_DZ as fhrDz,a.FHR_LXR as fhrLxr,a.FHR_LXDH as fhrLxdh,a.FHR_XZQH_DM as fhrXzqhDm,
+        (SELECT XZQH_JC FROM DM_XZQH WHERE XZQH_DM = A.FHR_XZQH_DM) AS fhrXzqhMc,
+		a.SHR_DJXH as shrDjxh,a.SHR_MC as shrMc,a.SHR_DZ as shrDz,a.SHR_LXR as shrLxr,a.SHR_LXDH as shrLxdh,a.SHR_XZQH_DM as shrXzqhDm,
+		(SELECT XZQH_JC FROM DM_XZQH WHERE XZQH_DM = A.SHR_XZQH_DM) AS shrXzqhMc,
+      	a.YQ_FHRQ as yqFhrq,a.YQ_DDRQ as yqDdrq,a.SHFS_DM as shfsDm,a.THFL_DM as thflDm,a.YKJSFS_DM as ykjsfsDm,a.YJJSFS_DM as yjjsfsDm,a.PSBZ as psbz,
+		DECODE(a.JS_SL,0,NULL,a.JS_SL) JSSL,
+       (SELECT JL.JLDW_JC FROM DM_JLDW JL WHERE JL.JLDW_DM =  a.JS_JLDW_DM) jsJldwMc
+		from $tableName$ a  where  a.XH=#xh#
+		<dynamic>
+			<isEqual property="tableName" compareValue="HY_DD_HWMX_TEMP">
+				and A.DD_DJXH = #mbDjxh#
+			</isEqual>
+			<isEqual property="tableName" compareValue="HY_MB_DD_HWMX">
+				and A.MB_DJXH = #mbDjxh#
+			</isEqual>
+		</dynamic>
+		
+		</select>
+		
+		<!-- 根据主键从临时表取数 -->
+		<select id="selectHyMbTydHwmxTempByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyMbTydHwmxDomain">
+		select a.DD_DJXH as mbDjxh,a.XH as xh,a.HWMC as hwmc,a.HW_DJXH as hwDjxh,a.HWXH_DJXH as hwxhDjxh,
+		a.HW_BZ_HLDW_DM as hwBzHldwDm,DECODE(a.HW_SL,0,NULL,a.HW_SL) as hwSl,a.HW_SL_JLDW_DM as hwSlJldwDm,
+		DECODE(a.HW_ZL,0,NULL,a.HW_ZL) as hwZl,a.HW_ZL_JLDW_DM as hwZlJldwDm,
+		DECODE(a.HW_TJ,0,NULL,a.HW_TJ) as hwTj,a.HW_TJ_JLDW_DM as hwTjJldwDm,
+		a.YXBZ as yxbz,a.HWFL_DM as hwflDm,
+		a.JS_JLDW_DM jsJldwDm,a.JS_JLDW_FL_DM jsJldwFlDm,a.hdbh
+		DECODE(a.JS_SL,0,NULL,a.JS_SL) JSSL,
+       (SELECT JL.JLDW_JC FROM DM_JLDW JL WHERE JL.JLDW_DM =  a.JS_JLDW_DM) jsJldwMc
+		from HY_DD_HWMX_TEMP a  where a.DD_DJXH=#mbDjxh# and a.XH=#xh# AND A.YXBZ = 'Y'
+		</select>
+
+	<!--插入数据-->
+		<insert id="insertHyMbTydHwmx"  parameterClass="com.cy.common.bo.HyMbTydHwmx">
+			<selectKey keyProperty="xh" resultClass="string" type="pre">
+				select NVL(MAX(XH),0)+1 as xh  FROM HY_MB_DD_HWMX HWMX
+					WHERE HWMX.MB_DJXH = #mbDjxh#
+			</selectKey>
+			insert into HY_MB_DD_HWMX(MB_DJXH,XH,HWMC,HW_DJXH,HWXH_DJXH,
+						HW_BZ_HLDW_DM,HW_SL,HW_SL_JLDW_DM,HW_ZL,HW_ZL_JLDW_DM,
+						HW_TJ,HW_TJ_JLDW_DM,YXBZ,HWFL_DM,JS_SL,JS_JLDW_DM,JS_JLDW_FL_DM,hdbh,
+						SR_HJ,SR_YJ,SR_XF,SR_HDF,SR_THF,SR_HF,SR_HK,
+						FHR_DJXH,FHR_MC,FHR_DZ,FHR_LXR,FHR_LXDH,
+						FHR_XZQH_DM,SHR_DJXH,SHR_MC,SHR_DZ,SHR_LXR,
+						SHR_LXDH,SHR_XZQH_DM,
+						YQ_FHRQ,YQ_DDRQ,SHFS_DM,
+						THFL_DM,YKJSFS_DM,YJJSFS_DM,PSBZ)
+			VALUES (#mbDjxh:NUMERIC#,#xh:NUMERIC#,#hwmc:VARCHAR#,#hwDjxh:NUMERIC#,#hwxhDjxh:NUMERIC#,
+					#hwBzHldwDm:VARCHAR#,#hwSl:NUMERIC#,#hwSlJldwDm:VARCHAR#,#hwZl:NUMERIC#,#hwZlJldwDm:VARCHAR#,
+					#hwTj:NUMERIC#,#hwTjJldwDm:VARCHAR#,#yxbz:VARCHAR#,#hwflDm:VARCHAR#,#jsSl:NUMERIC#,
+					#jsJldwDm:VARCHAR#,#jsJldwFlDm:VARCHAR#,#hdbh:VARCHAR#,
+					#srHj:NUMERIC#,#srYj:NUMERIC#,#srXf:NUMERIC#,#srHdf:NUMERIC#,#srThf:NUMERIC#,#srHf:NUMERIC#,#srHk:NUMERIC#,
+					#fhrDjxh:NUMERIC#,#fhrMc:VARCHAR#,#fhrDz:VARCHAR#,#fhrLxr:VARCHAR#,#fhrLxdh:VARCHAR#,
+					#fhrXzqhDm:VARCHAR#,#shrDjxh:NUMERIC#,#shrMc:VARCHAR#,#shrDz:VARCHAR#,#shrLxr:VARCHAR#,
+					#shrLxdh:VARCHAR#,#shrXzqhDm:VARCHAR#,
+					#yqFhrq:NUMERIC#,#yqDdrq:NUMERIC#,#shfsDm:NUMERIC#,
+					#thflDm:NUMERIC#,#ykjsfsDm:NUMERIC#,#yjjsfsDm:NUMERIC#,#psbz:VARCHAR#)
+		</insert>
+	
+	<!-- 插入数据到临时表 -->
+		<insert id="insertHyMbTydHwmxTemp"  parameterClass="com.cy.common.bo.HyMbTydHwmx">
+			<selectKey keyProperty="xh" resultClass="string" type="pre">
+				select NVL(MAX(XH),0)+1 as xh  FROM HY_DD_HWMX_TEMP HWMX
+					WHERE HWMX.DD_DJXH = #mbDjxh#
+			</selectKey>
+		insert into HY_DD_HWMX_TEMP(DD_DJXH,XH,HWMC,HW_DJXH,HWXH_DJXH,
+			HW_BZ_HLDW_DM,HW_SL,HW_SL_JLDW_DM,HW_ZL,HW_ZL_JLDW_DM,
+			HW_TJ,HW_TJ_JLDW_DM,YXBZ,HWFL_DM,JS_SL,JS_JLDW_DM,JS_JLDW_FL_DM,hdbh,
+			SR_HJ,SR_YJ,SR_XF,SR_HDF,SR_THF,SR_HF,SR_HK,
+			FHR_DJXH,FHR_MC,FHR_DZ,FHR_LXR,FHR_LXDH,
+			FHR_XZQH_DM,SHR_DJXH,SHR_MC,SHR_DZ,SHR_LXR,
+			SHR_LXDH,SHR_XZQH_DM,YQ_FHRQ,YQ_DDRQ,SHFS_DM,
+			THFL_DM,YKJSFS_DM,YJJSFS_DM,PSBZ,RQ)
+		VALUES (#mbDjxh:NUMERIC#,#xh:NUMERIC#,#hwmc:VARCHAR#,#hwDjxh:NUMERIC#,#hwxhDjxh:NUMERIC#,
+			#hwBzHldwDm:VARCHAR#,#hwSl:NUMERIC#,#hwSlJldwDm:VARCHAR#,#hwZl:NUMERIC#,#hwZlJldwDm:VARCHAR#,
+			#hwTj:NUMERIC#,#hwTjJldwDm:VARCHAR#,#yxbz:VARCHAR#,#hwflDm:VARCHAR#,#jsSl:NUMERIC#,
+			#jsJldwDm:VARCHAR#,#jsJldwFlDm:VARCHAR#,#hdbh:VARCHAR#,
+			#srHj:NUMERIC#,#srYj:NUMERIC#,#srXf:NUMERIC#,#srHdf:NUMERIC#,#srThf:NUMERIC#,#srHf:NUMERIC#,#srHk:NUMERIC#,
+			#fhrDjxh:NUMERIC#,#fhrMc:VARCHAR#,#fhrDz:VARCHAR#,#fhrLxr:VARCHAR#,#fhrLxdh:VARCHAR#,
+			#fhrXzqhDm:VARCHAR#,#shrDjxh:NUMERIC#,#shrMc:VARCHAR#,#shrDz:VARCHAR#,#shrLxr:VARCHAR#,
+			#shrLxdh:VARCHAR#,#shrXzqhDm:VARCHAR#,sysdate+#yqFhrq:NUMERIC#,sysdate+#yqDdrq:NUMERIC#,#shfsDm:NUMERIC#,
+			#thflDm:NUMERIC#,#ykjsfsDm:NUMERIC#,#yjjsfsDm:NUMERIC#,#psbz:VARCHAR#,SYSDATE)
+		</insert>
+		
+		<insert id="saveMbHwxxToFormal" parameterClass="com.cy.hygl.domain.HyMbTydDomain">
+			INSERT INTO HY_MB_DD_HWMX 
+				(MB_DJXH, XH, HWMC, HW_DJXH, HWXH_DJXH, HW_BZ_HLDW_DM,
+				HW_SL,HW_SL_JLDW_DM,HW_ZL,HW_ZL_JLDW_DM,HW_TJ,HW_TJ_JLDW_DM,
+				YXBZ,HWFL_DM,JS_SL,JS_JLDW_DM,JS_JLDW_FL_DM,HDBH,
+				SR_HJ,SR_YJ,SR_XF,SR_HDF,SR_THF,SR_HF,SR_HK,
+				FHR_DJXH,FHR_MC,FHR_DZ,FHR_LXR,FHR_LXDH,
+				FHR_XZQH_DM,SHR_DJXH,SHR_MC,SHR_DZ,SHR_LXR,
+				SHR_LXDH,SHR_XZQH_DM,YQ_FHRQ,YQ_DDRQ,SHFS_DM,
+				THFL_DM,YKJSFS_DM,YJJSFS_DM,PSBZ)
+				SELECT #mbDjxh#, 
+				(select NVL(MAX(XH),0)+RN FROM HY_MB_DD_HWMX HWMX
+					WHERE HWMX.MB_DJXH = #mbDjxh#), 				
+					HWMC, HW_DJXH, HWXH_DJXH, HW_BZ_HLDW_DM,
+					HW_SL,HW_SL_JLDW_DM,HW_ZL,HW_ZL_JLDW_DM,HW_TJ,HW_TJ_JLDW_DM,
+					YXBZ,HWFL_DM,JS_SL,JS_JLDW_DM,JS_JLDW_FL_DM,HDBH,
+					SR_HJ,SR_YJ,SR_XF,SR_HDF,SR_THF,SR_HF,SR_HK,
+					FHR_DJXH,FHR_MC,FHR_DZ,FHR_LXR,FHR_LXDH,FHR_XZQH_DM,
+					SHR_DJXH,SHR_MC,SHR_DZ,SHR_LXR,SHR_LXDH,SHR_XZQH_DM,
+					(YQ_FHRQ-trunc(sysdate)),(YQ_DDRQ-trunc(sysdate)),SHFS_DM,THFL_DM,YKJSFS_DM,YJJSFS_DM,PSBZ
+				FROM (
+					SELECT #mbDjxh#, rownum rn,
+					A.HWMC, A.HW_DJXH, A.HWXH_DJXH, A.HW_BZ_HLDW_DM,
+					A.HW_SL,A.HW_SL_JLDW_DM,A.HW_ZL,A.HW_ZL_JLDW_DM,A.HW_TJ,A.HW_TJ_JLDW_DM,
+					A.YXBZ,A.HWFL_DM,A.JS_SL,A.JS_JLDW_DM,A.JS_JLDW_FL_DM,A.HDBH,
+					A.SR_HJ,A.SR_YJ,A.SR_XF,A.SR_HDF,A.SR_THF,A.SR_HF,A.SR_HK,
+					A.FHR_DJXH,A.FHR_MC,A.FHR_DZ,A.FHR_LXR,A.FHR_LXDH,A.FHR_XZQH_DM,
+					A.SHR_DJXH,A.SHR_MC,A.SHR_DZ,A.SHR_LXR,A.SHR_LXDH,A.SHR_XZQH_DM,
+					A.YQ_FHRQ,A.YQ_DDRQ,A.SHFS_DM,A.THFL_DM,A.YKJSFS_DM,A.YJJSFS_DM,A.PSBZ
+					FROM HY_DD_HWMX_TEMP A
+					WHERE A.YXBZ = 'Y'
+					AND A.DD_DJXH = #mbDjxh#
+					ORDER BY A.DD_DJXH,A.XH
+				)
+		</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateHyMbTydHwmxByKey" parameterClass="com.cy.common.bo.HyMbTydHwmx">
+        update HY_MB_DD_HWMX set HWMC=#hwmc#,HW_DJXH=#hwDjxh#,HWXH_DJXH=#hwxhDjxh#,
+		HW_BZ_HLDW_DM=#hwBzHldwDm#,HW_SL=#hwSl#,HW_SL_JLDW_DM=#hwSlJldwDm#,HW_ZL=#hwZl#,HW_ZL_JLDW_DM=#hwZlJldwDm#,
+		HW_TJ=#hwTj#,HW_TJ_JLDW_DM=#hwTjJldwDm#,YXBZ=#yxbz#,HWFL_DM=#hwflDm#,
+		JS_SL=#jsSl#,JS_JLDW_DM=#jsJldwDm#,JS_JLDW_FL_DM=#jsJldwFlDm#,hdbh=#hdbh#,
+		SR_HJ=#srHj#,SR_YJ=#srYj#,SR_XF=#srXf#,SR_HDF=#srHdf#,SR_THF=#srThf#,SR_HF=#srHf#,SR_HK=#srHk#,
+		FHR_DJXH=#fhrDjxh#,FHR_MC=#fhrMc#,FHR_DZ=#fhrDz#,FHR_LXR=#fhrLxr#,FHR_LXDH=#fhrLxdh#,FHR_XZQH_DM=#fhrXzqhDm#,
+		SHR_DJXH=#shrDjxh#,SHR_MC=#shrMc#,SHR_DZ=#shrDz#,SHR_LXR=#shrLxr#,SHR_LXDH=#shrLxdh#,SHR_XZQH_DM=#shrXzqhDm#,
+		YQ_FHRQ=#yqFhrq:NUMERIC#,YQ_DDRQ=#yqDdrq:NUMERIC#,SHFS_DM=#shfsDm#,THFL_DM=#thflDm#,YKJSFS_DM=#ykjsfsDm#,YJJSFS_DM=#yjjsfsDm#,PSBZ=#psbz#				
+		where MB_DJXH=#mbDjxh# and XH=#xh#
+    </update>
+    
+    <!-- 更新临时表数据 -->
+    <update id="updateHyMbTydHwmxTempByKey" parameterClass="com.cy.common.bo.HyMbTydHwmx">
+        update HY_DD_HWMX_TEMP set HWMC=#hwmc#,HW_DJXH=#hwDjxh#,HWXH_DJXH=#hwxhDjxh#,
+		HW_BZ_HLDW_DM=#hwBzHldwDm#,HW_SL=#hwSl#,HW_SL_JLDW_DM=#hwSlJldwDm#,HW_ZL=#hwZl#,HW_ZL_JLDW_DM=#hwZlJldwDm#,
+		HW_TJ=#hwTj#,HW_TJ_JLDW_DM=#hwTjJldwDm#,YXBZ=#yxbz#,HWFL_DM=#hwflDm#,
+		JS_SL=#jsSl#,JS_JLDW_DM=#jsJldwDm#,JS_JLDW_FL_DM=#jsJldwFlDm#,hdbh=#hdbh#,
+		SR_HJ=#srHj#,SR_YJ=#srYj#,SR_XF=#srXf#,SR_HDF=#srHdf#,SR_THF=#srThf#,SR_HF=#srHf#,SR_HK=#srHk#,
+		FHR_DJXH=#fhrDjxh#,FHR_MC=#fhrMc#,FHR_DZ=#fhrDz#,FHR_LXR=#fhrLxr#,FHR_LXDH=#fhrLxdh#,FHR_XZQH_DM=#fhrXzqhDm#,
+		SHR_DJXH=#shrDjxh#,SHR_MC=#shrMc#,SHR_DZ=#shrDz#,SHR_LXR=#shrLxr#,SHR_LXDH=#shrLxdh#,SHR_XZQH_DM=#shrXzqhDm#,
+		YQ_FHRQ=sysdate+#yqFhrq:NUMERIC#,YQ_DDRQ=sysdate+#yqDdrq:NUMERIC#,SHFS_DM=#shfsDm#,THFL_DM=#thflDm#,YKJSFS_DM=#ykjsfsDm#,YJJSFS_DM=#yjjsfsDm#,PSBZ=#psbz#,RQ=SYSDATE				
+		where DD_DJXH=#mbDjxh# and XH=#xh#
+    </update>
+    
+	<!--根据主键删除表数据：软删除-->
+	<delete id="deleteHyMbTydHwmxByKey" parameterClass="java.util.Map">
+		UPDATE HY_MB_DD_HWMX SET YXBZ = 'N' where MB_DJXH=#mbDjxh# and XH=#xh#
+    </delete>
+    
+    <!-- 删除临时表数据 -->
+    <delete id="deleteHyMbTydHwxxTempByDdDjxh" parameterClass="java.util.Map">
+		DELETE FROM HY_DD_HWMX_TEMP where DD_DJXH=#mbDjxh#
+    </delete>
+    
+    <delete id="deleteMbHwxxByXhs" parameterClass="java.util.Map">
+    	UPDATE $tableName$ SET YXBZ = 'N'
+			WHERE $xhsIn$
+			<dynamic>
+				<isEqual property="tableName" compareValue="HY_DD_HWMX_TEMP">
+					AND DD_DJXH = #mbDjxh#
+				</isEqual>
+				<isEqual property="tableName" compareValue="HY_MB_DD_HWMX">
+					AND MB_DJXH = #mbDjxh#
+				</isEqual>
+			</dynamic>
+    </delete>
+    
+     <!-- 托运单保存为模板 -->
+	<insert id="insertHyMbTydHwmxFromTyd"  parameterClass="java.util.Map">
+		insert into HY_MB_DD_HWMX(MB_DJXH,XH,HWMC,HW_DJXH,HWXH_DJXH,
+			HW_BZ_HLDW_DM,HW_SL,HW_SL_JLDW_DM,HW_ZL,HW_ZL_JLDW_DM,
+			HW_TJ,HW_TJ_JLDW_DM,YXBZ,HWFL_DM,JS_SL,JS_JLDW_DM,JS_JLDW_FL_DM,hdbh,
+			SR_HJ,SR_YJ,SR_XF,SR_HDF,SR_THF,SR_HF,SR_HK,
+			FHR_DJXH,FHR_MC,FHR_DZ,FHR_LXR,FHR_LXDH,
+			FHR_XZQH_DM,SHR_DJXH,SHR_MC,SHR_DZ,SHR_LXR,
+			SHR_LXDH,SHR_XZQH_DM,YQ_FHRQ,YQ_DDRQ,SHFS_DM,
+			THFL_DM,YKJSFS_DM,YJJSFS_DM,PSBZ)
+		    SELECT #mbDjxh:NUMERIC#,HW.XH,HW.HWMC,HW.HW_DJXH,HW.HWXH_DJXH,
+		    HW.HW_BZ_HLDW_DM,HW.HW_SL,HW.HW_SL_JLDW_DM,HW.HW_ZL,HW.HW_ZL_JLDW_DM,
+		    HW.HW_TJ,HW.HW_TJ_JLDW_DM,HW.YXBZ,HW.HWFL_DM,HW.JS_SL,HW.JS_JLDW_DM,HW.JS_JLDW_FL_DM,HW.hdbh,
+		    HW.SR_HJ,HW.SR_YJ,HW.SR_XF,HW.SR_HDF,HW.SR_THF,HW.SR_HF,HW.SR_HK,
+			HW.FHR_DJXH,HW.FHR_MC,HW.FHR_DZ,HW.FHR_LXR,HW.FHR_LXDH,
+			HW.FHR_XZQH_DM,HW.SHR_DJXH,HW.SHR_MC,HW.SHR_DZ,HW.SHR_LXR,
+			HW.SHR_LXDH,HW.SHR_XZQH_DM,HW.YQ_FHRQ-SYSDATE,HW.YQ_DDRQ-SYSDATE,HW.SHFS_DM,
+			HW.THFL_DM,HW.YKJSFS_DM,HW.YJJSFS_DM,HW.PSBZ
+		    FROM HY_DD_HWMX HW WHERE HW.YXBZ = 'Y'
+		    AND HW.DD_DJXH = #ddDjxh#
+	</insert>
+    
+</sqlMap>

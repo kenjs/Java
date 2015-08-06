@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+
+
+ <!-- service start -->
+
+ <!-- 用户service -->
+<!--  <bean name="queryWebUserInfoService" class="com.cy.dcts.webUser.service.imp.QueryWebUserInfoServiceImp"> -->
+<!-- 		<property name="webUserInfoDao" ref="webUserInfoDao"></property> -->
+<!--  </bean> -->
+<!--  <bean name="saveWebUserInfoService" class="com.cy.dcts.webUser.service.imp.SaveWebUserInfoServiceImp"> -->
+<!-- 		<property name="webUserInfoDao" ref="webUserInfoDao"></property> -->
+<!--  </bean>  -->
+   <!-- App登录service -->
+   <bean name="loginUserInfoService" class="com.cy.driver.service.impl.LoginUserInfoServiceImpl">
+   	<!--<property name="driverUserCargoInfoDao" ref="driverUserCargoInfoDao" />-->
+   </bean>
+
+   <!-- 新增预约 -->
+   <bean name="driverBusinessLineInfoService" class="com.cy.driver.service.impl.DriverBusinessLineInfoServiceImpl">
+   	<!--<property name="driverBusinessLineInfoDao" ref="driverBusinessLineInfoDao"></property>-->
+   </bean>
+   <!-- 货源信息 -->
+   <bean name="driverUserCargoInfoService" class="com.cy.driver.service.impl.DriverUserCargoInfoServiceImpl">
+   	<!--<property name="driverUserCargoInfoDao" ref="driverUserCargoInfoDao"></property>-->
+   	<property name="driverBusinessLineInfoService" ref="driverBusinessLineInfoService"></property>
+   	<property name="driverLineInfoService" ref="driverLineInfoService"></property>
+   	<!-- <property name="orderCargoInfoDao" ref="orderCargoInfoDao"></property>
+   	<property name="sendNoteSDK" value="${dctms.download.sendNoteSDK}"></property>
+	<property name="sendNoteUSERID" value="${dctms.download.sendNoteUSERID}"></property>
+	<property name="sendNotePwdSDK" value="${dctms.download.sendNotePwdSDK}"></property>
+	<property name="sendNoteTERMID" value="${dctms.download.sendNoteTERMID}"></property>
+	<property name="sendNoteTIME" value="${dctms.download.sendNoteTIME}"></property> -->
+   </bean>
+    <!-- 货源信息列表 -->
+    <bean name="orderCargoInfoService" class="com.cy.driver.service.impl.OrderCargoInfoServiceImpl">
+    	<!--<property name="orderCargoInfoDao" ref="orderCargoInfoDao"></property>-->
+    	<!--<property name="driverUserCargoInfoDao" ref="driverUserCargoInfoDao"></property>-->
+    	<property name="driverLineInfoService" ref="driverLineInfoService"></property>
+    	<property name="driverBusinessLineInfoService" ref="driverBusinessLineInfoService"></property>
+    </bean>
+    <!-- WEB司机线路service -->
+    <bean name="driverLineInfoService" class="com.cy.driver.service.impl.DriverLineInfoServiceImpl">
+    	<!--<property name="driverLineInfoDao" ref="driverLineInfoDao"></property>-->
+    </bean>
+    <!-- 订单SERVICE -->
+    <bean name="transactionInfoService" class="com.cy.driver.service.impl.TransactionInfoServiceImpl">
+    	<!--<property name="transactionInfoDao" ref="transactionInfoDao"></property>-->
+    </bean>
+    <!-- 所有报过价的订单SERVICE -->
+    <bean name="quoteInfoService" class="com.cy.driver.service.impl.QuoteInfoServiceImpl">
+    	<!--<property name="quoteInfoDao" ref="quoteInfoDao"></property>-->
+    </bean>
+    <!-- 位置信息service -->
+    <bean name="locationLastInfoService" class="com.cy.driver.service.impl.LocationLastInfoServiceImpl">
+    	<!--<property name="locationLastInfoDao" ref="locationLastInfoDao"></property>-->
+    </bean>
+    <!-- 评价货源 -->
+    <bean name="driverUserAssessInfoService" class="com.cy.driver.service.impl.DriverUserAssessInfoServiceImpl">
+    	<!--<property name="driverUserAssessInfoDao" ref="driverUserAssessInfoDao"></property>-->
+    </bean>
+
+    <!-- 操作日志记录 -->
+    <bean name="operationLogService" class="com.cy.driver.service.impl.OperationLogServiceImpl">
+    	<!--<property name="operationLogDao" ref="operationLogDao" />-->
+    	<!--<property name="driverUserCargoInfoDao" ref="driverUserCargoInfoDao"></property>-->
+    </bean>
+
+    <!-- 百度云消息推送 -->
+    <bean name="androidPushMessageService" class="com.cy.driver.service.impl.AndroidPushMessageServiceImpl" init-method="init">
+    	<property name="bdApiKey" value="${baiduyun.apiKey}" />
+    	<property name="bdSecretKey" value="${baiduyun.secretKey}" />
+    </bean>
+
+    <!-- web 用户 -->
+    <bean name="webUserInfoService" class="com.cy.driver.service.impl.WebUserInfoServiceImpl">
+    	<!--<property name="webUserInfoDao" ref="webUserInfoDao"/>-->
+    </bean>
+
+     <!-- 回单操作 -->
+    <bean name="transactionReceiptPathService" class="com.cy.driver.service.impl.TransactionReceiptPathServiceimpl">
+    	<!--<property name="transactionReceiptPathDao" ref="transactionReceiptPathDao" />-->
+    </bean>
+
+    <!-- 合同车源 -->
+    <bean name="pactDriverInfoService" class="com.cy.driver.service.impl.PactDriverInfoServiceImpl">
+    	<!--<property name="pactDriverInfoDao" ref="pactDriverInfoDao" />-->
+    </bean>
+
+    <!-- 司机手机信息 -->
+    <bean name="driverTelephoneInfoService" class="com.cy.driver.service.impl.DriverTelephoneInfoServiceImpl">
+        <!--<property name="driverTelephoneInfoDao" ref="driverTelephoneInfoDao" />-->
+    </bean>
+
+    <bean name="logRecorder" class="com.cy.driver.common.threadObject.log.LogRecorderImpl" />
+
+    <bean name="logService" class="com.cy.driver.common.syslog.LogServiceImpl" />
+
+    <bean name="countRecorder" class="com.cy.driver.common.threadObject.count.CountUpdateImpl" />
+
+    <bean name="countService" class="com.cy.driver.common.threadObject.count.CountServiceImpl" />
+</beans>

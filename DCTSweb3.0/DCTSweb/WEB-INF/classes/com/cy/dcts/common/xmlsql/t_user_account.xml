@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="UserAccountInfo" type="com.cy.dcts.common.bo.UserAccountInfo"/>
+	
+	<!-- 增 -->
+	<insert id="iBatisInsertUserAccountInfo" parameterClass="UserAccountInfo">
+		insert into t_user_account (user_id,account_balance,remark,create_time,modify_time) 
+		values (#userId#,#accountBalance#,#remark#,sysdate(),sysdate())
+		<selectKey keyProperty="id" resultClass="Integer">
+			select last_insert_id() as id
+		</selectKey>
+	</insert>
+	
+	<!-- 改 -->
+	<update id="iBatisUpdateUserAccountInfo" parameterClass="UserAccountInfo">
+		update t_user_account set modify_time = sysdate()
+		<dynamic>
+			<isNotEmpty prepend="," property="accountBalance">
+				account_balance = #accountBalance#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="remark">
+				remark = #remark#
+			</isNotEmpty>
+		</dynamic>
+		where user_id = #userId#
+	</update>
+	
+	<!-- 查 -->
+	<select id="iBatisSelectUserAccountInfo" parameterClass="string" resultClass="com.cy.dcts.common.domain.UserAccountInfoDomain">
+		select account_balance as accountBalance,
+				remark as remark,
+				create_time as createTime,
+				modify_time as modifyTime 
+		from t_user_account where user_id = #userId#
+	</select>
+</sqlMap>

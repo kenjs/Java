@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.cwgl.dao.CwFpKpdjMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectCwFpKpdjByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.cwgl.domain.CwFpKpdjDomain">
+		 select  A.KPSQ_DJXH kpsqDjxh,
+			  (select AA.kpsqfs_mc from dm_kpsqfs AA where AA.kpsqfs_dm = A.KPSQFS_DM) kpsqfs,
+       		A.KH_DJXH khDjxh,
+       		(SELECT KH.KHMC FROM QY_KH_DJXX KH WHERE KH.KH_DJXH = A.KH_DJXH) khmc,
+       		A.SQ_KPJE_HJ sqKpjeHj,
+       		A.SQ_KPRQ sqKprq,
+       		A.FPKJJE fpkjje,
+          (A.sq_kpje_hj - A.Fpkjje) wkjje,
+       		(SELECT MC FROM QY_RYDJ DM WHERE DM.CZY_DJXH = A.DJR_CZY_DJXH) sqrMc,
+       		A.KPDW_JGMC dwMc,
+       		(SELECT JC FROM QY_ZZJG JG WHERE JG.JGBM = A.DJ_JGBM) bmMc,
+       		A.djrq djrq,
+       		A.bzsm bzsm,
+          	A.dj_jgbm djJgbm,
+          	A.ss_jgbm ssJgbm,
+          	A.spbz spbz
+      from js_kpsq A
+ 		WHERE A.YXBZ = 'Y'
+ 		  AND A.FPKJBZ = 'N'
+ 		  AND (A.SPBZ = 'N' OR (A.SPBZ = 'Y' AND A.WSSPZT_DM = '3')) 
+      and A.kpsq_djxh = #kpsqDjxh#
+    </select>
+
+	<!--根据主键更新字段-->
+    <update id="updateCwFpKpdjByKey" parameterClass="com.cy.common.bo.CwFpKpdj">
+        UPDATE JS_KPSQ set bzsm = #bzsm#, spbz = #spbz#
+       where kpsq_djxh = #kpsqDjxh#
+    </update>
+    
+</sqlMap>

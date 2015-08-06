@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.cwgl.dao.BusCwqtsrMapper">
+	<select id="selectCwQtsrPage" parameterClass="java.util.Map"
+		resultClass="com.cy.cwgl.domain.CwQtsrDomain">
+		SELECT A.CW_DJXH AS cwDjxh,
+		       A.SS_JGBM AS ssJgbm,
+		       A.DJ_JGBM AS djJgbm,
+		       A.FKF AS fkf,
+		       A.RQ AS rq,
+		       A.XMMC AS xmmc,
+		       A.JE AS je,
+		       A.ZCFL_DM AS zcflDm,
+		       A.YH_CSH_DJXH AS yhCshDjxh,
+		       A.BZ AS bz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM CW_QTSR A 
+	WHERE A.SS_JGBM=#ssJgbm#
+		 AND A.RQ=to_date(#rq:DATE#,'yyyy-MM-dd')
+		 AND A.YXBZ = 'Y'
+		  ORDER by A.CW_DJXH ASC
+    </select>
+    
+    <select id="selectCwQtsrAll" parameterClass="java.util.Map"
+		resultClass="com.cy.cwgl.domain.CwQtsrDomain">
+		SELECT A.CW_DJXH AS cwDjxh,
+		       A.SS_JGBM AS ssJgbm,
+		       A.DJ_JGBM AS djJgbm,
+		       A.FKF AS fkf,
+		       A.RQ AS rq,
+		       A.XMMC AS xmmc,
+		       A.JE AS je,
+		       A.ZCFL_DM AS zcflDm,
+		       A.YH_CSH_DJXH AS yhCshDjxh,
+		       A.BZ AS bz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM CW_QTSR A 
+		WHERE A.SS_JGBM=#ssJgbm#
+		 AND A.RQ=to_date(#rq:DATE#,'yyyy-MM-dd')
+		  AND A.YXBZ = 'Y'
+		  ORDER by A.CW_DJXH ASC
+    </select>
+
+	<select id="getCwQtsrRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.CW_DJXH) 
+		  FROM CW_QTSR A 
+		 WHERE A.SS_JGBM=#ssJgbm#
+		 AND A.RQ=to_date(#rq:DATE#,'yyyy-MM-dd')
+		  AND A.YXBZ = 'Y'
+    </select>
+    
+    <parameterMap class="java.util.Map" id="qtsrHxMap">
+		<parameter property="cwDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>	
+    	<parameter property="jgbm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="czyDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="rtnCode" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+		<parameter property="rtnMess" javaType="java.lang.String" jdbcType="VARCHAR" mode="OUT"/>	
+	</parameterMap>
+	
+	<procedure id="callPCwglQtsrHxcl" parameterMap="qtsrHxMap">
+		{call P_CWGL_QTSR_HXCL(?,?,?,?,?)}
+	</procedure>
+</sqlMap>

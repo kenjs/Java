@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.swp.dao.MarketingCompanyInfoDao">
+
+    <!-- 企业客户资料表 -->
+    <resultMap type="MarketingCompanyInfo" id="marketing_company_info_result">
+        <!-- 主键 -->
+        <result property="id" column="id"/>
+        <!-- 联系手机 -->
+        <result property="contactMobiphone" column="contact_mobiphone"/>
+        <!-- 公司id -->
+        <result property="companyId" column="company_id"/>
+        <!-- 公司名称 -->
+        <result property="name" column="name"/>
+        <!-- 省 -->
+        <result property="province" column="province"/>
+        <!-- 市 -->
+        <result property="city" column="city"/>
+        <!-- 县 -->
+        <result property="county" column="county"/>
+        <!-- 详细地址 -->
+        <result property="address" column="address"/>
+        <!-- 联系人 -->
+        <result property="contactName" column="contact_name"/>
+        <!-- 固定电话 -->
+        <result property="contactTelephone" column="contact_telephone"/>
+        <!-- 分配状态 0 待分配 1 分配中 2 已分配 -->
+        <result property="allocateStatus" column="allocate_status"/>
+        <!-- 营销专员id(当分配状态为1或2时，此字段不能为空) -->
+        <result property="assisterId" column="assister_id"/>
+        <!-- 分配者id(指有权限进行客户分配的营销人员id) -->
+        <result property="distributerId" column="distributer_id"/>
+        <!-- 分配时间 -->
+        <result property="distributTime" column="distributer_time"/>
+        <!-- 创建时间 -->
+        <result property="createTime" column="create_time"/>
+        <!-- 最后修改时间 -->
+        <result property="lastModifyTime" column="last_modify_time"/>
+        <!-- 0 未删除 1 已删除 -->
+        <result property="deleteFlag" column="delete_flag"/>
+    </resultMap>
+	
+
+    <!-- 根据手机号码查询企业客户条数 queryMarketingCompanyInfoByContactMobiphone -->
+    <select id="queryMarketingCompanyInfoByContactMobiphone" parameterType="String" resultType="Integer">
+        select COUNT(*) from t_marketing_company_info t where t.contact_mobiphone = #{contactMobiphone}
+    </select>
+
+
+    <!-- 保存企业客户信息 addMarketingCompanyInfo -->
+    <insert id="addMarketingCompanyInfo" parameterType="MarketingCompanyInfo" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_marketing_company_info (
+        contact_mobiphone,company_id,name,
+        contact_name,contact_telephone,
+        create_time)
+        VALUES (
+        #{contactMobiphone},#{companyId},#{name},
+        #{contactName},#{contactTelephone},
+        sysdate())
+    </insert>
+
+</mapper>

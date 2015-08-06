@@ -1,0 +1,60 @@
+package tf56.exchange.controllers;
+
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.serfj.RestController;
+import net.sf.serfj.annotations.GET;
+import net.sf.serfj.annotations.POST;
+import net.sf.serfj.client.WebServiceException;
+
+import org.apache.log4j.Logger;
+
+import tf56.exchange.services.CarDao;
+import tf56.sofa.serializer.JsonResponse;
+import tf56.sofa.util.ClientUtil;
+import tf56.sofa.util.SofaSpringContext;
+import tf56.sofa.util.SysUtil;
+
+/**
+ * 
+ * 总包接口类
+ * @athor changmeng.liu
+ * @date 2014-4-16
+ * @version 1.0
+ * @update
+ */
+public class Contractc extends RestController{
+	
+	public static Logger logger = Logger.getLogger(Contractc.class);
+	
+	
+	@POST
+	public String exchangeInformationFromScm2ryp() {
+		String msgJson = "";
+		Map map = SysUtil.removeFilter(getParams());
+		HttpServletResponse response = this.getResponseHelper().getResponse();
+		HttpServletRequest request = this.getResponseHelper().getRequest();
+		
+		try {
+			StringBuffer sb = new StringBuffer();
+			//获取收到的报文
+			String url = "";			
+			ClientUtil clientUtil = new ClientUtil(url);
+			msgJson = clientUtil.post(url, map).toString();
+			
+			//要返回的报文
+			sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+	        sb.append("<report_data>");
+	        sb.append("<respon_sys>RYP</respon_req>");
+	        sb.append("<respon_time>2014-04-08 14:30:59</respon_time>");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+		return new JsonResponse().responseJson(response, msgJson);
+	}
+	
+	
+}

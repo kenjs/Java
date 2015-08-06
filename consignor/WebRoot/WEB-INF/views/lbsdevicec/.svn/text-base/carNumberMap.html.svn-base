@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="pragma" content="no-cache" />
+		<meta http-equiv="Cache-Control" content="no-cache,must-revalidate" />
+		<title>前台GPS管理-轨迹回放</title>
+		<script src="../js/jquery/jquery-1.8.3.min.js" type=text/javascript></script>
+		<script src="../js/ligerUI/js/core/base.js" type="text/javascript"></script>
+		<script src="../js/ligerUI/js/plugins/ligerAccordion.js" type="text/javascript"></script>
+		<!-- MapABC 地图 -->
+		
+		<!--<script type="text/javascript" src="http://apis.mapabc.com/webapi/auth.json?t=javascriptmap&v=3.1.1&key=f6c97a7f64063cfee7c2dc2157847204d4dbf0933f083b8686f9e71eef9067551fbd34f941b42f01"></script>
+		
+		--><!--<script type="text/javascript" src="http://map.tf56.com:8091/webapi/auth.json?t=javascriptmap&v=3.1.2&key=f03346eb3a99be025979045e8fa1a281c5159611e114c448f4ab8554ad14eff3d66dfeb3965ce8fc"></script>
+		-->
+		<script type="text/javascript" src="../js/amap/basic_demo.js"></script>
+		<script type="text/javascript" src="../js/amap/utils/gps_change.js"></script>
+		<link rel="stylesheet" type="text/css" href="../js/amap/css/basic.css" />
+		<script type="text/javascript" src="../js/sys/json/json2.js"></script>
+		
+		<!-- 日期时间控件   --> 
+		<script language="javascript" type="text/javascript"
+			src="../js/sys/DatePicker/WdatePicker.js"></script>
+		
+       <script src="../js/amap/mapabc_js.js" type="text/javascript"></script>
+		<!-- 滑块开始 -->
+		<script>
+		window.dhx_globalImgPath = "../js/sys/dhtmlxSlider/codebase/imgs/";
+		</script>
+		<script type="text/javascript"
+			src="../js/sys/dhtmlxSlider/codebase/dhtmlxcommon.js"></script>
+		<script type="text/javascript"
+			src="../js/sys/dhtmlxSlider/codebase/dhtmlxslider.js"></script>
+		<script type="text/javascript"
+			src="../js/sys/dhtmlxSlider/codebase/ext/dhtmlxslider_start.js"></script>
+		<link rel="STYLESHEET" type="text/css"
+			href="../js/sys/dhtmlxSlider/codebase/dhtmlxslider.css" />
+		<!-- 滑块  结束 -->
+
+		<script type="text/javascript"
+			src="../js/themes/lbstrackc/lbstrack_demo.js"></script>
+		<link rel="STYLESHEET" type="text/css"
+			href="../css/themes/lbstrackc/lbstrack_demo.css" />
+		<style type="text/css">
+		</style>
+		
+	</head>
+
+	<body>
+		<!-- 顶部 --开始  此处须由js动态加入-------------------------------------->
+		<!--<div id="header" class="c-header">
+
+		</div>
+		--><!-- 顶部 --结束------------------------------------->
+
+		<!-- LOGON --开始   此处须由js动态加入------------------------------------->
+		<!--<div id="logo" class="c-logo">
+
+		</div>
+
+		--><!-- 工作区 --开始-->
+		<!--<div id="main" class="c-main">
+			--><!-- 左侧菜单 --开始  此处须由js动态加入------------------------------------->
+			<!--<div id="left" class="c-left">
+			</div>
+
+			--><!-- 左侧菜单 --结束------------------------------------->
+			<!-- 左侧菜单 --结束-->
+			<!-- 右侧工作区 --开始-->
+			<!--<div id="right" class="c-right">
+				-->
+			
+				<div id="float_left_div" style="z-index:2;position:absolute;">
+					<div id="playback_info" style="width:264px;">
+						<table width="100%" style="border-collapse:collapse" cellpadding="0" cellspacing="0">
+							<tr>
+								<td width="253px" height="260px" id="col1" align="left"
+									style="background: url('../imgs/lbstrackc/bg01_demo.png') no-repeat;">
+									<table width="100%" style="font-size: 12px; margin:0">
+										<tr class="none">
+											<td>
+												<input type="hidden" id="partyIds" value=""/>
+												<input type="hidden" id="deviceIds" value="" />
+											</td>
+											<td>
+												<input type="hidden" id="validdates" value="" />
+												<input type="hidden" id="invaliddates" value="" />
+											</td>
+										</tr>
+										<tr height="38px">
+											<td align="left" rowspan="2" valign="top"
+												style="text-align: left; text-indent: 10px; padding-top: 8px;">
+												回放时间:
+											</td>
+											<td align="left" style="text-align: left;">
+												<input type="text" id="starttime" name="starttime" value=""
+													size="20" class="Wdate"
+													onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false,readOnly:true})" />
+												<input type="hidden" id="real_starttime" />
+											</td>
+										</tr>
+										<tr height="38px">
+											<td align="left" style="text-align: left;">
+												<input type="text" id="endtime" name="endtime" value=""
+													size="20" class="Wdate"
+													onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false,readOnly:true})" />
+												<input type="hidden" id="real_endtime" />
+											</td>
+										</tr>
+										<tr height="38px">
+											<td style="text-align: center" align="center" colspan="2">
+												<table width="100%" align="center">
+													<tr align="center">
+														<td width="33%">
+															<input type="image" src="../imgs/lbstrackc/cx.png" id="cx"/>
+														</td>
+														<td width="33%">
+															<input type="image" src="../imgs/lbstrackc/button01.png"
+																id="start" disabled="disabled"/>
+															<input type="image" src="../imgs/lbstrackc/button02.png"
+																id="restart" class="none" />
+														</td>
+														<td width="33%">
+															<input type="image" src="../imgs/lbstrackc/button03.png"
+																id="suspend" />
+															<input type="image" src="../imgs/lbstrackc/button04.png"
+																id="go_on" class="none" />
+															<input type="image" src="../imgs/lbstrackc/button05.png"
+															    id="finish" class="none" disabled="disabled"/>
+														</td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+										<tr height="38px">
+											<td align="left" style="text-align: left; text-indent: 10px;" width="30%">
+												播放速度:
+											</td>
+											<td align="left" style="text-align: left;" width="70%">
+												<table width="100%" cellpadding="0" cellspacing="0">
+													<tr width="100%" align="left">
+														<td align="left" width="20%" id="speed"></td>
+														<td align="left" width="80%" id="speed_parent"></td>
+													</tr>
+												</table>
+												<script>
+	var slider1 = new dhtmlxSlider(document.getElementById("speed_parent"),
+			110, "arrowgreen", null, 100, 1000, 300, 100);
+	slider1.linkTo('speed');
+	slider1.init();
+</script>
+											</td>
+										</tr>
+										<tr height="38px">
+											<td align="left" style="text-align: left; text-indent: 10px;">
+												播放进度:
+											</td>
+											<td align="left" style="text-align: left;">
+												<table width="100%" cellpadding="0" cellspacing="0">
+													<tr width="100%" align="left">
+														<td align="left" width="20%">
+															<span id="proceed" style="float: left;"></span>%
+														</td>
+														<td align="left" width="80%" id="proceed_parent"></td>
+													</tr>
+												</table>
+												<script>
+	var slider2 = new dhtmlxSlider(document.getElementById("proceed_parent"),
+			110, "arrowgreen", null, 0, 100, 0, 1);
+	slider2.linkTo('proceed');
+	slider2.init();
+</script>
+											</td>
+										</tr>
+										<tr height="38px">
+											<td align="left" style="text-align: left; text-indent: 10px;">
+												回放里程:
+											</td>
+											<td align="left" id="distance" style="text-align: left;">
+												0
+											</td>
+										</tr>
+									</table>
+								</td>
+								<td id="switch_div" width="10px">
+									<img id="sj" src="../imgs/lbstrackc/sj01.png"/>
+									<img id="zk" src="../imgs/lbstrackc/zk01.png" class="none" />
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div id="float_location" style="z-index:2;position:absolute;bottom:50px;left:10px;" class="none">
+					<img src="../imgs/lbstrackc/position.png" width="50px" height="50px"  style="opacity:0.9" onclick="setLocation();"/>
+				</div>
+				<div id="imgloading" style="z-index:2;position:absolute;" class="none" >
+					<img src="../imgs/lbstrackc/loading.gif" border="0" />
+				</div>
+				<div id="right_map_div">
+				</div>
+			<!--</div>
+			--><!-- 右侧工作区 --开始-->
+		<!--</div>
+		--><!-- 工作区 --结束-->
+
+		<!-- 底部 --开始  此处须由js动态加入-->
+		<!--<div id="footer" class="c-footer">
+
+		</div>
+		--><!-- 底部 --结束-->
+	</body>
+</html>
+
+
+

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.xtgl.dao.QyJsMapper">
+
+	<!--根据主键取DOMAIN-->
+	<select id="selectQyJsByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.QyJsDomain">
+		select a.JS_DJXH as jsDjxh,a.JS_MC as jsMc,a.JS_JC as jsJc,a.JS_DM as jsDm,a.LYBZ as lybz,
+		(SELECT B.MC FROM QY_ZZJG B WHERE B.JGBM=a.SS_JGBM) AS sjMc,
+		a.BZSM as bzsm,a.SS_JGBM as ssJgbm,a.QYBZ as qybz,a.YXBZ as yxbz,a.CJR_CZY_DJXH as cjrCzyDjxh,
+		a.CJRQ as cjrq,a.XGR_CZY_DJXH as xgrCzyDjxh,a.XGRQ as xgrq from QY_JS a  where a.JS_DJXH=#jsDjxh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertQyJs"  parameterClass="com.cy.common.bo.QyJs">
+	    <selectKey keyProperty="jsDjxh" resultClass="String" type="pre"> 
+			select seq_js_djxh.nextval as jgbm from dual 
+		</selectKey> 
+		insert into QY_JS(JS_DJXH,JS_MC,JS_JC,JS_DM,LYBZ,
+		BZSM,SS_JGBM,QYBZ,YXBZ,CJR_CZY_DJXH,
+		CJRQ,XGR_CZY_DJXH,XGRQ)
+		values(#jsDjxh:NUMERIC#,#jsMc:VARCHAR#,#jsJc:VARCHAR#,#jsDm:NUMERIC#,#lybz:VARCHAR#,
+		#bzsm:VARCHAR#,#ssJgbm:NUMERIC#,#qybz:VARCHAR#,#yxbz:VARCHAR#,#cjrCzyDjxh:NUMERIC#,
+		to_date(#cjrq:DATE#,'yyyy-MM-dd'),#xgrCzyDjxh:NUMERIC#,to_date(#xgrq:DATE#,'yyyy-MM-dd'))
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateQyJsByKey" parameterClass="com.cy.common.bo.QyJs">
+        update QY_JS set JS_DJXH=#jsDjxh#,JS_MC=#jsMc#,JS_JC=#jsJc#,JS_DM=#jsDm#,LYBZ=#lybz#,
+		BZSM=#bzsm#,SS_JGBM=#ssJgbm#,QYBZ=#qybz#,YXBZ=#yxbz#,CJR_CZY_DJXH=#cjrCzyDjxh#,
+		CJRQ=to_date(#cjrq#, 'YYYY-MM-DD'),XGR_CZY_DJXH=#xgrCzyDjxh#,XGRQ=to_date(#xgrq#, 'YYYY-MM-DD') where JS_DJXH=#jsDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：软删除-->
+	<delete id="deleteQyJsByKey" parameterClass="java.util.Map">
+		update QY_JS set yxbz='N' where JS_DJXH=#jsDjxh#
+    </delete>
+    
+</sqlMap>

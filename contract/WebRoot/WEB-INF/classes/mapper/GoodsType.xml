@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<!--  -->
+<sqlMap >
+ <typeAlias type="tf56.contract.domain.GoodsType" alias="goodsType"/>
+ <resultMap id="goodsTypeFieldMap" class="goodsType">
+  <result column="goodsTypeId" property="goodstypeid" jdbcType="VARCHAR" />   <!--  -->
+  <result column="fromPartyId" property="frompartyid" jdbcType="VARCHAR" />   <!-- 父会员ID -->
+  <result column="toPartyId" property="topartyid" jdbcType="VARCHAR" />   <!-- 承接货盘的会员ID -->
+  <result column="checked" property="checked" jdbcType="VARCHAR" />   <!--  -->
+  <result column="goodsName" property="goodsname" jdbcType="VARCHAR" />   <!-- 货物名称 -->
+  <result column="helpCode" property="helpcode" jdbcType="VARCHAR" />   <!--  -->
+  <result column="package" property="packAge" jdbcType="VARCHAR" />   <!--  -->
+  <result column="unit" property="unit" jdbcType="CHAR" />
+  <result column="goodsType" property="goodstype" jdbcType="VARCHAR" />   <!-- 货物名称 -->
+  <result column="spec" property="spec" jdbcType="VARCHAR" />   <!--  -->
+  <result column="model" property="model" jdbcType="VARCHAR" />
+  <result column="unitWeight" property="unitweight" jdbcType="VARCHAR" />   <!--  -->
+  <result column="unitVolume" property="unitvolume" jdbcType="VARCHAR" />   <!--  -->
+  <result column="chargeType" property="chargetype" jdbcType="VARCHAR" />   <!--  -->
+  <result column="inputDate" property="inputdate" jdbcType="VARCHAR" />   <!--  -->
+  <result column="inputMan" property="inputman" jdbcType="VARCHAR" />   <!--  -->
+ </resultMap>
+
+ <!-- 新增记录 -->
+ <insert id="iBatisInsertGoodsType" parameterClass="goodsType">
+  insert into GoodsType (fromPartyId,toPartyId,checked,goodsName,helpCode,package,unitWeight,unit,unitVolume,chargeType,goodsType,spec,model,inputDate,inputMan) 
+                 values (#frompartyid:VARCHAR#,#topartyid:VARCHAR#,#checked:VARCHAR#,#goodsname:VARCHAR#,#helpcode:VARCHAR#,
+                 #packAge:VARCHAR#,#unitweight:VARCHAR#,#unit:VARCHAR#,#unitvolume:VARCHAR#,#chargetype:VARCHAR#,#goodstype:VARCHAR#,#spec:VARCHAR#,#model:VARCHAR#,#inputdate:VARCHAR#,#inputman:VARCHAR#)
+  <selectKey resultClass="String" keyProperty="goodstypeid">
+   select last_insert_id() as id
+  </selectKey>
+ </insert>
+
+ <!-- 删除用户对象 -->
+ <delete id="iBatisDeleteGoodsType" parameterClass="java.util.HashMap">
+  delete from GoodsType where goodsTypeId=#goodstypeid#
+ </delete>
+
+ <!-- 更新用户对象 wei.huang -->
+ <update id="iBatisUpdateGoodsType" parameterClass="goodsType">
+  update GoodsType set checked=#checked:VARCHAR#,goodsName=#goodsname:VARCHAR#,helpCode=#helpcode:VARCHAR#,
+  package=#packAge:VARCHAR#,unitWeight=#unitweight:VARCHAR#,unit=#unit:VARCHAR#,unitVolume=#unitvolume:VARCHAR#,
+  chargeType=#chargetype:VARCHAR#,goodsType=#goodstype:VARCHAR#,spec=#spec:VARCHAR#,model=#model:VARCHAR# where goodsTypeId=#goodstypeid:VARCHAR#
+ </update>
+
+<!-- 更新用户对象   wei.huang-->
+ <update id="iBatisUpdateGoodsTypeChecked" parameterClass="java.util.HashMap">
+  update GoodsType set checked=#checked:VARCHAR#
+  <dynamic prepend="WHERE">  
+            <isNotEmpty prepend="AND" property="frompartyid">  
+                ( fromPartyId=#frompartyid:VARCHAR#)
+            </isNotEmpty> 
+            <isNotEmpty prepend="AND" property="topartyid">  
+                ( toPartyId=#topartyid:VARCHAR#)
+            </isNotEmpty>  
+            <isNotEmpty prepend="AND" property="goodstypeid">  
+                ( goodsTypeId=#goodstypeid:VARCHAR#)
+            </isNotEmpty>
+    </dynamic> 
+ </update>
+ 
+ <!-- 获取多条记录查询列表 返回List -->
+ <select id="iBatisSelectGoodsTypeList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+  select * from GoodsType where fromPartyId=#frompartyid:VARCHAR# and toPartyId=#topartyid:VARCHAR#
+  <dynamic>
+	  	<isNotEmpty prepend="AND" property="checked">  
+	       checked=#checked:VARCHAR#
+	  	</isNotEmpty>
+	  	<isNotEmpty prepend="AND" property="goodsname">  
+	       (goodsName LIKE '%$goodsname$%' or helpCode LIKE '%$goodsname$%')
+	  	</isNotEmpty>
+  </dynamic>
+  order by goodsTypeId desc limit $skipCount$,$pageSize$
+ </select>
+ 
+ <!-- 获取记录条数 -->
+ <select id="iBatisSelectGoodsTypeCount" parameterClass="java.util.HashMap" resultClass="java.lang.String">
+  select count(*) from GoodsType where fromPartyId=#frompartyid:VARCHAR# and toPartyId=#topartyid:VARCHAR#
+  <dynamic>
+	  	<isNotEmpty prepend="AND" property="checked">  
+	       checked=#checked:VARCHAR#
+	  	</isNotEmpty>
+  </dynamic>
+ </select>
+
+ <!-- 根据id获得用户对象, 返回bean -->
+ <select id="iBatisSelectGoodsTypeById" parameterClass="java.util.HashMap" resultMap="goodsTypeFieldMap">
+  select * from GoodsType where goodsTypeId=#goodstypeid#
+ </select> 
+
+</sqlMap>

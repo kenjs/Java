@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.hygl.dao.HyTydMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectHyTydByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyTydglDomain">
+		select a.DD_DJXH as ddDjxh,a.DDBH as ddbh,a.xdrq as xdrq,a.BZ as bz,A.DZZT_DM dzztDm,
+			B.FHR_DJXH as fhrDjxh,B.FHR_MC as fhrMc,B.FHR_DZ as fhrDz,
+		    B.FHR_LXR as fhrLxr,B.FHR_LXDH as fhrLxdh,B.FHR_XZQH_DM as fhrXzqhDm,
+		    (SELECT XZQH_JC FROM DM_XZQH WHERE XZQH_DM = B.FHR_XZQH_DM) AS fhrXzqhMc,
+		    B.SHR_MC as shrMc,B.SHR_DZ as shrDz,
+		    B.SHR_LXR as shrLxr,B.SHR_LXDH as shrLxdh,B.SHR_XZQH_DM as shrXzqhDm,
+		    (SELECT XZQH_JC FROM DM_XZQH WHERE XZQH_DM = B.SHR_XZQH_DM) AS shrXzqhMc,
+		    B.YQ_FHRQ as yqFhrq,B.YQ_DDRQ as yqDdrq,
+		    B.SHFS_DM as shfsDm,B.YKJSFS_DM as ykjsfsDm,B.YJJSFS_DM as yjjsfsDm,
+		    a.YXBZ as yxbz,a.DJR_CZY_DJXH as djrCzyDjxh,a.DJRQ as djrq,
+		    a.DJ_JGBM as djJgbm,a.SS_JGBM as ssJgbm,a.CJR_CZY_DJXH as cjrCzyDjxh,a.CJRQ as cjrq,a.XGR_CZY_DJXH as xgrCzyDjxh,
+		    a.XGRQ as xgrq,
+		    B.THFL_DM as thflDm,
+		    KH.KHLX_DM khlxDm4js, KH.YKJSFS_DM ykjsfsDm4js,
+		    a.DJ_JGBM djJgbm,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = a.DJ_JGBM) djJgmc,
+		    a.SS_JGBM ssJgbm,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = a.SS_JGBM) ssJgmc
+		    from HY_DD a, QY_KH_DJXX KH, (SELECT DD_DJXH, FHR_DJXH,FHR_MC,FHR_DZ,FHR_LXR,FHR_LXDH,
+				FHR_XZQH_DM,SHR_DJXH,SHR_MC,SHR_DZ,SHR_LXR,
+				SHR_LXDH,SHR_XZQH_DM,YQ_FHRQ,YQ_DDRQ,SHFS_DM,
+				THFL_DM,YKJSFS_DM,YJJSFS_DM, ROWNUM RN
+				FROM HY_DD_HWMX 
+				WHERE DD_DJXH = #ddDjxh# ORDER BY XH DESC) B
+		    WHERE A.DD_DJXH = B.DD_DJXH
+		    AND B.FHR_DJXH = KH.KH_DJXH(+)
+		    AND a.DD_DJXH=#ddDjxh#
+		    AND B.RN = 1
+    </select>
+ 	<!-- 取默认信息 -->
+ 	<select id="selectHyTydMrxx" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyTydglDomain">
+		select a.xzqh_dm fhrXzqhDm,
+			   (select dm.xzqh_jc from dm_xzqh dm where dm.xzqh_dm=a.xzqh_dm) fhrXzqhMc
+		  from qy_zzjg a where a.jgbm= #ssJgbm#
+		</select>
+	<!--插入数据-->
+	<insert id="insertHyTyd"  parameterClass="com.cy.common.bo.HyTyd">
+		insert into HY_DD(DD_DJXH,DDBH,KH_DJXH,KHMC,XDRQ,
+		DDFL_DM,BZ,YXBZ,DJR_CZY_DJXH,DJRQ,
+		DJ_JGBM,SS_JGBM,CJR_CZY_DJXH,CJRQ,XGR_CZY_DJXH,
+		XGRQ,SR_HJ,SR_YJ,SR_XF,SR_HDF,
+		SR_THF,SR_HF,SR_HK,DZZT_DM,HWZT_DM)
+		values(#ddDjxh:NUMERIC#,#ddbh:VARCHAR#,#khDjxh:NUMERIC#,#khmc:VARCHAR#,#xdrq:DATE#,
+		#ddflDm:NUMERIC#,#bz:VARCHAR#,#yxbz:VARCHAR#,#djrCzyDjxh:NUMERIC#,#djrq:DATE#,
+		#djJgbm:NUMERIC#,#ssJgbm:NUMERIC#,#cjrCzyDjxh:NUMERIC#,#cjrq:DATE#,#xgrCzyDjxh:NUMERIC#,
+		#xgrq:DATE#,#srHj:NUMERIC#,#srYj:NUMERIC#,#srXf:NUMERIC#,#srHdf:NUMERIC#,
+		#srThf:NUMERIC#,#srHf:NUMERIC#,#srHk:NUMERIC#,#dzztDm:NUMERIC#,#hwztDm:NUMERIC#)
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateHyTydByKey" parameterClass="com.cy.common.bo.HyTyd">
+		update HY_DD set KH_DJXH=#khDjxh#,DDBH=#ddbh#,KHMC=#khmc#,XDRQ=#xdrq#,
+		BZ=#bz#,XGR_CZY_DJXH=#xgrCzyDjxh#,
+		XGRQ=#xgrq#,SR_HJ=#srHj#,SR_YJ=#srYj#,SR_XF=#srXf#,SR_HDF=#srHdf#,
+		SR_THF=#srThf#,SR_HF=#srHf#,SR_HK=#srHk# where DD_DJXH=#ddDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteHyTydByKey" parameterClass="java.util.Map">
+		update HY_DD set yxbz='N' where DD_DJXH=#ddDjxh#
+    </delete>
+</sqlMap>

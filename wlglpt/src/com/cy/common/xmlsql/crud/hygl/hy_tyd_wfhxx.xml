@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.hygl.dao.HyTydWfhxxMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectHyTydWfhxxByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyTydWfhxxDomain">
+		SELECT A.WFH_DJXH    AS WFHDJXH,
+	       A.HWZT_DM     AS HWZTDM,
+	       A.DD_DJXH     AS DDDJXH,
+	       A.XH          AS XH,
+	       A.HW_SL       AS HWSL,
+	       A.HW_ZL       AS HWZL,
+	       A.HW_TJ       AS HWTJ,
+	       A.FHR_DJXH    AS FHRDJXH,
+	       A.FHR_MC      AS FHRMC,
+	       A.FHR_DZ      AS FHRDZ,
+	       A.FHR_LXR     AS FHRLXR,
+	       A.FHR_LXDH    AS FHRLXDH,
+	       A.FHR_XZQH_DM AS FHRXZQHDM,
+	       A.BBH         AS BBH,
+	       A.YTHCS       AS YTHCS    
+   		FROM HY_DD_WFHXX A  
+   		WHERE A.WFH_DJXH = #wfhDjxh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertHyTydWfhxxFromHwxx"  parameterClass="java.util.Map">
+		insert into HY_DD_WFHXX(WFH_DJXH,HWZT_DM,DD_DJXH,XH,HW_SL,
+		HW_ZL,HW_TJ,FHR_DJXH,FHR_MC,FHR_DZ,
+		FHR_LXR,FHR_LXDH,FHR_XZQH_DM,PCBZ,PC_DJXH,
+		YXBZ)
+		SELECT SEQ_WFH_DJXH.nextval,A.HWZT_DM, B.DD_DJXH, B.XH, B.HW_SL, B.HW_ZL, B.HW_TJ,
+			A.FHR_DJXH, A.FHR_MC, A.FHR_DZ, A.FHR_LXR,A.FHR_LXDH, A.FHR_XZQH_DM,'N',NULL,'Y' 
+			FROM HY_DD A, HY_DD_HWMX B
+			WHERE A.DD_DJXH = B.DD_DJXH
+			AND B.DD_DJXH = #ddDjxh#
+			<dynamic>
+				<isNotEmpty property="xh" prepend="AND">
+					B.XH = #xh#
+				</isNotEmpty>
+			</dynamic>
+	</insert>
+
+	<!--插入数据-->
+	<insert id="insertHyTydWfhxx"  parameterClass="com.cy.common.bo.HyTydWfhxx">
+		<selectKey keyProperty="wfhDjxh" resultClass="long" type="pre"> 
+			select SEQ_WFH_DJXH.nextval as wfhDjxh from dual 
+		</selectKey> 
+		insert into HY_DD_WFHXX(WFH_DJXH,HWZT_DM,DD_DJXH,XH,HW_SL,
+		HW_ZL,HW_TJ,FHR_DJXH,FHR_MC,FHR_DZ,
+		FHR_LXR,FHR_LXDH,FHR_XZQH_DM,PCBZ,PC_DJXH)
+		values(#wfhDjxh:NUMERIC#,#hwztDm:NUMERIC#,#ddDjxh:NUMERIC#,#xh:NUMERIC#,#hwSl:NUMERIC#,
+		#hwZl:NUMERIC#,#hwTj:NUMERIC#,#fhrDjxh:NUMERIC#,#fhrMc:VARCHAR#,#fhrDz:VARCHAR#,
+		#fhrLxr:VARCHAR#,#fhrLxdh:VARCHAR#,#fhrXzqhDm:VARCHAR#,#pcbz:VARCHAR#,#pcDjxh:NUMERIC#)
+	</insert>
+
+	<insert id="insertHyXgjlRz"  parameterClass="com.cy.common.bo.HyXgjlRz">
+		<selectKey keyProperty="id" resultClass="String" type="pre"> 
+			select XGRZ_ID.nextval as id from dual 
+		</selectKey> 
+		INSERT INTO HY_XGJL_RZ(ID, MSWZ, YW_ID, LX, MKMC, CZR_CZY_DJXH, CZRQ)
+		VALUES(#id:NUMERIC#,#mswz:VARCHAR#,#ywId:VARCHAR#,#lx:VARCHAR#,#mkmc:VARCHAR#,#czrCzyDjxh:NUMERIC#,to_date(#czrq:DATE#,'yyyy-MM-dd'))
+	</insert>
+	
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateHyTydWfhxxFromHwxx" parameterClass="java.util.Map">
+        UPDATE HY_DD_WFHXX A
+			SET (A.HW_SL, A.HW_ZL, A.HW_TJ)=
+			(SELECT B.HW_SL, B.HW_ZL, B.HW_TJ FROM HY_DD_HWMX B
+			WHERE A.DD_DJXH = B.DD_DJXH
+			AND A.XH = B.XH)
+			WHERE A.DD_DJXH = #ddDjxh#
+			AND A.XH = #xh#
+    </update>
+    
+    <update id="updateHwztByKey" parameterClass="java.util.Map">
+    	UPDATE HY_DD_WFHXX SET HWZT_DM=#hwztDm# WHERE WFH_DJXH=#wfhDjxh#
+    </update>
+    
+    <update id="updateHyTydWfhxxByKey" parameterClass="com.cy.common.bo.HyTydWfhxx">
+        update HY_DD_WFHXX set WFH_DJXH=#wfhDjxh#,HWZT_DM=#hwztDm#,DD_DJXH=#ddDjxh#,XH=#xh#,HW_SL=#hwSl#,
+		HW_ZL=#hwZl#,HW_TJ=#hwTj#,FHR_DJXH=#fhrDjxh#,FHR_MC=#fhrMc#,FHR_DZ=#fhrDz#,
+		FHR_LXR=#fhrLxr#,FHR_LXDH=#fhrLxdh#,FHR_XZQH_DM=#fhrXzqhDm#,PCBZ=#pcbz#,PC_DJXH=#pcDjxh#
+		where WFH_DJXH=#wfhDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteHyTydWfhxxByKey" parameterClass="java.util.Map">
+		DELETE FROM HY_DD_WFHXX where WFH_DJXH=#wfhDjxh#
+    </delete>
+    
+    <delete id="deleteHyTydWfhxxByHwmxKey" parameterClass="java.util.Map">
+		DELETE FROM HY_DD_WFHXX where DD_DJXH=#ddDjxh# and XH=#xh#
+    </delete>
+    
+    <delete id="deleteHyTydWfhxxByHwmxXhs" parameterClass="java.util.Map">
+		DELETE FROM HY_DD_WFHXX where $xhsIn$
+		 AND DD_DJXH=#ddDjxh# 
+    </delete>
+    
+</sqlMap>

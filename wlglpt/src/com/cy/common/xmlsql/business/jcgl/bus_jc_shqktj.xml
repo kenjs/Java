@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.jcgl.dao.BusJcShQkTjMapper">
+
+	<parameterMap class="java.util.Map" id="shQkTjMap">
+		<parameter property="jgbm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="date" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="fhrDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="fhrMc" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="dataList" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" resultMap="shQkTjResMap"/>
+	</parameterMap>
+	
+	<resultMap class="com.cy.jcgl.domain.JcShQkTjDomain" id="shQkTjResMap">
+		<result property="khMc" column="KHMC"/>
+		<result property="byZl" column="BY_ZL"/>
+		<result property="byTj" column="BY_TJ"/>
+		<result property="byXj" column="BY_XJ"/>
+		<result property="byXf" column="BY_XF"/>
+		<result property="byDj" column="BY_DF"/>
+		<result property="byHf" column="BY_HF"/>
+		<result property="byHk" column="BY_HK"/>
+		<result property="bnZl" column="BNLJ_ZL"/>
+		<result property="bnTj" column="BNLJ_TJ"/>
+		<result property="bnXj" column="BNLJ_XJ"/>
+		<result property="bnXf" column="BNLJ_XF"/>
+		<result property="bnDj" column="BNLJ_DF"/>
+		<result property="bnHf" column="BNLJ_HF"/>
+		<result property="bnHk" column="BNLJ_HK"/>
+	</resultMap>
+
+	<procedure id="queryShQkTjList" parameterMap="shQkTjMap" resultMap="shQkTjResMap">
+		{call P_JCGL_JYQK_SHQK(?,?,?,?,?)}
+	</procedure>
+	
+</sqlMap>

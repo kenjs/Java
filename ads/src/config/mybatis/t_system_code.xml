@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.driver.dao.CommonDao">
+	<select id="getSystemParameter" parameterType="hashmap" resultType="string">
+		select t.value from t_system_code t where t.code = #{code} and t.sp_key = #{key}
+        and param_type = #{paramType} and delete_flag = 0
+	</select>
+
+    <insert id="insertCaptchNoteLog" parameterType="CaptchaNoteLog" keyProperty="id" useGeneratedKeys="true">
+        insert into t_captcha_note_log(note_sended_id,mobilephone,captcha,web_or_app,purpose,create_time)
+        values (#{noteSendedId},#{mobilephone},#{captcha},#{webOrApp},#{purpose},sysdate())
+    </insert>
+
+    <select id="queryLatestCode" parameterType="string" resultType="string">
+        SELECT
+          tcnl.captcha
+        FROM t_captcha_note_log tcnl
+        WHERE tcnl.create_time BETWEEN DATE_ADD(SYSDATE(),INTERVAL -8 HOUR) AND SYSDATE()
+        AND tcnl.web_or_app = 1 AND tcnl.mobilephone = #{code}
+        AND tcnl.purpose = #{purpose}
+        ORDER BY tcnl.create_time DESC LIMIT 1
+    </select>
+
+    <select id="queryCodeForVerify" parameterType="hashmap" resultType="string">
+        SELECT tcnl.captcha FROM t_captcha_note_log tcnl WHERE tcnl.create_time
+        BETWEEN DATE_ADD(SYSDATE(),INTERVAL -8 HOUR) AND SYSDATE()
+        AND tcnl.web_or_app = 1 AND tcnl.mobilephone = #{code}
+        AND tcnl.purpose &lt;&gt; 0
+        ORDER BY tcnl.create_time DESC LIMIT 1
+    </select>
+
+    <insert id="addNoteSendRecord" parameterType="NoteSendRecord" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO t_note_send_record(event_from, note_sended_id, type, telephone, content, return_status, remark, use_for, create_time)
+                VALUES (#{eventFrom}, #{noteSendedId}, #{type}, #{telephone}, #{content}, #{returnStatus}, #{remark}, #{useFor}, sysdate())
+    </insert>
+</mapper>

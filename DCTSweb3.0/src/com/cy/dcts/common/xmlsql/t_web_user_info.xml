@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="WebUserInfo" type="com.cy.dcts.common.bo.WebUserInfo"/><!-- 用户表 -->
+	<typeAlias alias="WebUserInfoDamain" type="com.cy.dcts.common.domain.WebUserInfoDamain"/><!-- 用户表 -->
+	<resultMap class="WebUserInfo" id="web_userInfo_result">
+		<result property="id" column="ID"/>
+		<result property="code" column="CODE"/>
+		<result property="password" column="PASSWORD"/>
+		<result property="name" column="NAME"/>
+		<result property="companyId" column="COMPANY_ID"/>
+		<result property="mobilephone" column="MOBILEPHONE"/>
+		<result property="userQq" column="USER_QQ"/>
+		<result property="email" column="EMAIL"/>
+		<result property="idCardNumber" column="ID_CARD_NUMBER"/>
+		<result property="userImages" column="USER_IMAGES"/>
+		<result property="deletedFlag" column="DELETED_FLAG"/>
+		<result property="loginIp" column="LOGIN_IP"/>
+		<result property="loginTime" column="LOGIN_TIME"/>
+		<result property="enterpriseFlag" column="ENTERPRISE_FLAG"/>
+		<result property="enterpriseTime" column="ENTERPRISE_TIME"/>
+		<result property="panymentFlag" column="PANYMENT_FLAG"/>
+		<result property="panymentTime" column="PANYMENT_TIME"/>
+		<result property="personageFlag" column="PERSONAGE_FLAG"/>
+		<result property="personageTime" column="PERSONAGE_TIME"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="modifyTime" column="MODIFY_TIME"/>
+		<result property="newoldUserType" column="NEWOLD_USER_TYPE"/>
+		<result property="userOrigin" column="USER_ORIGIN"/><!-- 用户来源(0.自己注册，1.导入的)20140716 -->
+		<result property="submitType" column="SUBMIT_TYPE"/>
+		<result property="pactCarDriverFlag" column="PACT_CAR_DRIVER_FLAG"/><!-- 权限标识（0无权限1有权限）20140801 -->
+		
+		<result property="userType" column="USER_TYPE"/><!-- 注册用户类型（物流企业0、发货方1、收货方2） -->
+		<result property="encoded" column="ENCODED"/><!-- 编码代码 -->
+		<result property="parentId" column="PARENT_ID"/><!-- 所属物流企业（用户表）标识（父级0，子级为父级id） -->
+		<result property="deliveryFlag" column="DELIVERY_FLAG"/><!-- 发货确认权限（1有权限，0无权限） -->
+		<result property="arrivalSure" column="ARRIVAL_SURE"/><!--发货确认权限（1有权限，0无权限） -->
+		<result property="receiveSure" column="RECEIVE_SURE"/><!--收货确认权限（1有权限，0无权限） -->
+	</resultMap>
+	
+	
+	<resultMap class="WebUserInfoDamain" id="web_userInfo_domain_dresult">
+		<result property="id" column="ID"/><!-- 主键 -->
+		<result property="code" column="CODE"/><!-- 登录名 -->
+		<result property="password" column="PASSWORD"/><!-- 密码 -->
+		<result property="name" column="NAME"/><!-- 姓名 -->
+		<result property="companyId" column="COMPANY_ID"/><!-- 公司Id -->
+		<result property="companyName" column="COMPANY_NAME"/><!-- 公司名称 -->
+		<result property="companyProvince" column="COMPANY_PROVINCE"/><!-- 公司所在地省 -->
+		<result property="companyCity" column="COMPANY_CITY"/><!-- 公司所在地市  -->
+		<result property="companyCounty" column="COMPANY_COUNTY"/><!-- 公司所在地区  -->
+		<result property="companyAddress" column="COMPANY_ADDRESS"/><!-- 公司所在地详细地址 -->
+		<result property="contactName" column="CONTACT_NAME"/><!-- 联系人 -->
+		<result property="contactTelephone" column="CONTACT_TELEPHONE"/><!-- 固定电话 -->
+		<result property="mobilephone" column="MOBILEPHONE"/><!-- 手机号码 -->
+		<result property="deletedFlag" column="DELETED_FLAG"/><!-- 是否有效 -->
+		<result property="loginIp" column="LOGIN_IP"/><!-- 登录ip -->
+		<result property="loginTime" column="LOGIN_TIME"/><!-- 最后登录时间 -->
+		<result property="createTime" column="CREATE_TIME"/><!-- 创建时间 -->
+		<result property="userType" column="USER_TYPE"/><!-- 注册用户类型（物流企业0、发货方1、收货方2） -->
+		<result property="encoded" column="ENCODED"/><!-- 编码代码 -->
+		<result property="parentId" column="PARENT_ID"/><!-- 所属物流企业（用户表）标识（父级0，子级为父级id） -->
+		<result property="deliveryFlag" column="DELIVERY_FLAG"/><!-- 发货确认权限（1有权限，0无权限） -->
+		<result property="arrivalSure" column="ARRIVAL_SURE"/><!--发货确认权限（1有权限，0无权限） -->
+		<result property="receiveSure" column="RECEIVE_SURE"/><!--收货确认权限（1有权限，0无权限） -->
+	</resultMap>
+	
+	<!-- 查询最大编码 -->
+	<resultMap class="WebUserInfo" id="web_userInfo_result_encoded">
+		<result property="encoded" column="ENCODED"/><!-- 编码 -->
+	</resultMap>
+	
+	<!-- 查询 所有子账号 -->
+	<select id="query_web_user_companyoy_ById" parameterClass="String" resultMap="web_userInfo_domain_dresult">
+		select 
+			t.ID,t.CODE,t.PASSWORD,t.NAME,t.COMPANY_ID,t.MOBILEPHONE,t.DELETED_FLAG,t.LOGIN_IP,t.LOGIN_TIME,
+			date_format(t.CREATE_TIME,'%Y-%m-%d') as CREATE_TIME,t.USER_TYPE,t.ENCODED,t.PARENT_ID,t.DELIVERY_FLAG,t.ARRIVAL_SURE,t.RECEIVE_SURE,
+			t1.COMPANY_NAME,t1.COMPANY_PROVINCE,t1.COMPANY_CITY,t1.COMPANY_COUNTY,t1.COMPANY_ADDRESS,
+			t1.CONTACT_TELEPHONE,t1.CONTACT_NAME
+		from t_web_user_info t,t_company_info t1 
+		where t.COMPANY_ID = t1.ID and t.id = #id# 
+		</select>
+	
+	<!-- 查询 所有子账号 -->
+	<select id="query_son_web_user_info_list" parameterClass="java.util.HashMap" resultMap="web_userInfo_domain_dresult">
+		select 
+			t.ID,t.CODE,t.PASSWORD,t.NAME,t.COMPANY_ID,t.MOBILEPHONE,t.DELETED_FLAG,t.LOGIN_IP,t.LOGIN_TIME,
+			date_format(t.CREATE_TIME,'%Y-%m-%d') as CREATE_TIME,t.USER_TYPE,t.ENCODED,t.PARENT_ID,t.DELIVERY_FLAG,t.ARRIVAL_SURE,t.RECEIVE_SURE,
+			t1.COMPANY_NAME,t1.COMPANY_PROVINCE,t1.COMPANY_CITY,t1.COMPANY_COUNTY,t1.COMPANY_ADDRESS,
+			t1.CONTACT_TELEPHONE,t1.CONTACT_NAME
+		from t_web_user_info t,t_company_info t1 
+		where t.COMPANY_ID = t1.ID
+		<dynamic prepend="and ">
+			<isNotEmpty property="userType" prepend="and ">t.USER_TYPE = #userType#</isNotEmpty>
+			<isNotEmpty property="id" prepend="and ">t.ID = #id#</isNotEmpty>
+			<isNotEmpty property="parentId" prepend="and ">t.PARENT_ID = #parentId#</isNotEmpty>
+			<isNotEmpty property="mobilephone" prepend="and ">t.MOBILEPHONE = #mobilephone#</isNotEmpty>
+			<isNotEmpty property="companyName" prepend="and ">t1.COMPANY_NAME like CONCAT('%',#companyName#,'%')</isNotEmpty>
+			<isNotEmpty property="deletedFlag" prepend="and ">t.DELETED_FLAG = #deletedFlag#</isNotEmpty>
+			<isNotEmpty property="companyProvince" prepend="and ">t1.COMPANY_PROVINCE = #companyProvince#</isNotEmpty>
+			<isNotEmpty property="companyCity" prepend="and ">t1.COMPANY_CITY = #companyCity#</isNotEmpty>
+			<isNotEmpty property="companyCounty" prepend="and ">t1.COMPANY_COUNTY = #companyCounty#</isNotEmpty>
+			<isNotEmpty property="createTimeStart" prepend="and ">date_format(t.CREATE_TIME,'%Y-%m-%d') <![CDATA[>=]]> date_format(#createTimeStart#,'%Y-%m-%d')</isNotEmpty>
+			<isNotEmpty property="createTimeEnd" prepend="and ">date_format(t.CREATE_TIME,'%Y-%m-%d') <![CDATA[<=]]> date_format(#createTimeEnd#,'%Y-%m-%d')</isNotEmpty>
+		</dynamic>
+		order by t.CREATE_TIME DESC
+	</select>
+	
+	
+	<!-- 查询子账号分页查询 -->
+	<select id="query_son_web_user_info_page" parameterClass="java.util.HashMap" resultMap="web_userInfo_domain_dresult">
+		select 
+			t.ID,t.CODE,t.PASSWORD,t.NAME,t.COMPANY_ID,t.MOBILEPHONE,t.DELETED_FLAG,t.LOGIN_IP,t.LOGIN_TIME,
+			date_format(t.CREATE_TIME,'%Y-%m-%d') as CREATE_TIME,t.USER_TYPE,t.ENCODED,t.PARENT_ID,t.DELIVERY_FLAG,t.ARRIVAL_SURE,t.RECEIVE_SURE,
+			t1.COMPANY_NAME,t1.COMPANY_PROVINCE,t1.COMPANY_CITY,t1.COMPANY_COUNTY,t1.COMPANY_ADDRESS,
+			t1.CONTACT_TELEPHONE,t1.CONTACT_NAME
+		from t_web_user_info t,t_company_info t1 
+		where t.COMPANY_ID = t1.ID
+		<dynamic prepend="and ">
+			<isNotEmpty property="userType" prepend="and ">t.USER_TYPE = #userType#</isNotEmpty>
+			<isNotEmpty property="parentId" prepend="and ">t.PARENT_ID = #parentId#</isNotEmpty>
+			<isNotEmpty property="mobilephone" prepend="and ">t.MOBILEPHONE = #mobilephone#</isNotEmpty>
+			<isNotEmpty property="companyName" prepend="and ">t1.COMPANY_NAME like CONCAT('%',#companyName#,'%')</isNotEmpty>
+			<isNotEmpty property="deletedFlag" prepend="and ">t.DELETED_FLAG = #deletedFlag#</isNotEmpty>
+			<isNotEmpty property="companyProvince" prepend="and ">t1.COMPANY_PROVINCE = #companyProvince#</isNotEmpty>
+			<isNotEmpty property="companyCity" prepend="and ">t1.COMPANY_CITY = #companyCity#</isNotEmpty>
+			<isNotEmpty property="companyCounty" prepend="and ">t1.COMPANY_COUNTY = #companyCounty#</isNotEmpty>
+			<isNotEmpty property="createTimeStart" prepend="and ">date_format(t.CREATE_TIME,'%Y-%m-%d') <![CDATA[>=]]> date_format(#createTimeStart#,'%Y-%m-%d')</isNotEmpty>
+			<isNotEmpty property="createTimeEnd" prepend="and ">date_format(t.CREATE_TIME,'%Y-%m-%d') <![CDATA[<=]]> date_format(#createTimeEnd#,'%Y-%m-%d')</isNotEmpty>
+		</dynamic>
+		order by t.CREATE_TIME DESC LIMIT  $curPage$,$pageSize$
+	</select>
+	
+	<!-- 查询子账号分页查询(总条数) -->
+	<select id="query_son_web_user_info_page_count" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+		select COUNT(*) from t_web_user_info t,t_company_info t1 
+		where t.COMPANY_ID = t1.ID
+		<dynamic prepend="and ">
+			<isNotEmpty property="userType" prepend="and ">t.USER_TYPE = #userType#</isNotEmpty>
+			<isNotEmpty property="parentId" prepend="and ">t.PARENT_ID = #parentId#</isNotEmpty>
+			<isNotEmpty property="mobilephone" prepend="and ">t.MOBILEPHONE = #mobilephone#</isNotEmpty>
+			<isNotEmpty property="companyName" prepend="and ">t1.COMPANY_NAME like #companyName#</isNotEmpty>
+			<isNotEmpty property="deletedFlag" prepend="and ">t.DELETED_FLAG = #deletedFlag#</isNotEmpty>
+			<isNotEmpty property="companyProvince" prepend="and ">t1.COMPANY_PROVINCE = CONCAT('%',#companyName#,'%')</isNotEmpty>
+			<isNotEmpty property="companyCity" prepend="and ">t1.COMPANY_CITY = #companyCity#</isNotEmpty>
+			<isNotEmpty property="companyCounty" prepend="and ">t1.COMPANY_COUNTY = #companyCounty#</isNotEmpty>
+			<isNotEmpty property="createTimeStart" prepend="and ">date_format(t.CREATE_TIME,'%Y-%m-%d') <![CDATA[>=]]> date_format(#createTimeStart#,'%Y-%m-%d')</isNotEmpty>
+			<isNotEmpty property="createTimeEnd" prepend="and ">date_format(t.CREATE_TIME,'%Y-%m-%d') <![CDATA[<=]]> date_format(#createTimeEnd#,'%Y-%m-%d')</isNotEmpty>
+		</dynamic>
+	</select>
+	<!-- 根据父级Id，用户类型和编码查询用户 -->
+	<select id="query_web_user_by_parentIdUsertypeEncoded" parameterClass="map"  resultClass="Integer">
+		SELECT id FROM t_web_user_info WHERE user_type = #userType# AND parent_id = #parentId# AND encoded = #encoded# limit 1 
+	</select>
+	<!-- 获取父级最大编码 -->
+	<select id="query_web_user_info_encoded" resultMap="web_userInfo_result_encoded">
+		select t.ENCODED from t_web_user_info t where t.USER_ORIGIN = 0 and t.PARENT_ID=0 ORDER BY t.ENCODED DESC LIMIT 0,1
+	</select>
+	
+	<!-- 获取父级维护的子级最大编码 -->
+	<select id="query_web_user_info_encoded_by_parent_id" parameterClass="java.util.HashMap" resultMap="web_userInfo_result_encoded">
+		select t.ENCODED from t_web_user_info t where t.USER_ORIGIN = 0 and t.PARENT_ID = #parentId# ORDER BY t.ENCODED DESC LIMIT 0,1
+	</select>
+		
+	<!-- 根据登录名查询 -->
+	<select id="query_web_user_info" parameterClass="map" resultMap="web_userInfo_result">
+		select 
+		t.ID,t.CODE,t.PASSWORD,t.NAME,t.COMPANY_ID,t.MOBILEPHONE,t.USER_QQ,t.EMAIL,
+		t.ID_CARD_NUMBER,
+		t.USER_IMAGES,
+		t.DELETED_FLAG,
+		t.LOGIN_IP,
+		t.LOGIN_TIME,
+		t.ENTERPRISE_FLAG,
+		t.ENTERPRISE_TIME,
+		t.PANYMENT_FLAG,
+		t.PANYMENT_TIME,
+		t.PERSONAGE_FLAG,
+		t.PERSONAGE_TIME,
+		t.CREATE_TIME,
+		t.MODIFY_TIME,
+		t.USER_ORIGIN,
+		t.SUBMIT_TYPE,
+		t.PACT_CAR_DRIVER_FLAG,
+		t.NEWOLD_USER_TYPE, 
+		t.USER_TYPE,
+		t.ENCODED,
+		t.PARENT_ID,
+		t.DELIVERY_FLAG,
+		t.ARRIVAL_SURE,
+		t.RECEIVE_SURE
+	    from t_web_user_info t 
+	    where t.USER_ORIGIN = 0 
+		<dynamic prepend="and ">
+			<isNotEmpty property="id" prepend="and ">t.ID = #id#</isNotEmpty>
+			<isNotEmpty property="code" prepend="and ">t.CODE = #code#</isNotEmpty>
+			<isNotEmpty property="mobilephone" prepend="and ">t.MOBILEPHONE = #mobilephone#</isNotEmpty>
+			<isNotEmpty property="companyId" prepend="and ">t.COMPANY_ID = #companyId#</isNotEmpty>
+			<isNotEmpty property="deletedFlag" prepend="and ">t.DELETED_FLAG = #deletedFlag#</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<!-- 根据用户ID查询 -->
+	<select id="query_web_user_info_by_id" parameterClass="String" resultMap="web_userInfo_result">
+		select 
+		t.ID,t.CODE,t.PASSWORD,t.NAME,t.COMPANY_ID,t.MOBILEPHONE,t.USER_QQ,t.EMAIL,
+		t.ID_CARD_NUMBER,
+		t.USER_IMAGES,
+		t.DELETED_FLAG,
+		t.LOGIN_IP,
+		t.LOGIN_TIME,
+		t.ENTERPRISE_FLAG,
+		t.ENTERPRISE_TIME,
+		t.PANYMENT_FLAG,
+		t.PANYMENT_TIME,
+		t.PERSONAGE_FLAG,
+		t.PERSONAGE_TIME,
+		t.CREATE_TIME,
+		t.MODIFY_TIME,
+		t.USER_ORIGIN,
+		t.SUBMIT_TYPE,
+		t.PACT_CAR_DRIVER_FLAG,
+		t.NEWOLD_USER_TYPE,
+		t.USER_TYPE,
+		t.ENCODED,
+		t.PARENT_ID,
+		t.DELIVERY_FLAG,
+		t.ARRIVAL_SURE,
+		t.RECEIVE_SURE 
+		from t_web_user_info t where t.ID = #id# 
+	</select>
+	
+	<!-- 根据用户code查询 -->
+	<select id="query_web_user_info_by_code" parameterClass="String" resultMap="web_userInfo_result">
+		select 
+		t.ID,t.CODE,t.PASSWORD,t.NAME,t.COMPANY_ID,t.MOBILEPHONE,t.USER_QQ,t.EMAIL,
+		t.ID_CARD_NUMBER,
+		t.USER_IMAGES,
+		t.DELETED_FLAG,
+		t.LOGIN_IP,
+		t.LOGIN_TIME,
+		t.ENTERPRISE_FLAG,
+		t.ENTERPRISE_TIME,
+		t.PANYMENT_FLAG,
+		t.PANYMENT_TIME,
+		t.PERSONAGE_FLAG,
+		t.PERSONAGE_TIME,
+		t.CREATE_TIME,
+		t.MODIFY_TIME,
+		t.USER_ORIGIN,
+		t.SUBMIT_TYPE,
+		t.PACT_CAR_DRIVER_FLAG,
+		t.NEWOLD_USER_TYPE,
+		t.USER_TYPE,
+		t.ENCODED,
+		t.PARENT_ID,
+		t.DELIVERY_FLAG,
+		t.ARRIVAL_SURE,
+		t.RECEIVE_SURE
+		from t_web_user_info t where t.USER_ORIGIN = 0 and t.CODE = #code#
+	</select>
+	
+	<!-- 根据用户mobilephone查询 -->
+	<select id="query_web_user_info_by_mobilephone" parameterClass="String" resultMap="web_userInfo_result">
+		select 
+		t.ID,t.CODE,t.PASSWORD,t.NAME,t.COMPANY_ID,t.MOBILEPHONE,t.USER_QQ,t.EMAIL,
+		t.ID_CARD_NUMBER,
+		t.USER_IMAGES,
+		t.DELETED_FLAG,
+		t.LOGIN_IP,
+		t.LOGIN_TIME,
+		t.ENTERPRISE_FLAG,
+		t.ENTERPRISE_TIME,
+		t.PANYMENT_FLAG,
+		t.PANYMENT_TIME,
+		t.PERSONAGE_FLAG,
+		t.PERSONAGE_TIME,
+		t.CREATE_TIME,
+		t.MODIFY_TIME,
+		t.USER_ORIGIN,
+		t.SUBMIT_TYPE,
+		t.PACT_CAR_DRIVER_FLAG,
+		t.NEWOLD_USER_TYPE,
+		t.USER_TYPE,
+		t.ENCODED,
+		t.PARENT_ID,
+		t.DELIVERY_FLAG,
+		t.ARRIVAL_SURE,
+		t.RECEIVE_SURE  
+		from t_web_user_info t where t.USER_ORIGIN = 0 and  t.MOBILEPHONE = #mobilephone#
+	</select>
+	
+	 <!-- 注册web用户信息 -->
+	<insert id="insert_web_user_info" parameterClass="WebUserInfo">
+		INSERT INTO t_web_user_info(
+			CODE,PASSWORD,COMPANY_ID,MOBILEPHONE,LOGIN_IP,LOGIN_TIME,ENTERPRISE_FLAG,ENTERPRISE_TIME,
+			PANYMENT_FLAG,PANYMENT_TIME,PERSONAGE_FLAG,PERSONAGE_TIME,CREATE_TIME,MODIFY_TIME,USER_ORIGIN,USER_TYPE,ENCODED,PARENT_ID,
+			DELIVERY_FLAG,ARRIVAL_SURE,RECEIVE_SURE
+		)VALUES(
+			#code#,
+			#password#,
+			#companyId#,
+			#mobilephone#,
+			#loginIp#,
+			sysdate(),
+			#enterpriseFlag#,
+			sysdate(),
+			#panymentFlag#,
+			sysdate(),
+			#personageFlag#,
+			sysdate(),
+			sysdate(),
+			sysdate(),
+			#userOrigin#,
+			#userType#,
+			#encoded#,
+			#parentId#,
+			#deliveryFlag#,
+			#arrivalSure#,
+			#receiveSure#
+		)
+		<selectKey resultClass="String" keyProperty="id">
+   			select last_insert_id() as id
+  		</selectKey>
+	</insert>
+	
+	<!-- 完善个人信息  -->
+	<update id="modify_web_user_info_by_id" parameterClass="WebUserInfo">
+		UPDATE t_web_user_info T SET 
+			NAME = #name#,
+			USER_QQ = #userQq#,
+			EMAIL = #email#,
+			<dynamic>
+				<isNotEmpty property="idCardNumber">
+					ID_CARD_NUMBER = #idCardNumber#,
+				</isNotEmpty>
+				<isNotEmpty property="userImages">
+					USER_IMAGES = #userImages#,
+				</isNotEmpty>
+			</dynamic>
+			MODIFY_TIME = sysdate()
+		 WHERE T.ID = #id#
+	</update>
+	
+	<!-- 个人认证  -->
+	<update id="modify_web_user_info_personageflag_by_id" parameterClass="WebUserInfo">
+		UPDATE t_web_user_info T SET 
+			PERSONAGE_FLAG = #personageFlag#,
+			PERSONAGE_TIME = sysdate()
+		 WHERE T.ID = #id#
+	</update>
+	
+	<!-- 企业认证  -->
+	<update id="modify_web_user_info_enterpriseflag_by_id" parameterClass="WebUserInfo">
+		UPDATE t_web_user_info T SET 
+			ENTERPRISE_FLAG = #enterpriseFlag#,
+			SUBMIT_TYPE = #submitType# 
+		 WHERE T.ID = #id#
+	</update>
+	
+	<!-- 缴费认证  -->
+	<update id="modify_web_user_info_panymentflag_by_id" parameterClass="WebUserInfo">
+		UPDATE t_web_user_info T SET 
+			PANYMENT_FLAG = #panymentFlag#,
+			PANYMENT_TIME = sysdate()
+		 WHERE T.ID = #id#
+	</update>
+	
+	<!-- 修改登陆密码  -->
+	<update id="modify_web_user_info_password_by_id" parameterClass="WebUserInfo">
+		UPDATE t_web_user_info T SET 
+			PASSWORD = #password#,
+			MODIFY_TIME = sysdate()
+		 WHERE T.ID = #id#
+	</update>
+	
+	<!-- 修改认证手机号码  -->
+	<update id="modify_web_user_info_mobilephone_by_id" parameterClass="WebUserInfo">
+		UPDATE t_web_user_info T SET 
+			MOBILEPHONE = #mobilephone#,
+			MODIFY_TIME = sysdate()
+		 WHERE T.ID = #id#
+	</update>	
+	
+	<!-- 修改用户标识 -->
+	<update id="iBatisUpdateFlagById" parameterClass="map">
+		UPDATE t_web_user_info SET NEWOLD_USER_TYPE = 0,MOBILEPHONE = #code# WHERE ID = #id#
+	</update>
+	
+	<!-- 修改用户编码标识 -->
+	<update id="modify_web_user_info_encoded_by_id" parameterClass="WebUserInfo">
+		UPDATE t_web_user_info SET ENCODED = #encoded# WHERE ID = #id#
+	</update>
+	
+	<!-- 修改用户编码标识 -->
+	<update id="modify_son_web_user_info_by_id" parameterClass="WebUserInfo">
+		UPDATE t_web_user_info SET 
+		DELIVERY_FLAG = #deliveryFlag#,
+		ARRIVAL_SURE = #arrivalSure#,
+		RECEIVE_SURE = #receiveSure#,
+		MODIFY_TIME = sysdate()
+		WHERE ID = #id# and PARENT_ID = #parentId#
+	</update>
+</sqlMap>

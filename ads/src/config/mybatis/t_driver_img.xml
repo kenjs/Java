@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.driver.dao.DriverImgDao">
+    <resultMap id="driverImgMap" type="DriverImgDomain">
+        <result column="id" property="id" />
+        <result column="driver_id" property="driverId" />
+        <result column="img_path" property="imgPath" />
+        <result column="img_type" property="imgType" />
+        <result column="submit_type" property="submitType" />
+        <result column="submit_time" property="submitTime" />
+     </resultMap>
+
+    <select id="selectDriverImg" parameterType="DriverImg" resultMap="driverImgMap">
+        SELECT * FROM t_driver_img WHERE driver_id = #{driverId} and img_type = #{imgType}
+    </select>
+
+    <select id="selectDriverImgByDriverId" parameterType="string" resultMap="driverImgMap">
+        SELECT * FROM t_driver_img WHERE driver_id = #{driverId} order by upload_time desc
+    </select>
+
+    <insert id="insertDriverImg" parameterType="DriverImg" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO t_driver_img(driver_id, img_path, img_type, submit_type, submit_time) VALUES
+            (#{driverId}, #{imgPath}, #{imgType}, #{submitType}, #{submitTime})
+    </insert>
+
+    <update id="updateDriverImg" parameterType="DriverImg">
+        UPDATE t_driver_img
+        <set>
+            <if test="imgPath != null and imgPath != ''">
+                img_path = #{imgPath},
+            </if>
+            <if test="imgType != null and imgType != ''">
+                img_type = #{imgType},
+            </if>
+            <if test="submitType != null and submitType != ''">
+                submit_type = #{submitType},
+            </if>
+            <if test="submitTime != null and submitTime != ''">
+                submit_time = #{submitTime}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

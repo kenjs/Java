@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<!-- 运单操作日志 -->
+<sqlMap >
+ <typeAlias type="tf56.contract.domain.WaybillLog" alias="waybillLog"/>
+ <resultMap id="waybillLogFieldMap" class="waybillLog">
+  <result column="waybillLogId" property="waybilllogid" jdbcType="VARCHAR" />   <!-- 编码Id -->
+  <result column="waybillId" property="waybillid" jdbcType="VARCHAR" />   <!-- 运单Id -->
+  <result column="waybillNumber" property="waybillnumber" jdbcType="VARCHAR" />   <!-- 运单编号 -->
+  <result column="status" property="status" jdbcType="VARCHAR" />   <!-- 状态 -->
+  <result column="trace" property="trace" jdbcType="VARCHAR" />   <!-- 跟踪详情 -->
+  <result column="inputDate" property="inputdate" jdbcType="VARCHAR" />   <!-- 输入日期 -->
+  <result column="inputMan" property="inputman" jdbcType="VARCHAR" />   <!-- 输入人 -->
+ </resultMap>
+
+ <!-- 新增记录 -->
+ <insert id="iBatisInsertWaybillLog" parameterClass="java.util.HashMap">
+  insert into WaybillLog (waybillId,waybillNumber,status,trace,inputDate,inputMan)
+  select waybillId,waybillNumber,#status#,#trace#,#inputDate#,#inputMan# from Waybill where waybillId=#waybillid#
+	  <selectKey resultClass="String" keyProperty="waybilllogid">
+	   select last_insert_id() as id
+	  </selectKey>
+ </insert>
+
+ <!-- 删除用户对象 -->
+ <delete id="iBatisDeleteWaybillLog" parameterClass="java.util.HashMap">
+  delete from WaybillLog where waybillLogId=#waybilllogid#
+ </delete>
+
+ <!-- 更新用户对象 -->
+ <update id="iBatisUpdateWaybillLog" parameterClass="waybillLog">
+  update WaybillLog set waybillId=#waybillid:VARCHAR#,waybillNumber=#waybillnumber:VARCHAR#,status=#status:VARCHAR#,trace=#trace:VARCHAR#,inputDate=#inputdate:VARCHAR#,inputMan=#inputman:VARCHAR# where waybillLogId=#waybilllogid#
+ </update>
+
+ <!-- 根据id获得用户对象, 返回bean -->
+ <select id="iBatisSelectWaybillLogById" parameterClass="java.util.HashMap" resultClass="waybillLog">
+  select * from WaybillLog where waybillLogId=#waybilllogid# limit 20
+ </select> 
+
+ <!-- 获取多条记录查询列表 返回List -->
+ <select id="iBatisSelectWaybillLogList" parameterClass="java.util.HashMap" resultClass="waybillLog">
+  select * from WaybillLog order by waybillLogId desc limit 20
+ </select>
+ 
+ <!-- 获取多条记录查询列表 返回List根据运单id -->
+ <select id="iBatisSelectWaybillLogListByWaybillId" parameterClass="java.util.HashMap" resultClass="waybillLog">
+	 SELECT l.waybillLogId,l.waybillId,l.waybillNumber,l.`status`,l.trace,l.inputMan,DATE_FORMAT(l.inputDate,"%Y-%m-%d %H:%i:%s") inputdate
+		FROM WaybillLog l WHERE l.waybillId = #waybillid# ORDER BY inputdate DESC
+ </select>
+ <!-- [验证是否存在] 
+ <select id="iBatisSelectCount" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+  select count(*) from WaybillLog where waybillLogId=#waybilllogid#
+ </select> 
+ -->
+</sqlMap>

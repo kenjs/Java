@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.zyegl.dao.HyWlssdjMapper">
+
+   
+
+	<!--插入数据-->
+	<insert id="insertHyWlssdjMx"  parameterClass="com.cy.common.bo.HyWlssdjMx">
+		insert into hy_wlssdj_mx(wlss_djxh,xh,wlssclfs_dm,je,
+		yxbz,wlssyy_wh_xh,pcyg_czy_djxh)
+		values(#wlssDjxh:NUMERIC#,#xh:NUMERIC#,#wlssclfsDm:NUMERIC#,#je:NUMERIC#,
+		#yxbz:VARCHAR#,#wlssyyWhXh:NUMERIC#,#pcygCzyDjxh:NUMERIC#)
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateHyWlssdjMxByKey" parameterClass="com.cy.common.bo.HyWlssdjMx">
+       update hy_wlssdj_mx 
+       set wlss_djxh=#wlssDjxh#,xh=#xh#,wlssclfs_dm=#wlssclfsDm#,je=#je#,yxbz=#yxbz#,PCYG_CZY_DJXH=#pcygCzyDjxh#,wlssyy_wh_xh=#wlssyyWhXh#
+       where WLSS_DJXH=#wlssDjxh#
+       and xh=#xh#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteHyWlssdjMxByKey" parameterClass="java.util.Map">
+		delete from hy_wlssdj_mx  where WLSS_DJXH=#wlssDjxh# and xh=#xh#
+    </delete>
+</sqlMap>

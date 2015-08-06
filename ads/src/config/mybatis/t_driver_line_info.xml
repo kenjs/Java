@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.driver.dao.DriverLineInfoDao">
+	<!-- 新增司机线路 -->
+	<insert id="insertDriverLineInfo" parameterType="DriverLineInfoBo" useGeneratedKeys="true" keyProperty="id">
+		insert into t_driver_line_info (START_PROVINCE,START_CITY,END_PROVINCE,END_CITY,DRIVER_ID,START,LINE_TYPE,CREATE_TIME,MODIFY_TIME)
+		values(#{startProvince},#{startCity},#{endProvince},#{endCity},#{driverId},0,#{lineType},sysdate(),sysdate())
+	</insert>
+	<!-- 修改司机线路 -->
+	<update id="updateDriverLineInfo" parameterType="DriverLineInfoBo">
+		update t_driver_line_info set 
+			START_PROVINCE=#{startProvince},
+			START_CITY=#{startCity},
+			END_PROVINCE=#{endProvince},
+			END_CITY=#{endCity},
+			MODIFY_TIME=sysdate()
+		where id=#{id}
+	</update>
+	<!-- 删除司机线路 -->
+	<delete id="deleteDriverLineInfo" parameterType="string">
+		update t_driver_line_info set START = 1 where id=#{id}
+	</delete>
+	<!-- 根据司机id查找司机线路 -->
+	<select id="selectDriverLineInfoList" parameterType="string" resultType="DriverLineInfoDomain">
+		select ID as id,START_PROVINCE as startProvince,START_CITY as startCity,END_PROVINCE as endProvince,END_CITY as endCity
+		from t_driver_line_info where DRIVER_ID = #{driverId} and START = 0 order by MODIFY_TIME desc limit 3
+	</select>
+	<!-- 检索司机线路数目 -->
+	<select id="selectDriverLineInfoCount" parameterType="string" resultType="integer">
+		select count(id) from t_driver_line_info where DRIVER_ID = #{driverId} and START = 0
+	</select>
+</mapper>

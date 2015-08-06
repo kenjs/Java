@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.xtgl.dao.BusXtglJsqxwhMapper">
+
+ 	<select id="selectXtGnmkMenuByXtflDm" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.XtGnmkMenuDomain">
+		
+		select A.MENU_DM as menuDm,A.MENU_MC as menuMc,A.NODE as node,A.URL as url,A.URL_HELP as urlHelp,
+			   A.PARMBZ as parmbz,A.XYBZ as xybz,A.XTFL_DM as xtflDm,A.PXXH as pxxh,A.SJ_MENU_DM as sjMenuDm,
+			   A.REMARK as remark from V_MENU A WHERE A.XYBZ='Y'
+    	 AND ((A.MENU_DM IN (select GNMK_DM from GL_QY_GNMK WHERE QY_ZCXH = #zcxh#) AND NODE = 'N') OR NODE = 'Y')
+		ORDER BY A.PXXH
+    </select>
+    
+    <select id="selectXtJsGnmkByJsDm" parameterClass="java.util.Map" resultClass="com.cy.xtgl.domain.XtJsGnmkDomain">
+   	 	select JS_DJXH as jsDm,GNMK_DM as gnmkDm from QY_JS_GNMK where 1=1
+   	 	<dynamic>
+   	 		<isNotEmpty property="jsDm" prepend="and">
+   	 			JS_DJXH=#jsDm#
+   	 		</isNotEmpty>
+   	 	</dynamic>
+    </select>
+   
+    <delete id="deleteXtJsGnmk" parameterClass="java.util.Map">
+		delete QY_JS_GNMK where JS_DJXH=#jsDm# and GNMK_DM in ($gnmkDm$)
+    </delete>
+    
+    <select id="selectXtJsGnmkByGnmkDm" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.XtJsGnmkDomain">
+		select a.JS_DJXH as jsDm,a.GNMK_DM as gnmkDm from QY_JS_GNMK a  where a.GNMK_DM=#gnmkDm#
+    </select>
+    
+    <select id="getJsmcByDjxh" parameterClass="com.cy.xtgl.domain.XtJsGnmkDomain" resultClass="com.cy.xtgl.domain.QyJsDomain">
+		SELECT A.JS_DJXH AS jsDjxh,A.JS_MC AS jsMc from qy_js A
+			  where A.ss_jgbm=#ssJgbm# and A.yxbz='Y' and A.qybz='Y' order by JS_DJXH
+	</select>
+	
+	<delete id="deleteXtJsGnmkByGnmkDm" parameterClass="java.util.Map">
+		delete QY_JS_GNMK where GNMK_DM=#gnmkDm# and JS_DJXH in($jsDm$)
+    </delete>
+</sqlMap>

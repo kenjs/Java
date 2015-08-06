@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap >
+   <typeAlias type="tf56.contract.domain.ContractAttribute" alias="contractaribute"/>
+   <insert id="iBatisInsertContractAttribute" parameterClass="java.util.HashMap">
+   		insert into ContractAttribute (fromPartyId,ShipperOrSubContractor,toPartyId,attributeName,attributeValue)
+   			values(#frompartyid#,#shipperorsubcontractor#,#topartyid#,#attributename#,#attributevalue#)
+   			  <selectKey resultClass="String" keyProperty="contractattributeid">
+			  	 select last_insert_id() as contractattributeid
+			  </selectKey>
+   </insert>
+   <update id="iBatisUpdateContractAttribute" parameterClass="java.util.HashMap">
+   		update ContractAttribute set attributevalue=#attributevalue#
+   			where fromPartyId=#frompartyid# and toPartyId=#topartyid#
+   			<dynamic prepend="and">
+	   			 <isEqual property="attributename" prepend="" compareValue="业务员">
+	   				attributename=#attributename#
+	   			</isEqual>
+	   			<isEqual property="attributename" prepend="" compareValue="客户号">
+	   				attributename=#attributename#
+	   			</isEqual>
+	   			<isEqual property="attributename" prepend="" compareValue="车辆数量">
+	   				attributename=#attributename#
+	   			</isEqual>
+	   			<isEqual property="attributename" prepend="" compareValue="投保金额">
+	   				attributename=#attributename#
+	   			</isEqual>
+	   			<isEqual property="attributename" prepend="" compareValue="年营业额">
+	   				attributename=#attributename#
+	   			</isEqual>
+	   			<isEqual property="attributename" prepend="" compareValue="网点数量">
+	   				attributename=#attributename#
+	   			</isEqual>
+	   			<isEqual property="attributename" prepend="" compareValue="年运输量">
+	   				attributename=#attributename#
+	   			</isEqual>
+	   			<isEqual property="attributename" prepend="" compareValue="是否使用系统">
+	   				attributename=#attributename#
+	   			</isEqual>
+	   			<isEqual property="attributename" prepend="" compareValue="优势行业">
+	   				attributename=#attributename#
+	   			</isEqual>
+	   			<isEqual property="attributename" prepend="" compareValue="经营范围">
+	   				attributename=#attributename#
+	   			</isEqual>
+   			</dynamic>
+   </update>
+   
+   <select id="iBatisSelectContractAttributeList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+   		select contractAttributeId,attributeName,attributeValue from ContractAttribute where fromPartyId = #frompartyid# and ShipperOrSubContractor = #shipperorsubcontractor# and toPartyId = #topartyid#
+   		<dynamic>
+	  		<isNotEmpty prepend="AND" property="attributename">  
+	       		attributeName = #attributename#
+	  		</isNotEmpty>
+  		</dynamic>
+   </select>
+   <!-- 验证是否客户号是否重复    wei.huang -->
+   <select id="iBatisSelectClientNumberCount" parameterClass="java.util.HashMap" resultClass="java.lang.String">
+   	select count(*) from ContractAttribute where fromPartyId = #frompartyid# and ShipperOrSubContractor = '1' and toPartyId = #topartyid# and attributeName='客户号' and attributeValue=#attributevalue#
+   	<dynamic>
+	  	<isNotEmpty prepend="AND" property="contractattributeid">  
+	       	contractAttributeId != #contractattributeid#
+	  	</isNotEmpty>
+  	</dynamic>
+   </select>
+   <!-- 变更银行保理状态 -->
+   <update id="iBatisUpdateFactoringStatus" parameterClass="java.util.HashMap">
+   		update ContractAttribute set attributevalue=#status#
+   	     where fromPartyId=#partyid# and toPartyId=#topartyid# 
+   		   and shipperOrSubContractor = 0 and attributename='银行保理状态'
+   </update>
+   <update id="iBatisUpdateFactoringInformation" parameterClass="java.util.HashMap">
+   		update ContractAttribute set attributevalue=#attributevalue# where fromPartyId=#frompartyid# and toPartyId=#topartyid# 
+   		and shipperOrSubContractor = 0 and attributename=#attributename#
+   </update>
+   <!-- 检验分包商是否已经加入银行保理 -->
+   <select id="iBatisCheckExistsBank" parameterClass="java.util.HashMap" resultClass="java.lang.String">
+   		select count(*) from ContractAttribute where fromPartyId=#partyid# and toPartyId=#topartyid#
+		and shipperOrSubContractor=0 and attributeName in('银行保理状态','银行监管账号','组织机构代码证')
+   </select>
+   <!-- 查询分包商的银行保理状态 author:wei.huang -->
+   <select id="iBatisSelectBankFactoringStatus" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+   		select attributeValue as status from ContractAttribute,(SELECT partyId,inOutPartyId,inOutPartyIdSec,inOrOut from SettleBill where settleBillId=#settlebillid:VARCHAR#) as temp
+	WHERE ContractAttribute.fromPartyId=temp.partyId and ContractAttribute.toPartyId=temp.inOutPartyId and shipperOrSubContractor='0' and attributeName='银行保理状态'
+   </select>
+</sqlMap>
+

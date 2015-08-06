@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.hygl.dao.BusHyglHykpsqshMapper">
+
+    <parameterMap class="java.util.Map" id="kpsqshParMap">
+		<parameter property="czyDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="shbz" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="rqQ" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="rqZ" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="dataList" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" resultMap="kpsqshResMap"/>
+	</parameterMap>
+	
+	<resultMap class="com.cy.hygl.domain.HyKpsqshDomain" id="kpsqshResMap">
+		<result property="xh" column="XH"/>
+		<result property="wsSpxh" column="WS_SPXH"/>
+		<result property="spxh" column="SPXH"/>
+		<result property="jdxh" column="JDXH"/>
+		<result property="fsthbz" column="FSTHBZ"/>
+		<result property="fsrMc" column="FSR_MC"/>
+		<result property="fsrq" column="FSRQ"/>
+		<result property="spjzsj" column="SPJZSJ"/>
+		<result property="cqbz" column="CQBZ"/>
+		<result property="sprMc" column="SPR_MC"/>
+		<result property="sprq" column="SPRQ"/>
+		<result property="spjg" column="SPJG"/>
+		<result property="kpsqfsDm" column="KPSQFS_DM"/>
+		<result property="kpsqfsMc" column="KPSQFS_MC"/>
+		<result property="khDjxh" column="KH_DJXH"/>
+		<result property="khMc" column="KH_MC"/>
+		<result property="sqKpjeHj" column="SQ_KPJE_HJ"/>
+		<result property="sqKprq" column="SQ_KPRQ"/>
+		<result property="bzsm" column="BZSM"/>
+		<result property="djrCzyDjxh"  column="DJR_CZY_DJXH"/>
+		<result property="djrMc" column="DJR_MC"/>
+		<result property="djJgbm" column="DJ_JGBM"/>
+		<result property="ssJgbm" column="SS_JGBM"/>
+		<result property="bmmc" column="BMMC"/>
+		<result property="dwmc" column="DWMC"/>
+	</resultMap>
+	
+	<procedure id="queryHyKpsqshList" parameterMap="kpsqshParMap" resultMap="kpsqshResMap">
+		{call P_HYGL_JSGL_KPSQSH_CX(?,?,?,?,?)}
+	</procedure>
+    
+  
+</sqlMap>

@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.hygl.dao.BushyxxglMapper">
+
+	<parameterMap class="java.util.Map" id="hyPcxxglMap">
+		<parameter property="pcJgbm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="dwbmBz" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="pcrCzyDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="fhrDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="fhrMc" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="pcrqq" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="pcrqz" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="cyrClhm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="cyrSjxm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="dingdan" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="pcdh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="pcfsDm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="pageNum" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+		<parameter property="pageSize" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+		<parameter property="pageCount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+		<parameter property="reccount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+		<parameter property="dataList" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" resultMap="hyPcxxglResMap"/>
+	</parameterMap>
+	
+	<resultMap class="com.cy.hygl.domain.HyPcxxglDomain" id="hyPcxxglResMap">
+		<result property="pageXh" column="PAGE_XH"/>
+		<result property="pcDjxh" column="PC_DJXH"/>
+		<result property="pcdh" column="PCDH"/>
+		<result property="pcrq" column="PCRQ"/>
+		<result property="pcfsDm" column="PCFS_DM"/>
+		<result property="pcfsMc" column="PCFS_MC"/>
+		<result property="zhuangche" column="ZCFS_DM"/>
+		<result property="zcfxMc" column="ZCFS_MC"/>
+		<result property="cyrClhm" column="CYR_CLHM"/>
+		<result property="cyrGchm" column="CYR_GCHM"/>
+		<result property="cyrSjxm" column="CYR_SJXM"/>
+		<result property="yfHj" column="YF_HJ"/>
+		<result property="yfYfyf" column="YF_YFYF"/>
+		<result property="yfYj" column="YF_YJ"/>
+		<result property="yfXxf" column="YF_XXF"/>
+		<result property="yfSjs" column="YF_SJS"/>
+		<result property="yfHdyf" column="YF_HDYF"/>
+		<result property="yfHdf" column="YF_HDF"/>
+		<result property="yfZjf" column="YF_ZJF"/>
+		<result property="zrbmDm" column="ZRBM_DM"/>
+		<result property="zrbmMc" column="ZRBM_MC"/>
+		<result property="fhrXzqhDm" column="FHR_XZQH_DM"/>
+		<result property="fhrXzqhMc" column="FHR_XZQH_MC"/>
+		<result property="shrXzqhDm" column="SHR_XZQH_DM"/>
+		<result property="shrXzqhMc" column="SHR_XZQH_MC"/>
+		<result property="hwMc" column="HWMC"/>
+		<result property="hwbz" column="BZ"/>
+		<result property="sl" column="SL"/>
+		<result property="zl" column="ZL"/>
+		<result property="tj" column="TJ"/>
+		<result property="jssl" column="JS_SL"/>
+		<result property="fhrMc" column="FHR_MC"/>
+		<result property="sfdMc" column="FHR_DZ"/>
+		<result property="yqFhrq" column="YQ_FHRQ"/>
+		<result property="shrMc" column="SHR_MC"/>
+		<result property="mddMc" column="SHR_DZ"/>
+		<result property="yqDdrq" column="YQ_DDRQ"/>
+		<result property="pcrCzyDjxh" column="PCR_CZY_DJXH"/>
+		<result property="pcrq" column="PCRQ"/>
+		<result property="pcrMc" column="PCR_MC"/>
+		<result property="pcJgbm" column="PC_JGBM"/>
+		<result property="pcJgbmMc" column="PC_JGMC"/>
+		<result property="ssJgbm" column="SS_JGBM"/>
+		<result property="ssJgbmMc" column="SS_JGMC"/>
+		<result property="fhrMc" column="FHR_MC"/>
+		<result property="dingdan" column="DDBH"/>
+		<result property="ddDjxh" column="DD_DJXH"/>
+		<result property="xh" column="XH"/>
+		<result property="shbgBz" column="SHBG_BZ"/>
+		<result property="wfhDjxh" column="WFH_DJXH"/>
+		<result property="wsspztMc" column="WSSPZT_MC"/>
+		<result property="wsspztDm" column="WSSPZT_DM"/>
+		<result property="wsSpxh" column="WS_SPXH"/>
+		<result property="yfhjyf" column="YFHJYF"/>
+		<result property="srhjdf" column="SRHJDF"/>
+		<result property="zcZl" column="ZCZL"/>
+		<result property="zcTj" column="ZCTJ"/>
+		<result property="zs" column="ZS"/>
+		<result property="zcHj" column="ZC_HJ"/>
+		<result property="zcYj" column="ZC_YJ"/>
+		<result property="zcXf" column="ZC_XF"/>
+		<result property="zcDf" column="ZC_DF"/>
+		<result property="zcHk" column="ZC_HK"/>
+		<result property="pchwClfsDm" column="PCHW_CLFS_DM"/>
+	</resultMap>
+
+	<procedure id="queryHyPcxxglPage" parameterMap="hyPcxxglMap" resultMap="hyPcxxglResMap">
+		{call P_HYGL_DDGL_PCXXGL(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}
+	</procedure>
+	
+	<parameterMap class="java.util.Map" id="pcxxHxclParMap">
+		<parameter property="pcDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="rtnCode" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+		<parameter property="rtnMess" javaType="java.lang.String" jdbcType="VARCHAR" mode="OUT"/>
+	</parameterMap>
+	
+	<parameterMap class="java.util.Map" id="pcxxDelParMap">
+		<parameter property="pcDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="czyDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="rtnCode" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+		<parameter property="rtnMess" javaType="java.lang.String" jdbcType="VARCHAR" mode="OUT"/>
+	</parameterMap>
+	
+	<procedure id="callPHyglDdglPcxxHxcl" parameterMap="pcxxHxclParMap">
+		{call P_HYGL_DDGL_PCXX_HXCL(?,?,?)}
+	</procedure>
+	
+	<procedure id="callPHyglDdglPcxxDelete" parameterMap="pcxxDelParMap">
+		{call P_HYGL_DDGL_PCXX_DELETE(?,?,?,?)}
+	</procedure>
+	
+	<parameterMap class="java.util.Map" id="pcxxSjsParMap">
+		<parameter property="pcDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="pchwLsxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="yfSjs" javaType="java.lang.Double" jdbcType="FLOAT" mode="OUT"/>
+		<parameter property="bz" javaType="java.lang.String" jdbcType="VARCHAR" mode="OUT"/>
+	</parameterMap>
+	
+	<procedure id="queryPcxxSjsInitVal" parameterMap="pcxxSjsParMap">
+		{call P_HYGL_DDGL_PCXX_GETSJS(?,?,?,?)}
+	</procedure>
+	
+	<!-- ZC_HDF,ZC_THF若为‘送货到站’或‘中转配送’或‘转包’则置到付，若为送货到门，则置司机收 -->
+	<insert id="saveWfhxx4Pc" parameterClass="java.util.Map">
+		insert into HY_PC_HWXX_TMP(PCHW_LSXH,PC_DJXH,WFH_DJXH,RQ,
+				PCHW_CLFS_DM,HW_SL,HW_ZL,HW_TJ,JS_SL,BBH,HDBH,
+				ZRBM_DM, ZRBM_DJXH,ZRBM_DZ,ZRBM_LXR,ZRBM_LXDH,ZRBM_XZQH_DM,
+        		ZC_HDF,ZC_THF,YF_SJS,ZC_HJ, ZC_YJ, ZC_XF,ZC_HF,ZC_HK)
+          SELECT #lsxh:NUMERIC#,'',C.WFH_DJXH,SYSDATE,
+          		#pchwClfsDm#,C.HW_SL,C.HW_ZL,C.HW_TJ,C.JS_SL,C.BBH,B.HDBH,
+          		#zrbmDm:VARCHAR#, #zrbmDjxh:NUMERIC#,#zrbmDz:VARCHAR#,#zrbmLxr:VARCHAR#,#zrbmLxdh:VARCHAR#,#zrbmXzqhDm:VARCHAR#,
+          	  CASE WHEN (#pchwClfsDm# = '12' OR #pchwClfsDm# = '22' OR #pchwClfsDm# = '32' OR #pchwClfsDm# = '42') AND B.SHFS_DM = '2' 
+                THEN B.SR_HDF - NVL((SELECT SUM(NVL(PC.ZC_HDF,0)+NVL(PC.YF_SJS,0)) FROM HY_PC_HWXX PC WHERE PC.YXBZ = 'Y' AND PC.DD_DJXH = B.DD_DJXH AND PC.XH = B.XH),0)
+                ELSE 0 END,
+              CASE WHEN (#pchwClfsDm# = '12' OR #pchwClfsDm# = '22' OR #pchwClfsDm# = '32' OR #pchwClfsDm# = '42') AND B.SHFS_DM = '1'  
+                THEN B.SR_THF - NVL((SELECT SUM(NVL(PC.ZC_THF,0)+NVL(PC.YF_SJS,0)) FROM HY_PC_HWXX PC WHERE PC.YXBZ = 'Y' AND PC.DD_DJXH = B.DD_DJXH AND PC.XH = B.XH),0)
+                ELSE 0 END,
+              CASE WHEN #pchwClfsDm# = '21' OR #pchwClfsDm# = '31' 
+                THEN B.SR_HDF+B.SR_THF - NVL((SELECT SUM(NVL(PC.ZC_THF,0) +NVL(PC.ZC_HDF,0)+ NVL(PC.YF_SJS,0)) FROM HY_PC_HWXX PC WHERE PC.YXBZ = 'Y' AND PC.DD_DJXH = B.DD_DJXH AND PC.XH = B.XH),0)
+                ELSE 0 END,
+              #zcHj:NUMERIC#,#zcYj:NUMERIC#,#zcXf:NUMERIC#,#zcHf:NUMERIC#,#zcHk:NUMERIC#
+          FROM HY_DD_WFHXX C,HY_DD_HWMX B
+          WHERE B.DD_DJXH = C.DD_DJXH
+          AND B.XH = C.XH
+          AND $xhsIn$
+          AND NOT EXISTS (
+              SELECT 1 FROM HY_PC_HWXX_TMP TMP
+	              WHERE TMP.PCHW_LSXH = #lsxh:NUMERIC#
+	              AND TMP.WFH_DJXH = C.WFH_DJXH  
+              UNION ALL
+              SELECT 1 FROM HY_PC_HWXX PCHW
+				WHERE PCHW.PC_DJXH = #pcDjxh#
+				AND PCHW.WFH_DJXH = C.WFH_DJXH           
+          )
+	</insert>
+	
+	<insert id="bakPcHwxx2Tmp" parameterClass="java.util.Map">
+		INSERT INTO HY_PC_HWXX_TMP(PCHW_LSXH,PC_DJXH,WFH_DJXH,RQ,JS_SL,HW_SL,HW_ZL,HW_TJ,
+				PCHW_CLFS_DM,
+				ZRBM_DM, ZRBM_DJXH, ZC_HJ, ZC_YJ, ZC_XF,ZC_HDF,
+       			ZC_THF, ZC_HF, ZC_HK)
+			SELECT #lsxh:NUMERIC#, '',A.WFH_DJXH, SYSDATE, B.JS_SL,B.HW_SL, B.HW_ZL, B.HW_TJ,
+				B.PCHW_CLFS_DM,
+				B.ZRBM_DM, B.ZRBM_DJXH, B.ZC_HJ, B.ZC_YJ, B.ZC_XF,B.ZC_HDF,
+       			B.ZC_THF, B.ZC_HF, B.ZC_HK
+			FROM HY_DD_WFHXX A, HY_PC_HWXX B
+			WHERE A.DD_DJXH = B.DD_DJXH
+			AND A.XH = B.XH
+			AND A.FHR_MC = B.FHR_MC
+			AND A.FHR_DZ = B.FHR_DZ
+			AND B.PC_DJXH = #pcDjxh#
+	</insert>
+	
+	<select id="queryPcHwxxByLsxhAndPcxh" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyTydWfhxxDomain">
+		SELECT D.PCHW_LSXH pchwLsxh, null pcDjxh,B.DD_DJXH ddDjxh,B.WFH_DJXH wfhDjxh,A.DDBH,B.FHR_MC fhrMc,
+				(CASE WHEN D.ZRBM_DM = 2 THEN (SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = D.ZRBM_DJXH) 
+	                WHEN D.ZRBM_DM = 3 THEN (SELECT FBSJC FROM QY_FBS_DJXX DM WHERE DM.FBS_DJXH = D.ZRBM_DJXH)
+	                ELSE ''
+	           		END) zrbmMc,
+               B.HWZT_DM hwztDm,(SELECT HWZT_MC FROM DM_HWZT DM WHERE DM.HWZT_DM = B.HWZT_DM) hwztMc,
+               B.FHR_XZQH_DM fhrXzqhDm,(SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = B.FHR_XZQH_DM) fhrXzqhMc,
+               C.SHR_XZQH_DM shrXzqhDm,(SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = C.SHR_XZQH_DM) shrXzqhMc,
+               C.HWMC,(SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '07' AND DM.JLDW_DM = C.HW_BZ_HLDW_DM) BZ,
+               D.ZC_HJ ZCHJ,D.ZC_YJ ZCYJ,D.ZC_XF ZCXF,(D.ZC_THF+D.ZC_HDF) ZCDF,D.ZC_HK ZCHK,D.PCHW_CLFS_DM PCHWCLFSDM,
+        	<![CDATA[ 
+               '<input type="hidden" name="wfhDjxhs" value="' || B.WFH_DJXH || '" />'
+               || '<input type="hidden" name="bbhs" value="' || B.BBH || '" />' 
+               || '<input type="hidden" name="tempBz" value="Y" />' xh,
+               B.HW_SL kcsl,
+               D.HW_SL hwSl,
+               rtrim(TO_CHAR(D.HW_SL,'fm99999999999990.99'),'.') ||
+               (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '01' AND DM.JLDW_DM = C.HW_SL_JLDW_DM) SL,
+               D.HW_ZL hwZl,
+               rtrim(TO_CHAR(D.HW_ZL,'fm99999999999990.99'),'.') ||
+                (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '02' AND DM.JLDW_DM = C.HW_ZL_JLDW_DM) ZL,
+                D.HW_TJ hwTj,
+               rtrim(TO_CHAR(D.HW_TJ,'fm99999999999990.99'),'.') ||
+               (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '03' AND DM.JLDW_DM = C.HW_TJ_JLDW_DM) TJ,
+             ]]>
+             	NVL(D.ZC_HDF,0)+NVL(D.ZC_THF,0)+NVL(D.YF_SJS,0) df,
+               (SELECT HWFL_MC FROM DM_HWFL DM WHERE DM.HWFL_DM = C.HWFL_DM) lb,
+               B.FHR_DZ fhrDz,C.YQ_FHRQ fhRq,
+               C.SHR_MC shrMc,C.SHR_DZ shDz,C.YQ_DDRQ yqDdrq,
+               A.DJR_CZY_DJXH djrCzyDjxh,(SELECT MC FROM QY_RYDJ DM WHERE DM.CZY_DJXH = A.CJR_CZY_DJXH) djrMc,
+               A.DJRQ,
+               A.DJ_JGBM djJgbm,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = A.DJ_JGBM) djJgmc,
+               A.SS_JGBM ssJgbm,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = A.SS_JGBM) ssJgmc,
+               C.HDBH,CASE WHEN C.HW_SL IS NULL OR C.HW_SL = 0 THEN 0 ELSE ROUND(C.SR_HJ*D.HW_SL/C.HW_SL,2) END srHj,
+               DECODE(C.SR_XF,0,NULL,C.SR_XF) srXf, DECODE(C.SR_YJ,0,NULL,C.SR_YJ) srYj, DECODE(C.SR_HK,0,NULL,C.SR_HK) srHk,
+               (SELECT SH.SHFS_JC FROM DM_SHFS SH WHERE SH.SHFS_DM = (
+               	CASE WHEN D.PCHW_CLFS_DM = '24' THEN 3 ELSE C.SHFS_DM END)) shfsMc
+            FROM HY_DD A, HY_DD_WFHXX B, HY_DD_HWMX C, HY_PC_HWXX_TMP D
+	          WHERE A.DD_DJXH = C.DD_DJXH
+	          AND B.DD_DJXH = C.DD_DJXH
+	          AND B.XH = C.XH
+	          AND B.WFH_DJXH = D.WFH_DJXH
+	          AND D.PCHW_LSXH = #lsXh#
+        UNION ALL
+        SELECT null pchwLsxh,B.PC_DJXH pcDjxh,B.DD_DJXH ddDjxh,B.WFH_DJXH wfhDjxh,A.DDBH,B.FHR_MC fhrMc,
+        	(CASE WHEN B.ZRBM_DM = 2 THEN (SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = B.ZRBM_DJXH) 
+	                WHEN B.ZRBM_DM = 3 THEN (SELECT FBSJC FROM QY_FBS_DJXX DM WHERE DM.FBS_DJXH = B.ZRBM_DJXH)
+	                ELSE ''
+	           		END) zrbmMc,
+             A.HWZT_DM hwztDm,(SELECT HWZT_MC FROM DM_HWZT DM WHERE DM.HWZT_DM = A.HWZT_DM) hwztMc,
+             B.FHR_XZQH_DM fhrXzqhDm,(SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = B.FHR_XZQH_DM) fhrXzqhMc,
+             B.SHR_XZQH_DM shrXzqhDm,(SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = B.SHR_XZQH_DM) shrXzqhMc,
+             B.HWMC,(SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '07' AND DM.JLDW_DM = B.HW_BZ_HLDW_DM) BZ,
+             B.ZC_HJ ZCHJ,B.ZC_YJ ZCYJ,B.ZC_XF ZCXF,(B.ZC_THF+B.ZC_HDF) ZCDF,B.ZC_HK ZCKH,B.PCHW_CLFS_DM PCHWCLFSDM,
+           <![CDATA[   
+             '<input type="hidden" name="wfhDjxhs" value="' || B.WFH_DJXH || '" />'
+               || '<input type="hidden" name="bbhs" value="' || D.BBH || '" />' 
+               || '<input type="hidden" name="tempBz" value="N" />' xh,             
+               B.HW_SL + D.HW_SL kcsl,
+               B.HW_SL hwSl,
+               rtrim(TO_CHAR(B.HW_SL,'fm99999999999990.99'),'.') ||
+               (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '01' AND DM.JLDW_DM = B.HW_SL_JLDW_DM) SL,
+               B.HW_ZL hwZl,
+               rtrim(TO_CHAR(B.HW_ZL,'fm99999999999990.99'),'.') ||
+                (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '02' AND DM.JLDW_DM = B.HW_ZL_JLDW_DM) ZL,
+                B.HW_TJ hwTj,
+               rtrim(TO_CHAR(B.HW_TJ,'fm99999999999990.99'),'.') ||
+               (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '03' AND DM.JLDW_DM = B.HW_TJ_JLDW_DM) TJ,
+             ]]>  
+             NVL(B.ZC_HDF,0)+NVL(B.ZC_THF,0)+NVL(B.YF_SJS,0) df,
+             (SELECT HWFL_MC FROM DM_HWFL DM WHERE DM.HWFL_DM = C.HWFL_DM) lb,
+             B.FHR_DZ fhrDz,B.YQ_FHRQ fhRq,
+             B.SHR_MC shrMc,B.SHR_DZ shDz,B.YQ_DDRQ yqDdrq,
+             A.DJR_CZY_DJXH djrCzyDjxh,(SELECT MC FROM QY_RYDJ DM WHERE DM.CZY_DJXH = A.CJR_CZY_DJXH) djrMc,
+             A.DJRQ,
+             A.DJ_JGBM djJgbm,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = A.DJ_JGBM) djJgmc,
+             A.SS_JGBM ssJgbm,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = A.SS_JGBM) ssJgmc,
+             B.HDBH,CASE WHEN C.HW_SL IS NULL OR C.HW_SL = 0 THEN 0 ELSE ROUND(C.SR_HJ*B.HW_SL/C.HW_SL,2) END srHj,
+             DECODE(C.SR_XF,0,NULL,C.SR_XF) srXf, DECODE(C.SR_YJ,0,NULL,C.SR_YJ) srYj, DECODE(C.SR_HK,0,NULL,C.SR_HK) srHk,
+             (SELECT SH.SHFS_JC FROM DM_SHFS SH WHERE SH.SHFS_DM = (
+             	CASE WHEN B.PCHW_CLFS_DM = '24' THEN 3 ELSE C.SHFS_DM END)) shfsMc  
+          FROM HY_DD A, HY_PC_HWXX B, HY_DD_HWMX C, HY_DD_WFHXX D
+	          WHERE A.DD_DJXH = B.DD_DJXH
+	          AND B.DD_DJXH = C.DD_DJXH
+	          AND B.XH = C.XH
+	          AND B.WFH_DJXH = D.WFH_DJXH
+	          AND B.YXBZ = 'Y'
+	          AND A.YXBZ = 'Y'
+	          AND C.YXBZ = 'Y'
+              AND B.PC_DJXH = #pcDjxh#
+          ORDER BY ddDjxh,XH
+	</select>
+	
+	<delete id="deletePcHwxxTmpByLsXh" parameterClass="java.util.Map">
+		DELETE FROM HY_PC_HWXX_TMP TMP WHERE TMP.PCHW_LSXH = #lsXh#
+	</delete>
+	
+	<delete id="deletePcHwxxByPcXh" parameterClass="java.util.Map">
+		DELETE FROM HY_PC_HWXX A
+			WHERE A.PC_DJXH = #pcDjxh#
+	</delete>
+	
+	<update id="updatePchwxxBbh" parameterClass="java.util.Map">
+		UPDATE $tableName$ T SET T.BBH = 
+			(SELECT WFH.BBH FROM HY_DD_WFHXX WFH WHERE WFH.WFH_DJXH = T.WFH_DJXH)
+		<dynamic>
+			<isEqual property="tableName" compareValue="HY_PC_HWXX_TMP">
+				WHERE T.PCHW_LSXH = #pcXh#
+			</isEqual>
+			<isEqual property="tableName" compareValue="HY_PC_HWXX">
+				WHERE T.PC_DJXH = #pcXh#
+			</isEqual>
+		</dynamic>
+			
+	</update>	
+	
+	<parameterMap class="java.util.Map" id="queryQingDanMap">
+			<parameter property="pcDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+			<parameter property="dataList" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" resultMap="resultQingDanMap"/>
+	</parameterMap>
+	
+	<resultMap class="com.cy.hygl.domain.HyQingDanDomain" id="resultQingDanMap">
+			<result property="hwMc" column="HWMC"/>
+			<result property="sl" column="SL"/>
+			<result property="zl" column="ZL"/>
+			<result property="tj" column="TJ"/>
+			<result property="fhr" column="FHR"/>
+			<result property="pcBz" column="pcBz"/>
+			<result property="dsHk" column="dsHk"/>
+			<result property="ddbh" column="DDBH"/>
+			<result property="mddDz" column="SHR_XZQH_MC"/>
+			<result property="shrMc" column="SHR"/>
+			<result property="shrmc" column="SHRMC"/>
+			<result property="shrLxdh" column="SHR_LXDH"/>
+			<result property="shrDz" column="SHR_DZ"/>
+			<result property="shfsMc" column="SHFS_MC"/>
+			<result property="fkfsMc" column="FKFS"/>
+			<result property="ds" column="DS"/>
+			<result property="xf" column="XF"/>
+			<result property="yj" column="YJ"/>
+			<result property="mdd" column="MDD"/>
+			<result property="hd" column="HD"/>
+			<result property="bz" column="BZ"/>
+			<result property="sfd" column="SFD"/>
+			<result property="pcdh" column="PCDH"/>
+			<result property="pcrq" column="PCRQ"/>
+			<result property="sjxm" column="SJXM"/>
+			<result property="clhm" column="CLHM"/>
+			<result property="lxdh" column="LXDH"/>
+			<result property="hwhh" column="HWHH"/>
+			<result property="srPsf" column="SR_PSF"/>
+	</resultMap>
+	
+	<procedure id="queryHyQingDan" parameterMap="queryQingDanMap" resultMap="resultQingDanMap">
+		{call P_HYGL_DDGL_SCHWQD_CX(?,?)}
+	</procedure>
+	
+	<select id="queryZgsMc" parameterClass="java.util.Map" resultClass="string">
+		select jc from qy_zzjg where jgbm=#zgs#
+	</select>
+	<!-- <select id="queryExistWfhxxCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT COUNT(*) FROM HY_DD_WFHXX
+        WHERE $xhsIn$
+	</select> -->
+	<!--取确认后的配送费  -->
+	<select id="getQrPsf" parameterClass="java.util.Map"
+		resultClass="java.lang.Double">
+		select f.psfy
+		  from hy_dd_wfhxx w,hy_dd_hwmx m,hy_pc_hwqs q,HY_PC_XYPSFLR f
+		 where w.wfh_djxh = #wfhDjxh#
+		   and w.dd_djxh = m.dd_djxh
+		   and w.xh = m.xh
+		   and w.dd_djxh = q.new_dd_djxh
+		   and q.pc_djxh = f.pc_djxh
+		   and m.sy_dd_djxh = f.dd_djxh
+		   and m.sy_xh = f.hwmx_xh
+		   and f.qrjg = 'Y'
+	</select>
+</sqlMap>

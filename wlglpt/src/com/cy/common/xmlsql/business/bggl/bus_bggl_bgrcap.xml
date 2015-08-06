@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.bggl.dao.BusBgrcapMapper">
+	<select id="selectBgRcapPage" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgRcapDomain">
+		SELECT A.BG_DJXH AS bgDjxh,
+		       A.CZY_DJXH AS czyDjxh,
+		       A.RQ AS rq,
+		       A.NR AS nr,
+		       A.DX_FSXH AS dxFsxh,
+		       A.CKBZ AS ckbz,
+		       A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM BG_RCAP A 
+		  WHERE A.YXBZ='Y' 
+
+		  $orderStr$
+    </select>
+    
+    <select id="selectBgRcapAll" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgRcapDomain">
+		SELECT A.BG_DJXH AS bgDjxh,
+		       A.CZY_DJXH AS czyDjxh,
+		       A.RQ AS rq,
+		       A.NR AS nr,
+		       A.DX_FSXH AS dxFsxh,
+		       A.CKBZ AS ckbz,
+		       A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM BG_RCAP A 
+		  WHERE A.YXBZ='Y' 
+
+		  ORDER by A.BG_DJXH ASC
+    </select>
+
+	<select id="getBgRcapRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.BG_DJXH) 
+		  FROM BG_RCAP A 
+		  WHERE A.YXBZ='Y' 
+
+    </select>
+    
+   <select id="selectBgRcapByDate" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgRcapDomain">
+		SELECT 
+		       A.RQ AS rq
+		  FROM BG_RCAP A 
+		  WHERE A.YXBZ='Y' 
+		  		AND A.RQ >= TO_DATE(#rqQ#,'YYYY-MM-DD') 
+		  		AND A.RQ &lt;= TO_DATE(#rqZ#,'YYYY-MM-DD')
+		  		AND A.CJR_CZY_DJXH = #czyDjxh#
+    </select> 
+</sqlMap>

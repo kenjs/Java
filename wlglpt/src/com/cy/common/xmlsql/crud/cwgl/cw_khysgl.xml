@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.xtgl.dao.CwKhysglMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectCwKhysglByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.cwgl.domain.CwKhysglDomain">
+		select a.SR_DJXH as srDjxh,a.KH_DJXH as khDjxh,
+		(select khmc from qy_kh_djxx qy where qy.kh_djxh=a.KH_DJXH) as khMc,
+		a.JE as je,a.YXBZ as yxbz,a.DJR_DJXH as djrDjxh,
+		a.DJRQ as djrq,a.DJ_JGBM as djJgbm,a.SS_SSJG as ssSsjg,a.XGR_DJXH as xgrDjxh,a.XGRQ as xgrq from CW_KHYSGL a  where a.KH_DJXH=#khDjxh#
+		and a.ss_ssjg=#jgbm# and a.yxbz='Y'
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertCwKhysgl"  parameterClass="com.cy.common.bo.CwKhysgl">
+		<selectKey keyProperty="srDjxh" resultClass="string" type="pre"> 
+			select SEQ_SR_DJXH.nextval as srDjxh from dual 
+		</selectKey> 
+		insert into CW_KHYSGL(SR_DJXH,KH_DJXH,KHMC,JE,YXBZ,DJR_DJXH,
+		DJRQ,DJ_JGBM,SS_SSJG,XGR_DJXH,XGRQ)
+		values(#srDjxh:NUMERIC#,#khDjxh:NUMERIC#,#khMc:VARCHAR#,#je:NUMERIC#,#yxbz:VARCHAR#,#djrDjxh:VARCHAR#,
+		to_date(#djrq:DATE#,'yyyy-MM-dd'),#djJgbm:NUMERIC#,#ssSsjg:NUMERIC#,#xgrDjxh:NUMERIC#,to_date(#xgrq:DATE#,'yyyy-MM-dd'))
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateCwKhysglByKey" parameterClass="com.cy.common.bo.CwKhysgl">
+        update CW_KHYSGL set SR_DJXH=#srDjxh#,KH_DJXH=#khDjxh#,JE=#je#,YXBZ=#yxbz#,DJR_DJXH=#djrDjxh#,
+		DJRQ=to_date(#djrq#, 'YYYY-MM-DD'),DJ_JGBM=#djJgbm#,SS_SSJG=#ssSsjg#,XGR_DJXH=#xgrDjxh#,XGRQ=to_date(#xgrq#, 'YYYY-MM-DD') where SR_DJXH=#srDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteCwKhysglByKey" parameterClass="java.util.Map">
+		update CW_KHYSGL set yxbz='N' where SR_DJXH=#srDjxh#
+    </delete>
+    
+    <select id="selectKhYsJeByKhDjxh" parameterClass="java.util.Map" resultClass="java.lang.Double">
+    	select je from cw_khysgl where kh_djxh=#djxh# and ss_ssjg=#jgbm#
+    </select>
+    <select id="selectKhWsJeByKhDjxh" parameterClass="java.util.Map" resultClass="java.lang.Double">
+    	select sum(c.wsf_je) from cw_ysyf c where c.yfjsf_dm=21 and c.kmxl_dm=312 and c.yfjsf_djxh=#djxh# and c.ss_jgbm=#jgbm#
+    </select>
+    
+</sqlMap>

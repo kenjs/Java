@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+ 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="pragma" content="no-cache"/>
+    <meta http-equiv="Cache-Control" content="no-cache,must-revalidate"/>
+    <title>应收结算单管理</title>
+    <link href="../js/sys/ymPrompt/skin/ch/ymPrompt.css" rel="stylesheet">
+	<link href="../css/webui/hgrid.css" rel="stylesheet" />
+    <link href="../css/themes/citydistancec/tag.css" rel="stylesheet"></link>
+    
+    <script src="../js/jquery/jquery-1.8.3.min.js" type=text/javascript></script>
+    <script type="text/javascript" src="../js/sys/DatePicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="../js/sys/ymPrompt/ymPrompt.js"></script>
+	<script type="text/javascript" src="../js/sys/webui/hgrid.js"></script>
+    <link href="../css/webui/main.css" rel="stylesheet" />	
+    <script src="../js/sys/webui/contract/header.js"></script>    	
+    <script src="../js/sys/webui/logo.js"></script>   	 
+    <script src="../js/sys/webui/contract/left.js"></script> 
+	<script src="../js/sys/webui/hgrid.js" type="text/javascript"></script>
+	<link href="../css/themes/settlebillc/inList.css" rel="stylesheet"/>
+	<script type="text/javascript" src="../js/themes/settlebillc/inList.js"></script>
+	<link href="../css/webui/commonPage.css" rel="stylesheet" />
+	<style type="text/css">
+	#hgrid {
+	    width: 820px;
+	}
+	</style>
+ </head>
+  <body>
+    	<!-- 顶部 --开始  此处须由js动态加入-->
+		<div id="header" class="c-header" >
+	
+		</div>
+		<!-- 顶部 --结束-->
+	
+		<!-- LOGON --开始   此处须由js动态加入-->
+		<div id="logo" class="c-logo" >
+		
+		</div>
+	<!-- LOGON --结束-->
+	<div id="main" class="c-main">
+  		<div id="left" class="c-left">
+			<div id="accordion"> 
+			</div>  
+		</div>
+  		<div id="right" class="c-right" style="text-align: left;">
+  			<div id="rigthtag" class="c-right-tag" style="text-align: left;">
+				<img src="../imgs/sys/home-icon.jpg"/><a href="../logincs/index_main">首页</a><span>&gt;</span><!--<a href="javascript:void(0)">结算管理</a><span>&gt;</span>--><span id="current">应收结算管理</span>
+			</div>
+			<div style="margin-top: 15px;" id="querydiv">
+				<table style="width: 902px; border: none;">
+					<tr>
+						<td style="text-align:left;padding-left: 20px;border-bottom:none; width:170px;">
+							客户单号
+							<input id="clientnumber" name="clientnumber" type="text"/>
+						</td>
+						<td style="text-align: left;border-bottom:none;width: 290px;">
+							结算期
+							<input id="startdate" name="startdate" class="Wdate w80" type="text" onfocus="WdatePicker({firstDayOfWeek:1})"/><span style="margin-left: 0px;">~</span><input id="enddate" name="enddate"  type="text" class="Wdate w80" onfocus="WdatePicker({firstDayOfWeek:1})"/>						
+						</td>
+						<td style="text-align: left;border-bottom:none;width: 170px;"></td>
+					</tr>
+					<tr>
+						<td style="text-align:left;padding-left: 20px;border-bottom:none; width:170px;">
+							结算单号
+							<input id="settlebillnumber" name="settlebillnumber" type="text"/>
+						</td>
+						<td style="text-align: left;border-bottom:none;width: 170px;">
+							发货方
+							<input id="inoutpartyrealname" name="inoutpartyrealname" type="text"/>						
+							<button class="btn-white fn-noborder" style="margin-left: 20px;" onclick="search()">查询</button>
+						</td>
+						<td style="text-align: right;border-bottom:none;width: 213px;" align="right">
+							<button class="btn-orange-small fn-noborder fn-cWhite ft-blod" onclick='window.location="../settlebillcs/inAdd?order=7"' style="margin:0 5px; 0 5px;">新增结算单</button>
+						</td>
+					</tr>
+				</table>
+				</div>
+			<div class="hgrid" style="width:100%;float: ">
+  			<table id="hgrid"></table>
+  		</div>
+  		</div>
+	</div>
+	<div id="footer" class="c-footer">
+	</div>
+	<script type="text/javascript">
+		f_hgrid_ini("1");
+		$("#pagecode").val("1");
+		f_hgrid_json("");
+		$(".page_nav").css("margin-top","20px");
+		$(".page_nav").css("text-align","right");
+	</script>
+  </body>
+</html>

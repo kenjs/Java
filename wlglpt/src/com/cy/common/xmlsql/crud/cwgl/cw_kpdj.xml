@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.cwgl.dao.CwKpdjMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectCwKpdjByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.cwgl.domain.CwKpdjDomain">
+		select a.KP_DJXH as kpDjxh,a.KPSQ_DJXH as kpsqDjxh,a.KH_DJXH as khDjxh,
+		       (select khjc from qy_kh_djxx qy where qy.KH_DJXH=a.KH_DJXH ) khmc,
+			   a.FPDM as fpdm,a.FPHM as fphm,
+			   a.KPR_CZY_DJXH as kprCzyDjxh,a.KPRQ as kprq,a.KPJE as kpje,a.SL as sl,a.SE as se,
+			   a.ZFBZ as zfbz,a.HZBZ as hzbz,a.LZ_FPDM as lzFpdm,a.LZ_FPHM as lzFphm,a.DJ_JGBM as djJgbm,
+			   (select jc from qy_zzjg qy where qy.jgbm = a.DJ_JGBM) djJgmc,
+			   a.SS_JGBM as ssJgbm,
+			   (select jc from qy_zzjg qy where qy.jgbm = a.SS_JGBM) ssJgmc,
+			   a.CJR_CZY_DJXH as cjrCzyDjxh,a.CJRQ as cjrq,a.XGR_CZY_DJXH as xgrCzyDjxh,a.XGRQ as xgrq from CW_KPDJ a 
+		where a.KP_DJXH=#kpDjxh#
+    </select>
+    
+    <!-- 根据kpDjxh取kpsqDjxh -->
+	<select id="getKpDjxhByKpsqDjxh" parameterClass="com.cy.cwgl.domain.CwFpKpdjDomain"
+		resultClass="java.lang.String">
+		select kp_djxh from cw_kpdj where kpsq_djxh = #kpsqDjxh# and fpdm = #fpdm# and fphm = #fphm#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertCwKpdj"  parameterClass="com.cy.common.bo.CwKpdj">
+		<selectKey keyProperty="kpDjxh" resultClass="String" type="pre"> 
+			select SEQ_KP_DJXH.nextval as kpDjxh from dual 
+		</selectKey> 
+		insert into CW_KPDJ(KP_DJXH,KPSQ_DJXH,KH_DJXH,FPDM,FPHM,
+		KPR_CZY_DJXH,KPRQ,KPJE,SL,SE,
+		ZFBZ,HZBZ,LZ_FPDM,LZ_FPHM,DJ_JGBM,
+		SS_JGBM,CJR_CZY_DJXH,CJRQ,XGR_CZY_DJXH,XGRQ)
+		values(#kpDjxh:NUMERIC#,#kpsqDjxh:NUMERIC#,#khDjxh:NUMERIC#,#fpdm:VARCHAR#,#fphm:VARCHAR#,
+		#kprCzyDjxh:NUMERIC#,to_date(#kprq:DATE#,'yyyy-MM-dd'),#kpje:NUMERIC#,#sl:NUMERIC#,#se:NUMERIC#,
+		#zfbz:VARCHAR#,#hzbz:VARCHAR#,#lzFpdm:VARCHAR#,#lzFphm:VARCHAR#,#djJgbm:NUMERIC#,
+		#ssJgbm:NUMERIC#,#cjrCzyDjxh:NUMERIC#,to_date(#cjrq:DATE#,'yyyy-MM-dd'),#xgrCzyDjxh:NUMERIC#,to_date(#xgrq:DATE#,'yyyy-MM-dd'))
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateCwKpdjByKey" parameterClass="com.cy.common.bo.CwKpdj">
+        update CW_KPDJ set KP_DJXH=#kpDjxh#,KPSQ_DJXH=#kpsqDjxh#,KH_DJXH=#khDjxh#,FPDM=#fpdm#,FPHM=#fphm#,
+		KPR_CZY_DJXH=#kprCzyDjxh#,KPRQ=to_date(#kprq#, 'YYYY-MM-DD'),KPJE=#kpje#,SL=#sl#,SE=#se#,
+		ZFBZ=#zfbz#,HZBZ=#hzbz#,LZ_FPDM=#lzFpdm#,LZ_FPHM=#lzFphm#,DJ_JGBM=#djJgbm#,
+		SS_JGBM=#ssJgbm#,XGR_CZY_DJXH=#xgrCzyDjxh#,XGRQ=to_date(#xgrq#, 'YYYY-MM-DD') where KP_DJXH=#kpDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<update id="deleteCwKpdjByKey" parameterClass="java.util.Map">
+		UPDATE CW_KPDJ SET ZFBZ='Y',ZFR_CZY_DJXH=#zfrCzyDjxh#,ZFRQ=to_date(#zfRq#, 'YYYY-MM-DD') WHERE KP_DJXH = #kpDjxh#
+    </update>
+</sqlMap>

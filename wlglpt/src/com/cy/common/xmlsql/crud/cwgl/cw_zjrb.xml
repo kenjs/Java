@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.cwgl.dao.CwZjrbMapper">
+
+    <!--根据主键取DOMAIN-->
+		<select id="selectCwZjrbByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.common.bo.CwZjrb">
+		select a.CW_DJXH as cwDjxh,a.SS_JGBM as ssJgbm,a.ZR_KC_XJ as zrKcXj,a.ZR_KC_YH as zrKcYh,a.ZR_KC_YK as zrKcYk,
+		a.KC_XJ as kcXj,a.KC_YH as kcYh,a.KC_YK as kcYk,a.SR_XJ as srXj,a.SR_YH as srYh,
+		a.SR_YK as srYk,a.ZC_XJ as zcXj,a.ZC_YH as zcYh,a.ZC_YK as zcYk,a.KC_XJ_SRZ as kcXjSrz,
+		a.KC_YH_SRZ as kcYhSrz,a.SR_XJ_SRZ as srXjSrz,a.SR_YH_SRZ as srYhSrz,a.ZC_XJ_SRZ as zcXjSrz,a.ZC_YH_SRZ as zcYhSrz,
+		a.RQ as rq,a.XF_SR_XJ as xfSrXj,a.DF_SR_XJ as dfSrXj,a.YJ_SR_XJ as yjSrXj,a.DSHK_SR_XJ as dshkSrXj,
+		a.YS_SR_XJ as ysSrXj,a.QT_SR_XJ as qtSrXj,a.XF_SR_YH as xfSrYh,a.DF_SR_YH as dfSrYh,a.YJ_SR_YH as yjSrYh,
+		a.DSHK_SR_YH as dshkSrYh,a.YS_SR_YH as ysSrYh,a.QT_SR_YH as qtSrYh,a.CJR_CZY_DJXH as cjrCzyDjxh,a.CJRQ as cjrq,
+		a.XGR_CZY_DJXH as xgrCzyDjxh,a.XGRQ as xgrq from CW_ZJRB a  where a.CW_DJXH=#cwDjxh#
+		</select>
+
+	<!--插入数据-->
+			<insert id="insertCwZjrb"  parameterClass="com.cy.common.bo.CwZjrb">
+		<selectKey keyProperty="cwDjxh" resultClass="java.lang.String" type="pre"> 
+			select SEQ_CW_DJXH.nextval as cwDjxh from dual 
+		</selectKey> 
+		insert into CW_ZJRB(CW_DJXH,SS_JGBM,ZR_KC_XJ,ZR_KC_YH,ZR_KC_YK,
+		KC_XJ,KC_YH,KC_YK,SR_XJ,SR_YH,
+		SR_YK,ZC_XJ,ZC_YH,ZC_YK,KC_XJ_SRZ,
+		KC_YH_SRZ,SR_XJ_SRZ,SR_YH_SRZ,ZC_XJ_SRZ,ZC_YH_SRZ,
+		RQ,XF_SR_XJ,DF_SR_XJ,YJ_SR_XJ,DSHK_SR_XJ,
+		YS_SR_XJ,QT_SR_XJ,XF_SR_YH,DF_SR_YH,YJ_SR_YH,
+		DSHK_SR_YH,YS_SR_YH,QT_SR_YH,CJR_CZY_DJXH,CJRQ,
+		XGR_CZY_DJXH,XGRQ)
+		values(#cwDjxh:NUMERIC#,#ssJgbm:NUMERIC#,#zrKcXj:NUMERIC#,#zrKcYh:NUMERIC#,#zrKcYk:NUMERIC#,
+		#kcXj:NUMERIC#,#kcYh:NUMERIC#,#kcYk:NUMERIC#,#srXj:NUMERIC#,#srYh:NUMERIC#,
+		#srYk:NUMERIC#,#zcXj:NUMERIC#,#zcYh:NUMERIC#,#zcYk:NUMERIC#,#kcXjSrz:NUMERIC#,
+		#kcYhSrz:NUMERIC#,#srXjSrz:NUMERIC#,#srYhSrz:NUMERIC#,#zcXjSrz:NUMERIC#,#zcYhSrz:NUMERIC#,
+		to_date(#rq:DATE#,'yyyy-MM-dd'),#xfSrXj:NUMERIC#,#dfSrXj:NUMERIC#,#yjSrXj:NUMERIC#,#dshkSrXj:NUMERIC#,
+		#ysSrXj:NUMERIC#,#qtSrXj:NUMERIC#,#xfSrYh:NUMERIC#,#dfSrYh:NUMERIC#,#yjSrYh:NUMERIC#,
+		#dshkSrYh:NUMERIC#,#ysSrYh:NUMERIC#,#qtSrYh:NUMERIC#,#cjrCzyDjxh:NUMERIC#,to_date(#cjrq:DATE#,'yyyy-MM-dd'),
+		#xgrCzyDjxh:NUMERIC#,to_date(#xgrq:DATE#,'yyyy-MM-dd')) 
+		</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+        <update id="updateCwZjrbByKey" parameterClass="com.cy.common.bo.CwZjrb">
+		update CW_ZJRB set CW_DJXH=#cwDjxh#,SS_JGBM=#ssJgbm#,ZR_KC_XJ=#zrKcXj#,ZR_KC_YH=#zrKcYh#,ZR_KC_YK=#zrKcYk#,
+		KC_XJ=#kcXj#,KC_YH=#kcYh#,KC_YK=#kcYk#,SR_XJ=#srXj#,SR_YH=#srYh#,
+		SR_YK=#srYk#,ZC_XJ=#zcXj#,ZC_YH=#zcYh#,ZC_YK=#zcYk#,KC_XJ_SRZ=#kcXjSrz#,
+		KC_YH_SRZ=#kcYhSrz#,SR_XJ_SRZ=#srXjSrz#,SR_YH_SRZ=#srYhSrz#,ZC_XJ_SRZ=#zcXjSrz#,ZC_YH_SRZ=#zcYhSrz#,
+		RQ=to_date(#rq#, 'YYYY-MM-DD'),XF_SR_XJ=#xfSrXj#,DF_SR_XJ=#dfSrXj#,YJ_SR_XJ=#yjSrXj#,DSHK_SR_XJ=#dshkSrXj#,
+		YS_SR_XJ=#ysSrXj#,QT_SR_XJ=#qtSrXj#,XF_SR_YH=#xfSrYh#,DF_SR_YH=#dfSrYh#,YJ_SR_YH=#yjSrYh#,
+		DSHK_SR_YH=#dshkSrYh#,YS_SR_YH=#ysSrYh#,QT_SR_YH=#qtSrYh#,CJR_CZY_DJXH=#cjrCzyDjxh#,CJRQ=to_date(#cjrq#, 'YYYY-MM-DD'),
+		XGR_CZY_DJXH=#xgrCzyDjxh#,XGRQ=to_date(#xgrq#, 'YYYY-MM-DD') where CW_DJXH=#cwDjxh#
+		</update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteCwZjrbByKey" parameterClass="java.util.Map">
+		delete from CW_ZJRB where CW_DJXH=#cwDjxh#
+    </delete>
+</sqlMap>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.xtgl.dao.QyXtCsMapper">
+    <!--根据主键取bo-->
+		<select id="selectQyXtCsByKey" parameterClass="com.cy.xtgl.domain.QyXtCsDomain"
+		resultClass="com.cy.common.bo.QyXtCs">
+		SELECT SZDW AS szdw,CSXH AS csxh,CSLB_DM AS cslbDm,
+		CSZ AS csz,CJR_CZY_DJXH AS cjrCzyDjxh,CJRQ AS cjrq,
+		XGR_CZY_DJXH AS xgrCzyDjxh,XGRQ AS xgrq
+	    FROM XT_XTCS_SZXX
+	    WHERE SZDW = #ssJgbm# AND CSXH = #csxh# AND CSLB_DM = #cslbDm#
+		</select>
+    
+	<!--插入数据-->
+	<insert id="insertQyXtCs"  parameterClass="com.cy.common.bo.QyXtCs">
+		insert into XT_XTCS_SZXX(SZDW,CSXH,CSLB_DM,CSZ,CJR_CZY_DJXH,CJRQ,XGR_CZY_DJXH,XGRQ)
+		values(#szdw:VARCHAR#,#csxh:NUMERIC#,#cslbDm:NUMERIC#,#csz:VARCHAR#,
+		#cjrCzyDjxh:NUMERIC#,to_date(#cjrq:DATE#,'yyyy-MM-dd'),#xgrCzyDjxh:NUMERIC#,to_date(#xgrq:DATE#,'yyyy-MM-dd'))
+	</insert>
+
+	<!--根据 设置单位和参数序号 更新参数值-->
+    <update id="updateQyXtCs" parameterClass="com.cy.common.bo.QyXtCs">
+        update XT_XTCS_SZXX a set a.CSZ=#csz#
+        where a.SZDW=#szdw# and a.CSXH=#csxh# and a.CSLB_DM=#cslbDm#
+    </update>
+    
+   	<!--根据主键删除表数据-->
+	<delete id="deleteQyXtCsByKey" parameterClass="com.cy.xtgl.domain.QyXtCsDomain">
+		delete  from XT_XTCS_SZXX WHERE SZDW = #ssJgbm# AND CSXH = #csxh# AND CSLB_DM = #cslbDm#
+    </delete>
+</sqlMap>

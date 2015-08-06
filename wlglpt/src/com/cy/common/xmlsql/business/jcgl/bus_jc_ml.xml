@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.jcgl.dao.BusJcMlbMapper">
+	<parameterMap class="java.util.Map" id="jcmlbParMap">
+		<parameter property="ssJgbm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="fcrqS" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="fcrqZ" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="khmc" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="khDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="hdbh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		
+		<parameter property="pageNum" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+		<parameter property="pageSize" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+		<parameter property="pageCount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+		<parameter property="reccount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+		<parameter property="dataList" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" resultMap="jcmlbResMap"/>
+	</parameterMap>
+	
+	<resultMap class="com.cy.jcgl.domain.JcYxsjbDomain" id="jcmlbResMap">
+		<result property="pageXh" column="PAGE_XH"/>
+		<result property="ssjgMc" column="SSJGMC"/>
+		<result property="khmc" column="KHMC"/>
+		<result property="xdrq" column="XDRQ"/>
+		<result property="hdbh" column="HDBH"/>
+		<result property="clhm" column="CLHM"/>
+		<result property="mdd" column="MDD"/>
+		<result property="ddbh" column="DDBH"/>		
+		
+		<result property="zsr" column="SRHJ"/>
+		<result property="ysf" column="YSF"/>
+		<result property="hk" column="SRHK"/>
+		<result property="thf" column="THF"/>
+		<result property="psf" column="PSF"/>
+		<result property="wlssSr" column="WLSSSR"/>
+		<result property="wlssZc" column="WLSSZC"/>
+		<result property="ml" column="ML"/>
+		<result property="mll" column="MLL"/>
+	</resultMap>
+	
+	<procedure id="queryMlbPage" parameterMap="jcmlbParMap" resultMap="jcmlbResMap">
+		{call P_JCGL_ML_CX(?,?,?,?,?,?,?,?,?,?,?)}
+	</procedure>
+	
+</sqlMap>

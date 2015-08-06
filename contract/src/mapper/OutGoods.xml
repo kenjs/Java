@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<!-- 运单子表 -->
+<sqlMap >
+ <typeAlias type="tf56.contract.domain.OutGoods" alias="outGoods"/>
+ 
+ <insert id="iBatisInsertOutGoods" parameterClass="outGoods">
+  insert into OutGoods (waybillId,goodsType,goodsName,spec,model,num,packageName,weight,volume)
+   values (#waybillid:VARCHAR#,#goodstype:VARCHAR#,#goodsname:VARCHAR#,#spec:VARCHAR#,#model:VARCHAR#,#num:VARCHAR#,#packagename:VARCHAR#,
+   #weight:VARCHAR#,#volume:VARCHAR#)
+  <selectKey resultClass="String" keyProperty="goodsid">
+   select last_insert_id() as id
+  </selectKey>
+ </insert>
+ 
+ <!-- 根据运单id查找货物 -->
+ <select id="iBatisSelectOutGoodsByWaybillId" parameterClass="java.util.HashMap" resultClass="outGoods">
+ 	SELECT * FROM OutGoods WHERE waybillId = #waybillid#
+ </select>
+ 
+ <delete id="iBatisDeeleteOutGoods" parameterClass="java.util.HashMap">
+  delete from OutGoods where waybillId = #waybillid#
+ </delete>
+</sqlMap>

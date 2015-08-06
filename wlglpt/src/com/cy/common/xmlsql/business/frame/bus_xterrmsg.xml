@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.framework.dao.XtErrMsgMapper">
+
+	<!--获取所有的错误信息-->
+	<select id="selectXtErrMsgList" parameterClass="java.util.Map"
+		resultClass="com.cy.framework.domain.XtErrMsgDomain">
+		SELECT MEG.ERR_CODE AS errCode,MEG.ERR_MESS AS errMess,MEG.ERR_DO AS errDo  FROM XT_ERR_MSG MEG
+    </select>
+</sqlMap>

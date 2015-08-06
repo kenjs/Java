@@ -1,0 +1,28 @@
+@CHARSET "UTF-8";
+#right {
+	font-family:inherit;
+    font-family:"宋体",Arial,sans-serif;
+    font-size: 12px;
+}
+.sub_top{width: 900px;border-bottom: 1px solid #d3d7d4;font-size: 14px;
+    font-weight: bold;
+    padding-bottom: 5px;
+    margin-left: 15px;
+    }
+.hgrid{margin-left: 15px;width: 885px;}
+#hgrid{width: 870px;}
+.sub_center{width: 900px;margin-top: 0px; margin-left: 15px;}
+#organization{width: 120px;height: 28px;margin-left: 5px;line-height: 24px;color: #999999;}
+#organization{width: 120px;height: 28px;margin-left: 5px;}
+.tab_query{width: 892px;border: none;}
+.tab_query INPUT{line-height: 24px;}
+#partyname{width: 120px;height: 28px;margin-left: 5px;line-height: 24px;color: #999999;}
+#btnadd{width: 100px;height: 27px;line-height: 24px;cursor: pointer;background-color: #ec6110;color:#ffffff; font-weight: bold;border: none;}
+.btn{    border-radius: 2px 2px 2px 2px;
+    display: inline-block;
+    font: bold 12px/25px Arial,sans-serif;
+    margin: 10px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.22);}

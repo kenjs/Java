@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.gnqx.dao.BusLoginMapper">
+	<!--根据登录帐号、密码取得用户信息-->	
+	
+    <parameterMap class="java.util.Map" id="checkUserParMap">
+    	<parameter property="qybm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="dlzh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="dlmm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="macAddr" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="rtnCode" javaType="java.lang.Integer" jdbcType="BIGINT" mode="OUT"/>
+    	<parameter property="rtnMess" javaType="java.lang.String" jdbcType="VARCHAR" mode="OUT"/>
+    	<parameter property="czyDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="OUT"/>
+    </parameterMap>
+    
+    <procedure id="checkUserInfoPro" parameterMap="checkUserParMap" >
+    	{call P_QX_USER_LOGIN(?,?,?,?,?,?,?)}
+    </procedure>
+    
+    <parameterMap class="java.util.Map" id="getUserParMap">
+    	<parameter property="czyDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="gwDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="userInfoList" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" resultMap="getUserRes"/>
+    </parameterMap>
+    
+    <resultMap class="com.cy.common.domain.UserDomain" id="getUserRes">
+    	<result property="qyZcxh" column="QY_ZCXH"/>
+    	<result property="qybm" column="QYBM"/>
+    	<result property="czyDjxh" column="CZY_DJXH"/>
+    	<result property="czyMc" column="MC"/>
+    	<result property="bmbm" column="BMBM"/>
+    	<result property="bmjc" column="BMJC"/>
+    	<result property="bmjbdm" column="BMJBDM"/>
+    	<result property="gsbm" column="GSBM"/>
+    	<result property="gsjc" column="GSJC"/>
+    	<result property="gsjbdm" column="GSJBDM"/>
+    	<result property="zgsbm" column="ZGSBM"/>
+    	<result property="zgsjc" column="ZGSJC"/>
+    	<result property="zgsjbdm" column="ZGSJBDM"/>
+    	<result property="qxJgbm" column="QX_JGBM"/>
+    	<result property="gwDjxh" column="GW_DJXH"/>
+    	<result property="gwmc" column="GWMC"/>
+    	<result property="hwSlJldwDm" column="SLJB_JLDW"/>
+    	<result property="hwZlJldwDm" column="ZLJB_JLDW"/>
+    	<result property="hwTjJldwDm" column="TJJB_JLDW"/>
+    	<result property="hwBzJldwDm" column="BZJB_JLDW"/>
+    	<result property="ZlTjProportion" column="ZH_ZLTJB"/>
+    	<result property="cs_20001" column="CS_20001"/>
+    	<result property="cs_20052" column="CS_20052"/>
+    	<result property="rowNum" column="ROW_NUM"/>
+    </resultMap>
+    
+    <procedure id="getUserInfo" parameterMap="getUserParMap" resultMap="getUserRes">
+    	{call P_QX_USER_MESS(?,?,?)}
+    </procedure>
+    
+    
+    <select id="queryLatestOprMenu" parameterClass="java.util.Map" 
+    		resultClass="com.cy.common.domain.XtGnmkDomain">
+    	SELECT GNMK_DM AS gnmkDm,XTML_XH AS sjMenuDm, GNMK_MC AS gnmkMc, ACTION AS URL FROM (
+				SELECT GNMK_DM,XTML_XH, GNMK_MC, ACTION FROM (
+				SELECT L.GNMK_DM, L.XTML_XH, GNMK.GNMK_MC, GNMK.URL AS ACTION, L.KSSJ,
+				ROW_NUMBER() OVER (PARTITION BY L.GNMK_DM ORDER BY L.KSSJ DESC) RN
+				FROM XT_LOG_ACTION L, XT_GNMK GNMK
+				WHERE L.GNMK_DM = GNMK.GNMK_DM
+				AND L.GNMK_DM IS NOT NULL
+				AND L.XTML_XH IS NOT NULL
+				AND L.CZY_DJXH = #czyDjxh#
+			) WHERE RN = 1 
+			ORDER BY KSSJ DESC
+			) where rownum &lt;= 10
+    	
+    </select>
+    
+    <resultMap id="curMenuRetmap" class="com.cy.common.domain.XtGnmkDomain">
+    	<result property="gnmkDm" column="GNMKDM" /> 
+    	<result property="gnmkMc" column="GNMKMC" /> 
+    	<result property="node" column="NODE" />
+    	<result property="url" column="URL" /> 
+    	<result property="urlHelp" column="URLHELP" /> 
+    	<result property="parmbz" column="PARMBZ" /> 
+    	<result property="xybz" column="XYBZ" /> 
+    	<result property="xtflDm" column="XTFLDM" />
+    	<result property="pxxh" column="PXXH" /> 
+    	<result property="sjMenuDm" column="SJMENUDM" /> 
+    	<result property="gnmkPath" column="GNMKPATH" />
+	</resultMap>
+	<parameterMap id="curMemuParameters" class="java.util.HashMap" > 	    
+	    <parameter property="czyDjxh"  javaType="java.lang.String" mode="IN"/> 
+	    <parameter property="xtmlXh"  javaType="java.lang.String" mode="IN"/> 
+	    <parameter property="curMemuList" jdbcType="ORACLECURSOR" javaType="java.sql.ResultSet" mode="OUT" resultMap="curMenuRetmap" />
+	</parameterMap>
+	<procedure id="getCurMemuList" parameterMap="curMemuParameters"> 
+	    {call P_QX_USER_MENU_SUB(?,?,?)} 
+	</procedure> 
+    
+    <!-- 添加上网电脑待审批信息 -->
+    <insert id="insertSwdnDsh" parameterClass="com.cy.common.bo.QySwdnDsh">
+    	<selectKey keyProperty="ggDjxh" resultClass="java.lang.Long" type="pre"> 
+			select SEQ_GG_DJXH.nextval as ggDjxh from dual 
+		</selectKey> 
+    	INSERT INTO QY_SWDN_DSH SH 
+			(SH.GG_DJXH, SH.QY_ZCXH, SH.MAC, SH.BZSM, SH.CZY_DJXH, 
+			SH.SQR_CZY_DJXH, SH.SQRQ, SH.SHR_CZY_DJXH, SH.SHRQ, SH.SHJG)
+		(SELECT #ggDjxh:NUMERIC#, QY.QY_ZCXH, #mac:VARCHAR#, #bzsm:VARCHAR#, #czyDjxh:VARCHAR#, 
+		#sqrCzyDjxh:VARCHAR#, sysdate, #shrCzyDjxh:VARCHAR#,to_date(#shrq:VARCHAR#,'yyyy-MM-dd'), #shjg:VARCHAR#
+		FROM GL_QYZC QY WHERE QY.QYBM = #qybm#)
+    </insert>
+    <!-- 根据mac地址与用户判断是否存在为审批上网电脑 -->
+    <select id="selectByMac" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.QySwdnDshDomain">
+		SELECT SH.GG_DJXH, SH.QY_ZCXH, SH.MAC, SH.BZSM, SH.CZY_DJXH, 
+			SH.SQR_CZY_DJXH, SH.SQRQ, SH.SHR_CZY_DJXH, SH.SHRQ, SH.SHJG
+			FROM QY_SWDN_DSH SH
+			WHERE SH.MAC = #mac# AND SH.CZY_DJXH = #czyDjxh# AND (SH.SHJG='' OR SH.SHJG IS NULL) 
+	</select>
+	
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateSwdnDshByKey" parameterClass="com.cy.common.bo.QySwdnDsh">
+        update QY_SWDN_DSH set QY_ZCXH=#qyZcxh#, MAC=#mac#, BZSM=#bzsm#, CZY_DJXH=#czyDjxh#, 
+			SQR_CZY_DJXH=#sqrCzyDjxh#, SQRQ=#sqrq#, SHR_CZY_DJXH=#shrCzyDjxh#, SHRQ=#shrq#, SHJG=#shjg#
+		where GG_DJXH=#ggDjxh#
+    </update>
+    
+	<resultMap id="topMenuRetmap" class="com.cy.common.domain.XtXtmlDomain">
+    	<result property="xtmlXh" column="XTML_XH" /> 
+    	<result property="xtmlMc" column="XTML_MC" /> 
+    	<result property="pic" column="PIC" />
+    	<result property="sxh" column="SXH" /> 
+	</resultMap>
+	<parameterMap id="topMenuParameters" class="java.util.HashMap" > 	    
+	    <parameter property="czyDjxh" jdbcType="VARCHAR" javaType="java.lang.String" mode="IN"/> 
+	    <parameter property="topMemuList" jdbcType="ORACLECURSOR" javaType="java.sql.ResultSet" mode="OUT" resultMap="topMenuRetmap" />
+	</parameterMap>
+	<procedure id="getTopMemuList" parameterMap="topMenuParameters"> 
+	    {call P_QX_USER_MENU_TOP(?,?)} 
+	</procedure> 
+	
+	<select id="queryLatestOprXtml" parameterClass="java.util.Map"
+		resultClass="java.lang.String">
+		SELECT CASE WHEN B.JCXH = 1 THEN B.XTML_XH ELSE B.SJ_XTML_XH END
+			FROM XT_XTML B
+			WHERE B.XTML_XH =
+			(SELECT XTML_XH FROM (
+					SELECT * FROM XT_LOG_ACTION A
+					WHERE A.CZY_DJXH = #czyDjxh#
+					AND A.XTML_XH IS NOT NULL
+					ORDER BY KSSJ DESC
+				) WHERE ROWNUM = 1)
+	</select>
+	<select id="queryGwqhList" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.QyRyGwDomain">
+		select B.GW_DJXH AS gwDjxh, B.ZJBZ AS zjbz,
+		JG.JC AS gsmc,
+		BM.JC AS bmmc,
+		GW.GW_MC AS gwmc
+		from QY_RYDJ A, QY_RY_GW B,QY_ZZJG BM,QY_ZZJG JG,QY_GW GW
+		WHERE A.CZY_DJXH=B.CZY_DJXH
+		AND GW.GW_DJXH=B.GW_DJXH
+		AND GW.YXBZ = 'Y'
+		AND GW.QYBZ = 'Y'
+		AND BM.YXBZ = 'Y'
+		AND BM.QYBZ = 'Y'
+		AND JG.YXBZ = 'Y'
+		AND JG.QYBZ = 'Y'
+		AND B.SS_JGBM = BM.JGBM
+		AND ((BM.JGLB_DM = '4' AND BM.SJ_JGBM = JG.JGBM)
+		OR (BM.JGLB_DM &lt;&gt; '4' AND BM.JGBM = JG.JGBM))
+		AND A.YXBZ='Y'
+		AND A.CZY_DJXH = #czyDjxh#
+	</select>
+</sqlMap>

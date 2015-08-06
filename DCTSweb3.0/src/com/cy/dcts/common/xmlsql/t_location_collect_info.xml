@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="LocationCollectInfo" type="com.cy.dcts.common.bo.LocationCollectInfo"/><!-- 车辆位置历史信息表 -->
+	<typeAlias alias="LocationCollectInfoDomain" type="com.cy.dcts.common.domain.LocationCollectInfoDomain"/>
+     <resultMap class="LocationCollectInfo" id="location_collectInfo_result">
+     <result property="id" column="ID"/>
+     <result property="driverId" column="DRIVER_ID"/>
+     <result property="longitude" column="LONGITUDE"/>
+     <result property="latitude" column="LATITUDE"/>
+     <result property="province" column="PROVINCE"/>
+     <result property="city" column="CITY"/>
+     <result property="county" column="COUNTY"/>
+     <result property="town" column="TOWN"/>
+     <result property="location" column="LOCATION"/>
+     <result property="collectTime" column="COLLECT_TIME"/>
+     <result property="createTime" column="CREATE_TIME"/>
+    </resultMap>
+    
+     <resultMap class="LocationCollectInfoDomain" id="location_collectInfo_domain_result">
+     <result property="id" column="ID"/>
+     <result property="driverId" column="DRIVER_ID"/>
+     <result property="longitude" column="LONGITUDE"/>
+     <result property="latitude" column="LATITUDE"/>
+     <result property="province" column="PROVINCE"/>
+     <result property="city" column="CITY"/>
+     <result property="county" column="COUNTY"/>
+     <result property="town" column="TOWN"/>
+     <result property="location" column="LOCATION"/>
+     <result property="collectTime" column="COLLECT_TIME"/>
+     <result property="createTime" column="CREATE_TIME"/>
+     <result property="searchLocation" column="SEARCHLOCATION"/>
+     
+    </resultMap>
+    
+    <!-- 根据driverId查询历史位置-不分页 -->
+  <select id="query_location_collectInfo_driverId" parameterClass="Map" resultMap="location_collectInfo_domain_result">
+    SELECT a.* FROM (
+    SELECT id,
+		driver_id,
+		longitude,
+		latitude,
+		province,
+		city,
+		county,
+		(CASE WHEN county is NOT  NULL AND county != '' THEN CONCAT(province,'-',city,'-',county) 
+		WHEN city IS NOT  NULL AND city != '' THEN CONCAT(province,'-',city)
+		 ELSE province 
+		END) searchLocation,
+		town,
+		location,
+		date_format(collect_time,'%Y-%c-%d %T') collect_time,
+		create_time 
+	FROM t_location_collect_info 
+	WHERE driver_id = #driverId#  
+    )a  
+	<dynamic prepend="WHERE">
+	    <isNotEqual  prepend="AND" property="afterLoadTradeModifyTime" compareValue=""> UNIX_TIMESTAMP(date_format(a.collect_time,'%Y-%c-%d')) <![CDATA[>=]]>  UNIX_TIMESTAMP(#afterLoadTradeModifyTime#) </isNotEqual>
+	    <isNotEmpty property="arrivedTradeModifyTime" prepend="AND"> UNIX_TIMESTAMP(date_format(a.collect_time,'%Y-%c-%d')) <![CDATA[<=]]>  UNIX_TIMESTAMP(#arrivedTradeModifyTime#) </isNotEmpty>
+	    <isNotEmpty property="searchLocation" prepend="AND"> a.searchLocation like CONCAT(#searchLocation#,'%') </isNotEmpty>
+		<isNotEmpty property="startTime" prepend="AND"> UNIX_TIMESTAMP(date_format(a.collect_time,'%Y-%c-%d')) <![CDATA[>=]]>  UNIX_TIMESTAMP(#startTime#) </isNotEmpty>
+		<isNotEmpty property="endTime" prepend="AND"> UNIX_TIMESTAMP(date_format(a.collect_time,'%Y-%c-%d')) <![CDATA[<=]]>  UNIX_TIMESTAMP(#endTime#) </isNotEmpty>
+	</dynamic> 
+	ORDER BY a.collect_time DESC  
+  </select>
+    <!-- 根据driverId查询历史位置-分页 -->
+    <select id="query_location_collectInfo_driverId_byPage" parameterClass="Map" resultMap="location_collectInfo_domain_result">
+      SELECT a.* FROM (
+       SELECT id,
+		driver_id,
+		longitude,
+		latitude,
+		province,
+		city,
+		county,
+		(CASE WHEN county is NOT  NULL AND county != '' THEN CONCAT(province,'-',city,'-',county) 
+		WHEN city IS NOT  NULL AND city != '' THEN CONCAT(province,'-',city)
+		 ELSE province 
+		END) searchLocation,
+		town,
+		location,
+		date_format(collect_time,'%Y-%c-%d %T') collect_time,
+		create_time 
+	FROM t_location_collect_info 
+	WHERE driver_id = #driverId# 
+    )a 
+	<dynamic prepend="WHERE">
+	    <isNotEqual  prepend="AND" property="afterLoadTradeModifyTime" compareValue=""> UNIX_TIMESTAMP(date_format(a.collect_time,'%Y-%c-%d')) <![CDATA[>=]]>  UNIX_TIMESTAMP(#afterLoadTradeModifyTime#) </isNotEqual>
+	    <isNotEmpty property="arrivedTradeModifyTime" prepend="AND"> UNIX_TIMESTAMP(date_format(a.collect_time,'%Y-%c-%d')) <![CDATA[<=]]>  UNIX_TIMESTAMP(#arrivedTradeModifyTime#) </isNotEmpty>
+	    <isNotEmpty property="searchLocation" prepend="AND"> a.searchLocation like CONCAT(#searchLocation#,'%') </isNotEmpty>
+		<isNotEmpty property="startTime" prepend="AND"> UNIX_TIMESTAMP(date_format(a.collect_time,'%Y-%c-%d')) <![CDATA[>=]]>  UNIX_TIMESTAMP(#startTime#) </isNotEmpty>
+		<isNotEmpty property="endTime" prepend="AND"> UNIX_TIMESTAMP(date_format(a.collect_time,'%Y-%c-%d')) <![CDATA[<=]]>  UNIX_TIMESTAMP(#endTime#) </isNotEmpty>
+	</dynamic> 
+	ORDER BY a.collect_time DESC  
+	LIMIT #beginNum#,#endNum#
+  </select>
+  <!-- 查询总记录数 -->
+  <select id="query_location_collectInfo_driverId_count" parameterClass="Map" resultClass="java.lang.Integer">
+  SELECT COUNT(*) FROM (
+       SELECT id,
+		driver_id,
+		longitude,
+		latitude,
+		province,
+		city,
+		county,
+		(CASE WHEN county is NOT  NULL AND county != '' THEN CONCAT(province,'-',city,'-',county) 
+		WHEN city IS NOT  NULL AND city != '' THEN CONCAT(province,'-',city)
+		 ELSE province 
+		END) searchLocation,
+		town,
+		location,
+		date_format(collect_time,'%Y-%c-%d %T') collect_time,
+		create_time 
+	FROM t_location_collect_info 
+	WHERE driver_id = #driverId#  
+    )a 
+	<dynamic prepend="WHERE"> 
+	    <isNotEqual  prepend="AND" property="afterLoadTradeModifyTime" compareValue=""> UNIX_TIMESTAMP(date_format(a.collect_time,'%Y-%c-%d')) <![CDATA[>=]]>  UNIX_TIMESTAMP(#afterLoadTradeModifyTime#) </isNotEqual>
+	    <isNotEmpty property="arrivedTradeModifyTime" prepend="AND"> UNIX_TIMESTAMP(date_format(a.collect_time,'%Y-%c-%d')) <![CDATA[<=]]>  UNIX_TIMESTAMP(#arrivedTradeModifyTime#) </isNotEmpty>
+	    <isNotEmpty property="searchLocation" prepend="AND"> a.searchLocation like CONCAT(#searchLocation#,'%') </isNotEmpty>
+		<isNotEmpty property="startTime" prepend="AND"> UNIX_TIMESTAMP(date_format(a.collect_time,'%Y-%c-%d')) <![CDATA[>=]]>  UNIX_TIMESTAMP(#startTime#) </isNotEmpty>
+		<isNotEmpty property="endTime" prepend="AND"> UNIX_TIMESTAMP(date_format(a.collect_time,'%Y-%c-%d')) <![CDATA[<=]]>  UNIX_TIMESTAMP(#endTime#) </isNotEmpty>
+	</dynamic>
+  </select>
+</sqlMap>

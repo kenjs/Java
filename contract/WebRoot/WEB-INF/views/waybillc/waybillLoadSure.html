@@ -1,0 +1,274 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<title>运单管理</title>
+		<script src="../js/jquery/jquery-1.8.3.min.js" type=text/javascript></script>
+		<script src="../js/sys/system.js" type="text/javascript"></script>
+		<script src="../js/sys/webui/contract/header.js"></script>
+		<script src="../js/sys/webui/logo.js"></script>
+		<script src="../js/sys/webui/contract/left.js" type="text/javascript"></script>
+		<script type="text/javascript" src="../js/sys/DatePicker/WdatePicker.js"></script>
+		<script type="text/javascript" src="../js/sys/ymPrompt/ymPrompt.js"></script>
+		<link href="../js/sys/ymPrompt/skin/ch/ymPrompt.css" rel="stylesheet" />
+		<link href="../css/webui/main.css" rel="stylesheet" type="text/css"/>
+		
+		<link href="../css/themes/waybill/waybill_add.css" rel="stylesheet" type="text/css"/>
+		<script type="text/javascript" src="../js/themes/waybillc/waybill_add.js"></script>
+		<!-- 地区插件 -->
+		<link href="../js/sys/CityPicker/cityLayout.css" rel="stylesheet" type="text/css" />
+		<link href="../js/sys/CityPicker/buju.css" rel="stylesheet" type="text/css" />
+		
+		<!-- 地区插件 -->
+		<script type="text/javascript" src="../js/themes/waybillc/frompartyIdList.js"></script>
+		<script type="text/javascript" src="../js/themes/waybillc/consigneeList.js"></script>
+		<script type="text/javascript" src="../js/themes/waybillc/goodsnameList.js"></script>
+		<script type="text/javascript" src="../js/themes/waybillc/topartyNameList.js"></script>
+		<script type="text/javascript" src="../js/themes/waybillc/waybillLoadSure.js"></script>
+		<link href="../css/webui/commonPage.css" rel="stylesheet" type="text/css" />
+		<style type="text/css">
+			a{text-decoration:none;}
+			a:hover{ text-decoration:underline;color: #ec6110;}
+			a:link{color: #1560ea;}
+			*{ outline:none;}
+			body{/**font-size:12px;*/color:#000;}
+		</style>
+</head>
+
+<body>
+	<!-- 顶部 --开始  此处须由js动态加入-->
+	<div id="header" class="c-header" >
+
+	</div>
+	<!-- 顶部 --结束-->
+
+	<!-- LOGON --开始   此处须由js动态加入-->
+	<div id="logo" class="c-logo" >
+	
+	</div>
+	<!-- LOGON --结束-->
+	<div id="main" class="c-main">
+		<div id="left" class="c-left">
+			<div id="accordion">
+			</div>  
+		</div>
+    	<div id="right" class="c-right">
+  			<div class="crumbs fn-mt10 fn-cGray3">
+				<span class="house"></span>
+				<span class="links"><a href="../logincs/index_main" class="fn-cBlue">首页</a>
+				<span class="fn-ml5 fn-mr5">&gt;</span><a href="../waybillcs/waybillManager?order=3" class="fn-cBlue">运单管理</a>
+				<span class="fn-ml5 fn-mr5">&gt;</span><b>待装车确认</b></span>
+			</div>
+			<div class="fgxDiv"></div>
+			<!-- 右边新增内容开始 -->
+			<table width="820px" class="table1" border="0" cellspacing="0" cellpadding="0">
+				<tr class="tr2">
+					<td align="right" style="width:60px;">运单号：
+						<input type="hidden" name="waybillid" id="waybillid" value="" /><!-- 主键id -->
+						<input type="hidden" name="frompartyid" id="frompartyid"  value="" /><!-- 发货方id -->
+					</td>
+					<td align="left" style="width:160px;" id="waybillnumberDiv"></td>
+					<td align="right" style="width:90px;">客户单号&nbsp;</td>
+					<td align="left"   colspan="3" style="width:300px;">
+						<input type="text" class="addform_input" id="clientnumber" name="clientnumber" value="" />
+					</td>
+					<td align="right" style="width:130px;">托运日期&nbsp;</td>
+					<td align="left" style="width:130px;">
+						<input type="text" name="consigndate" id="consigndate" class="Wdate comDate" onfocus="WdatePicker({firstDayOfWeek:1})" style="width: 100px;" />
+					</td>
+				</tr>
+				<tr>
+					<td align="right">发货方&nbsp;</td>
+					<td align="left" id="frompartyidDIV"></td>
+					<td align="right">发货联系人&nbsp;</td>
+					<td align="left" style="width:125px;">
+						<input name="consignorlinkman" id="consignorlinkman" type="text" class="addform_input" />
+					</td>
+					<td align="right" style="width:65px;">联系电话&nbsp;</td>
+					<td align="left"><input type="text" class="addform_input" id="consignortelephonenumber" name="consignortelephonenumber" onchange="input_onfocus(this)" value="" /></td>
+					<td align="right">手机&nbsp;&nbsp;</td>
+					<td align="left"><input type="text" maxlength="11" class="addform_input" id="consignormobilenumber" name="consignormobilenumber" onblur="bilenumber(this);" value="" /></td>
+				</tr>
+				<tr class="tr2">
+					<td align="right"><span style='color: red;margin-right:1px;'>*</span>发货地&nbsp;&nbsp;</td>
+					<td align="left">
+						<input onchange="input_onfocus(this)"  style="background:transparent; border:1px solid #CCCCCC;width:120px;height:25px;font-size:12px;padding-left:0px;text-align:left; line-height:25px;margin-top: 8px;margin-right: 8px;margin-bottom: 8px;" name="consignorprovince" id="consignorprovince" autocomplete="off" type="text" value="请选择/输入城市名称" class="city_input  inputFocus proCityQueryAll proCitySelAll" ov="请选择/输入城市名称" />
+					</td>
+					<td align="right">详细地址&nbsp;</td>
+					<td align="left" colspan="5"><input style="width:310px;" type="text" class="addform_input" id="consignortown" name="consignortown" onchange="input_onfocus(this)" value="" /></td>
+				</tr>
+				<tr>
+					<td align="right"><span style='color: red;margin-right:1px;'>*</span>收货方&nbsp;</td>
+					<td align="left">
+						<input name="consignee" id="consignee" type="text" class="addform_input"  />
+					</td>
+					<td align="right">收货联系人&nbsp;</td>
+					<td align="left"><input type="text" class="addform_input" id="consigneelinkman" name="consigneelinkman" value="" onchange="input_onfocus(this)"/></td>
+					<td align="right" >联系电话&nbsp;</td>
+					<td align="left"><input type="text"  class="addform_input" id="consigneetelephonenumber" name="consigneetelephonenumber" onchange="input_onfocus(this)" value="" /></td>
+					<td align="right">手机&nbsp;</td>
+					<td align="left"><input type="text" maxlength="11" class="addform_input" id="consigneemobilenumber" name="consigneemobilenumber" onblur="bilenumber(this);" value="" /></td>
+				</tr>
+				<tr>
+					<td align="right"><span style='color: red;margin-right:1px;'>*</span>收货地&nbsp;</td>
+					<td align="left"><input onchange="input_onfocus(this)"  style="background:transparent; border:1px solid #CCCCCC;width:120px;height:25px;font-size:12px;padding-left:0px;text-align:left; line-height:25px;margin-top: 8px;margin-right: 8px;margin-bottom: 8px;" name="consigneeprovince" id="consigneeprovince" autocomplete="off" type="text" value="请选择/输入城市名称" class="city_input  inputFocus proCityQueryAll proCitySelAll" ov="请选择/输入城市名称" /></td>
+					<td align="right">详细地址&nbsp;</td>
+					<td align="left" colspan="3"><input style="width:310px;" type="text" onchange="input_onfocus(this)" class="addform_input" id="consigneetown" name="consigneetown" value="" /></td>
+					<td align="right">城区间距离(公里)&nbsp;</td>
+					<td align="left"><input type="text" class="addform_input" id="distance" name="distance" value="" /></td>
+				</tr>
+			</table>
+			<table id="hgrid" border="0" cellspacing="0" cellpadding="0" style="width:100%;">
+	         	<tr class="titleTr">
+	         		<th width="70px" height="10px" scope="col">货物名称</th>
+					<th width="60px" height="10px" scope="col">货物类型</th>
+					<th width="45px" height="10px" scope="col">规格</th>
+					<th width="45px" height="10px" scope="col">型号</th>
+					<th width="30px" height="10px" scope="col">数量</th>
+					<th width="70px"><font color="red">*</font>核定数量</th>
+					<th width="40px" height="10px" scope="col">包装</th>
+					<th width="40px" height="10px" scope="col">重量</th>
+					<th width="70px"><font color="red">*</font>核定重量</th>
+					<th width="30px" height="10px" scope="col">单位</th>
+					<th width="40px">体积</th>
+					<th width="70px"><font color="red">*</font>核定体积</th>
+					<th width="70px" height="10px" scope="col">计费方式</th>
+	        	</tr>
+	         </table>
+			<table id="hgrid" border="0"  cellspacing="0" cellpadding="0">
+				<tr>
+					<th width="70px" scope="col">合计</th>
+					<th width="60px" scope="col"></th>
+					<th width="50px" scope="col"></th>
+					<th width="50px" scope="col"></th>
+					<th width="40px" scope="col"></th>
+					<th width="60px" id="numZ">0</th>
+					<th width="55px" scope="col"></th>
+					<th style="text-align:right;"  width="140px" colspan="2" id="weightZ">0 公斤</th>
+					<th width="55px" scope="col"></th>
+					<th style="text-align:right;" width="120px" colspan="2" scope="col" id="volumeZ">0立方</th>
+					<th width="90px" scope="col"></th>
+				</tr>
+			</table>
+			<table class="table3" width="820px" border="0" cellspacing="0" cellpadding="0">
+				<tr>
+					<td align="right">结算方式 &nbsp;</td>
+					<td align="left">  
+						<select style="width:100px;height: 28px;padding-top:4px;" name="settletype" id="settletype" >
+					    </select>
+					</td>
+					<td align="right">收货方式&nbsp;</td>
+					<td align="left">
+						<select style="width:80px;height: 28px;padding-top:4px;" name="receivetype" id="receivetype" >
+					    </select>
+					</td>
+					<td align="right">到货方式&nbsp;</td>
+					<td align="left">
+						<select style="width:80px;height: 28px;padding-top:4px;" name="arrivetype" id="arrivetype" >
+					    </select>
+					</td>
+					<td align="right">回单方式&nbsp;</td>
+					<td align="left">
+						<select style="width:80px;height: 28px;padding-top:4px;" name="backbilltype" id="backbilltype" >
+					    </select>
+					</td>
+					<td align="right">回单张数&nbsp;</td>
+					<td align="left"><input type="text" class="addform_input" style="width:80px;" id="backbillnum" name="backbillnum" value="" /></td>
+					</tr>
+					<tr class="tr3">
+					<td align="right">备注&nbsp;</td>
+					<td colspan="9" align="left"><input style="width:705px;" type="text" class="addform_input" id="memo" name="memo" value="" /></td>
+				</tr>
+				<tr class="tr3">
+					<td align="right">分派分包商&nbsp;</td>
+					<td align="left" id="topartyname"></td>
+					<td align="right">运输方式&nbsp;</td> 
+					<td align="left">
+						<select style="width:80px;height: 28px;padding-top:4px;" name="shiptype" id="shiptype" >
+					    </select></td>
+					<td align="right">紧急程度&nbsp;</td>
+					<td align="left">
+						<select style="width:80px;height: 28px;padding-top:4px;" name="urgencydegree" id="urgencydegree" >
+					    </select></td>
+					<td align="right">装车日期&nbsp;</td>
+					<td align="left" colspan="3">
+						<input type="text" name="suredate" id="suredate" class="Wdate comDateTime" 
+							onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" style="width: 130px;" />
+					</td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td align="right">录单人：</td>
+					<td align="left" id="inputmanDiv"></td>
+					<td></td>
+					<td align="right">审核人：</td>
+					<td align="left"></td>
+					<td></td>
+					<td align="right">录单时间：</td>
+					<td align="left" colspan="3" id="inputdateDiv"></td>
+				</tr>
+				<tr>
+					<td colspan="9">
+						<button class="btn_submit" id="save" onclick="btnSave()" style="margin-left: 30px;">保存</button>
+						<input class="btn_submit" type="button" id="reback" value="取消" onclick="closeBack()"/>
+					</td>
+				</tr>
+			</table>
+			<!-- 右边新增内容结束 -->
+       	</div>
+	</div>
+<!--弹出省省市-->
+<div class="provinceCityAll">
+  <div class="tabs clearfix">
+    <ul class="">
+      <li><a href="javascript:" class="current" tb="hotCityAll">热门城市</a></li>
+      <li><a href="javascript:" tb="provinceAll">省份</a></li>
+      <li><a href="javascript:" tb="cityAll" id="cityAll">城市</a></li>
+      <li><a href="javascript:" tb="countyAll" id="countyAll">区县</a></li>
+    </ul>
+  </div>
+  <div class="con">
+    <div class="hotCityAll invis">
+      <div class="pre"><a></a></div>
+      <div class="list">
+        <ul>
+          <!-- 					<li><a href="javascript:"  class="current">南京</a></li> -->
+        </ul>
+      </div>
+      <div class="next"><a class="can"></a></div>
+    </div>
+    <div class="provinceAll invis">
+      <div class="pre"><a></a></div>
+      <div class="list">
+        <ul>
+          <!-- 					<li><a href="javascript:"  class="current">江西省</a></li> -->
+        </ul>
+      </div>
+      <div class="next"><a class="can"></a></div>
+    </div>
+    <div class="cityAll invis">
+      <div class="pre"><a></a></div>
+      <div class="list">
+        <ul>
+          <!-- 					<li><a href="javascript:"  class="current">南京</a></li> -->
+        </ul>
+      </div>
+      <div class="next"><a class="can"></a></div>
+    </div>
+    <div class="countyAll invis">
+      <div class="pre"><a></a></div>
+      <div class="list">
+        <ul>
+        </ul>
+      </div>
+      <div class="next"><a class="can"></a></div>
+    </div>
+  </div>
+</div>
+<script src="../js/sys/CityPicker/public.js"></script>
+<script>
+	
+</script>
+</body>
+</html>

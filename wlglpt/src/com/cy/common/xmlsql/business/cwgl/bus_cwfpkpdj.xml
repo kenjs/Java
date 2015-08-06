@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.hygl.dao.BusCwFpKpdjMapper">
+	<select id="selectCwFpKpdjPage" parameterClass="java.util.Map"
+		resultClass="com.cy.cwgl.domain.CwFpKpdjDomain">
+		SELECT A.KPSQ_DJXH kpsqDjxh,
+			A.KPSQFS_DM kpsqfsDm,
+       		A.KH_DJXH khDjxh,
+       		(SELECT KH.KHJC FROM QY_KH_DJXX KH WHERE A.KH_DJXH = KH.KH_DJXH) khmc,
+       		A.SQ_KPJE_HJ sqKpjeHj,
+       		A.SQ_KPRQ sqKprq,
+       		A.FPKJJE fpkjje,
+       		(SELECT MC FROM QY_RYDJ DM WHERE DM.CZY_DJXH = A.DJR_CZY_DJXH) sqrMc,
+       		A.KPDW_JGMC dwMc,
+       		(SELECT JC FROM QY_ZZJG JG WHERE JG.JGBM = A.DJ_JGBM) bmMc,
+       		A.djrq djrq,
+       		A.bzsm bzsm,
+          A.dj_jgbm djJgbm,
+          A.ss_jgbm ssJgbm
+  		FROM JS_KPSQ A
+ 		WHERE A.YXBZ = 'Y' 		 
+ 		  AND A.FPKJBZ = 'N' 
+ 		  AND (A.SPBZ = 'N' OR (A.SPBZ = 'Y' AND A.WSSPZT_DM = '3'))
+ 		  <dynamic>
+ 		  	<isNotEmpty property="kpdwJgbm" prepend=" and ">
+ 		  		A.kpdw_jgbm = #kpdwJgbm#
+ 		  	</isNotEmpty>
+ 		  	<isNotEmpty property="khDjxh" prepend=" and ">
+ 		  		A.KH_DJXH = #khDjxh#
+ 		  	</isNotEmpty>
+ 		  </dynamic>
+		  $orderStr$
+    </select>
+    
+    <select id="selectCwFpKpdjAll" parameterClass="java.util.Map"
+		resultClass="com.cy.cwgl.domain.CwFpKpdjDomain">
+		SELECT A.KPSQ_DJXH kpsqDjxh,
+			A.KPSQFS_DM kpsqfsDm,
+       		A.KH_DJXH khDjxh,
+       		(SELECT KH.KHJC FROM QY_KH_DJXX KH WHERE A.KH_DJXH = KH.KH_DJXH) khmc,
+       		A.SQ_KPJE_HJ sqKpjeHj,
+       		A.SQ_KPRQ sqKprq,
+       		A.FPKJJE fpkjje,
+       		(SELECT MC FROM QY_RYDJ DM WHERE DM.CZY_DJXH = A.DJR_CZY_DJXH) sqrMc,
+       		A.KPDW_JGMC dwMc,
+       		(SELECT JC FROM QY_ZZJG JG WHERE JG.JGBM = A.DJ_JGBM) bmMc,
+       		A.djrq djrq,
+       		A.bzsm bzsm,
+          A.dj_jgbm djJgbm,
+          A.ss_jgbm ssJgbm
+  		FROM JS_KPSQ A
+ 		WHERE A.YXBZ = 'Y' 		 
+ 		  AND A.FPKJBZ = 'N' 
+ 		  AND (A.SPBZ = 'N' OR (A.SPBZ = 'Y' AND A.WSSPZT_DM = '3'))
+ 		  <dynamic>
+ 		  	<isNotEmpty property="kpdwJgbm" prepend=" and ">
+ 		  		A.kpdw_jgbm = #kpdwJgbm#
+ 		  	</isNotEmpty>
+ 		  	<isNotEmpty property="khDjxh" prepend=" and ">
+ 		  		A.KH_DJXH = #khDjxh#
+ 		  	</isNotEmpty> 		  
+ 		  </dynamic>
+		  ORDER by A.KPSQ_DJXH ASC
+    </select>
+
+	<select id="getCwFpKpdjRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		select count(A.KPSQ_DJXH) 
+		  FROM JS_KPSQ A
+ 		 WHERE A.YXBZ = 'Y' 	
+ 		   AND A.FPKJBZ = 'N' 
+ 		   AND (A.SPBZ = 'N' OR (A.SPBZ = 'Y' AND A.WSSPZT_DM = '3'))
+ 		  <dynamic>
+ 		  	<isNotEmpty property="kpdwJgbm" prepend=" and ">
+ 		  		A.kpdw_jgbm = #kpdwJgbm#
+ 		  	</isNotEmpty>
+ 		  	<isNotEmpty property="khDjxh" prepend=" and ">
+ 		  		A.KH_DJXH = #khDjxh#
+ 		  	</isNotEmpty> 		  	
+ 		  </dynamic>
+    </select>
+
+	
+	<update id="deleteByKpsqDjxh" parameterClass="java.util.Map">
+		update JS_KPSQ set yxbz='N' where KPSQ_DJXH=#kpsqDjxh#
+	</update>
+	
+</sqlMap>

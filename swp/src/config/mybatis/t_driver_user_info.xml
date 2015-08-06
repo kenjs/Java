@@ -1,0 +1,1084 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.swp.dao.DriverUserInfoDao">
+	<resultMap type="DriverUserInfo" id="driver_user_info_result">
+        <result property="id" column="ID"/>
+        <result property="code" column="CODE"/>
+        <result property="password" column="PASSWORD"/>
+        <result property="name" column="NAME"/>
+        <result property="carNumber" column="CAR_NUMBER"/>
+        <result property="freezeFlag" column="FREEZE_FLAG"/>
+        <result property="auditFlag" column="AUDIT_FLAG"/>
+        <result property="telephone" column="telephone"/>
+        <result property="identityLicenseNum" column="IDENTITY_LICENSE_NUM"/>
+        <result property="operatingLicense" column="OPERATING_LICENSE"/>
+        <result property="driversLicense" column="DRIVERS_LICENSE"/>
+        <result property="carLength" column="CAR_LENGTH"/>
+        <result property="carWeight" column="CAR_WEIGHT"/>
+        <result property="remark" column="REMARK"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="modifyTime" column="MODIFY_TIME"/>
+        <result property="drivingLicense" column="DRIVING_LICENSE"/>
+        <result property="deleteFlag" column="DELETE_FLAG"/>
+        <result property="carStateType" column="CAR_STATE_TYPE"/>
+        <result property="carCubage" column="CAR_CUBAGE"/>
+        <result property="carPlateType" column="CAR_PLATE_TYPE"/>
+        <result property="carBarType" column="CAR_BAR_TYPE"/>
+        <result property="carTypes" column="CAR_TYPES"/> 
+
+        <!-- 20140701 AM添加的两字段 -->
+        <result property="identityLicenseNumFront" column="IDENTITY_LICENSE_NUM_FRONT"/>
+        <result property="identityLicenseNumContrary" column="IDENTITY_LICENSE_NUM_CONTRARY"/>
+        <!-- 201407013 pM添加的两字段,百度云推送使用  例子：提醒司机确认拉货-->
+        <result property="baiduChannelId" column="BAIDU_CHANNEL_ID"/>
+        <result property="baiduUserId" column="BAIDU_USER_ID"/>
+        <!-- 审核提交标识 20140728 -->
+        <result property="submitType" column="SUBMIT_TYPE"/>
+        <!-- 司机VIP会员对外是否展示（0展示1不展示） 20140901-->
+        <result property="driverPactStart" column="DRIVER_PACT_START"/>
+    </resultMap>
+
+	<resultMap type="DriverUserInfoDomain" id="driver_user_info_domain_results">
+        <result property="id" column="ID"/>
+        <result property="code" column="CODE"/>
+        <result property="password" column="PASSWORD"/>
+        <result property="name" column="NAME"/>
+        <result property="carNumber" column="CAR_NUMBER"/>
+        <result property="freezeFlag" column="FREEZE_FLAG"/>
+        <result property="auditFlag" column="AUDIT_FLAG"/>
+        <result property="telephone" column="telephone"/>
+        <result property="identityLicenseNum" column="IDENTITY_LICENSE_NUM"/>
+        <result property="operatingLicense" column="OPERATING_LICENSE"/>
+        <result property="driversLicense" column="DRIVERS_LICENSE"/>
+        <result property="carLength" column="CAR_LENGTH"/>
+        <result property="carWeight" column="CAR_WEIGHT"/>
+        <result property="remark" column="REMARK"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="modifyTime" column="MODIFY_TIME"/>
+        <result property="drivingLicense" column="DRIVING_LICENSE"/>
+        <result property="deleteFlag" column="DELETE_FLAG"/>
+        <result property="carStateType" column="CAR_STATE_TYPE"/>
+        <result property="carCubage" column="CAR_CUBAGE"/>
+        <result property="carPlateType" column="CAR_PLATE_TYPE"/>
+        <result property="carBarType" column="CAR_BAR_TYPE"/>
+        <result property="carTypes" column="CAR_TYPES"/>
+        <result property="lastLocation" column="LASTLOCATION"/>
+        <result property="driverLine" column="DRIVERLINE"/>
+
+        <!-- 201407013 pM添加的两字段,百度云推送使用  例子：提醒司机确认拉货-->
+        <result property="baiduChannelId" column="BAIDU_CHANNEL_ID"/>
+        <result property="baiduUserId" column="BAIDU_USER_ID"/>
+        <!-- 20141018 -->
+        <result property="contactDriverCounts" column="CONTACTDRIVERCOUNTS"/>
+        <result property="driverReply" column="DRIVERREPLY"/>
+        
+        
+    </resultMap>
+    
+    <resultMap type="DriverUserInfoDomain" id="driver_user_info_domain_new_results">
+        <result property="id" column="ID"/>
+        <result property="code" column="CODE"/>
+        <result property="name" column="NAME"/>
+        <result property="carNumber" column="CAR_NUMBER"/>
+        <result property="identityLicenseNum" column="IDENTITY_LICENSE_NUM"/>
+        <result property="carTypes" column="CAR_TYPES"/>
+        <!-- 201407013 pM添加的两字段,百度云推送使用  例子：提醒司机确认拉货-->
+        <result property="baiduChannelId" column="BAIDU_CHANNEL_ID"/>
+        <result property="baiduUserId" column="BAIDU_USER_ID"/>
+        <!-- 20141018 -->
+        <result property="lastLocation" column="LASTLOCATION"/>
+        <result property="driverLine" column="DRIVERLINE"/>
+        <!-- 定位时间 -->
+        <result property="lastTime" column="LAST_TIME"/>
+    </resultMap>
+
+	<resultMap type="DriverUserInfoDomain" id="driver_user_info_domain_result">
+		<result property="id" column="ID"/>
+		<result property="name" column="NAME"/>
+		<result property="code" column="CODE"/>
+		<result property="carNumber" column="CAR_NUMBER"/>
+		<result property="carTypes" column="CAR_TYPES"/>
+	</resultMap>
+
+    <resultMap type="DriverUserInfoDomain" id="driver_user_info_domain_rescount">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="code" column="code"/>
+        <result property="carNumber" column="car_number"/>
+        <result property="submitType" column="submit_type"/>
+        <result property="countDriverLine" column="countDriverLine"/>
+        <!--t_dayrecord_driver_active按天统计司机存活与活跃记录表中的记录数-->
+        <result property="countMonAct" column="countMonAct"/>
+        <!--司机最近使用时间-->
+        <result property="usedRecentTime" column="used_recent_time"/>
+        <!--近15天使用次数-->
+        <result property="user15DayNum" column="user15DayNum"/>
+        <!--最近定位地点-->
+        <result property="lastLocation" column="lastLocation"/>
+        <!--最近定位时间-->
+        <result property="lastTime" column="lastTime"/>
+    </resultMap>
+
+	<resultMap type="DriverUserInfo" id="driver_user_info_location_result">
+		<result property="id" column="ID"/>
+		<result property="province" column="province"/>
+		<result property="city" column="city"/>
+		<result property="county" column="county"/>
+		<result property="baiduChannelId" column="BAIDU_CHANNEL_ID"/>
+		<result property="baiduUserId" column="BAIDU_USER_ID"/>
+	</resultMap>
+	
+	 <!-- 根据Id查询司机车辆 -->
+    <select id="queryDriverUserInfoById" parameterType="string" resultMap="driver_user_info_result">
+         SELECT t.id,
+        t.code,
+        t.password,
+        t.name,
+        t.car_number,
+        t.freeze_flag,
+        t.audit_flag,
+        t.telephone,
+        t.identity_license_num,
+        t.operating_license,
+        t.car_length,
+        t.car_weight,
+        t.remark,
+        t.create_time,
+        t.modify_time,
+        t.driving_license,
+        t.drivers_license,
+        t.delete_flag,
+        t.car_state_type,
+        t.car_cubage,
+        t.car_plate_type,
+        t.car_bar_type,
+        t.car_types,
+        t.identity_license_num_front,
+        t.identity_license_num_contrary,
+        t.baidu_channel_id,
+        t.baidu_user_id,
+        t.driver_pact_start,
+        t.submit_type 
+        FROM t_driver_user_info t
+        WHERE t.id = #{id}
+    </select>
+	
+	
+	<!-- 根据导入货源匹配id获取司机信息 -->
+    <select id="queryCarByAssisterId" parameterType="String" resultMap="driver_user_info_domain_new_results">
+	SELECT
+	t.id,
+	t. CODE,
+	t. NAME,
+	t.car_number,
+	t.identity_license_num,
+	t.car_types,
+	t.baidu_channel_id,
+	t.baidu_user_id,
+	CONCAT(cli.province,cli.city,cli.county) lastLocation,
+	cli.last_time,
+	l.driverLine 
+	FROM 
+	t_driver_user_info t,
+	(SELECT a.DRIVER_ID,GROUP_CONCAT(a.START_PROVINCE,REPLACE (a.start_city,'','全部市'),
+		'——',a.end_province,REPLACE (a.end_city, '', '全部市')) AS driverLine
+	FROM t_driver_line_info a 
+	WHERE a. START = 0 GROUP BY DRIVER_ID ) l,
+	t_location_collect_last_info cli,
+	t_marketing_cargo_driver_contacts mar 
+	where  t.id = l.DRIVER_ID and cli.driver_id = t.id 
+	and t.id = mar.driver_user_id
+	and	t.delete_flag = 0 
+	and mar.assist_id = #{assistId}
+	and mar.reply_result = 0
+	ORDER BY t.id
+    </select>
+	
+	
+	
+	<!-- 货找车-不分页 -->
+    <!-- queryCargoMateDriverDomain -->
+    <select id="queryCargoMateDriverDomain" parameterType="hashmap" resultMap="driver_user_info_domain_results">
+		SELECT
+		t.id,
+		t. CODE,
+		t. PASSWORD,
+		t. NAME,
+		t.car_number,
+		t.freeze_flag,
+		t.audit_flag,
+		t.telephone,
+		t.identity_license_num,
+		t.operating_license,
+		t.car_length,
+		t.car_weight,
+		t.remark,
+		t.create_time,
+		t.modify_time,
+		t.driving_license,
+		t.drivers_license,
+		t.delete_flag,
+		t.car_state_type,
+		t.car_cubage,
+		t.car_plate_type,
+		t.car_bar_type,
+		t.car_types,
+		t.baidu_channel_id,
+		t.baidu_user_id,
+		(SELECT Count(*) FROM t_marketing_cargo_driver_contacts m
+		WHERE	m.driver_user_id = t.id
+		AND m.assist_id = #{assistId}) contactDriverCounts,
+		(SELECT m.reply_result
+		FROM t_marketing_cargo_driver_contacts m
+		WHERE	m.driver_user_id = t.id
+		AND m.assist_id = #{assistId}
+		ORDER BY	m.id DESC LIMIT 1 ) driverReply,
+		(SELECT CONCAT(cli.province,cli.city,cli.county) FROM t_location_collect_last_info cli
+		WHERE	cli.driver_id = t.id
+		ORDER BY	last_time DESC LIMIT 1 ) lastLocation,
+		l.driverLine
+		FROM t_driver_user_info t
+		INNER JOIN (
+		select
+		t.DRIVER_ID,
+		GROUP_CONCAT(t.START_PROVINCE,REPLACE (t.start_city,'','全部市'),'——',t.end_province,REPLACE (t.end_city, '', '全部市')) AS driverLine
+		FROM t_driver_business_line_info t
+		WHERE t.START = 0
+		<if test="null != startProvince and '' != startProvince">
+			AND t.start_province = #{startProvince}
+		</if>
+		<if test="null != endProvince and '' != endProvince">
+			AND t.end_province = #{endProvince}
+		</if>
+		<if test="null != startCity and '' != startCity">
+			AND t.start_city = #{startCity}
+		</if>
+		<if test="null != endCity and '' != endCity">
+			AND t.end_city = #{endCity}
+		</if>
+		<if test="null != requestStartTime and '' != requestStartTime">
+			and DATE_FORMAT(t.START_TIME,'%Y-%m-%d') <![CDATA[<=]]> DATE_FORMAT(#{requestStartTime},'%Y-%m-%d') and DATE_FORMAT(t.END_TIME,'%Y-%m-%d') <![CDATA[>=]]> DATE_FORMAT(#{requestStartTime},'%Y-%m-%d')
+		</if>
+		GROUP BY t.DRIVER_ID
+		UNION
+		select
+		t.DRIVER_ID,
+		GROUP_CONCAT(t.START_PROVINCE,REPLACE (t.start_city,'','全部市'),'——',t.end_province,REPLACE (t.end_city, '', '全部市')) AS driverLine
+		from t_driver_line_info t,t_location_collect_last_info tl
+		where t.DRIVER_ID = tl.DRIVER_ID and t.START = 0 and TIMESTAMPDIFF(HOUR,tl.MODIFY_TIME,sysdate()) <![CDATA[<=]]> 24
+		<if test="(null != startProvince and '' != startProvince) or (null != endProvince and '' != endProvince)">
+			and ((
+		</if>
+		<choose>
+			<when test="null != startProvince and '' != startProvince">
+				t.START_PROVINCE = #{startProvince}
+				<if test="null != startCity and '' != startCity">
+					and t.START_CITY = #{startCity}
+				</if>
+				<if test="null != endProvince and '' != endProvince">
+					and t.END_PROVINCE = #{endProvince}
+				</if>
+				<if test="null != endCity and '' != endCity">
+					and t.END_CITY = #{endCity}
+				</if>
+			</when>
+			<otherwise>
+				<if test="null != endProvince and '' != endProvince">
+					t.END_PROVINCE = #{endProvince}
+				</if>
+				<if test="null != endCity and '' != endCity">
+					and t.END_CITY = #{endCity}
+				</if>
+			</otherwise>
+		</choose>
+		<if test="(null != startProvince and '' != startProvince) or (null != endProvince and '' != endProvince)">
+			) or (
+		</if>
+		<choose>
+			<when test="null != startProvince and '' != startProvince">
+				t.END_PROVINCE = #{startProvince}
+				<if test="null != startCity and '' != startCity">
+					and t.END_CITY = #{startCity}
+				</if>
+				<if test="null != endProvince and '' != endProvince">
+					and t.START_PROVINCE = #{endProvince}
+				</if>
+				<if test="null != endCity and '' != endCity">
+					and t.START_CITY = #{endCity}
+				</if>
+			</when>
+			<otherwise>
+				<if test="null != endProvince and '' != endProvince">
+					t.START_PROVINCE = #{endProvince}
+				</if>
+				<if test="null != endCity and '' != endCity">
+					and t.START_CITY = #{endCity}
+				</if>
+			</otherwise>
+		</choose>
+		<if test="(null != startProvince and '' != startProvince) or (null != endProvince and '' != endProvince)">
+			))
+		</if>
+		GROUP BY t.DRIVER_ID
+		UNION
+		select
+		t.DRIVER_ID,
+		GROUP_CONCAT(t.START_PROVINCE,REPLACE (t.start_city,'','全部市'),'——',t.end_province,REPLACE (t.end_city, '', '全部市')) AS driverLine
+		from t_driver_line_info t
+		where t.START = 0
+		<if test="(null != startProvince and '' != startProvince) or (null != endProvince and '' != endProvince)">
+			and ((
+		</if>
+		<choose>
+			<when test="null != startProvince and '' != startProvince">
+				t.START_PROVINCE = #{startProvince}
+				<if test="null != startCity and '' != startCity">
+					and t.START_CITY = #{startCity}
+				</if>
+				<if test="null != endProvince and '' != endProvince">
+					and t.END_PROVINCE = #{endProvince}
+				</if>
+				<if test="null != endCity and '' != endCity">
+					and t.END_CITY = #{endCity}
+				</if>
+			</when>
+			<otherwise>
+				<if test="null != endProvince and '' != endProvince">
+					t.END_PROVINCE = #{endProvince}
+				</if>
+				<if test="null != endCity and '' != endCity">
+					and t.END_CITY = #{endCity}
+				</if>
+			</otherwise>
+		</choose>
+		<if test="(null != startProvince and '' != startProvince) or (null != endProvince and '' != endProvince)">
+			) or (
+		</if>
+		<choose>
+			<when test="null != startProvince and '' != startProvince">
+				t.END_PROVINCE = #{startProvince}
+				<if test="null != startCity and '' != startCity">
+					and t.END_CITY = #{startCity}
+				</if>
+				<if test="null != endProvince and '' != endProvince">
+					and t.START_PROVINCE = #{endProvince}
+				</if>
+				<if test="null != endCity and '' != endCity">
+					and t.START_CITY = #{endCity}
+				</if>
+			</when>
+			<otherwise>
+				<if test="null != endProvince and '' != endProvince">
+					t.START_PROVINCE = #{endProvince}
+				</if>
+				<if test="null != endCity and '' != endCity">
+					and t.START_CITY = #{endCity}
+				</if>
+			</otherwise>
+		</choose>
+		<if test="(null != startProvince and '' != startProvince) or (null != endProvince and '' != endProvince)">
+			))
+		</if>
+		GROUP BY t.DRIVER_ID
+		UNION
+		SELECT a1.id as DRIVER_ID,
+		(select GROUP_CONCAT(a2.START_PROVINCE,REPLACE (a2.start_city,'','全部市'),'——',a2.end_province,REPLACE (a2.end_city, '', '全部市')) as driverLine from t_driver_line_info a2 where a2.driver_id = a1.id and a2.START=0) as driverLine
+		FROM t_location_collect_last_info a,t_driver_user_info a1
+		WHERE a.DRIVER_ID = a1.id   and TIMESTAMPDIFF(HOUR,a.MODIFY_TIME,sysdate()) <![CDATA[<=]]> 24
+		<if test="null != startProvince and '' != startProvince">
+			and a.PROVINCE = #{startProvince}
+		</if>
+		<if test="null != startCity and '' != startCity">
+			and a.CITY = #{startCity}
+		</if>
+		GROUP BY a1.id
+		) l ON t.id = l.DRIVER_ID
+		WHERE	t.delete_flag = #{deleteFlag}
+		ORDER BY t.id
+    </select>
+
+    <!-- 货找车-分页 -->
+    <!-- queryCargoMateDriverDomainByPage -->
+    <select id="queryCargoMateDriverDomainByPage" parameterType="hashmap" resultMap="driver_user_info_domain_results">
+	   SELECT
+		t.id,
+		t. CODE,
+		t. PASSWORD,
+		t. NAME,
+		t.car_number,
+		t.freeze_flag,
+		t.audit_flag,
+		t.telephone,
+		t.identity_license_num,
+		t.operating_license,
+		t.car_length,
+		t.car_weight,
+		t.remark,
+		t.create_time,
+		t.modify_time,
+		t.driving_license,
+		t.drivers_license,
+		t.delete_flag,
+		t.car_state_type,
+		t.car_cubage,
+		t.car_plate_type,
+		t.car_bar_type,
+		t.car_types,
+		t.baidu_channel_id,
+		t.baidu_user_id,
+		(SELECT Count(*) FROM t_marketing_cargo_driver_contacts m
+			WHERE	m.driver_user_id = t.id
+			AND m.assist_id = #{assistId}) contactDriverCounts,
+		(SELECT m.reply_result
+			FROM t_marketing_cargo_driver_contacts m
+			WHERE	m.driver_user_id = t.id
+			AND m.assist_id = #{assistId} 
+			ORDER BY	m.id DESC LIMIT 1 ) driverReply,
+		(SELECT CONCAT(cli.province,cli.city,cli.county) FROM t_location_collect_last_info cli
+			WHERE	cli.driver_id = t.id
+			ORDER BY	last_time DESC LIMIT 1 ) lastLocation,
+		l.driverLine 
+		FROM t_driver_user_info t 
+		INNER JOIN (
+			select 
+			t.DRIVER_ID,
+			GROUP_CONCAT(t.START_PROVINCE,REPLACE (t.start_city,'','全部市'),'——',t.end_province,REPLACE (t.end_city, '', '全部市')) AS driverLine
+			FROM t_driver_business_line_info t
+			WHERE t.START = 0
+			<if test="null != startProvince and '' != startProvince">
+				AND t.start_province = #{startProvince}
+			</if>
+			<if test="null != endProvince and '' != endProvince">
+				AND t.end_province = #{endProvince}
+			</if>
+			<if test="null != startCity and '' != startCity">
+				AND t.start_city = #{startCity}
+			</if>
+			<if test="null != endCity and '' != endCity">
+				AND t.end_city = #{endCity}
+			</if>
+			<if test="null != requestStartTime and '' != requestStartTime">
+				and DATE_FORMAT(t.START_TIME,'%Y-%m-%d') <![CDATA[<=]]> DATE_FORMAT(#{requestStartTime},'%Y-%m-%d') and DATE_FORMAT(t.END_TIME,'%Y-%m-%d') <![CDATA[>=]]> DATE_FORMAT(#{requestStartTime},'%Y-%m-%d')
+			</if>
+			GROUP BY t.DRIVER_ID
+			UNION  
+			select
+			t.DRIVER_ID,
+			GROUP_CONCAT(t.START_PROVINCE,REPLACE (t.start_city,'','全部市'),'——',t.end_province,REPLACE (t.end_city, '', '全部市')) AS driverLine
+			from t_driver_line_info t,t_location_collect_last_info tl 
+			where t.DRIVER_ID = tl.DRIVER_ID and t.START = 0 and TIMESTAMPDIFF(HOUR,tl.MODIFY_TIME,sysdate()) <![CDATA[<=]]> 24
+			<if test="(null != startProvince and '' != startProvince) or (null != endProvince and '' != endProvince)">
+				and ((
+			</if>
+				<choose>
+					<when test="null != startProvince and '' != startProvince">
+						t.START_PROVINCE = #{startProvince}
+						<if test="null != startCity and '' != startCity">
+							and t.START_CITY = #{startCity}
+						</if>
+						<if test="null != endProvince and '' != endProvince">
+							and t.END_PROVINCE = #{endProvince}
+						</if>
+						<if test="null != endCity and '' != endCity">
+							and t.END_CITY = #{endCity}
+						</if>
+					</when>
+					<otherwise>
+						<if test="null != endProvince and '' != endProvince">
+							t.END_PROVINCE = #{endProvince}
+						</if>
+						<if test="null != endCity and '' != endCity">
+							and t.END_CITY = #{endCity}
+						</if>
+					</otherwise>
+				</choose>
+			<if test="(null != startProvince and '' != startProvince) or (null != endProvince and '' != endProvince)">
+				) or (
+			</if>
+				<choose>
+					<when test="null != startProvince and '' != startProvince">
+						t.END_PROVINCE = #{startProvince}
+						<if test="null != startCity and '' != startCity">
+							and t.END_CITY = #{startCity}
+						</if>
+						<if test="null != endProvince and '' != endProvince">
+							and t.START_PROVINCE = #{endProvince}
+						</if>
+						<if test="null != endCity and '' != endCity">
+							and t.START_CITY = #{endCity}
+						</if>
+					</when>
+					<otherwise>
+						<if test="null != endProvince and '' != endProvince">
+							t.START_PROVINCE = #{endProvince}
+						</if>
+						<if test="null != endCity and '' != endCity">
+							and t.START_CITY = #{endCity}
+						</if>
+					</otherwise>
+				</choose>
+			<if test="(null != startProvince and '' != startProvince) or (null != endProvince and '' != endProvince)">
+				))
+			</if>
+			GROUP BY t.DRIVER_ID
+			UNION  
+			select
+			t.DRIVER_ID,
+			GROUP_CONCAT(t.START_PROVINCE,REPLACE (t.start_city,'','全部市'),'——',t.end_province,REPLACE (t.end_city, '', '全部市')) AS driverLine
+			from t_driver_line_info t 
+			where t.START = 0
+			<if test="(null != startProvince and '' != startProvince) or (null != endProvince and '' != endProvince)">
+				and ((
+			</if>
+				<choose>
+					<when test="null != startProvince and '' != startProvince">
+						t.START_PROVINCE = #{startProvince}
+						<if test="null != startCity and '' != startCity">
+							and t.START_CITY = #{startCity}
+						</if>
+						<if test="null != endProvince and '' != endProvince">
+							and t.END_PROVINCE = #{endProvince}
+						</if>
+						<if test="null != endCity and '' != endCity">
+							and t.END_CITY = #{endCity}
+						</if>
+					</when>
+					<otherwise>
+						<if test="null != endProvince and '' != endProvince">
+							t.END_PROVINCE = #{endProvince}
+						</if>
+						<if test="null != endCity and '' != endCity">
+							and t.END_CITY = #{endCity}
+						</if>
+					</otherwise>
+				</choose>
+			<if test="(null != startProvince and '' != startProvince) or (null != endProvince and '' != endProvince)">
+				) or (
+			</if>
+				<choose>
+					<when test="null != startProvince and '' != startProvince">
+						t.END_PROVINCE = #{startProvince}
+						<if test="null != startCity and '' != startCity">
+							and t.END_CITY = #{startCity}
+						</if>
+						<if test="null != endProvince and '' != endProvince">
+							and t.START_PROVINCE = #{endProvince}
+						</if>
+						<if test="null != endCity and '' != endCity">
+							and t.START_CITY = #{endCity}
+						</if>
+					</when>
+					<otherwise>
+						<if test="null != endProvince and '' != endProvince">
+							t.START_PROVINCE = #{endProvince}
+						</if>
+						<if test="null != endCity and '' != endCity">
+							and t.START_CITY = #{endCity}
+						</if>
+					</otherwise>
+				</choose>
+			<if test="(null != startProvince and '' != startProvince) or (null != endProvince and '' != endProvince)">
+				))
+			</if>
+			GROUP BY t.DRIVER_ID
+			UNION
+			SELECT a1.id as DRIVER_ID,
+			(select GROUP_CONCAT(a2.START_PROVINCE,REPLACE (a2.start_city,'','全部市'),'——',a2.end_province,REPLACE (a2.end_city, '', '全部市')) as driverLine from t_driver_line_info a2 where a2.driver_id = a1.id and a2.START=0) as driverLine
+			FROM t_location_collect_last_info a,t_driver_user_info a1
+			WHERE a.DRIVER_ID = a1.id   and TIMESTAMPDIFF(HOUR,a.MODIFY_TIME,sysdate()) <![CDATA[<=]]> 24
+			<if test="null != startProvince and '' != startProvince">
+				and a.PROVINCE = #{startProvince}
+			</if>
+			<if test="null != startCity and '' != startCity">
+				and a.CITY = #{startCity}
+			</if>
+			GROUP BY a1.id
+			) l ON t.id = l.DRIVER_ID
+			WHERE	t.delete_flag = #{deleteFlag} 
+			ORDER BY t.id  
+	        LIMIT #{beginNum},#{endNum}
+    </select>
+
+    <!-- 计算某条货物所匹配到车的总记录数 -->
+    <!-- queryCargoMateDriverDomainCount -->
+    <select id="queryCargoMateDriverDomainCount" parameterType="hashmap" resultType="integer">
+	    SELECT COUNT(*) 
+		FROM t_driver_user_info t 
+		INNER JOIN (
+			select 
+			t.DRIVER_ID,
+			GROUP_CONCAT(t.START_PROVINCE,REPLACE (t.start_city,'','全部市'),'——',t.end_province,REPLACE (t.end_city, '', '全部市')) AS driverLine
+			FROM t_driver_business_line_info t
+			WHERE t. START = 0
+			<if test="null != startProvince and '' != startProvince">
+				AND t.start_province = #{startProvince}
+			</if>
+			<if test="null != endProvince and '' != endProvince">
+				AND t.end_province = #{endProvince}
+			</if>
+			<if test="null != startCity and '' != startCity">
+				AND t.start_city = #{startCity}
+			</if>
+			<if test="null != endCity and '' != endCity">
+				AND t.end_city = #{endCity}
+			</if>
+			<if test="null != requestStartTime and '' != requestStartTime">
+				and DATE_FORMAT(t.START_TIME,'%Y-%m-%d') <![CDATA[<=]]> DATE_FORMAT(#{requestStartTime},'%Y-%m-%d') and DATE_FORMAT(t.END_TIME,'%Y-%m-%d') <![CDATA[>=]]> DATE_FORMAT(#{requestStartTime},'%Y-%m-%d')
+			</if>
+			GROUP BY t.DRIVER_ID
+			UNION  
+			select
+			t.DRIVER_ID,
+			GROUP_CONCAT(t.START_PROVINCE,REPLACE (t.start_city,'','全部市'),'——',t.end_province,REPLACE (t.end_city, '', '全部市')) AS driverLine
+			from t_driver_line_info t,t_location_collect_last_info tl 
+			where t.DRIVER_ID = tl.DRIVER_ID and t.START = 0 and TIMESTAMPDIFF(HOUR,tl.MODIFY_TIME,sysdate()) <![CDATA[<=]]> 24
+			<if test="(null != startProvince and '' != startProvince) or (null != endProvince and '' != endProvince)">
+				and ((
+			</if>
+				<choose>
+					<when test="null != startProvince and '' != startProvince">
+						t.START_PROVINCE = #{startProvince}
+						<if test="null != startCity and '' != startCity">
+							and t.START_CITY = #{startCity}
+						</if>
+						<if test="null != endProvince and '' != endProvince">
+							and t.END_PROVINCE = #{endProvince}
+						</if>
+						<if test="null != endCity and '' != endCity">
+							and t.END_CITY = #{endCity}
+						</if>
+					</when>
+					<otherwise>
+						<if test="null != endProvince and '' != endProvince">
+							t.END_PROVINCE = #{endProvince}
+						</if>
+						<if test="null != endCity and '' != endCity">
+							and t.END_CITY = #{endCity}
+						</if>
+					</otherwise>
+				</choose>
+			<if test="(null != startProvince and '' != startProvince) or (null != endProvince and '' != endProvince)">
+				) or (
+			</if>
+				<choose>
+					<when test="null != startProvince and '' != startProvince">
+						t.END_PROVINCE = #{startProvince}
+						<if test="null != startCity and '' != startCity">
+							and t.END_CITY = #{startCity}
+						</if>
+						<if test="null != endProvince and '' != endProvince">
+							and t.START_PROVINCE = #{endProvince}
+						</if>
+						<if test="null != endCity and '' != endCity">
+							and t.START_CITY = #{endCity}
+						</if>
+					</when>
+					<otherwise>
+						<if test="null != endProvince and '' != endProvince">
+							t.START_PROVINCE = #{endProvince}
+						</if>
+						<if test="null != endCity and '' != endCity">
+							and t.START_CITY = #{endCity}
+						</if>
+					</otherwise>
+				</choose>
+			<if test="(null != startProvince and '' != startProvince) or (null != endProvince and '' != endProvince)">
+				))
+			</if>
+			GROUP BY t.DRIVER_ID
+			UNION  
+			select
+			t.DRIVER_ID,
+			GROUP_CONCAT(t.START_PROVINCE,REPLACE (t.start_city,'','全部市'),'——',t.end_province,REPLACE (t.end_city, '', '全部市')) AS driverLine
+			from t_driver_line_info t 
+			where t.START = 0
+			<if test="(null != startProvince and '' != startProvince) or (null != endProvince and '' != endProvince)">
+				and ((
+			</if>
+				<choose>
+					<when test="null != startProvince and '' != startProvince">
+						t.START_PROVINCE = #{startProvince}
+						<if test="null != startCity and '' != startCity">
+							and t.START_CITY = #{startCity}
+						</if>
+						<if test="null != endProvince and '' != endProvince">
+							and t.END_PROVINCE = #{endProvince}
+						</if>
+						<if test="null != endCity and '' != endCity">
+							and t.END_CITY = #{endCity}
+						</if>
+					</when>
+					<otherwise>
+						<if test="null != endProvince and '' != endProvince">
+							t.END_PROVINCE = #{endProvince}
+						</if>
+						<if test="null != endCity and '' != endCity">
+							and t.END_CITY = #{endCity}
+						</if>
+					</otherwise>
+				</choose>
+			<if test="(null != startProvince and '' != startProvince) or (null != endProvince and '' != endProvince)">
+				) or (
+			</if>
+				<choose>
+					<when test="null != startProvince and '' != startProvince">
+						t.END_PROVINCE = #{startProvince}
+						<if test="null != startCity and '' != startCity">
+							and t.END_CITY = #{startCity}
+						</if>
+						<if test="null != endProvince and '' != endProvince">
+							and t.START_PROVINCE = #{endProvince}
+						</if>
+						<if test="null != endCity and '' != endCity">
+							and t.START_CITY = #{endCity}
+						</if>
+					</when>
+					<otherwise>
+						<if test="null != endProvince and '' != endProvince">
+							t.START_PROVINCE = #{endProvince}
+						</if>
+						<if test="null != endCity and '' != endCity">
+							and t.START_CITY = #{endCity}
+						</if>
+					</otherwise>
+				</choose>
+			<if test="(null != startProvince and '' != startProvince) or (null != endProvince and '' != endProvince)">
+				))
+			</if>
+			GROUP BY t.DRIVER_ID
+			UNION
+			SELECT a1.id as DRIVER_ID,
+			(select GROUP_CONCAT(a2.START_PROVINCE,REPLACE (a2.start_city,'','全部市'),'——',a2.end_province,REPLACE (a2.end_city, '', '全部市')) as driverLine from t_driver_line_info a2 where a2.driver_id = a1.id and a2.START=0) as driverLine
+			FROM t_location_collect_last_info a,t_driver_user_info a1
+			WHERE a.DRIVER_ID = a1.id   and TIMESTAMPDIFF(HOUR,a.MODIFY_TIME,sysdate()) <![CDATA[<=]]> 24
+			<if test="null != startProvince and '' != startProvince">
+				and a.PROVINCE = #{startProvince}
+			</if>
+			<if test="null != startCity and '' != startCity">
+				and a.CITY = #{startCity}
+			</if>
+			GROUP BY a1.id
+			) l ON t.id = l.DRIVER_ID
+			WHERE	t.delete_flag = #{deleteFlag} 
+    </select>
+	
+	
+	<select id="selectDriverUserInfo" parameterType="map" resultMap="driver_user_info_domain_result">
+		select t.ID,t.`NAME`,t.`CODE`,t.CAR_NUMBER,t.CAR_TYPES from (
+			SELECT
+				t4.ID,t4.`NAME`,t4.CODE,t4.CAR_NUMBER,t4.CAR_TYPES
+			FROM
+				t_driver_business_line_info t3 
+			LEFT JOIN t_driver_user_info t4 ON t4.ID = t3.DRIVER_ID
+			where
+				t3.`START` = 0 and t4.DELETE_FLAG = 0 and t4.FREEZE_FLAG = 0
+				<if test="null != startProvince and '' != startProvince">
+					and t3.START_PROVINCE = #{startProvince}
+				</if>
+				<if test="null != startCity and '' != startCity">
+					and t3.START_CITY = #{startCity}
+				</if>
+				<if test="null != endProvince and '' != endProvince">
+					and t3.END_PROVINCE = #{endProvince}
+				</if>
+				<if test="null != endCity and '' != endCity">
+					and t3.END_CITY = #{endCity}
+				</if>
+			UNION
+			SELECT
+				t1.ID,t1.`NAME`,t1.CODE,t1.CAR_NUMBER,t1.CAR_TYPES
+			FROM
+				t_driver_line_info t2
+			LEFT JOIN t_driver_user_info t1 ON t1.ID = t2.DRIVER_ID
+			where
+				t2.`START` = 0 and t1.DELETE_FLAG = 0 and t1.FREEZE_FLAG = 0
+				<if test="null != startProvince and '' != startProvince">
+					and t2.START_PROVINCE = #{startProvince}
+				</if>
+				<if test="null != startCity and '' != startCity">
+					and t2.START_CITY = #{startCity}
+				</if>
+				<if test="null != endProvince and '' != endProvince">
+					and t2.END_PROVINCE = #{endProvince}
+				</if>
+				<if test="null != endCity and '' != endCity">
+					and t2.END_CITY = #{endCity}
+				</if>
+		) t  where not EXISTS 
+		(select 1 
+			from t_note_send_record r 
+		where r.type = 1 and r.FROM_OBJECT = t.ID 
+			and DATE_FORMAT(r.CREATE_TIME,'%Y-%m-%d') = DATE_FORMAT(sysdate(),'%Y-%m-%d') 
+			HAVING(count(r.ID)) &gt;= 3) 
+		or not EXISTS 
+			(select 1 
+			from t_note_send_record r 
+				where r.type = 0 and r.TO_OBJECT = t.ID 
+			and DATE_FORMAT(r.CREATE_TIME,'%Y-%m-%d') = DATE_FORMAT(sysdate(),'%Y-%m-%d') 
+			HAVING(count(r.ID)) &gt;= 3)
+			limit 3
+	</select>
+	
+	
+	<!-- 1预约线路（单向） & 预约时间 -->
+	<select id="queryDriverMapPageSizeOne" parameterType="map" resultMap="driver_user_info_domain_result">
+		select a.ID,a.`NAME`,a.`CODE`,a.CAR_NUMBER,a.CAR_TYPES 
+		from t_driver_user_info a,
+		(select DISTINCT t.DRIVER_ID from t_driver_business_line_info t
+			where t.START = 0 
+			<if test="null != startProvince and '' != startProvince">
+				and t.START_PROVINCE = #{startProvince}
+			</if>
+			<if test="null != startCity and '' != startCity">
+				and t.START_CITY = #{startCity}
+			</if>
+			<if test="null != endProvince and '' != endProvince">
+				and t.END_PROVINCE = #{endProvince}
+			</if>
+			<if test="null != endCity and '' != endCity">
+				and t.END_CITY = #{endCity}
+			</if>
+			<if test="null != requestStartTime and '' != requestStartTime">
+				and DATE_FORMAT(t.START_TIME,'%Y-%m-%d') <![CDATA[<=]]> DATE_FORMAT(#{requestStartTime},'%Y-%m-%d') and DATE_FORMAT(t.END_TIME,'%Y-%m-%d') <![CDATA[>=]]> DATE_FORMAT(#{requestStartTime},'%Y-%m-%d')
+			</if>
+		) b
+		where 
+		a.id = b.DRIVER_ID and a.DELETE_FLAG=0
+		<if test="null != andNotCarNumber and '' != andNotCarNumber">
+			and a.CAR_NUMBER != ''
+		</if> 
+		<if test="null != andNotCode and '' != andNotCode">
+			#{andNotCode}  
+		</if>
+		LIMIT 0,${pageSize}
+	</select>
+	
+	<!-- 2线路（双向） & 当前位置（24小时内 -->
+	<select id="queryDriverMapPageSizeTow" parameterType="map" resultMap="driver_user_info_domain_result">
+		select a.ID,a.`NAME`,a.`CODE`,a.CAR_NUMBER,a.CAR_TYPES from t_driver_user_info a,
+		(select DISTINCT t.DRIVER_ID from t_driver_line_info t,t_location_collect_last_info tl 
+			where t.DRIVER_ID = tl.DRIVER_ID and t.START = 0 
+			<if test="(null != startProvince and '' != startProvince) or (null != endProvince and '' != endProvince)">
+				and ((
+			</if>
+				<choose>
+					<when test="null != startProvince and '' != startProvince">
+						t.START_PROVINCE = #{startProvince}
+						<if test="null != startCity and '' != startCity">
+							and t.START_CITY = #{startCity}
+						</if>
+						<if test="null != endProvince and '' != endProvince">
+							and t.END_PROVINCE = #{endProvince}
+						</if>
+						<if test="null != endCity and '' != endCity">
+							and t.END_CITY = #{endCity}
+						</if>
+					</when>
+					<otherwise>
+						<if test="null != endProvince and '' != endProvince">
+							t.END_PROVINCE = #{endProvince}
+						</if>
+						<if test="null != endCity and '' != endCity">
+							and t.END_CITY = #{endCity}
+						</if>
+					</otherwise>
+				</choose>
+			<if test="(null != startProvince and '' != startProvince) or (null != endProvince and '' != endProvince)">
+				) or (
+			</if>
+				<choose>
+					<when test="null != startProvince and '' != startProvince">
+						t.END_PROVINCE = #{startProvince}
+						<if test="null != startCity and '' != startCity">
+							and t.END_CITY = #{startCity}
+						</if>
+						<if test="null != endProvince and '' != endProvince">
+							and t.START_PROVINCE = #{endProvince}
+						</if>
+						<if test="null != endCity and '' != endCity">
+							and t.START_CITY = #{endCity}
+						</if>
+					</when>
+					<otherwise>
+						<if test="null != endProvince and '' != endProvince">
+							t.START_PROVINCE = #{endProvince}
+						</if>
+						<if test="null != endCity and '' != endCity">
+							and t.START_CITY = #{endCity}
+						</if>
+					</otherwise>
+				</choose>
+			<if test="(null != startProvince and '' != startProvince) or (null != endProvince and '' != endProvince)">
+				))
+			</if>
+			and 
+			TIMESTAMPDIFF(HOUR,tl.MODIFY_TIME,sysdate()) <![CDATA[<=]]> 24
+		) b
+		where a.id = b.DRIVER_ID and a.DELETE_FLAG=0 
+		<if test="null != andNotCarNumber and '' != andNotCarNumber">
+			and a.CAR_NUMBER != ''
+		</if> 
+		<if test="null != andNotCode and '' != andNotCode">
+			#{andNotCode}  
+		</if>
+		LIMIT 0,${pageSize}
+	</select>
+	
+	<!-- 3线路（双向） -->
+	<select id="queryDriverMapPageSizeThree" parameterType="map" resultMap="driver_user_info_domain_result">
+		select a.ID,a.`NAME`,a.`CODE`,a.CAR_NUMBER,a.CAR_TYPES from t_driver_user_info a,
+		(select DISTINCT t.DRIVER_ID from t_driver_line_info t 
+			where t.START = 0   
+			<if test="(null != startProvince and '' != startProvince) or (null != endProvince and '' != endProvince)">
+				and ((
+			</if>
+				<choose>
+					<when test="null != startProvince and '' != startProvince">
+						t.START_PROVINCE = #{startProvince}
+						<if test="null != startCity and '' != startCity">
+							and t.START_CITY = #{startCity}
+						</if>
+						<if test="null != endProvince and '' != endProvince">
+							and t.END_PROVINCE = #{endProvince}
+						</if>
+						<if test="null != endCity and '' != endCity">
+							and t.END_CITY = #{endCity}
+						</if>
+					</when>
+					<otherwise>
+						<if test="null != endProvince and '' != endProvince">
+							t.END_PROVINCE = #{endProvince}
+						</if>
+						<if test="null != endCity and '' != endCity">
+							and t.END_CITY = #{endCity}
+						</if>
+					</otherwise>
+				</choose>
+			<if test="(null != startProvince and '' != startProvince) or (null != endProvince and '' != endProvince)">
+				) or (
+			</if>
+				<choose>
+					<when test="null != startProvince and '' != startProvince">
+						t.END_PROVINCE = #{startProvince}
+						<if test="null != startCity and '' != startCity">
+							and t.END_CITY = #{startCity}
+						</if>
+						<if test="null != endProvince and '' != endProvince">
+							and t.START_PROVINCE = #{endProvince}
+						</if>
+						<if test="null != endCity and '' != endCity">
+							and t.START_CITY = #{endCity}
+						</if>
+					</when>
+					<otherwise>
+						<if test="null != endProvince and '' != endProvince">
+							t.START_PROVINCE = #{endProvince}
+						</if>
+						<if test="null != endCity and '' != endCity">
+							and t.START_CITY = #{endCity}
+						</if>
+					</otherwise>
+				</choose>
+			<if test="(null != startProvince and '' != startProvince) or (null != endProvince and '' != endProvince)">
+				))
+			</if>
+		) b
+		where a.id = b.DRIVER_ID and a.DELETE_FLAG=0 
+		<if test="null != andNotCarNumber and '' != andNotCarNumber">
+			and a.CAR_NUMBER != ''
+		</if> 
+		<if test="null != andNotCode and '' != andNotCode">
+			#{andNotCode}  
+		</if> 
+		LIMIT 0,${pageSize}
+	</select>
+	
+	<!--  当前位置（24小时内) -->
+	<select id="queryDriverMapPageSizeFour" parameterType="map" resultMap="driver_user_info_domain_result">
+		select a.ID,a.`NAME`,a.`CODE`,a.CAR_NUMBER,a.CAR_TYPES from t_driver_user_info a,
+		(select DISTINCT t.DRIVER_ID from t_location_collect_last_info t 
+			where 1=1
+			<if test="null != startProvince and '' != startProvince">
+				and t.PROVINCE = #{startProvince}
+			</if>
+			<if test="null != startCity and '' != startCity">
+				and t.CITY = #{startCity}
+			</if>
+			and TIMESTAMPDIFF(HOUR,t.MODIFY_TIME,sysdate()) <![CDATA[<=]]> 24
+		) b
+		where a.id = b.DRIVER_ID and a.DELETE_FLAG=0 
+		<if test="null != andNotCarNumber and '' != andNotCarNumber">
+			and a.CAR_NUMBER != ''
+		</if> 
+		<if test="null != andNotCode and '' != andNotCode">
+			#{andNotCode}  
+		</if>
+		LIMIT 0,${pageSize}
+	</select>
+
+    <!--根据手机号码查询，计数司机运营线路条数，计数司机活跃记录表的条数 queryByPhone -->
+    <select id="queryByPhone" parameterType="java.util.Map" resultMap="driver_user_info_domain_rescount">
+        select a.id ,a.code ,a.name ,a.car_number ,a.submit_type
+        ,date_format(a.used_recent_time,'%Y-%m-%d %T') used_recent_time
+        ,(select count(b.id) from t_driver_line_info b
+        where a.id = b.driver_id and b.start = 0) as countDriverLine
+        ,(select count(c.id) from t_dayrecord_driver_active c
+        where a.id = c.driver_id and c.record_day between date_add(curdate(), INTERVAL -1 MONTH)
+        and curdate() ) as countMonAct
+        ,(select ifnull(sum(d.initiative_links),0)
+        from t_dayrecord_driver_active d
+        where d.driver_id = a.id
+        and d.record_day between date_add(curdate(), INTERVAL -15 DAY) and curdate()) as user15DayNum
+        ,e.location as lastLocation
+        ,date_format(e.last_time,'%Y-%m-%d %T') as lastTime
+        from t_driver_user_info a
+        left join t_location_collect_last_info e
+        on e.driver_id = a.id
+        where a.code = #{mobilePhone}
+        and a.delete_flag = 0
+    </select>
+
+	<!-- 修改司机信息（姓名、车牌号、车长、车板、车栏、运力（体积、重量））updateDriverUserInfoSetDriverInfo -->
+	<update id="updateDriverUserInfoSetDriverInfo" parameterType="DriverUserInfo">
+		UPDATE t_driver_user_info SET
+		<if test="null != name and '' != name">
+			name = #{name} ,
+		</if>
+		<if test="null != carNumber and '' != carNumber">
+			car_number = #{carNumber} ,
+		</if>
+		<if test="null != carLength and '' != carLength">
+			car_length = #{carLength} ,
+		</if>
+		<if test="null != carPlateType and '' != carPlateType">
+			car_plate_type = #{carPlateType} ,
+		</if>
+		<if test="null != carBarType and '' != carBarType">
+			car_bar_type = #{carBarType} ,
+		</if>
+		<if test="null != carWeight and '' != carWeight">
+			car_weight = #{carWeight} ,
+		</if>
+		<if test="null != carCubage and '' != carCubage">
+			car_cubage = #{carCubage} ,
+		</if>
+		<if test="null != carTypes and '' != carTypes">
+			CAR_TYPES = #{carTypes} ,
+		</if>
+		modify_time = sysdate()
+		WHERE ID = #{id}
+	</update>
+
+
+	<!--  当前位置（24小时内) -->
+	<select id="queryDriverUserInfoLocation" parameterType="Integer" resultMap="driver_user_info_location_result">
+		select
+		t1.province,t1.city,t1.county,t.baidu_channel_id,t.baidu_user_id,t.id
+		from
+		t_driver_user_info t,t_location_collect_last_info t1
+		where t.id = t1.driver_id
+		and TIMESTAMPDIFF(HOUR,t.MODIFY_TIME,sysdate()) <![CDATA[<=]]> 24
+		and t.id = #{driverId}
+	</select>
+</mapper>

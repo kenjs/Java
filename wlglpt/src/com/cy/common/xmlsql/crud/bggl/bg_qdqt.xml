@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.zygl.dao.BgSbqdMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectBgQdqtByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgQdqtDomain">
+		select a.BG_DJXH as bgDjxh,a.CZY_DJXH as czyDjxh,a.RQ as rq,a.QDQT_DM as qdqtDm,a.Y_QDQT_SJ as yQdqtSj,
+		a.SJ_QDQT_SJ as sjQdqtSj,a.CDZTBZ as cdztbz,a.CDZTSJ as cdztsj from BG_QDQT a  where a.BG_DJXH=#bgDjxh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertBgQdqt"  parameterClass="com.cy.common.bo.BgQdqt">
+		<selectKey keyProperty="bgDjxh" resultClass="String" type="pre"> 
+			select SEQ_BG_DJXH.nextval as bgDjxh from dual 
+		</selectKey> 
+		insert into BG_QDQT(BG_DJXH,CZY_DJXH,RQ,QDQT_DM,Y_QDQT_SJ,
+		SJ_QDQT_SJ,CDZTBZ,CDZTSJ)
+		values(#bgDjxh:NUMERIC#,#czyDjxh:NUMERIC#,to_date(#rq:DATE#,'yyyy-MM-dd'),#qdqtDm:NUMERIC#,to_date(#yQdqtSj:DATE#,'yyyy-MM-dd hh24:mi:ss'),
+		to_date(#sjQdqtSj:DATE#,'yyyy-MM-dd hh24:mi:ss'),#cdztbz:VARCHAR#,#cdztsj:NUMERIC#)
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateBgQdqtByKey" parameterClass="com.cy.common.bo.BgQdqt">
+        update BG_QDQT set BG_DJXH=#bgDjxh#,CZY_DJXH=#czyDjxh#,RQ=to_date(#rq#, 'YYYY-MM-DD'),QDQT_DM=#qdqtDm#,Y_QDQT_SJ=to_date(#yQdqtSj#, 'YYYY-MM-DD'),
+		SJ_QDQT_SJ=to_date(#sjQdqtSj#, 'YYYY-MM-DD'),CDZTBZ=#cdztbz#,CDZTSJ=#cdztsj# where BG_DJXH=#bgDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteBgQdqtByKey" parameterClass="java.util.Map">
+		delete from BG_QDQT where BG_DJXH=#bgDjxh#
+    </delete>
+</sqlMap>

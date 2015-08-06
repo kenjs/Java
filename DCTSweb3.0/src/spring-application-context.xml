@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:flex="http://www.springframework.org/schema/flex"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context   
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+	http://www.springframework.org/schema/flex	http://www.springframework.org/schema/flex/spring-flex-1.0.xsd
+   http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
+
+    <bean id="propertyConfigurer1" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"> 
+	    <property name="ignoreUnresolvablePlaceholders" value="true" /> 
+	    <property name="location"> 
+	       <value>classpath:database.properties</value> 
+	    </property> 
+	</bean> 
+	
+	<bean id="propertyConfigurer2" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"> 
+	    <property name="ignoreUnresolvablePlaceholders" value="true" /> 
+	    <property name="location"> 
+	       <value>classpath:config.properties</value> 
+	    </property> 
+	    <property name="fileEncoding"> 
+	       <value>UTF8</value> 
+	     </property> 
+	</bean> 
+
+	<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
+		
+	<!-- <tx:annotation-driven>这项配置告诉spring去检查容器中所有不管在类层面还是方法层面配置了
+		注解@Transactional的bean,找到后<tx:annotation-driven>会为它们执行事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">  
+    	<property name="dataSource" ref="dataSource" />  
+	</bean>  
+	
+    <!-- action begin -->
+    <!-- 合同司机信息 -->
+     <!-- 删除合同司机信息即修改删除标志 -->
+      <bean name="modifyPactDriverDeleteFlag" class="com.cy.dcts.pactDriverInfo.action.modifyPactDriverDeleteFlagAction">
+        <property name="pactDriverInfoService" ref="pactDriverInfoService"></property>
+      </bean>
+     <!-- 添加合同司机信息 -->
+     <bean name="addPactDriverInfo" class="com.cy.dcts.pactDriverInfo.action.AddPactDriverInfoAction">
+        <property name="pactDriverInfoService" ref="pactDriverInfoService"></property>
+        <property name="driverUserCarInfoService" ref="driverUserCarInfoService"></property>
+      </bean>
+      <!-- 查询合同司机信息 -->
+     <bean name="queryPactDriveInfo" class="com.cy.dcts.pactDriverInfo.action.QueryPactDriveInfoAction" scope="prototype">
+        <property name="pactDriverInfoService" ref="pactDriverInfoService"></property>
+      </bean>
+    
+      <!-- 查询首页的今日动态（没有交易时再查询今日新增司机） -->
+      <bean name="queryTodayDynamic" class="com.cy.dcts.transaction.action.QueryTodayDynamicAction">
+        <property name="transactionInfoService" ref="transactionInfoService"></property>
+        <property name="driverUserCarInfoService" ref="driverUserCarInfoService"></property>
+      </bean>
+    
+    <!-- 主页最新货源 -->
+     <bean name="newOrderCargoStartAction" class="com.cy.dcts.mainIndex.action.NewOrderCargoStartAction">
+     	 <property name="queryOrderCargoInfoService" ref="queryOrderCargoInfoService"></property>
+     </bean>
+      <!-- 更多货源 -->
+     <bean name="queryOrderCargoListAction" class="com.cy.dcts.orderCargo.action.QueryOrderCargoListAction">
+     	 <property name="queryOrderCargoInfoService" ref="queryOrderCargoInfoService"></property>
+     </bean>
+     <!-- 主页预约车源 -->
+     <bean name="returnDriverCarAction" class="com.cy.dcts.mainIndex.action.ReturnDriverCarAction">
+     	 <property name="driverCarLineService" ref="driverCarLineService"></property>
+     </bean>
+     <!-- 主页当前车源 -->
+     <bean name="realDriverCarAction" class="com.cy.dcts.mainIndex.action.RealDriverCarAction">
+     	 <property name="driverUserCarInfoService" ref="driverUserCarInfoService"></property>
+     </bean>
+     
+       <!-- 主页统计交易信息记录数 20140708 -->
+     <bean name="trandeInfoCount" class="com.cy.dcts.mainIndex.action.TrandeInfoCountAction">
+     	 <property name="transactionInfoService" ref="transactionInfoService"></property>
+     </bean>
+     
+     <bean name="validateUserCodeAction" class="com.cy.dcts.webUser.action.ValidateUserCodeAction">
+     	<property name="queryWebUserInfoService" ref="queryWebUserInfoService"></property>
+     </bean>
+     
+     <!-- 主页数据统计 -->
+     <bean name="countDateAction" class="com.cy.dcts.mainIndex.action.CountDateAction">
+     	 <property name="driverUserCarInfoService" ref="driverUserCarInfoService"></property>
+     	 <property name="queryOrderCargoInfoService" ref="queryOrderCargoInfoService"></property>
+     	 <property name="transactionInfoService" ref="transactionInfoService"></property>
+     </bean>
+     
+      <!-- 更多当前车源 -->
+     <bean name="queryMoreRealDriverInfoAction" class="com.cy.dcts.driverCar.action.QueryMoreRealDriverInfoAction">
+     	 <property name="driverUserCarInfoService" ref="driverUserCarInfoService"></property>
+     </bean>
+     
+     <!-- 推荐当前车源 -->
+     <bean name="recommendRealDiverCarAction" class="com.cy.dcts.mainIndex.action.RecommendRealDiverCarAction">
+     	 <property name="driverUserCarInfoService" ref="driverUserCarInfoService"></property>
+     </bean>
+     
+      <!-- 更多预约车源 -->
+     <bean name="queryMoreReturnDriverInfoAction" class="com.cy.dcts.driverCar.action.QueryMoreReturnDriverInfoAction">
+     	 <property name="driverCarLineService" ref="driverCarLineService"></property>
+     </bean>
+     
+      <!-- 司机详细页 -->
+     <bean name="openDriverDetailedAction" class="com.cy.dcts.driverCar.action.OpenDriverDetailedAction">
+     	 <property name="driverUserCarInfoService" ref="driverUserCarInfoService"></property>
+     </bean>
+     
+       <!-- 根据司机ID查询预约线路 -->
+     <bean name="driverBusinessLineByIdAction" class="com.cy.dcts.driverLine.action.DriverBusinessLineByIdAction">
+     	 <property name="driverCarLineService" ref="driverCarLineService"></property>
+     </bean>
+     
+      <!-- 根据司机ID查询运营线路 -->
+     <bean name="queryDriverLineByIdAction" class="com.cy.dcts.driverLine.action.QueryDriverLineByIdAction">
+     	 <property name="driverCarLineService" ref="driverCarLineService"></property>
+     </bean>
+     
+      <!-- 根据driverId查询评价信息 -->
+     <bean name="queryUserDriverAssessInfodmList" class="com.cy.dcts.userDriverAssess.action.QueryUserDriverAssessInfodmListAction">
+     	 <property name="userDriverAssessInfoService" ref="userDriverAssessInfoService"></property>
+     </bean>
+     
+     <!-- 根据driverId获取司机评价数量 -->
+     <bean name="queryUserDrivrAssessCount" class="com.cy.dcts.userDriverAssess.action.QueryUserDrivrAssessCountAction">
+     	 <property name="userDriverAssessInfoService" ref="userDriverAssessInfoService"></property>
+     </bean>
+     
+     <!-- 首页ACtion -->
+     <!-- 获取访问者地区 -->
+     <bean name="ipUserActio" class="com.cy.dcts.mainIndex.action.IpUserActio">
+     	 <property name="ipUrlStrService" ref="ipUrlStrService"></property>
+     </bean>
+     
+      <!-- 司机对货源的点评根据货源Id查询 -->
+        <bean name="queryDriverCargoAssessByCargoId" class="com.cy.dcts.driverCargoAssess.action.QueryDriverCargoAssessByCargoIdAction">
+       <property name="driverCargoAssessService" ref="driverCargoAssessService"></property>
+     </bean>
+     <!-- 查询我的货源 -->
+     <bean name="queryLocalOrderCargoInfo" class="com.cy.dcts.orderCargo.action.QueryLocalOrderCargoInfoAction" scope="prototype">
+       <property name="queryOrderCargoInfoService" ref="queryOrderCargoInfoService"></property>
+     </bean>
+     <!-- 删除货源 -->
+     <bean name="deleteLocalOrderCargoInfo" class="com.cy.dcts.orderCargo.action.DeleteLocalOrderCargoInfoAction">
+       <property name="saveOrderCargoInfoService" ref="saveOrderCargoInfoService"></property>
+       <property name="queryOrderCargoInfoService" ref="queryOrderCargoInfoService"></property>
+    </bean>
+      <!-- 打开修改自已公司货源信息页面action -->
+	<bean name="openModifyLocalOrderCargoInfo" class="com.cy.dcts.orderCargo.action.OpenModifyLocalOrderCargoInfoAction">
+	  <property name="queryOrderCargoInfoService" ref="queryOrderCargoInfoService"></property>
+    </bean>
+    <!-- 修改自已公司货源信息action -->
+    <bean name="modifyLocalOrderCargoInfo" class="com.cy.dcts.orderCargo.action.ModifyLocalOrderCargoInfoAction">
+       <property name="saveOrderCargoInfoService" ref="saveOrderCargoInfoService"></property>
+       <property name="queryOrderCargoInfoService" ref="queryOrderCargoInfoService"></property>
+    </bean>
+
+    <!-- 根据登录人的id获取待发货货源action -->
+    <bean name="queryOrderCargoQuoteAction" class="com.cy.dcts.orderCargo.action.QueryOrderCargoQuoteAction">
+       <property name="queryOrderCargoInfoService" ref="queryOrderCargoInfoService"></property>
+    </bean>
+    
+    <!-- 根据id查询货物action -->
+    <bean name="queryOrderCargoQuoteByIdAction" class="com.cy.dcts.orderCargo.action.QueryOrderCargoQuoteByIdAction">
+       <property name="queryOrderCargoInfoService" ref="queryOrderCargoInfoService"></property>
+    </bean>
+    
+    <!-- 根据货物Id查询货物报价列表action -->
+    <bean name="queryQuoteListAction" class="com.cy.dcts.orderCargo.action.QueryQuoteListAction">
+       <property name="queryOrderCargoInfoService" ref="queryOrderCargoInfoService"></property>
+    </bean>
+
+    
+     <!-- 个人中心——货源信息从excel导入功能 -->
+	<bean name="importOrderCargoFromFile" class="com.cy.dcts.orderCargo.action.ImportOrderCargoFromFileAction" >
+	 	<property name="upLoadFilePath" value="${upload.ordercargo.filepath}" />
+	 	<property name="saveOrderCargoInfoService">
+			<ref bean="saveOrderCargoInfoService"/>
+		</property>
+	</bean>
+	
+	 <!-- 首页——货源信息从excel导入功能 -->
+	<bean name="homeImportOrderCargoFromFile" class="com.cy.dcts.orderCargo.action.HomeImportOrderCargoFromFileAction" >
+	 	<property name="upLoadFilePath" value="${upload.ordercargo.filepath}" />
+	 	<property name="saveOrderCargoInfoService">
+			<ref bean="saveOrderCargoInfoService"/>
+		</property>
+	</bean>
+	
+	<!-- 货源信息下载excel导入模板 -->
+	<bean name="downloadOrderCargoFileAction" class="com.cy.dcts.orderCargo.action.DownloadOrderCargoFileAction" >
+	  	<property name="filePath" value="${download.ordercargo.template.filepath}" />
+	 	<property name="fileName" value="${download.ordercargo.template.filename}" />
+	</bean>
+	
+	<!-- 百度云推送消息给司机 ，提醒司机有待确认订单  -->
+	<bean name="pushMessageToDriver" class="com.cy.dcts.driverCar.action.PushMessageToDriverAction" ></bean>
+	
+     <!-- 首页ACtion -->
+     
+     <!-- 打开新增自已公司货源信息页面action -->
+	<bean name="openAddLocalOrderCargoInfo" class="com.cy.dcts.orderCargo.action.OpenAddLocalOrderCargoInfoAction" scope="prototype">
+    </bean>
+    <!-- 新增自已公司货源信息action -->
+    <bean name="addLocalOrderCargoInfo" class="com.cy.dcts.orderCargo.action.AddLocalOrderCargoInfoAction">
+       <property name="saveOrderCargoInfoService" ref="saveOrderCargoInfoService"></property>
+       <property name="queryOrderCargoInfoService" ref="queryOrderCargoInfoService"></property>
+    </bean>
+    <!-- 查询自己的所有常用车源action -->
+     <bean name="queryLocalDriverUserCarInfo" class="com.cy.dcts.driverCar.action.QueryLocalDriverUserCarInfoAction" scope="prototype">
+       <property name="driverUserCarInfoService" ref="driverUserCarInfoService"></property>
+    </bean>
+    
+    <!-- 查询司机位置信息（跟踪轨迹）action -->
+     <bean name="queryLocationInfo" class="com.cy.dcts.location.action.QueryLocationInfoAction" scope="prototype">
+       <property name="locationInfoService" ref="locationInfoService"></property>
+       <property name="transactionLastService" ref="transactionLastService"></property>
+    </bean>
+    
+    <!-- 司机的竞价详情 -->
+    <bean name="queryDriverQuoteInfo" class="com.cy.dcts.driverCar.action.QueryDriverQuoteInfoAction">
+      <property name="driverUserCarInfoService" ref="driverUserCarInfoService"></property>
+      <property name="queryOrderCargoInfoService" ref="queryOrderCargoInfoService"></property>
+    </bean>
+    
+    <!-- 收藏司机 -->
+    <bean name="addUserDriver" class="com.cy.dcts.driverCar.action.AddUserDriverAction">
+      <property name="driverUserCarInfoService" ref="driverUserCarInfoService"></property>
+    </bean>
+    
+ 	<!-- 根据用户code查询action -->
+	<bean name="queryWebUserInfoCode" class="com.cy.dcts.webUser.action.QueryWebUserInfoCodeAction">
+		<property name="queryWebUserInfoService" ref="queryWebUserInfoService"></property>
+    </bean>
+
+    <!-- 根据手机号码mobilephone查询action -->
+    <bean name="queryWebUserInfoMoblePhoneAction" class="com.cy.dcts.webUser.action.QueryWebUserInfoMoblePhoneAction">
+		<property name="queryWebUserInfoService" ref="queryWebUserInfoService"></property>
+    </bean>
+  
+       <!-- 添加货主对司机的评价 -->
+    <bean name="saveUserDriverAssessInfo" class="com.cy.dcts.userDriverAssess.action.SaveUserDriverAssessInfoAction">
+      <property name="userDriverAssessInfoService" ref="userDriverAssessInfoService"></property>
+    </bean>
+    
+     <!-- 货源订车查询司机信息 -->
+    <bean name="queryDriverTheCarInfoAction" class="com.cy.dcts.driverCar.action.QueryDriverTheCarInfoAction">
+      <property name="driverUserCarInfoService" ref="driverUserCarInfoService"></property>
+      <property name="queryOrderCargoInfoService" ref="queryOrderCargoInfoService"></property>
+    </bean>
+    
+    <!-- 查询回单和发货单上传的图片 -->
+    <bean name="queryReceiptOrShipperOrderPath" class="com.cy.dcts.transaction.action.QueryReceiptOrShipperOrderPathAction">
+      <property name="transactionInfoService" ref="transactionInfoService"></property>
+    </bean>
+    
+     <!--导入订单换车（货主版） -->
+    <bean name="modifyTransactionDriver" class="com.cy.dcts.transaction.action.ModifyTransactionDriverAction">
+      <property name="driverUserCarInfoService" ref="driverUserCarInfoService"></property>
+      <property name="transactionInfoService" ref="transactionInfoService"></property>
+    </bean>
+    
+    <!-- 保存导入的订单货源信息 -->
+    <bean name="saveImportTrandeCargo" class="com.cy.dcts.transaction.action.SaveImportTrandeCargoAction" scope="prototype">
+      <property name="transactionInfoService" ref="transactionInfoService"></property>
+      <property name="queryWebUserInfoService" ref="queryWebUserInfoService"></property>
+      <property name="driverUserCarInfoService" ref="driverUserCarInfoService"></property>
+    </bean>
+    
+    <!-- 订单货源信息下载excel导入模板 -->
+	<bean name="downloadTransactionCargoFile" class="com.cy.dcts.transaction.action.DownloadTransactionCargoFileAction" >
+	  	<property name="filePath" value="${download.ordercargo.template.filepath}" />
+	 	<property name="fileName" value="${download.transactionOrdercargo.template.filename}" />
+	</bean>
+    
+    <!-- 导入订单货源信息 -->
+     <bean name="importTransactionInfos" class="com.cy.dcts.transaction.action.ImportTransactionInfosAction" scope="prototype">
+      <property name="upLoadFilePath" value="${upload.ordercargo.filepath}" />
+      <property name="queryWebUserInfoService" ref="queryWebUserInfoService"></property>
+      <property name="driverUserCarInfoService" ref="driverUserCarInfoService"></property>
+    </bean>
+    
+    <!-- 修改导入订单的信息 (货主版) -->
+    <bean name="modifyImportTransactionInfo" class="com.cy.dcts.transaction.action.ModifyImportTransactionInfoAction" scope="prototype">
+      <property name="transactionInfoService" ref="transactionInfoService"></property>
+      <property name="queryWebUserInfoService" ref="queryWebUserInfoService"></property>
+      <property name="driverUserCarInfoService" ref="driverUserCarInfoService"></property>
+      <property name="saveOrderCargoInfoService" ref="saveOrderCargoInfoService"></property>
+    </bean>
+    
+    <!-- 打开修改导入订单的信息  根据Id查询导入订单的信息 返回domain  (货主版) -->
+    <bean name="openModifyImportTransactionInfo" class="com.cy.dcts.transaction.action.OpenModifyImportTransactionInfoAction" scope="prototype">
+      <property name="transactionInfoService" ref="transactionInfoService"></property>
+    </bean>
+    
+     <!-- 查询我的订单 -->
+    <bean name="queryTransactionInfo" class="com.cy.dcts.transaction.action.QueryTransactionInfoAction" scope="prototype">
+      <property name="transactionInfoService" ref="transactionInfoService"></property>
+    </bean>
+     <!-- 查询成交记录（成功或失败的订单 in）或个人中心首页的待处理订单（非成功和失败的 not in） -->
+    <bean name="querySuccessCloseTransactionInfo" class="com.cy.dcts.transaction.action.QuerySuccessCloseTransactionInfoAction" scope="prototype">
+      <property name="transactionInfoService" ref="transactionInfoService"></property>
+      <property name="queryWebUserInfoService" ref="queryWebUserInfoService"></property>
+    </bean>
+    <!-- 根据司机Id查询司机交易记录 -->
+    <bean name="queryDriverCarTransactionInfoAction" class="com.cy.dcts.transaction.action.QueryDriverCarTransactionInfoAction">
+      <property name="transactionInfoService" ref="transactionInfoService"></property>
+    </bean>
+    
+    <!-- 查询订单（成交）详情 -->
+    <bean name="queryTransactionDetail" class="com.cy.dcts.transaction.action.QueryTransactionDetailAction">
+      <property name="driverUserCarInfoService" ref="driverUserCarInfoService"></property>
+      <property name="queryOrderCargoInfoService" ref="queryOrderCargoInfoService"></property>
+      <property name="transactionInfoService" ref="transactionInfoService"></property>
+      <property name="userDriverAssessInfoService" ref="userDriverAssessInfoService"></property>
+      <property name="queryWebUserInfoService" ref="queryWebUserInfoService"></property>
+    </bean>
+    <!-- 取消订单（修改货源状态及交易状态，同时添加货源历史记录及交易历史记录） -->
+    <bean name="cancleTransaction" class="com.cy.dcts.transaction.action.CancleTransactionAction">
+      <property name="transactionInfoService" ref="transactionInfoService"></property>
+      <property name="transactionLastService" ref="transactionLastService"></property>
+      <property name="saveOrderCargoInfoService" ref="saveOrderCargoInfoService"></property>
+      <property name="orderCargoLastService" ref="orderCargoLastService"></property>
+      <property name="userDriverAssessInfoService" ref="userDriverAssessInfoService"></property>
+    </bean>
+    
+    <!-- 交易状态同时交易历史记录 ——若当前交易状态为：货源已送达 ——需添加货主对司机评价-->
+    <bean name="modifyTransactionStart" class="com.cy.dcts.transaction.action.ModifyTransactionStartAction" scope="prototype">
+      <property name="transactionInfoService" ref="transactionInfoService"></property>
+      <property name="transactionLastService" ref="transactionLastService"></property>
+      <property name="userDriverAssessInfoService" ref="userDriverAssessInfoService"></property>
+      <property name="saveOrderCargoInfoService" ref="saveOrderCargoInfoService"></property>
+      <property name="orderCargoLastService" ref="orderCargoLastService"></property>
+    </bean>
+    <!-- 修改交易（订单）状态
+    <bean name="modifyTransactionStart" class="com.cy.dcts.transaction.action.ModifyTransactionStartAction">
+      <property name="transactionInfoService" ref="transactionInfoService"></property>
+    </bean> -->
+    <!-- 修改订单的删除状态 -->
+    <bean name="modifyTransactionInfoOrderStart" class="com.cy.dcts.transaction.action.ModifyTransactionInfoOrderStartAction">
+      <property name="transactionInfoService" ref="transactionInfoService"></property>
+    </bean>
+    
+     <!-- 修改订单的发货时间和到货时间 -->
+    <bean name="modifyDeliveryOrArrivalTime" class="com.cy.dcts.transaction.action.ModifyDeliveryOrArrivalTimeAction" scope="prototype">
+      <property name="transactionInfoService" ref="transactionInfoService"></property>
+    </bean>
+    
+    <!-- 添加订单 -->
+    <bean name="addTransactionInfo" class="com.cy.dcts.transaction.action.AddTransactionInfoAction">
+      <property name="transactionInfoService" ref="transactionInfoService"></property>
+      <property name="saveOrderCargoInfoService" ref="saveOrderCargoInfoService"></property>
+      <property name="orderCargoLastService" ref="orderCargoLastService"></property>
+    </bean>
+
+      <!-- 根据公司名称companyName查询action -->
+    <bean name="queryCompanyByNameAction" class="com.cy.dcts.company.action.QueryCompanyByNameAction">
+		<property name="companyService" ref="companyService"></property>
+		<property name="queryWebUserInfoService" ref="queryWebUserInfoService"></property>
+    </bean>
+    <!-- 打开企业认证 -->
+    <bean name="openCompanyAuthentication" class="com.cy.dcts.company.action.OpenCompanyAuthenticationAction">
+		<property name="companyService" ref="companyService"></property>
+		<property name="queryWebUserInfoService" ref="queryWebUserInfoService"></property>
+    </bean>
+     <!-- 提交企业认证信息 -->
+    <bean name="saveCompanyAuthentication" class="com.cy.dcts.company.action.SaveCompanyAuthenticationAction">
+        <property name="filePath" value="${upload.image.filePath}" />
+		<property name="companyService" ref="companyService"></property>
+		<property name="saveWebUserInfoService" ref="saveWebUserInfoService"></property>
+    </bean>
+    
+    <!-- 添加订车 -->
+    <bean name="addTransactionCargoQuoteAction" class="com.cy.dcts.transaction.action.AddTransactionCargoQuoteAction">
+      <property name="transactionInfoService" ref="transactionInfoService"></property>
+      <property name="saveOrderCargoInfoService" ref="saveOrderCargoInfoService"></property>
+      <property name="orderCargoLastService" ref="orderCargoLastService"></property>
+    </bean>
+
+    <!-- 从本地文件夹中读出文件显示到jsp页面 
+    <bean name="outputImage" class="com.cy.dcts.company.action.OutputImageAction">
+    </bean> 
+    -->
+	<!-- 注册用户action -->
+    <bean name="registerWebUserInfoAction" class="com.cy.dcts.webUser.action.RegisterWebUserInfoAction">
+		<property name="queryWebUserInfoService" ref="queryWebUserInfoService"></property>
+		<property name="saveWebUserInfoService" ref="saveWebUserInfoService"></property>
+		<property name="companyService" ref="companyService"></property>
+		<property name="ipUrlStrService" ref="ipUrlStrService"></property>
+    </bean>
+    
+    <!-- 找回用户密码用户action -->
+    <bean name="retrieveUserPwsAction" class="com.cy.dcts.webUser.action.RetrieveUserPwsAction">
+		<property name="queryWebUserInfoService" ref="queryWebUserInfoService"></property>
+		<property name="saveWebUserInfoService" ref="saveWebUserInfoService"></property>
+    </bean>
+    
+	<!-- 用户登录action -->
+    <bean name="loginWebUserInfoAction" class="com.cy.dcts.webUser.action.LoginWebUserInfoAction">
+		<property name="queryWebUserInfoService" ref="queryWebUserInfoService"></property>
+		<property name="saveWebUserInfoService" ref="saveWebUserInfoService"></property>
+    </bean>
+	<!-- 用户快速登录action -->
+    <bean name="loginUserInfoAction" class="com.cy.dcts.webUser.action.LoginUserInfoAction">
+		<property name="queryWebUserInfoService" ref="queryWebUserInfoService"></property>
+		<property name="saveWebUserInfoService" ref="saveWebUserInfoService"></property>
+    </bean>
+ 	<!-- 用户退出action -->
+    <bean name="webUserInfoLogoutAction" class="com.cy.dcts.webUser.action.WebUserInfoLogoutAction">
+    </bean>
+    <!-- 获取物流公司评价数量action -->
+    <bean name="queryDriverUserAssessCountAction" class="com.cy.dcts.webUser.action.QueryDriverUserAssessCountAction">
+    	<property name="evaluationManagementService" ref="evaluationManagementService"></property>
+    </bean>
+ 	
+ 	<!-- 个人中心 账户管理 -->
+ 	<bean name="accountManagementAction" class="com.cy.dcts.webUser.action.AccountManagementAction">
+ 		<property name="accountManagementService" ref="accountManagementService" />
+ 		<property name="queryWebUserInfoService" ref="queryWebUserInfoService"></property>
+ 	</bean>
+ 	<!-- 个人中心  修改密码 -->
+ 	<bean name="updatePwdAction" class="com.cy.dcts.webUser.action.UpdatePwdAction" scope="prototype">
+ 		<property name="updatePwdService" ref="updatePwdService"></property>
+ 	</bean>
+ 	<!-- 个人中心 修改手机号码 -->
+ 	<bean name="updateTelephoneAction" class="com.cy.dcts.webUser.action.UpdateTelephoneAction">
+ 		<property name="saveWebUserInfoService" ref="saveWebUserInfoService"></property>
+ 		<property name="queryWebUserInfoService" ref="queryWebUserInfoService"></property>
+ 	</bean>
+ 	<!-- 检查手机号码是否存在 -->
+ 	<bean name="checkPhoneNumberAction" class="com.cy.dcts.webUser.action.CheckPhoneNumberAction">
+ 		<property name="queryWebUserInfoService" ref="queryWebUserInfoService"></property>
+ 	</bean>
+ 	<!-- 账户管理 完善信息 -->
+ 	<bean name="accountManagementUpdateAction" class="com.cy.dcts.webUser.action.AccountManagementUpdateAction">
+ 		<property name="accountManagementService" ref="accountManagementService"></property>
+ 		<property name="queryWebUserInfoService" ref="queryWebUserInfoService"></property>
+ 	</bean>
+ 	<!-- 查询对司机的评价 -->
+ 	<bean name="loadUserDriverEvaluation" class="com.cy.dcts.webUser.action.LoadUserDriverEvaluationAction">
+ 		<property name="evaluationManagementService" ref="evaluationManagementService"></property>
+ 	</bean>
+ 	<!-- 查询给他人的评价 -->
+ 	<bean name="loadDriverUserEvaluation" class="com.cy.dcts.webUser.action.LoadDriverUserEvaluationAction" scope="prototype">
+ 		<property name="evaluationManagementService" ref="evaluationManagementService"></property>
+ 	</bean>
+ 	<!-- 用户发送短信action -->
+ 	<bean name="sendNoteAction" class="com.cy.dcts.note.action.SendNoteAction">
+		<property name="noteService" ref="noteService"></property>
+		<property name="ipUrlStrService" ref="ipUrlStrService"></property>
+    </bean>
+    
+    <bean name="validateUserAction" class="com.cy.dcts.webUser.action.ValidateUserAction">
+    	<property name="queryWebUserInfoService" ref="queryWebUserInfoService"></property>
+    </bean>
+
+	<!-- 维护子账号 -->
+    <bean name="registerSonWebUserInfoAction" class="com.cy.dcts.webUser.action.RegisterSonWebUserInfoAction" scope="prototype">
+    	<property name="queryWebUserInfoService" ref="queryWebUserInfoService"></property>
+		<property name="saveWebUserInfoService" ref="saveWebUserInfoService"></property>
+		<property name="companyService" ref="companyService"></property>
+		<property name="ipUrlStrService" ref="ipUrlStrService"></property>
+    </bean>
+    
+    <!-- 查询子账号分页 -->
+    <bean name="querySonWebUserInfoAction" class="com.cy.dcts.webUser.action.QuerySonWebUserInfoAction" scope="prototype">
+    	<property name="queryWebUserInfoService" ref="queryWebUserInfoService"></property>
+    </bean>
+    
+    <!-- 维护子账号页面 -->
+    <bean name="addSonWebUserInfoAction" class="com.cy.dcts.webUser.action.AddSonWebUserInfoAction">
+    </bean>
+    
+    <!--根据id查询子账号 -->
+    <bean name="querySonWebUserInfoByIdAction" class="com.cy.dcts.webUser.action.QuerySonWebUserInfoByIdAction" scope="prototype">
+    	<property name="queryWebUserInfoService" ref="queryWebUserInfoService"></property>
+    </bean>
+    
+    <!--根据id修改子账号 -->
+    <bean name="modifySonWebUserInfoAction" class="com.cy.dcts.webUser.action.ModifySonWebUserInfoAction" scope="prototype">
+    	<property name="saveWebUserInfoService" ref="saveWebUserInfoService"></property>
+    	<property name="companyService" ref="companyService"></property>
+    </bean>
+    
+    <!-- 全国公民身份验证 -->
+    <bean name="identityVerifyAction" class="com.cy.dcts.identityVerify.action.IdentityVerifyAction">
+    	<property name="identityVerifyService" ref="identityVerifyService" />
+    </bean>
+    
+    <!-- 身份证查询页面 -->
+    <bean name="openIdetityVerifyPage" class="com.cy.dcts.identityVerify.action.OpenIdetityVerifyPage">
+    	
+    </bean>
+	<!-- action end -->
+	
+</beans>

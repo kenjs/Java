@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.driver.dao.CountWebUserBusiDao">
+
+    <resultMap id="countWebUserBusiDomainMap" type="CountWebUserBusiDomain">
+        <result property="id" column="id" />
+        <result property="webUserId" column="web_user_id" />
+    </resultMap>
+
+    <!-- 查 -->
+    <select id="queryCountWebUserBusiDomainByWebUserId" parameterType="integer" resultMap="countWebUserBusiDomainMap">
+        SELECT *
+        FROM
+            t_count_web_user_busi
+        WHERE
+            web_user_id = #{webUserId}
+    </select>
+
+    <select id="queryCountWebUserBusiColumnByWebUserId" parameterType="map" resultType="integer">
+        SELECT ${column}
+        FROM
+            t_count_web_user_busi
+        WHERE
+            web_user_id = #{webUserId}
+    </select>
+
+    <!-- 增 -->
+    <insert id="insertCountWebUserBusiC" parameterType="map" useGeneratedKeys="true" keyProperty="id">
+        insert into t_count_web_user_busi (${column}) values (${value})
+    </insert>
+
+    <!-- 改 -->
+    <update id="updateCountWebUserBusiByWebUserId" parameterType="map">
+        update t_count_web_user_busi set ${column} = #{value} where web_user_id = #{webUserId}
+    </update>
+
+    <select id="queryWebUserIdById" parameterType="string" resultType="integer">
+        select DEPLOY_USERID from t_transaction_info where ID = #{id}
+    </select>
+
+    <select id="queryDriverUserAuditFlagById" parameterType="integer" resultType="integer">
+        select AUDIT_FLAG from t_driver_user_info where ID = #{id}
+    </select>
+</mapper>

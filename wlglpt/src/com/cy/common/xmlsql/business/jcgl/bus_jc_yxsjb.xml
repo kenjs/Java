@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.jcgl.dao.BusJcYxsjbMapper">
+	<parameterMap class="java.util.Map" id="yxsjbCxParMap">
+		<parameter property="ssJgbm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>		
+		<parameter property="fcrqS" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="fcrqZ" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="clhm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="orderStr" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		
+		<parameter property="pageNum" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+		<parameter property="pageSize" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+		<parameter property="pageCount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+		<parameter property="reccount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+		<parameter property="dataList" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" resultMap="yxsjbResMap"/>
+	</parameterMap>
+	
+	<resultMap class="com.cy.jcgl.domain.JcYxsjbDomain" id="yxsjbResMap">
+		<result property="pageXh" column="PAGE_XH"/>
+		<result property="clhm" column="CLHM"/>
+		<result property="pcdh" column="PCDH"/>
+		<result property="pcDjxh" column="PCDJXH"/>
+		<result property="pcrq" column="PCRQ"/>
+		<result property="zsr" column="ZSR"/>
+		<result property="hk" column="HK"/>
+		<result property="ysf" column="YSF"/>		
+		<result property="thf" column="THF"/>
+		<result property="df" column="DF"/>
+		<result property="xf" column="XF"/>
+		<result property="hf" column="HF"/>
+		<result property="psf" column="PSF"/>
+		<result property="wlssSr" column="WLSSSR"/>
+		<result property="wlssZc" column="WLSSZC"/>
+		<result property="lr" column="LR"/>
+		<result property="zzc" column="ZZC"/>
+	</resultMap>
+	
+	<procedure id="queryYxsjbPage" parameterMap="yxsjbCxParMap" resultMap="yxsjbResMap">
+		{call P_JCGL_YXSJB_CX(?,?,?,?,?,?,?,?,?,?)}
+	</procedure>
+</sqlMap>

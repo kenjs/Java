@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.zyegl.dao.HyWlssdjMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectHyWlssdjByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyWlssdjDomain">
+		select a.WLSS_DJXH as wlssDjxh,a.WLSSYY_WH_XH as wlssyyWhXh,a.JE as hjSr,a.KH_DJXH as khDjxh,
+		a.PC_DJXH as pcDjxh,a.WFH_DJXH as wfhDjxh,a.DD_DJXH as ddDjxh,a.HWMXXH as hwmxxh,a.BZ as bz,
+		a.PCYG_CZY_DJXH as pcygCzyDjxh,a.SPBZ as spbz,a.WSSPZT_DM as wsspztDm,a.WS_SPXH as wsSpxh,a.YXBZ as yxbz,
+		a.SS_JGBM as ssJgbm,a.DJ_JGBM as djJgbm,a.CJR_CZY_DJXH as cjrCzyDjxh,a.CJRQ as cjrq,a.XGR_CZY_DJXH as xgrCzyDjxh,
+		a.XGRQ as xgrq,rtrim(TO_CHAR(a.wlss_hw_sl,'fm99999999999990.99'),'.') as sl,rtrim(TO_CHAR(a.wlss_hw_zl,'fm99999999999990.99'),'.') as zl,rtrim(TO_CHAR(a.wlss_hw_tj,'fm99999999999990.99'),'.') as tj,
+		a.wlss_js_sl as jsSl,a.wlss_lybz as wlssLybz,a.spbcbz as spbcbz
+		from HY_WLSSDJ a  
+		where a.WLSS_DJXH=#wlssDjxh#
+		and a.YXBZ='Y'
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertHyWlssdj"  parameterClass="com.cy.common.bo.HyWlssdj">
+		<selectKey keyProperty="wlssDjxh" resultClass="string" type="pre"> 
+			select SEQ_WLSS_DJXH.nextval as wlssDjxh from dual 
+		</selectKey> 
+		insert into HY_WLSSDJ(WLSS_DJXH,WLSSYY_WH_XH,JE,KH_DJXH,
+		PC_DJXH,WFH_DJXH,DD_DJXH,HWMXXH,BZ,
+		PCYG_CZY_DJXH,SPBZ,WSSPZT_DM,WS_SPXH,YXBZ,
+		SS_JGBM,DJ_JGBM,CJR_CZY_DJXH,CJRQ,XGR_CZY_DJXH,
+		XGRQ,wlss_hw_sl,wlss_hw_zl,wlss_hw_tj,wlss_js_sl,wlss_lybz,spbcbz)
+		values(#wlssDjxh:NUMERIC#,#wlssyyWhXh:NUMERIC#,#hjSr:NUMERIC#,#khDjxh:NUMERIC#,
+		#pcDjxh:NUMERIC#,#wfhDjxh:NUMERIC#,#ddDjxh:NUMERIC#,#hwmxxh:NUMERIC#,#bz:VARCHAR#,
+		#pcygCzyDjxh:NUMERIC#,#spbz:VARCHAR#,#wsspztDm:NUMERIC#,#wsSpxh:NUMERIC#,#yxbz:VARCHAR#,
+		#ssJgbm:NUMERIC#,#djJgbm:NUMERIC#,#cjrCzyDjxh:NUMERIC#,to_date(#cjrq:DATE#,'yyyy-MM-dd'),#xgrCzyDjxh:NUMERIC#,
+		to_date(#xgrq:DATE#,'yyyy-MM-dd'),#sl:NUMERIC#,#zl:NUMERIC#,#tj:NUMERIC#,#jsSl:NUMERIC#,#wlssLybz:NUMERIC#,#spbcbz:VARCHAR#)
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateHyWlssdjByKey" parameterClass="com.cy.common.bo.HyWlssdj">
+        update HY_WLSSDJ set WLSSYY_WH_XH=#wlssyyWhXh#,JE=#hjSr#,KH_DJXH=#khDjxh#,
+		PC_DJXH=#pcDjxh#,WFH_DJXH=#wfhDjxh#,DD_DJXH=#ddDjxh#,HWMXXH=#hwmxxh#,BZ=#bz#,
+		PCYG_CZY_DJXH=#pcygCzyDjxh#,SPBZ=#spbz#,WSSPZT_DM=#wsspztDm#,WS_SPXH=#wsSpxh#,YXBZ=#yxbz#,
+		SS_JGBM=#ssJgbm#,DJ_JGBM=#djJgbm#,CJR_CZY_DJXH=#cjrCzyDjxh#,CJRQ=to_date(#cjrq#, 'YYYY-MM-DD'),XGR_CZY_DJXH=#xgrCzyDjxh#,
+		XGRQ=to_date(#xgrq#, 'YYYY-MM-DD'),wlss_hw_sl=#sl#,wlss_hw_zl=#zl#,wlss_hw_tj=#tj#,wlss_js_sl=#jsSl#,
+		wlss_lybz=#wlssLybz#,spbcbz=#spbcbz#
+		where WLSS_DJXH=#wlssDjxh#
+    </update>
+    
+    <!--根据主键更新该表中金额-->
+    <update id="updateHyWlssdjJeByKey" parameterClass="java.util.Map">
+        update HY_WLSSDJ set JE=#je# where WLSS_DJXH=#wlssDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteHyWlssdjByKey" parameterClass="java.util.Map">
+		update HY_WLSSDJ set yxbz='N' where WLSS_DJXH=#wlssDjxh#
+    </delete>
+</sqlMap>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="DriverLineInfoBo" type="com.cy.common.bo.DriverLineInfoBo"/>
+	<!-- 新增司机线路 -->
+	<insert id="iBatisInsertDriverLineInfo" parameterClass="DriverLineInfoBo">
+		insert into t_driver_line_info (START_PROVINCE,START_CITY,END_PROVINCE,END_CITY,DRIVER_ID,START,LINE_TYPE,CREATE_TIME,MODIFY_TIME)
+		values(#startProvince#,#startCity#,#endProvince#,#endCity#,#driverId#,0,#lineType#,sysdate(),sysdate())
+		<selectKey keyProperty="id"  resultClass="Integer">
+			select last_insert_id() as id
+		</selectKey>
+	</insert>
+	<!-- 修改司机线路 -->
+	<update id="iBatisUpdateDriverLineInfoById" parameterClass="DriverLineInfoBo">
+		update t_driver_line_info set 
+			START_PROVINCE=#startProvince#,
+			START_CITY=#startCity#,
+			END_PROVINCE=#endProvince#,
+			END_CITY=#endCity#,
+			MODIFY_TIME=sysdate()
+		where id=#id#
+	</update>
+	<!-- 删除司机线路 -->
+	<delete id="iBatisDeleteDriverLineInfo" parameterClass="String">
+		update t_driver_line_info set START = 1 where id=#id#
+	</delete>
+	<!-- 根据司机id查找司机线路 -->
+	<select id="iBatisSelectDriverLineInfoByDriverId" parameterClass="String" resultClass="com.cy.driver.line.domain.DriverLineInfoDomain">
+		select ID as id,START_PROVINCE as startProvince,START_CITY as startCity,END_PROVINCE as endProvince,END_CITY as endCity
+		from t_driver_line_info where DRIVER_ID = #driverId# and START = 0 order by ID desc
+	</select>
+	<!-- 检索司机线路数目 -->
+	<select id="iBatisSelectDriverLineInfoCount" parameterClass="String" resultClass="Integer">
+		select count(id) from t_driver_line_info where DRIVER_ID = #driverId# and START = 0
+	</select>
+</sqlMap>

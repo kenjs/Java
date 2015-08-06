@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.zygl.dao.BusXtglQyjcbmjldwMapper">
+	<select id="selectQyJcbmJldwPage" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyJcbmJldwDomain">
+select A.SS_JGBM as ssJgbm,
+              A.JLDW_DM as jldwDm,
+              B.JLDW_MC as jldwMc,
+              B.JLDW_JC as jldwJc,
+              A.JBDWBZ as jbdwbz,
+              A.QYBZ as qybz,
+              B.JLDW_FL_DM as jldwFlDm,
+              (select DM.JLDW_FL_MC from dm_jldw_fl DM where DM.JLDW_FL_DM=B.JLDW_FL_DM) as jldwFlMc,
+              A.Cjrq as cjrq,
+              A.Xgrq as xgrq,
+              (select QR.Mc from Qy_Rydj QR where QR.CZY_DJXH=A.Cjr_Czy_Djxh) as cjrMc,
+              (select QR.Mc from Qy_Rydj QR where QR.CZY_DJXH=A.Xgr_Czy_Djxh) as xgrMc,
+              A.HSBL as hsbl
+    from QY_JCBM_JLDW A, DM_JLDW B
+    WHERE A.JLDW_DM=B.JLDW_DM
+         AND   A.YXBZ='Y'
+         AND   B.JLDW_FL_DM=#jldwFlDm#
+         AND   B.YXBZ='Y'
+         <dynamic>
+			<isNotEmpty property="ssJgbm" prepend="and">
+				A.SS_JGBM  = #ssJgbm#
+			</isNotEmpty>
+		 </dynamic>
+    UNION ALL
+    SELECT NULL,
+               B.JLDW_DM as jldwDm,
+               B.JLDW_MC as jldwMc,
+               B.JLDW_JC as jldwJc,
+               'N' as jbdwbz,
+               'N' as qybz,
+               B.JLDW_FL_DM as jldwFlDm,
+               (select DM.JLDW_FL_MC from dm_jldw_fl DM where DM.JLDW_FL_DM=B.JLDW_FL_DM) as jldwFlMc,
+                NULL as cjrq,
+              NULL as xgrq,
+              NULL as cjrMc,
+              NULL as xgrMc,
+               NULL as hsbl
+    from DM_JLDW B
+    where B.YXBZ='Y'
+         AND B.JLDW_FL_DM=#jldwFlDm#
+         AND NOT EXISTS(
+         SELECT 1 FROM QY_JCBM_JLDW A 
+            WHERE A.JLDW_DM=B.JLDW_DM 
+            AND A.YXBZ='Y' 
+		<dynamic>
+			<isNotEmpty property="ssJgbm" prepend="and">
+				A.SS_JGBM  = #ssJgbm#
+			</isNotEmpty>
+		 </dynamic> 
+		 )
+		ORDER BY ssJgbm asc, jldwDm asc  
+    </select>
+    
+    <select id="selectQyJcbmJldwAll" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyJcbmJldwDomain">
+select A.SS_JGBM as ssJgbm,
+              A.JLDW_DM as jldwDm,
+              B.JLDW_MC as jldwMc,
+              B.JLDW_JC as jldwJc,
+              A.JBDWBZ as jbdwbz,
+              A.QYBZ as qybz,
+              B.JLDW_FL_DM as jldwFlDm,
+              (select DM.JLDW_FL_MC from dm_jldw_fl DM where DM.JLDW_FL_DM=B.JLDW_FL_DM) as jldwFlMc,
+              A.Cjrq as cjrq,
+              A.Xgrq as xgrq,
+              (select QR.Mc from Qy_Rydj QR where QR.CZY_DJXH=A.Cjr_Czy_Djxh) as cjrMc,
+              (select QR.Mc from Qy_Rydj QR where QR.CZY_DJXH=A.Xgr_Czy_Djxh) as xgrMc,
+              A.HSBL as hsbl
+    from QY_JCBM_JLDW A, DM_JLDW B
+    WHERE A.JLDW_DM=B.JLDW_DM
+         AND   A.YXBZ='Y'
+         AND   B.JLDW_FL_DM=#jldwFlDm#
+         AND   B.YXBZ='Y'
+         <dynamic>
+			<isNotEmpty property="ssJgbm" prepend="and">
+				A.SS_JGBM  = #ssJgbm#
+			</isNotEmpty>
+		 </dynamic>
+    UNION ALL
+    SELECT NULL,
+               B.JLDW_DM as jldwDm,
+               B.JLDW_MC as jldwMc,
+               B.JLDW_JC as jldwJc,
+               'N' as jbdwbz,
+               'N' as qybz,
+               B.JLDW_FL_DM as jldwFlDm,
+               (select DM.JLDW_FL_MC from dm_jldw_fl DM where DM.JLDW_FL_DM=B.JLDW_FL_DM) as jldwFlMc,
+                NULL as cjrq,
+              NULL as xgrq,
+              NULL as cjrMc,
+              NULL as xgrMc,
+               NULL as hsbl
+    from DM_JLDW B
+    where B.YXBZ='Y'
+         AND B.JLDW_FL_DM=#jldwFlDm#
+         AND NOT EXISTS(
+         SELECT 1 FROM QY_JCBM_JLDW A 
+            WHERE A.JLDW_DM=B.JLDW_DM 
+            AND A.YXBZ='Y' 
+		<dynamic>
+			<isNotEmpty property="ssJgbm" prepend="and">
+				A.SS_JGBM  = #ssJgbm#
+			</isNotEmpty>
+		 </dynamic> 
+		 )
+		ORDER BY ssJgbm asc, jldwDm asc 
+    </select>
+
+	<select id="getQyJcbmJldwRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		select count(B.JLDW_DM) 
+      	from DM_JLDW B
+      	WHERE B.JLDW_FL_DM=#jldwFlDm#
+        AND   B.YXBZ='Y'
+
+    </select>
+</sqlMap>

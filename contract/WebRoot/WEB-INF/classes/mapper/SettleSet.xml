@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+
+<sqlMap>
+   <typeAlias type="tf56.contract.domain.SettleSet" alias="settleSet"/>
+   <typeAlias type="tf56.contract.domain.SettleStepSet" alias="settleStepSet"/>
+ <!-- 查询列表记录 -->
+ <select id="iBatisSelectSettleSetList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+ 	 SELECT settleSetId as settlesetid, fromPartyId as frompartyid, toPartyId as topartyid, type as type, 
+ 	 fromAddress as fromaddress, toAddress as toaddress, eachWeightPrice as eachweightprice,
+		eachVolumePrice as eachvolumeprice, eachTonKilometerPrice as eachtonkilometerprice, 
+		eachCubeKilometerPrice as eachcubekilometerprice, eachCarPrice as eachcarprice, 
+		reportType as reporttype,
+		date_format(inputDate, '%Y-%m-%d') as inputdate, 
+		date_format(updateDate, '%Y-%m-%d') as updatedate from SettleSet where fromPartyId = #frompartyid# 
+	 	<dynamic>
+	 		<isNotEmpty prepend="and" property="type">
+	 			type like #type#
+	 		</isNotEmpty>
+	 		<isNotEmpty prepend="and" property="topartyid">
+	 			toPartyId like #topartyid#
+	 		</isNotEmpty>
+	 		<isNotEmpty prepend="and" property="topartyidfbsid">
+	 			toPartyId like #topartyidfbsid#
+	 		</isNotEmpty>
+	 		<isNotEmpty prepend="and" property="reporttype">
+	 			reportType like #reporttype#
+	 		</isNotEmpty>
+	 	</dynamic>
+ </select>
+  <select id="iBatisSelectSettleSetListCount" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+ 	select count(*) from SettleSet where fromPartyId = #frompartyid# 
+	 	<dynamic>
+	 		<isNotEmpty prepend="and" property="type">
+	 			type like #type#
+	 		</isNotEmpty>
+	 		<isNotEmpty prepend="and" property="topartyid">
+	 			toPartyId like #topartyid#
+	 		</isNotEmpty>
+	 		<isNotEmpty prepend="and" property="topartyid_fbs">
+	 			toPartyId like #topartyid_fbs#
+	 		</isNotEmpty>
+	 		<isNotEmpty prepend="and" property="reporttype">
+	 			reportType like #reporttype#
+	 		</isNotEmpty>
+	 	</dynamic>
+	 </select>
+	 
+	 <!-- 验证记录是否已经存在 -->
+ 	 <select id="iBatisCheckSettleSet" parameterClass="java.util.HashMap" resultClass="java.lang.String">
+ 	 	select count(*) from SettleSet where fromPartyId = #frompartyid# and 
+ 	 	type=#type:VARCHAR# and toPartyId=#topartyid:VARCHAR# 
+ 	 	and fromAddress=#fromaddress:VARCHAR# and toAddress=#toaddress:VARCHAR#
+ 	 	<isNotEmpty prepend="and" property="settlesetid">
+ 	 		settleSetId=#settlesetid#
+ 	 	</isNotEmpty>
+ 	 </select>
+ 	 
+ 	  <!-- 验证记录是否已经存在 -->
+ 	 <select id="iBatisCheckSettleSet_jt" parameterClass="java.util.HashMap" resultClass="java.lang.String">
+ 	 	select count(*) from SettleSet s1, SettleStepSet s2 
+ 	 	where s1.settleSetId=s2.settleSetId and s1.fromPartyId = #frompartyid# and 
+ 	 	s1.type=#type:VARCHAR# and s1.toPartyId=#topartyid:VARCHAR# 
+ 	 	and s1.fromAddress=#fromaddress:VARCHAR# and s1.toAddress=#toaddress:VARCHAR#
+ 	 	and s1.billType=#billtype:VARCHAR#
+ 	 	<isNotEmpty prepend="and" property="settlesetid">
+ 	 		s1.settleSetId=#settlesetid#
+ 	 	</isNotEmpty>
+ 	 </select>
+ 	 
+ 	 <!-- 新增记录 -->
+	 <insert id="iBatisInsertSettleSet" parameterClass="settleSet">
+		  insert into SettleSet (fromPartyId,toPartyId,type,fromAddress,toAddress,eachWeightPrice,
+		  eachVolumePrice,eachTonKilometerPrice,eachcubekilometerprice,eachCarPrice,billType,reportType,inputDate,updateDate)
+		   values (#frompartyid:VARCHAR#,#topartyid:VARCHAR#,#type:VARCHAR#,#fromaddress:VARCHAR#,
+		   #toaddress:VARCHAR#,#eachweightprice:VARCHAR#,#eachvolumeprice:VARCHAR#,#eachtonkilometerprice:VARCHAR#,
+		   #eachcubekilometerprice:VARCHAR#,#eachcarprice:VARCHAR#,#billtype:VARCHAR#,#reporttype:VARCHAR#,#inputdate:VARCHAR#,#updatedate:VARCHAR#)
+		  <selectKey resultClass="String" keyProperty="settlesetid">
+		   select last_insert_id() as id
+		  </selectKey>
+	 </insert>
+	 
+	 <insert id="iBatisInsertSettleStepSet" parameterClass="settleStepSet">
+		  insert into SettleStepSet (settleSetId,startValue,endValue,step,unitPrice)
+		   values (#settlesetid:VARCHAR#,#startvalue:VARCHAR#,#endvalue:VARCHAR#,#step:VARCHAR#,#unitprice:VARCHAR#)
+		  <selectKey resultClass="String" keyProperty="settlestepsetid">
+		   select last_insert_id() as id
+		  </selectKey>
+	 </insert>
+ 	 
+	 <!-- 根据settleSetId删除用户对象 -->
+	 <delete id="iBatisDeleteSettleSet" parameterClass="java.util.HashMap">
+	  	delete from SettleSet where settleSetId=#settlesetid:VARCHAR#
+	 </delete>
+	 
+	 <delete id="iBatisDeleteSettleSet_jt" parameterClass="java.util.HashMap">
+	  	delete from SettleStepSet where settleSetId=#settlesetid:VARCHAR#
+	 </delete>
+	 
+	 <delete id="iBatisTableDelete" parameterClass="java.util.HashMap">
+	  	delete from SettleStepSet where settleStepSetId=#settlestepsetid:VARCHAR#
+	 </delete>
+	 
+	 <!-- 根据settleSetId删除用户对象 -->
+	 <delete id="iBatisDeleteStep" parameterClass="java.util.HashMap">
+	  	delete from SettleStepSet where settleSetId in 
+	  		(select settleSetId from SettleSet where toPartyId=#topartyid:VARCHAR# and type = #type:VARCHAR#)
+	 </delete>
+
+	 <!-- 更新用户对象 -->
+	 <update id="iBatisUpdateSettleSet" parameterClass="settleSet">
+	  	update SettleSet set fromAddress=#fromaddress:VARCHAR#,toaddress=#toaddress:VARCHAR#,eachweightprice=#eachweightprice:VARCHAR#,
+	  	eachvolumeprice=#eachvolumeprice:VARCHAR#,eachtonkilometerprice=#eachtonkilometerprice:VARCHAR#,eachcubekilometerprice=#eachcubekilometerprice:VARCHAR#,
+	  	eachcarprice=#eachcarprice:VARCHAR#,billType=#billtype:VARCHAR#,updatedate=#updatedate:VARCHAR#
+	  	where settleSetId=#settlesetid:VARCAHR#
+	 </update>
+	 
+	 <update id="iBatisUpdateSettleSet_jt" parameterClass="settleStepSet">
+	  	update SettleStepSet set startValue=#startvalue:VARCHAR#,endValue=#endvalue:VARCHAR#,step=#step:VARCHAR#,unitPrice=#unitprice:VARCHAR#
+	  	where settleStepSetId=#settlestepsetid:VARCAHR#
+	 </update>
+ 	 
+ 	 <!-- 查询指定发货方的结算设置列表 -->
+ 	 <select id="iBatisSelectSettleSetListByTopartyidAndType" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+ 	 	SELECT settleSetId as settlesetid, fromPartyId as frompartyid, toPartyId as topartyid, type as type, 
+ 	 	fromAddress as fromaddress, toAddress as toaddress, eachWeightPrice as eachweightprice,
+		eachVolumePrice as eachvolumeprice, eachTonKilometerPrice as eachtonkilometerprice, eachCubeKilometerPrice as eachcubekilometerprice, 
+		eachCarPrice as eachcarprice, date_format(inputDate, '%Y-%m-%d') as inputdate, date_format(updateDate, '%Y-%m-%d') as updatedate 
+		from SettleSet where toPartyId=#topartyid:VARCHAR# and type=#type:VARCHAR# and fromPartyId = #frompartyid# 
+ 	 </select>
+ 	 
+	 <!-- type和topartyid删除用户对象 -->
+	 <delete id="iBatisDeleteByTopartyidAndType" parameterClass="java.util.HashMap">
+	  	delete from SettleSet where toPartyId=#topartyid:VARCHAR# and type = #type:VARCHAR#
+	 </delete>
+
+	 <!-- 根据frompartyid、topartyid和type查询结算设置详情列表 -->
+	<select id="iBatisSelectSettleSetDetailList" parameterClass="map" resultClass="settleSet">
+		select * from SettleSet 
+			where fromPartyId = #frompartyid# and toPartyId = #topartyid# and type = #type# order by updateDate desc
+	</select>
+	
+	<!-- 根据frompartyid、topartyid和type查询结算设置(阶梯报价)详情列表 add by yao.xia 2014-03-17-->
+	<select id="iBatisSelectSettleSetDetailJtList" parameterClass="map" resultClass="settleSet">
+		select ss.*,sss.startValue,sss.endValue,sss.unitPrice from SettleSet ss 
+	 		left JOIN SettleStepSet sss on ss.settleSetId=sss.settleSetId
+ 		 where ss.reportType='阶梯报价' and ss.fromPartyId = #frompartyid# and ss.toPartyId = #topartyid# and ss.type = #type# 
+ 		 <!-- order by ss.settleSetId desc,sss.startValue asc  -->
+	</select>
+	
+	<!-- 根据frompartyid、topartyid和type查询结算设置总条数 -->
+	<select id="iBatisCountSettleSetList" parameterClass="map" resultClass="Integer">
+		select count(*) from SettleSet 
+			where fromPartyId = #frompartyid# and toPartyId = #topartyid# and type = #type#
+	</select>
+	
+	<!-- 根据主键查询记录 -->
+	<select id="selectListBySettleSetId" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+ 	 SELECT settleSetId as settlesetid, fromPartyId as frompartyid, toPartyId as topartyid, type as type, 
+ 	 fromAddress as fromaddress, toAddress as toaddress, eachWeightPrice as eachweightprice,
+		eachVolumePrice as eachvolumeprice, eachTonKilometerPrice as eachtonkilometerprice, 
+		eachCarPrice as eachcarprice, 
+		date_format(inputDate, '%Y-%m-%d') as inputdate, 
+		date_format(updateDate, '%Y-%m-%d') as updatedate from SettleSet where settleSetId = #settlesetid#
+ 	</select>
+ 	
+ 	<select id="iBatisSelectJtCount" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+ 		select count(*) from SettleStepSet where settleSetId=#settlesetid:VARCHAR#
+ 	</select>
+
+	<!-- 根据主键查询记录 -->
+	<select id="settleSetListByTopartyidAndType" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+ 	 SELECT settleSetId as settlesetid, fromPartyId as frompartyid, toPartyId as topartyid, type as type, 
+ 	 fromAddress as fromaddress, toAddress as toaddress, eachWeightPrice as eachweightprice,
+		eachVolumePrice as eachvolumeprice, eachTonKilometerPrice as eachtonkilometerprice, 
+		eachCubeKilometerPrice as eachcubekilometerprice, eachCarPrice as eachcarprice, 
+		date_format(inputDate, '%Y-%m-%d') as inputdate, 
+		date_format(updateDate, '%Y-%m-%d') as updatedate from SettleSet where toPartyId = #topartyid# and type = #type#
+		and fromPartyId = #frompartyid#
+		<isNotEmpty prepend="and" property="fromaddress">
+			fromAddress=#fromaddress#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="toaddress">
+			toAddress=#toaddress#
+		</isNotEmpty>
+ 	</select>
+ 	
+ 	<!-- 根据主键查询记录 -->
+	<select id="settleSetListByTopartyidAndType_jt" parameterClass="java.util.HashMap" resultClass="settleSet">
+ 	 SELECT s1.settleSetId as settlesetid, s1.fromPartyId as frompartyid, s1.toPartyId as topartyid, s1.type as type, 
+ 	 s1.fromAddress as fromaddress, s1.toAddress as toaddress, s1.billType as billtype
+		from SettleSet s1 where s1.toPartyId = #topartyid# and s1.type = #type#
+		and s1.fromPartyId = #frompartyid#
+		<isNotEmpty prepend="and" property="fromaddress">
+			s1.fromAddress=#fromaddress#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="toaddress">
+			s1.toAddress=#toaddress#
+		</isNotEmpty>
+ 	</select>
+ 	
+ 	<select id="settleStepSetList" parameterClass="java.util.HashMap" resultClass="settleStepSet">
+ 		select settleStepSetId as settlestepsetid, settleSetId as settlesetid, startValue as startvalue, endValue as endvalue,
+ 		step as step, unitPrice as unitprice from SettleStepSet where settleSetId=#settlesetid:VARCHAR#
+ 	</select>
+ 	
+ 	<select id="settleStepSetListCount" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+ 		select count(*) from SettleStepSet where settleSetId=#settlesetid:VARCHAR#
+ 	</select>
+ 	
+	<!-- 根据主键查询记录 -->
+	<select id="settleSetListByTopartyidAndTypeCount_jt" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+ 	 SELECT count(*) from SettleSet s1,SettleStepSet s2 where s1.toPartyId = #topartyid# and s1.type = #type#
+		and s1.fromPartyId = #frompartyid# and s1.settleSetId = s2.settleSetId
+		<isNotEmpty prepend="and" property="fromaddress">
+			s1.fromAddress=#fromaddress#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="toaddress">
+			s1.toAddress=#toaddress#
+		</isNotEmpty>
+ 	</select>
+ 	
+ 	<select id="settleSetListByTopartyidAndTypeCount" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+ 	 SELECT count(*) from SettleSet where toPartyId = #topartyid# and type = #type# and fromPartyId = #frompartyid#
+ 	 <isNotEmpty prepend="and" property="fromaddress">
+			fromAddress=#fromaddress#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="toaddress">
+			toAddress=#toaddress#
+		</isNotEmpty>
+ 	</select>
+
+	<!-- 根据主键查询记录条数 -->
+	<select id="selectListBySettleSetIdCount" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+ 	 SELECT count(*) from SettleSet where settleSetId = #settlesetid#
+ 	</select>
+	 
+</sqlMap>
+
+

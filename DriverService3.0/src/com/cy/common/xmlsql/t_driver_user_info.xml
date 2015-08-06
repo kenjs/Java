@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="DriverUserInfoBo" type="com.cy.common.bo.DriverUserInfoBo"/>
+	<resultMap class="com.cy.driver.user.domain.DriverUserInfoDomain" id="DriverUserInfoDomain">
+		<result property="id" column="ID"/>
+		<result property="code" column="CODE"/>
+		<result property="password" column="PASSWORD"/>
+		<result property="name" column="NAME"/>
+		<result property="carNumber" column="CAR_NUMBER"/>
+		<result property="freezeFlag" column="FREEZE_FLAG"/>
+		<result property="auditFlag" column="AUDIT_FLAG"/>
+		<result property="telephone" column="TELEPHONE"/>
+		<result property="identityLicenseNum" column="IDENTITY_LICENSE_NUM"/>
+		<result property="operatingLicense" column="OPERATING_LICENSE"/>
+		<result property="driversLicense" column="DRIVERS_LICENSE"/>
+		<result property="drivingLicense" column="DRIVING_LICENSE"/>
+		<result property="carLength" column="CAR_LENGTH"/>
+		<result property="carWeight" column="CAR_WEIGHT"/>
+		<result property="carCubage" column="CAR_CUBAGE"/>
+		<result property="carPlateType" column="CAR_PLATE_TYPE"/>
+		<result property="carBarType" column="CAR_BAR_TYPE"/>
+		<result property="carTypes" column="CAR_TYPES"/>
+		<result property="remark" column="REMARK"/>
+		<result property="deleteFlag" column="DELETE_FLAG"/>
+		<result property="carStateType" column="CAR_STATE_TYPE"/>
+		<result property="headPortrait" column="HEAD_PORTRAIT"/>
+		<result property="newOrOldAppUser" column="NEW_OR_OLD_APP_USER"/>
+		<result property="submitType" column="SUBMIT_TYPE"/>
+		<result property="createTime" column="CREATE_TIME"/>
+	</resultMap>
+	<!-- 验证司机登录名是否存在 -->
+	<select id="iBatisSelectDriverInfoByCode" parameterClass="String" resultClass="java.lang.Integer">
+		select count(id) from t_driver_user_info where code = #code# and DELETE_FLAG = 0
+	</select>
+	
+	<!-- 验证账户是否被冻结 -->
+	<select id="iBatisSelectFreezeUser" parameterClass="String" resultClass="java.lang.Integer">
+		select count(id) from t_driver_user_info where code = #code# and DELETE_FLAG = 0 and FREEZE_FLAG = 1
+	</select>
+	
+	<!-- 根据登录名和密码查找用户信息 -->
+	<select id="iBatisSelectDriverInfoByCodeAndPwd" parameterClass="map" resultMap="DriverUserInfoDomain">
+		select * from t_driver_user_info where code = #code# and DELETE_FLAG = 0 and FREEZE_FLAG = 0
+		<dynamic>
+			<isNotEmpty prepend="and" property="password">
+				password = #password#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<!-- 根据id查找用户信息 -->
+	<select id="iBatisSelectDriverUserInfoByCode" parameterClass="String" resultClass="com.cy.driver.user.domain.DriverUserInfoDomain">
+		select 
+			t.ID as id,
+			t.CODE as code,
+			t.`NAME` as name,
+			t.CAR_NUMBER as carNumber,
+			t.FREEZE_FLAG as freezeFlag,
+			t.AUDIT_FLAG as auditFlag,
+			t.TELEPHONE as telephone,
+			t.IDENTITY_LICENSE_NUM as identityLicenseNum,
+			t.OPERATING_LICENSE as operatingLicense,
+			t.DRIVERS_LICENSE as driversLicense,
+			t.DRIVING_LICENSE as drivingLicense,
+			t.CAR_LENGTH as carLength,
+			t.CAR_WEIGHT as carWeight,
+			t.CAR_CUBAGE as carCubage,
+			t.CAR_PLATE_TYPE as carPlateType,
+			t.CAR_BAR_TYPE as carBarType,
+			t.CAR_TYPES as carTypes,
+			t.REMARK as remark,
+			t.CAR_STATE_TYPE as carStateType,
+			t.NEW_OR_OLD_APP_USER as newOrOldAppUser,
+			t.BAIDU_CHANNEL_ID as baiduChannelId,
+			t.BAIDU_USER_ID as baiduUserId,
+			t.HEAD_PORTRAIT as headPortrait,
+			t.IDENTITY_LICENSE_NUM_FRONT as identityLicenseNumFront,
+			t.IDENTITY_LICENSE_NUM_CONTRARY as identityLicenseNumContrary,
+			t.DELETE_FLAG as deleteFlag,
+			t.SUBMIT_TYPE as submitType
+		 from t_driver_user_info t
+		where t.ID = #driverId#
+		and t.DELETE_FLAG = 0
+		and t.FREEZE_FLAG = 0
+	</select>
+	<!-- 附近货源数目-->
+	<select id="iBatisSelectNearByCargoCount" parameterClass="map" resultClass="Integer">
+		select count(id) from t_order_cargo_info where DELETED_FLAG = 0 and CARGO_FLAG = 0 and START_PROVINCE = #startProvince#
+		and START_CITY = #startCity# AND REQUEST_START_TIME <![CDATA[>=]]> DATE_FORMAT(SYSDATE(),'%Y-%m-%d')
+	</select>
+	<!-- 预约线路 -->
+	<select id="iBatisSelectDriverBusinessLineInfoByDriverId" parameterClass="String" resultClass="com.cy.driver.order.domain.DriverBusinessLineInfoDomain">
+		SELECT
+			ID as id,
+			START_TIME as startTime,
+			END_TIME as endTime,
+			START_PROVINCE as startProvince,
+			START_CITY as startCity,
+			END_PROVINCE as endProvince,
+			END_CITY as endCity
+		FROM
+			t_driver_business_line_info
+		WHERE
+			DRIVER_ID = #driverId#
+			AND START = 0
+	</select>
+	<!-- 符合预约的货物数目 -->
+	<select id="iBatisSelectSuitCargoCount" parameterClass="map" resultClass="Integer">
+		SELECT
+			count(t.ID)
+		FROM
+		t_order_cargo_info t
+		WHERE 
+		((t.START_PROVINCE = #startProvice1# and t.START_CITY = #startCity1# and t.END_PROVINCE = #endProvince1#
+			and t.END_CITY = #endCity1# and t.REQUEST_START_TIME <![CDATA[<=]]> DATE_FORMAT(#startTime1#,'%Y-%m-%d')) 
+		OR
+	  		(t.START_PROVINCE = #startProvice2# and t.START_CITY = #startCity2# and t.END_PROVINCE = #endProvince2#
+			and t.END_CITY = #endCity2# and t.REQUEST_START_TIME <![CDATA[<=]]> DATE_FORMAT(#startTime2#,'%Y-%m-%d')) 
+		OR
+			(t.START_PROVINCE = #startProvice3# and t.START_CITY = #startCity3# and t.END_PROVINCE = #endProvince3#
+			and t.END_CITY = #endCity3# and t.REQUEST_START_TIME <![CDATA[<=]]> DATE_FORMAT(#startTime3#,'%Y-%m-%d')))
+		AND t.CARGO_FLAG = 0
+		AND t.REQUEST_START_TIME <![CDATA[>=]]> DATE_FORMAT(SYSDATE(),'%Y-%m-%d')	
+		AND t.DELETED_FLAG = 0				
+	</select>
+	<!-- 修改Driver信息 -->
+	<update id="iBatisUpdateDriverUserInfo" parameterClass="DriverUserInfoBo">
+		update t_driver_user_info set MODIFY_TIME = sysdate()		
+		<dynamic>
+			<isNotEmpty property="code" prepend=",">
+				`CODE` = #code#
+			</isNotEmpty>
+			<isNotEmpty property="carTypes" prepend=",">
+				CAR_TYPES = #carTypes#
+			</isNotEmpty>
+			<isNotEmpty property="carPlateType" prepend=",">
+				CAR_PLATE_TYPE = #carPlateType#
+			</isNotEmpty>
+			<isNotEmpty property="carBarType" prepend=",">
+				CAR_BAR_TYPE = #carBarType#
+			</isNotEmpty>
+			<isNotEmpty property="carLength" prepend=",">
+				CAR_LENGTH = #carLength#
+			</isNotEmpty>
+			<isNotEmpty property="carWeight" prepend=",">
+				CAR_WEIGHT = #carWeight#
+			</isNotEmpty>
+			<isNotEmpty property="carCubage" prepend=",">
+				CAR_CUBAGE = #carCubage#
+			</isNotEmpty>
+			<isNotEmpty property="name" prepend=",">
+				`NAME` = #name#
+			</isNotEmpty>
+			<isNotEmpty property="carNumber" prepend=",">
+				CAR_NUMBER = #carNumber#
+			</isNotEmpty>
+			<isNotEmpty property="operatingLicense" prepend=",">
+				OPERATING_LICENSE = #operatingLicense#
+			</isNotEmpty>
+			<isNotEmpty property="driversLicense" prepend=",">
+				DRIVERS_LICENSE = #driversLicense#
+			</isNotEmpty>
+			<isNotEmpty property="drivingLicense" prepend=",">
+				DRIVING_LICENSE = #drivingLicense#
+			</isNotEmpty>
+			<isNotEmpty property="telephone" prepend=",">
+				TELEPHONE = #telephone#
+			</isNotEmpty>
+			<isNotEmpty property="identityLicenseNum" prepend=",">
+				IDENTITY_LICENSE_NUM = #identityLicenseNum#
+			</isNotEmpty>
+			<isNotEmpty property="remark" prepend=",">
+				REMARK = #remark#
+			</isNotEmpty>
+			<isNotEmpty property="headPortrait" prepend=",">
+				HEAD_PORTRAIT = #headPortrait#
+			</isNotEmpty>
+			<isNotEmpty property="identityLicenseNumFront" prepend=",">
+				IDENTITY_LICENSE_NUM_FRONT = #identityLicenseNumFront#
+			</isNotEmpty>
+			<isNotEmpty property="auditFlag" prepend=",">
+				AUDIT_FLAG = #auditFlag#
+			</isNotEmpty>
+			<isNotEmpty property="identityLicenseNumContrary" prepend=",">
+				IDENTITY_LICENSE_NUM_CONTRARY = #identityLicenseNumContrary#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="newOrOldAppUser">
+				NEW_OR_OLD_APP_USER = #newOrOldAppUser#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="submitType">
+				SUBMIT_TYPE = #submitType#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="mobileBrand">
+				MOBILE_BRAND = #mobileBrand#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="operatingSystemVersionNnumber">
+				OPERATING_SYSTEM_VERSION_NUMBER = #operatingSystemVersionNnumber#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="mobilePhoneModel">
+				MOBILE_PHONE_MODEL = #mobilePhoneModel#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="noIimei">
+				NO_IMEI = #noIimei#
+			</isNotEmpty>
+		</dynamic>		
+		where ID = #id#
+	</update>
+	
+	<!-- 注册 -->
+	<insert id="iBatisInsertDriverUserInfo" parameterClass="DriverUserInfoBo">
+		insert into t_driver_user_info 
+			(CODE,DELETE_FLAG,CREATE_TIME,MODIFY_TIME,AUDIT_FLAG,MOBILE_BRAND,OPERATING_SYSTEM_VERSION_NUMBER,
+			MOBILE_PHONE_MODEL,NO_IMEI) 
+		values 
+			(#code#,0,sysdate(),sysdate(),0,#mobileBrand#,#operatingSystemVersionNnumber#,#mobilePhoneModel#,#noIimei#)
+		<selectKey keyProperty="id" resultClass="Integer">
+			select last_insert_id() as id
+		</selectKey>
+	</insert>
+	
+	<!-- 判断用户有效性 -->
+	<select id="iBatisSelectDriverUserById" parameterClass="String" resultClass="Integer">
+		select ifnull(FREEZE_FLAG,0) freezeFlag from t_driver_user_info where ID = #id# and DELETE_FLAG = 0
+	</select>
+	
+	<!-- 设置用户百度云推送的id -->
+	<update id="iBatisUpdateBaiduPushId" parameterClass="map">
+		update t_driver_user_info set BAIDU_CHANNEL_ID = #baiduChannelId#,BAIDU_USER_ID = #baiduUserId# where ID = #id#
+	</update>
+	
+	<!-- 查询用户对司机的评价信息 -->
+	<select id="iBatisSelectUserDirverAssessNum" parameterClass="String" resultClass="com.cy.driver.assess.domain.AssessDomain">
+		SELECT
+			t.TRADE_EVALUATE_SCORE score,count(t.ID) level
+		FROM
+			t_user_driver_assess_info t
+		WHERE
+			t.DRIVER_ID = #driverId#
+		GROUP BY
+			t.TRADE_EVALUATE_SCORE
+		ORDER BY
+			t.TRADE_EVALUATE_SCORE DESC
+	</select>
+</sqlMap>

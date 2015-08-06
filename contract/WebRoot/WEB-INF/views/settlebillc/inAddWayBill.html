@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+ 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="pragma" content="no-cache"/>
+    <meta http-equiv="Cache-Control" content="no-cache,must-revalidate"/>
+    <title>添加托运单</title>
+    
+    <!-- 地区插件 -->
+	<link href="../js/sys/CityPicker/cityLayout.css" rel="stylesheet" type="text/css" />
+	<link href="../js/sys/CityPicker/buju.css" rel="stylesheet" type="text/css" />
+	<!-- 地区插件 -->
+    
+	<link href="../css/webui/main.css" rel="stylesheet" />
+    <link href="../js/sys/ymPrompt/skin/ch/ymPrompt.css" rel="stylesheet"></link>	
+    <script src="../js/jquery/jquery-1.8.3.min.js" type=text/javascript></script>
+    <script type="text/javascript" src="../js/sys/DatePicker/WdatePicker.js"></script>    
+    <script src="../js/sys/ymPrompt/ymPrompt.js" type="text/javascript"></script>
+	<link href="../css/themes/settlebillc/inAddWayBill.css" rel="stylesheet"/>
+	<style type="text/css">
+	</style>
+	<script type="text/javascript">
+	</script>	
+ </head>
+  <body style="overflow: hidden;">
+  	<div>
+  		<div id="topquery" style="width: 800px;height: 50px;">
+  			<table>
+  				<tr>
+  					<td style="width: 260px;">
+  						<label for="waybillnumber" style="margin-left: 20px;margin-right: 5px;">托运单号</label>
+  						<input id="waybillnumber" name="waybillnumber" type="text"/>
+  					</td>
+  					<td style="width: 350px;">
+			  			<label for="inputdate" style="margin-left: 5px;margin-right: 5px;">托运日期</label>
+			  			<input id="fromdate" name="fromdate" type="text"class="Wdate w80" type="text" onfocus="WdatePicker({firstDayOfWeek:1})" style="padding: 0px;"/>
+			  			<span>~</span>
+			  			<input id="todate" name="todate" type="text" class="Wdate w80" type="text" onfocus="WdatePicker({firstDayOfWeek:1})" style="padding: 0px;"/>
+  					</td>
+  					<td style="width: 280px;">
+			  			<label for="clientcode" style="margin-left: 20px;margin-right: 5px;">客户单号</label>
+			  			<input id="clientnumber" name="clientnumber" type="text"/>
+  					</td>
+  				</tr>
+  				<tr>
+  					<td>
+  						<label for="fromaddress" style="margin-left: 20px;margin-right: 5px;">发货地</label>
+  						<input id="fromaddress" autocomplete="off" type="text" placeholder="请选择/输入城市名称" 
+							class="city_input inputFocus proCityQueryAll proCitySelAll fromaddress" style="width: 133px;"/>
+  					</td>
+  					<td>
+  						<label for="toaddress" style="margin-left: 5px;margin-right: 5px;">收货地</label>
+						<input id="toaddress" autocomplete="off" type="text" placeholder="请选择/输入城市名称" 
+							class="city_input inputFocus proCityQueryAll proCitySelAll toaddress" style="width: 133px;"/>
+  					</td>
+  					<td>
+  						<input type="button" id="btnquery" class='btn' value="查询" style="margin-left: 10px;" onclick="search()"/>
+  					</td>
+  				</tr>
+  			</table>
+  		</div>
+  		<div style="overflow: auto;">
+  		<div class="hgrid_title" style="width: 780px;margin-top: 45px;margin-left: 10px;background-color:#EEEEEE;">
+  			<table id="hgrid_title" style="width: 760px;">
+  				<tr>
+  					<th class='checkstatus' style="width:40px"><input type="checkbox" name="checked" style="margin-left: 20px;" onclick="check(this)"/></th>
+  					<th class='waybillnumber' style="width:100px">托运单号</th>
+  					<th class="inputdate" style="width:70px">托运日期</th>
+  					<th class="consignor" style="width:150px">发货方</th>
+  					<th class="fromaddress" style="width:115px">发货地</th>
+  					<th class="toaddress" style="width:115px">收货地</th>
+  					<th class="clientcode" style="width:100px">客户单号</th>
+  					<th class="inoroutamount" style="width:100px">应收费用(元)</th>
+  				</tr>
+  			</table>
+  		</div>
+  		<div style="width: 780px; overflow-y: auto;border-width: 0px;height: 200px;overflow-x: hidden;margin-left: 10px;">
+  			<table id="hgrid" style="width: 760px;height: auto;">
+  			</table>
+  		</div>
+  		</div>
+  		<div style="text-align: center;margin-top: 20px;">
+  			<input class="btn" type="button" id="save" value="确定" onclick="save(this)"/>
+  			<input class="btn" type="button" id="reback" value="取消" onclick="window.parent.ymPrompt.doHandler('close',true)"/>
+  		</div>
+  	</div>
+ 	<script src="../js/themes/settlebillc/inAddWayBill.js" type="text/javascript"></script>	 	
+ 	<!--弹出省省市开始-->
+<div class="provinceCityAll">
+  <div class="tabs clearfix">
+    <ul class="">
+      <li><a href="javascript:" class="current" tb="hotCityAll">热门城市</a></li>
+      <li><a href="javascript:" tb="provinceAll">省份</a></li>
+      <li><a href="javascript:" tb="cityAll" id="cityAll">城市</a></li>
+      <li><a href="javascript:" tb="countyAll" id="countyAll">区县</a></li>
+    </ul>
+  </div>
+  <div class="con">
+    <div class="hotCityAll invis">
+      <div class="pre"><a></a></div>
+      <div class="list">
+        <ul>
+          <!-- 					<li><a href="javascript:"  class="current">南京</a></li> -->
+        </ul>
+      </div>
+      <div class="next"><a class="can"></a></div>
+    </div>
+    <div class="provinceAll invis">
+      <div class="pre"><a></a></div>
+      <div class="list">
+        <ul>
+          <!-- 					<li><a href="javascript:"  class="current">江西省</a></li> -->
+        </ul>
+      </div>
+      <div class="next"><a class="can"></a></div>
+    </div>
+    <div class="cityAll invis">
+      <div class="pre"><a></a></div>
+      <div class="list">
+        <ul>
+          <!-- 					<li><a href="javascript:"  class="current">南京</a></li> -->
+        </ul>
+      </div>
+      <div class="next"><a class="can"></a></div>
+    </div>
+    <div class="countyAll invis">
+      <div class="pre"><a></a></div>
+      <div class="list">
+        <ul>
+        </ul>
+      </div>
+      <div class="next"><a class="can"></a></div>
+    </div>
+  </div>
+</div>
+<script src="../js/sys/CityPicker/public.js"></script>
+  </body>
+</html>

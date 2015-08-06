@@ -1,0 +1,1137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+   <typeAlias alias="DriverUserInfo" type="com.cy.dcts.common.bo.DriverUserInfo"/><!-- 司机车辆表 -->
+   <typeAlias alias="DriverUserInfoDomain" type="com.cy.dcts.common.domain.DriverUserInfoDomain"/>
+   <resultMap class="DriverUserInfo" id="driver_user_info_result">
+      <result property="id" column="ID"/>
+      <result property="code" column="CODE"/>
+      <result property="password" column="PASSWORD"/>
+      <result property="name" column="NAME"/>
+      <result property="carNumber" column="CAR_NUMBER"/>
+      <result property="freezeFlag" column="FREEZE_FLAG"/>
+      <result property="auditFlag" column="AUDIT_FLAG"/>
+      <result property="telephone" column="telephone"/>
+      <result property="identityLicenseNum" column="IDENTITY_LICENSE_NUM"/>
+      <result property="operatingLicense" column="OPERATING_LICENSE"/>
+      <result property="driversLicense" column="DRIVERS_LICENSE"/>
+      <result property="carLength" column="CAR_LENGTH"/>
+      <result property="carWeight" column="CAR_WEIGHT"/>
+      <result property="remark" column="REMARK"/>
+      <result property="createTime" column="CREATE_TIME"/>
+      <result property="modifyTime" column="MODIFY_TIME"/>
+      <result property="drivingLicense" column="DRIVING_LICENSE"/>
+      <result property="deleteFlag" column="DELETE_FLAG"/>
+      <result property="carStateType" column="CAR_STATE_TYPE"/>
+      <result property="carCubage" column="CAR_CUBAGE"/>
+      <result property="carPlateType" column="CAR_PLATE_TYPE"/>
+      <result property="carBarType" column="CAR_BAR_TYPE"/>
+      <result property="carTypes" column="CAR_TYPES"/>
+      
+      <!-- 20140701 AM添加的两字段 -->
+      <result property="identityLicenseNumFront" column="IDENTITY_LICENSE_NUM_FRONT"/>
+      <result property="identityLicenseNumContrary" column="IDENTITY_LICENSE_NUM_CONTRARY"/>
+       <!-- 201407013 pM添加的两字段,百度云推送使用  例子：提醒司机确认拉货-->
+      <result property="baiduChannelId" column="BAIDU_CHANNEL_ID"/>
+      <result property="baiduUserId" column="BAIDU_USER_ID"/> 
+      <!-- 审核提交标识 20140728 -->
+      <result property="submitType" column="SUBMIT_TYPE"/>
+   </resultMap>
+   
+    <resultMap class="DriverUserInfoDomain" id="driver_user_info_domain_result">
+      <result property="id" column="ID"/>
+      <result property="code" column="CODE"/>
+      <result property="password" column="PASSWORD"/>
+      <result property="name" column="NAME"/>
+      <result property="carNumber" column="CAR_NUMBER"/>
+      <result property="freezeFlag" column="FREEZE_FLAG"/>
+      <result property="auditFlag" column="AUDIT_FLAG"/>
+      <result property="telephone" column="telephone"/>
+      <result property="identityLicenseNum" column="IDENTITY_LICENSE_NUM"/>
+      <result property="operatingLicense" column="OPERATING_LICENSE"/>
+      <result property="driversLicense" column="DRIVERS_LICENSE"/>
+      <result property="carLength" column="CAR_LENGTH"/>
+      <result property="carWeight" column="CAR_WEIGHT"/>
+      <result property="remark" column="REMARK"/>
+      <result property="createTime" column="CREATE_TIME"/>
+      <result property="modifyTime" column="MODIFY_TIME"/>
+      <result property="drivingLicense" column="DRIVING_LICENSE"/>
+      <result property="deleteFlag" column="DELETE_FLAG"/>
+      <result property="carStateType" column="CAR_STATE_TYPE"/>
+      <result property="carCubage" column="CAR_CUBAGE"/>
+      <result property="carPlateType" column="CAR_PLATE_TYPE"/>
+      <result property="carBarType" column="CAR_BAR_TYPE"/>
+      <result property="carTypes" column="CAR_TYPES"/>
+      <result property="lastLocation" column="LASTLOCATION"/>
+      <result property="driverLine" column="DRIVERLINE"/>
+      
+       <!-- 201407013 pM添加的两字段,百度云推送使用  例子：提醒司机确认拉货-->
+      <result property="baiduChannelId" column="BAIDU_CHANNEL_ID"/>
+      <result property="baiduUserId" column="BAIDU_USER_ID"/> 
+       <!-- 201407018 pM司机当前位置的经度和纬度-->
+      <result property="longitude" column="LONGITUDE"/>
+      <result property="latitude" column="LATITUDE"/> 
+      
+      <!-- 当前位置的修改时间 20140728 -->
+      <result property="locationModifyTime" column="LOCATION_MODIFY_TIME"/>
+   </resultMap>
+   
+   <resultMap class="DriverUserInfoDomain" id="driver_quote_info_domain_result">
+      <result property="id" column="ID"/><!-- 主键 -->
+      <result property="code" column="CODE"/>
+      <result property="name" column="NAME"/>
+      <result property="carNumber" column="CAR_NUMBER"/>
+      <result property="telephone" column="TELEPHONE"/>
+      <result property="carLength" column="CAR_LENGTH"/>
+      <result property="carWeight" column="CAR_WEIGHT"/>
+      <result property="carStateType" column="CAR_STATE_TYPE"/>
+      <result property="carCubage" column="CAR_CUBAGE"/>
+      <result property="carPlateType" column="CAR_PLATE_TYPE"/>
+      <result property="carBarType" column="CAR_BAR_TYPE"/>
+      <result property="carTypes" column="CAR_TYPES"/>
+      <result property="quoteFair" column="QUOTE_FAIR"/>
+      <result property="quoteType" column="QUOTE_TYPE"/>
+      <result property="lastLocation" column="lastLocation"/>
+   </resultMap>
+   
+   <!-- 首页当前车源 -->
+      <resultMap class="DriverUserInfoDomain" id="driver_real_info_domain_result">
+      <result property="id" column="ID"/><!-- 主键 -->
+      <result property="code" column="CODE"/><!-- 账号 -->
+      <result property="name" column="NAME"/><!-- 姓名 -->
+      <result property="carNumber" column="CAR_NUMBER"/><!-- 车辆牌照号 -->
+      <result property="freezeFlag" column="FREEZE_FLAG"/><!-- 冻结标志（0:正常，1:冻结) -->
+      <result property="auditFlag" column="AUDIT_FLAG"/><!-- 审核标志（0:审核中,1:审核通过,-1审核未通过） -->
+      <result property="telephone" column="telephone"/><!-- 联系电话 -->
+      <result property="identityLicenseNum" column="IDENTITY_LICENSE_NUM"/><!-- 身份证 -->
+      <result property="operatingLicense" column="OPERATING_LICENSE"/><!-- 营运证号码 -->
+      <result property="driversLicense" column="DRIVERS_LICENSE"/><!-- 驾驶证号 -->
+      <result property="carLength" column="CAR_LENGTH"/><!-- 车长 -->
+      <result property="carWeight" column="CAR_WEIGHT"/><!-- 运力-吨位 -->
+      <result property="remark" column="REMARK"/><!-- 备注 -->
+      <result property="drivingLicense" column="DRIVING_LICENSE"/><!-- 行驶证号码 -->
+      <result property="deleteFlag" column="DELETE_FLAG"/><!-- 删除标志（1:已删除,0:未删除） -->
+      <result property="carStateType" column="CAR_STATE_TYPE"/><!-- 当前运营状态（1空车求货、2满载运营、3休息(默认空车求货)） -->
+      <result property="carCubage" column="CAR_CUBAGE"/><!-- 运力-体积 -->
+      <result property="carPlateType" column="CAR_PLATE_TYPE"/><!-- 板-平板、高低板 -->
+      <result property="carBarType" column="CAR_BAR_TYPE"/><!-- 栏-高栏、低栏 -->
+      <result property="carTypes" column="CAR_TYPES"/><!-- 车型（车长、车宽、板、栏、运力等合起来） -->
+      <result property="lastLocation" column="LASTLOCATION"/><!-- 完整当前位置信息 -->
+      <result property="province" column="PROVINCE"/><!-- 当前位置信息省 -->
+      <result property="city" column="CITY"/><!-- 当前位置信息市 -->
+      <result property="county" column="COUNTY"/><!-- 当前位置信息 区-->
+      <result property="driverLine" column="DRIVERLINE"/><!-- 司机运营线路信息 -->
+      
+       <!-- 201407013 pM添加的两字段,百度云推送使用  例子：提醒司机确认拉货-->
+      <result property="baiduChannelId" column="BAIDU_CHANNEL_ID"/>
+      <result property="baiduUserId" column="BAIDU_USER_ID"/>
+      <!-- <result property="driverBusinessLine" column="DRIVERBUSINESSLINE"/> --><!-- 司机预约线路信息 -->
+   </resultMap>
+   
+    <!-- 车源(货定车) -->
+      <resultMap class="DriverUserInfoDomain" id="driver_real_info_domain_count_result">
+      <result property="id" column="ID"/><!-- 主键 -->
+      <result property="code" column="CODE"/><!-- 账号 -->
+      <result property="name" column="NAME"/><!-- 姓名 -->
+      <result property="carNumber" column="CAR_NUMBER"/><!-- 车辆牌照号 -->
+      <result property="freezeFlag" column="FREEZE_FLAG"/><!-- 冻结标志（0:正常，1:冻结) -->
+      <result property="auditFlag" column="AUDIT_FLAG"/><!-- 审核标志（0:审核中,1:审核通过,-1审核未通过） -->
+      <result property="telephone" column="telephone"/><!-- 联系电话 -->
+      <result property="identityLicenseNum" column="IDENTITY_LICENSE_NUM"/><!-- 身份证 -->
+      <result property="operatingLicense" column="OPERATING_LICENSE"/><!-- 营运证号码 -->
+      <result property="driversLicense" column="DRIVERS_LICENSE"/><!-- 驾驶证号 -->
+      <result property="carLength" column="CAR_LENGTH"/><!-- 车长 -->
+      <result property="carWeight" column="CAR_WEIGHT"/><!-- 运力-吨位 -->
+      <result property="remark" column="REMARK"/><!-- 备注 -->
+      <result property="drivingLicense" column="DRIVING_LICENSE"/><!-- 行驶证号码 -->
+      <result property="deleteFlag" column="DELETE_FLAG"/><!-- 删除标志（1:已删除,0:未删除） -->
+      <result property="carStateType" column="CAR_STATE_TYPE"/><!-- 当前运营状态（1空车求货、2满载运营、3休息(默认空车求货)） -->
+      <result property="carCubage" column="CAR_CUBAGE"/><!-- 运力-体积 -->
+      <result property="carPlateType" column="CAR_PLATE_TYPE"/><!-- 板-平板、高低板 -->
+      <result property="carBarType" column="CAR_BAR_TYPE"/><!-- 栏-高栏、低栏 -->
+      <result property="carTypes" column="CAR_TYPES"/><!-- 车型（车长、车宽、板、栏、运力等合起来） -->
+      <result property="lastLocation" column="LASTLOCATION"/><!-- 完整当前位置信息 -->
+      <result property="province" column="PROVINCE"/><!-- 当前位置信息省 -->
+      <result property="city" column="CITY"/><!-- 当前位置信息市 -->
+      <result property="county" column="COUNTY"/><!-- 当前位置信息 区-->
+      <result property="driverLine" column="DRIVERLINE"/><!-- 司机运营线路信息 -->
+      
+       <!-- 201407013 pM添加的两字段,百度云推送使用  例子：提醒司机确认拉货-->
+      <result property="baiduChannelId" column="BAIDU_CHANNEL_ID"/>
+      <result property="baiduUserId" column="BAIDU_USER_ID"/>
+      <result property="driverBusinessLine" column="DRIVERBUSINESSLINE"/><!-- 司机预约线路信息 -->
+      <result property="lineType" column="LINE_TYPE"/><!-- 线路类型 1运营线路2预约线路 -->
+   </resultMap>
+   
+   <!-- 推荐预约车源 -->
+   <resultMap class="DriverUserInfoDomain" id="driver_return_info_domain_result">
+      <result property="id" column="ID"/><!-- 主键 -->
+      <result property="code" column="CODE"/><!-- 账号 -->
+      <result property="name" column="NAME"/><!-- 姓名 -->
+      <result property="carNumber" column="CAR_NUMBER"/><!-- 车辆牌照号 -->
+      <result property="freezeFlag" column="FREEZE_FLAG"/><!-- 冻结标志（0:正常，1:冻结) -->
+      <result property="auditFlag" column="AUDIT_FLAG"/><!-- 审核标志（0:审核中,1:审核通过,-1审核未通过） -->
+      <result property="carLength" column="CAR_LENGTH"/><!-- 车长 -->
+      <result property="carWeight" column="CAR_WEIGHT"/><!-- 运力-吨位 -->
+      <result property="deleteFlag" column="DELETE_FLAG"/><!-- 删除标志（1:已删除,0:未删除） -->
+      <result property="carStateType" column="CAR_STATE_TYPE"/><!-- 当前运营状态（1空车求货、2满载运营、3休息(默认空车求货)） -->
+      <result property="carCubage" column="CAR_CUBAGE"/><!-- 运力-体积 -->
+      <result property="carPlateType" column="CAR_PLATE_TYPE"/><!-- 板-平板、高低板 -->
+      <result property="carBarType" column="CAR_BAR_TYPE"/><!-- 栏-高栏、低栏 -->
+      <result property="driverBusinessLine" column="DRIVER_BUSINESS_LINE"/><!-- 司机预约线路信息 -->
+   </resultMap>
+   
+   <!-- 根据司机手机号查询司机 -->
+   <select id="query_driver_info_byCode" parameterClass="String" resultMap="driver_user_info_result">
+     SELECT t.id,
+		t.code,
+		t.password,
+		t.name,
+		t.car_number,
+		t.freeze_flag,
+		t.audit_flag,
+		t.telephone,
+		t.identity_license_num,
+		t.operating_license,
+		t.car_length,
+		t.car_weight,
+		t.remark,
+		t.create_time,
+		t.modify_time,
+		t.driving_license,
+		t.drivers_license,
+		t.delete_flag,
+		t.car_state_type,
+		t.car_cubage,
+		t.car_plate_type,
+		t.car_bar_type,
+		t.car_types,
+		t.identity_license_num_front,
+		t.identity_license_num_contrary,
+		t.baidu_channel_id,
+		t.baidu_user_id,
+		t.submit_type 
+		FROM t_driver_user_info t 
+		WHERE t.code = #code# and t.DELETE_FLAG=0 LIMIT 1 
+   </select>
+   
+   
+   <!-- 当天新增司机 -->
+    <select id="query_today_dynamic_driver_car_by_time" parameterClass="String" resultClass="com.cy.dcts.common.domain.DriverUserInfoDomain">
+		SELECT d.car_number as carNumber,d.code,d.name FROM t_driver_user_info d 
+		WHERE d.delete_flag =#deleteFlag#  AND DATE_FORMAT(d.create_time,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d') ;
+   </select>
+   
+   <!-- 每日新增司机或司机新增总量-->
+   <select id="query_driver_car_by_time_count" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+		select count(t.id) from t_driver_user_info t WHERE t.delete_flag = 0 
+		<dynamic prepend="AND ">
+		 	<isNotEmpty property="createTime" prepend="and ">date_format(t.CREATE_TIME,'%Y-%m-%d') = date_format(#createTime#,'%Y-%m-%d')</isNotEmpty>
+		</dynamic>
+   </select>
+   
+   
+    <select id="query_real_driver_car_byPage_list_count_by_id" parameterClass="java.util.HashMap" resultMap="driver_real_info_domain_count_result">
+   		  select      t.id,t.code,t.name,t.CAR_NUMBER,t.FREEZE_FLAG,t.AUDIT_FLAG,t.telephone,    
+ 			t.IDENTITY_LICENSE_NUM,t.OPERATING_LICENSE,t.DRIVERS_LICENSE,t.CAR_LENGTH,t.CAR_WEIGHT,    
+			 t.REMARK,t.DRIVING_LICENSE,t.DELETE_FLAG,t.CAR_STATE_TYPE,t.CAR_CUBAGE,t.CAR_PLATE_TYPE,    
+ 				t.CAR_BAR_TYPE,CAR_TYPES,t.BAIDU_CHANNEL_ID,t.BAIDU_USER_ID,     b.location as LASTLOCATION,b.PROVINCE,b.CITY,COUNTY,b.LAST_TIME,     
+			(select GROUP_CONCAT(CONCAT(START_PROVINCE,REPLACE(START_CITY, '全部', ''),'--',END_PROVINCE,REPLACE(END_CITY, '全部', '')))      
+			from t_driver_line_info a where a.driver_id =  t.id and a.START = 0 ) as DRIVERLINE,     (select GROUP_CONCAT(CONCAT(START_PROVINCE,REPLACE(START_CITY, '全部', '')
+			,'--',END_PROVINCE,REPLACE(END_CITY, '全部', '')))      from t_driver_business_line_info a where a.driver_id =  t.id and a.START = 0 
+			and date_format(a.END_TIME,'%Y-%m-%d')>=date_format(SYSDATE(),'%Y-%m-%d')                                                 ) 
+			as DRIVERBUSINESSLINE,'2' AS LINE_TYPE     from t_driver_user_info t,t_location_collect_last_info b  WHERE t.id=b.driver_id  AND   
+			t.id =#id#     and t.DELETE_FLAG = #deleteFlag#     
+   	</select>
+   
+   
+    <!-- 车源信息所有(订车) -->
+   <select id="query_real_driver_car_byPage_list_count" parameterClass="java.util.HashMap" resultMap="driver_real_info_domain_count_result">
+   		select * from (
+			select * from (
+				select 
+				t.id,t.code,t.name,t.CAR_NUMBER,t.FREEZE_FLAG,t.AUDIT_FLAG,t.telephone,
+				t.IDENTITY_LICENSE_NUM,t.OPERATING_LICENSE,t.DRIVERS_LICENSE,t.CAR_LENGTH,t.CAR_WEIGHT,
+				t.REMARK,t.DRIVING_LICENSE,t.DELETE_FLAG,t.CAR_STATE_TYPE,t.CAR_CUBAGE,t.CAR_PLATE_TYPE,
+				t.CAR_BAR_TYPE,CAR_TYPES,t.BAIDU_CHANNEL_ID,t.BAIDU_USER_ID,
+				b.location as LASTLOCATION,b.PROVINCE,b.CITY,COUNTY,b.LAST_TIME,
+				(select GROUP_CONCAT(CONCAT(START_PROVINCE,REPLACE(START_CITY, '全部', ''),'--',END_PROVINCE,REPLACE(END_CITY, '全部', ''))) 
+				from t_driver_line_info a where a.driver_id =  t.id and a.START = 0
+					<dynamic prepend="and ">
+						<isNotEmpty property="startProvince" prepend=" ">
+							((
+							<isNotEmpty property="startProvince" prepend=" ">a.START_PROVINCE = #startProvince#</isNotEmpty>
+			 				<isNotEmpty property="startCity" prepend="and ">a.START_CITY = #startCity#</isNotEmpty>
+			 				<isNotEmpty property="endProvince" prepend="and ">a.END_PROVINCE = #endProvince#</isNotEmpty>
+			 				<isNotEmpty property="endCity" prepend="and ">a.END_CITY = #endCity#</isNotEmpty>
+							) OR (
+							<isNotEmpty property="startProvince" prepend=" ">a.END_PROVINCE = #startProvince#</isNotEmpty>
+			 				<isNotEmpty property="startCity" prepend="and ">a.END_CITY = #startCity#</isNotEmpty>
+			 				<isNotEmpty property="endProvince" prepend="and ">a.START_PROVINCE = #endProvince#</isNotEmpty>
+			 				<isNotEmpty property="endCity" prepend="and ">a.START_CITY = #endCity#</isNotEmpty>
+							))
+						</isNotEmpty>
+						<isEmpty property="startProvince" prepend="">
+							<isNotEmpty property="endProvince" prepend="">
+								((
+				 				<isNotEmpty property="endProvince" prepend=" ">a.END_PROVINCE = #endProvince#</isNotEmpty>
+				 				<isNotEmpty property="endCity" prepend="and ">a.END_CITY = #endCity#</isNotEmpty>
+								) OR (
+				 				<isNotEmpty property="endProvince" prepend=" ">a.START_PROVINCE = #endProvince#</isNotEmpty>
+				 				<isNotEmpty property="endCity" prepend="and ">a.START_CITY = #endCity#</isNotEmpty>
+								))
+							</isNotEmpty>
+						</isEmpty>
+					</dynamic>
+				) as DRIVERLINE,
+				(select GROUP_CONCAT(CONCAT(START_PROVINCE,REPLACE(START_CITY, '全部', ''),'--',END_PROVINCE,REPLACE(END_CITY, '全部', ''))) 
+				from t_driver_business_line_info a where a.driver_id =  t.id and a.START = 0 and date_format(a.END_TIME,'%Y-%m-%d')>=date_format(SYSDATE(),'%Y-%m-%d')) 
+				as DRIVERBUSINESSLINE,'1' AS LINE_TYPE
+				from t_driver_user_info t,t_location_collect_last_info b  WHERE t.id=b.driver_id
+			) t1 where t1.DRIVERLINE is not NULL 
+			<dynamic prepend="and ">
+				<isNotEmpty property="lastLocation" prepend="and ">t1.LASTLOCATION like CONCAT('%',#lastLocation#,'%')</isNotEmpty><!--当前位置 -->
+			</dynamic>
+			UNION
+			select * from (
+				select 
+				t.id,t.code,t.name,t.CAR_NUMBER,t.FREEZE_FLAG,t.AUDIT_FLAG,t.telephone,
+				t.IDENTITY_LICENSE_NUM,t.OPERATING_LICENSE,t.DRIVERS_LICENSE,t.CAR_LENGTH,t.CAR_WEIGHT,
+				t.REMARK,t.DRIVING_LICENSE,t.DELETE_FLAG,t.CAR_STATE_TYPE,t.CAR_CUBAGE,t.CAR_PLATE_TYPE,
+				t.CAR_BAR_TYPE,CAR_TYPES,t.BAIDU_CHANNEL_ID,t.BAIDU_USER_ID,
+				b.location as LASTLOCATION,b.PROVINCE,b.CITY,COUNTY,b.LAST_TIME,
+				(select GROUP_CONCAT(CONCAT(START_PROVINCE,REPLACE(START_CITY, '全部', ''),'--',END_PROVINCE,REPLACE(END_CITY, '全部', ''))) 
+				from t_driver_line_info a where a.driver_id =  t.id and a.START = 0
+					<dynamic prepend="and ">
+						<isNotEmpty property="startProvince" prepend=" ">
+							((
+							<isNotEmpty property="startProvince" prepend=" ">a.START_PROVINCE = #startProvince#</isNotEmpty>
+			 				<isNotEmpty property="startCity" prepend="and ">a.START_CITY = #startCity#</isNotEmpty>
+			 				<isNotEmpty property="endProvince" prepend="and ">a.END_PROVINCE = #endProvince#</isNotEmpty>
+			 				<isNotEmpty property="endCity" prepend="and ">a.END_CITY = #endCity#</isNotEmpty>
+							) OR (
+							<isNotEmpty property="startProvince" prepend=" ">a.END_PROVINCE = #startProvince#</isNotEmpty>
+			 				<isNotEmpty property="startCity" prepend="and ">a.END_CITY = #startCity#</isNotEmpty>
+			 				<isNotEmpty property="endProvince" prepend="and ">a.START_PROVINCE = #endProvince#</isNotEmpty>
+			 				<isNotEmpty property="endCity" prepend="and ">a.START_CITY = #endCity#</isNotEmpty>
+							))
+						</isNotEmpty>
+						<isEmpty property="startProvince" prepend="">
+							<isNotEmpty property="endProvince" prepend="">
+								((
+				 				<isNotEmpty property="endProvince" prepend=" ">a.END_PROVINCE = #endProvince#</isNotEmpty>
+				 				<isNotEmpty property="endCity" prepend="and ">a.END_CITY = #endCity#</isNotEmpty>
+								) OR (
+				 				<isNotEmpty property="endProvince" prepend=" ">a.START_PROVINCE = #endProvince#</isNotEmpty>
+				 				<isNotEmpty property="endCity" prepend="and ">a.START_CITY = #endCity#</isNotEmpty>
+								))
+							</isNotEmpty>
+						</isEmpty>
+					</dynamic>
+				) as DRIVERLINE,
+				(select GROUP_CONCAT(CONCAT(START_PROVINCE,REPLACE(START_CITY, '全部', ''),'--',END_PROVINCE,REPLACE(END_CITY, '全部', ''))) 
+				from t_driver_business_line_info a where a.driver_id =  t.id and a.START = 0 and date_format(a.END_TIME,'%Y-%m-%d')>=date_format(SYSDATE(),'%Y-%m-%d')) 
+				as DRIVERBUSINESSLINE,'0' AS LINE_TYPE
+				from t_driver_user_info t,t_location_collect_last_info b  WHERE t.id=b.driver_id
+			) t1 where t1.DRIVERLINE is not NULL 
+			<dynamic prepend="and ">
+				<isNotEmpty property="lastLocation" prepend="and ">t1.LASTLOCATION NOT like CONCAT('%',#lastLocation#,'%')</isNotEmpty><!--当前位置 -->
+			</dynamic>
+			UNION
+			select * from (
+				select 
+				t.id,t.code,t.name,t.CAR_NUMBER,t.FREEZE_FLAG,t.AUDIT_FLAG,t.telephone,
+				t.IDENTITY_LICENSE_NUM,t.OPERATING_LICENSE,t.DRIVERS_LICENSE,t.CAR_LENGTH,t.CAR_WEIGHT,
+				t.REMARK,t.DRIVING_LICENSE,t.DELETE_FLAG,t.CAR_STATE_TYPE,t.CAR_CUBAGE,t.CAR_PLATE_TYPE,
+				t.CAR_BAR_TYPE,CAR_TYPES,t.BAIDU_CHANNEL_ID,t.BAIDU_USER_ID,
+				b.location as LASTLOCATION,b.PROVINCE,b.CITY,COUNTY,b.LAST_TIME,
+				(select GROUP_CONCAT(CONCAT(START_PROVINCE,REPLACE(START_CITY, '全部', ''),'--',END_PROVINCE,REPLACE(END_CITY, '全部', ''))) 
+				from t_driver_line_info a where a.driver_id =  t.id and a.START = 0 ) as DRIVERLINE,
+				(select GROUP_CONCAT(CONCAT(START_PROVINCE,REPLACE(START_CITY, '全部', ''),'--',END_PROVINCE,REPLACE(END_CITY, '全部', ''))) 
+				from t_driver_business_line_info a where a.driver_id =  t.id and a.START = 0 and date_format(a.END_TIME,'%Y-%m-%d')>=date_format(SYSDATE(),'%Y-%m-%d')
+					<dynamic prepend="and ">
+			 			<isNotEmpty property="startProvince" prepend="and ">a.START_PROVINCE = #startProvince#</isNotEmpty>
+			 			<isNotEmpty property="startCity" prepend="and ">a.START_CITY = #startCity#</isNotEmpty>
+			 			<isNotEmpty property="endProvince" prepend="and ">a.END_PROVINCE = #endProvince#</isNotEmpty>
+			 			<isNotEmpty property="endCity" prepend="and ">a.END_CITY = #endCity#</isNotEmpty>
+					</dynamic>
+				) as DRIVERBUSINESSLINE,'2' AS LINE_TYPE
+				from t_driver_user_info t,t_location_collect_last_info b  WHERE t.id=b.driver_id
+			) t1 where t1.DRIVERBUSINESSLINE is NOT NULL 
+		) t2 
+		<dynamic prepend="where ">
+			<isNotEmpty property="id" prepend="and ">t2.id = #id#</isNotEmpty>
+			<isNotEmpty property="deleteFlag" prepend="and ">t2.DELETE_FLAG = #deleteFlag#</isNotEmpty>
+			<isNotEmpty property="auditFlag" prepend="and ">t2.AUDIT_FLAG = #auditFlag#</isNotEmpty>
+			<isNotEmpty property="carLength" prepend="and ">t2.CAR_LENGTH = #carLength#</isNotEmpty>
+			<isNotEmpty property="carPlateType" prepend="and ">t2.CAR_PLATE_TYPE = #carPlateType#</isNotEmpty>
+			<isNotEmpty property="carBarType" prepend="and ">t2.CAR_BAR_TYPE = #carBarType#</isNotEmpty>
+			<isNotEmpty property="carWeight" prepend="and ">t2.CAR_WEIGHT = #carWeight#</isNotEmpty><!-- 车辆运力吨位 -->
+			<isNotEmpty property="carCubage" prepend="and ">t2.CAR_CUBAGE = #carCubage#</isNotEmpty><!-- 车辆运力体积 -->
+			<isNotEmpty property="code" prepend="and ">t2.code like CONCAT('%',#code#,'%')</isNotEmpty><!-- 手机号码 -->	
+			<isNotEmpty property="carNumber" prepend="and ">t2.CAR_NUMBER like CONCAT('%',#carNumber#,'%')</isNotEmpty><!-- 车辆号码 -->	
+			<!-- <isNotEmpty property="lastLocation" prepend="and ">t2.LASTLOCATION like CONCAT('%',#lastLocation#,'%')</isNotEmpty> --><!--当前位置 -->
+			<isNotEmpty property="province" prepend="and ">t2.PROVINCE = #province# </isNotEmpty><!--当前位置省 -->	
+			<isNotEmpty property="city" prepend="and ">t2.CITY = #city# </isNotEmpty><!--当前位置市 -->		
+		</dynamic>
+		ORDER BY t2.LINE_TYPE DESC
+   </select>
+   
+   
+   
+   
+   <!-- 首页当前车源信息所有 -->
+   <select id="query_real_driver_car_byPage_list" parameterClass="java.util.HashMap" resultMap="driver_real_info_domain_result">
+		select  
+		t1.id,t1.code,t1.name,t1.CAR_NUMBER,t1.FREEZE_FLAG,t1.AUDIT_FLAG,t1.telephone,
+		t1.IDENTITY_LICENSE_NUM,t1.OPERATING_LICENSE,t1.DRIVERS_LICENSE,t1.CAR_LENGTH,t1.CAR_WEIGHT,
+		t1.REMARK,t1.DRIVING_LICENSE,t1.DELETE_FLAG,t1.CAR_STATE_TYPE,t1.CAR_CUBAGE,t1.CAR_PLATE_TYPE,
+		t1.CAR_BAR_TYPE,t1.CAR_TYPES,t1.LASTLOCATION,t1.PROVINCE,t1.CITY,t1.COUNTY,t1.DRIVERLINE,t1.BAIDU_CHANNEL_ID,t1.BAIDU_USER_ID 
+		from 
+		(select t.id,t.code,t.name,t.CAR_NUMBER,t.FREEZE_FLAG,t.AUDIT_FLAG,t.telephone,
+		t.IDENTITY_LICENSE_NUM,t.OPERATING_LICENSE,t.DRIVERS_LICENSE,t.CAR_LENGTH,t.CAR_WEIGHT,
+		t.REMARK,t.DRIVING_LICENSE,t.DELETE_FLAG,t.CAR_STATE_TYPE,t.CAR_CUBAGE,t.CAR_PLATE_TYPE,
+		t.CAR_BAR_TYPE,CAR_TYPES,t.BAIDU_CHANNEL_ID,t.BAIDU_USER_ID,
+		b.location as LASTLOCATION,b.PROVINCE,b.CITY,COUNTY,b.LAST_TIME,
+		(select GROUP_CONCAT(CONCAT(START_PROVINCE,REPLACE(START_CITY, '全部', ''),'--',END_PROVINCE,REPLACE(END_CITY, '全部', ''))) 
+			from t_driver_line_info a where a.driver_id =  t.id and a.START = 0 
+			<dynamic prepend=" ">
+				<isNotEmpty property="driverLinestart" prepend="  ">
+					and ((
+					<isNotEmpty property="startProvince" prepend=" ">a.START_PROVINCE = #startProvince#</isNotEmpty>
+					<isNotEmpty property="startCity" prepend="and ">a.START_CITY = #startCity#</isNotEmpty>
+					<isNotEmpty property="endProvince" prepend="and ">a.END_PROVINCE = #endProvince#</isNotEmpty>
+					<isNotEmpty property="endCity" prepend="and ">a.END_CITY = #endCity#</isNotEmpty>
+					)
+				</isNotEmpty>
+				<isEmpty property="driverLinestart" prepend=" ">
+					<isNotEmpty property="driverLineEnd" prepend=" ">
+						and ( (
+						<isNotEmpty property="startProvince" prepend="and ">a.START_PROVINCE = #startProvince#</isNotEmpty>
+						<isNotEmpty property="startCity" prepend="and ">a.START_CITY = #startCity#</isNotEmpty>
+						<isNotEmpty property="endProvince" prepend=" ">a.END_PROVINCE = #endProvince#</isNotEmpty>
+						<isNotEmpty property="endCity" prepend="and ">a.END_CITY = #endCity#</isNotEmpty>
+						)
+					</isNotEmpty>
+				</isEmpty>
+				<isNotEmpty property="driverLinestart" prepend=" or ">
+					(
+						<isNotEmpty property="startProvince" prepend=" ">
+							a.END_PROVINCE = #startProvince#
+							<isNotEmpty property="startCity" prepend="and ">a.END_CITY = #startCity#</isNotEmpty>
+							<isNotEmpty property="endProvince" prepend="and ">a.START_PROVINCE = #endProvince#</isNotEmpty>
+							<isNotEmpty property="endCity" prepend="and ">a.START_CITY = #endCity#</isNotEmpty>
+						</isNotEmpty>
+						<isEmpty property="startProvince" prepend=" ">
+							<isNotEmpty property="endProvince" prepend=" ">a.START_PROVINCE = #endProvince#</isNotEmpty>
+							<isNotEmpty property="endCity" prepend="and ">a.START_CITY = #endCity#</isNotEmpty>
+						</isEmpty>
+					)
+				</isNotEmpty>
+				<isNotEmpty property="driverLineEnd" prepend=" or ">
+					(
+						<isNotEmpty property="startProvince" prepend=" ">
+							a.END_PROVINCE = #startProvince#
+							<isNotEmpty property="startCity" prepend="and ">a.END_CITY = #startCity#</isNotEmpty>
+							<isNotEmpty property="endProvince" prepend="and ">a.START_PROVINCE = #endProvince#</isNotEmpty>
+							<isNotEmpty property="endCity" prepend="and ">a.START_CITY = #endCity#</isNotEmpty>
+						</isNotEmpty>
+						<isEmpty property="startProvince" prepend=" ">
+							<isNotEmpty property="endProvince" prepend=" ">a.START_PROVINCE = #endProvince#</isNotEmpty>
+							<isNotEmpty property="endCity" prepend="and ">a.START_CITY = #endCity#</isNotEmpty>
+						</isEmpty>
+					)
+				</isNotEmpty>
+				<isNotEmpty property="driverLinestart" prepend=" ">)</isNotEmpty>
+				<isEmpty property="driverLinestart" prepend=" ">
+					<isNotEmpty property="driverLineEnd" prepend="  "> )</isNotEmpty>
+				</isEmpty>
+			</dynamic>
+		) as DRIVERLINE
+		from
+		t_driver_user_info t ,t_location_collect_last_info b
+		where
+		t.id=b.driver_id) as t1 
+		<dynamic prepend="WHERE ">
+		 <isNotEmpty property="id" prepend="and ">t1.id = #id#</isNotEmpty>
+		 <isNotEmpty property="deleteFlag" prepend="and ">t1.DELETE_FLAG = #deleteFlag#</isNotEmpty>
+		 <isNotEmpty property="auditFlag" prepend="and ">t1.AUDIT_FLAG = #auditFlag#</isNotEmpty>
+		 <isNotEmpty property="carLength" prepend="and ">t1.CAR_LENGTH = #carLength#</isNotEmpty>
+		 <isNotEmpty property="carPlateType" prepend="and ">t1.CAR_PLATE_TYPE = #carPlateType#</isNotEmpty>
+		 <isNotEmpty property="carBarType" prepend="and ">t1.CAR_BAR_TYPE = #carBarType#</isNotEmpty>
+	     <isNotEmpty property="carWeight" prepend="and ">t1.CAR_WEIGHT = #carWeight#</isNotEmpty><!-- 车辆运力吨位 -->
+		 <isNotEmpty property="carCubage" prepend="and ">t1.CAR_CUBAGE = #carCubage#</isNotEmpty><!-- 车辆运力体积 -->
+		 <isNotEmpty property="code" prepend="and ">t1.code like CONCAT(#code#,'%')</isNotEmpty><!-- 手机号码 -->	
+		 <isNotEmpty property="carNumber" prepend="and ">t1.CAR_NUMBER like CONCAT(#carNumber#,'%')</isNotEmpty><!-- 车辆号码 -->	
+		 <isNotEmpty property="driverLinestart" prepend="and (">
+		 	t1.DRIVERLINE like CONCAT(#driverLinestart#,'%')
+		 	<isNotEmpty property="driverLineEnd" prepend=" or ">
+		 		t1.DRIVERLINE like CONCAT(#driverLineEnd#,'%')
+		 	</isNotEmpty>
+		 	 )
+		 </isNotEmpty>
+		 <isEmpty property="driverLinestart" prepend=" ">
+		 	<isNotEmpty property="driverLineEnd" prepend=" and ">
+		 		t1.DRIVERLINE like CONCAT(#driverLineEnd#,'%')
+		 	</isNotEmpty>
+		 </isEmpty>
+		 <isNotEmpty property="lastLocation" prepend="and ">t1.LASTLOCATION like CONCAT(#lastLocation#,'%')</isNotEmpty><!--当前位置 -->
+		 <isNotEmpty property="province" prepend="and ">t1.PROVINCE = #province# </isNotEmpty><!--当前位置省 -->	
+		 <isNotEmpty property="city" prepend="and ">t1.CITY = #city# </isNotEmpty><!--当前位置市 -->		
+		</dynamic>
+		order by t1.LAST_TIME DESC
+   </select>
+   
+   
+   <!--推荐车源-->
+   <select id="query_real_driver_car_byPage_real" parameterClass="java.util.HashMap" resultMap="driver_real_info_domain_result">
+		select 
+		t1.id,t1.code,t1.name,t1.CAR_NUMBER,t1.FREEZE_FLAG,t1.AUDIT_FLAG,t1.telephone,
+		t1.IDENTITY_LICENSE_NUM,t1.OPERATING_LICENSE,t1.DRIVERS_LICENSE,t1.CAR_LENGTH,t1.CAR_WEIGHT,
+		t1.REMARK,t1.DRIVING_LICENSE,t1.DELETE_FLAG,t1.CAR_STATE_TYPE,t1.CAR_CUBAGE,t1.CAR_PLATE_TYPE,
+		t1.CAR_BAR_TYPE,t1.CAR_TYPES,t1.LASTLOCATION,t1.PROVINCE,t1.CITY,t1.COUNTY,t1.DRIVERLINE,t1.BAIDU_CHANNEL_ID,t1.BAIDU_USER_ID 
+		from 
+		(select t.id,t.code,t.name,t.CAR_NUMBER,t.FREEZE_FLAG,t.AUDIT_FLAG,t.telephone,
+		t.IDENTITY_LICENSE_NUM,t.OPERATING_LICENSE,t.DRIVERS_LICENSE,t.CAR_LENGTH,t.CAR_WEIGHT,
+		t.REMARK,t.DRIVING_LICENSE,t.DELETE_FLAG,t.CAR_STATE_TYPE,t.CAR_CUBAGE,t.CAR_PLATE_TYPE,
+		t.CAR_BAR_TYPE,CAR_TYPES,t.BAIDU_CHANNEL_ID,t.BAIDU_USER_ID,
+		b.location as LASTLOCATION,b.PROVINCE,b.CITY,COUNTY,b.LAST_TIME,
+		(select GROUP_CONCAT(CONCAT(START_PROVINCE,REPLACE(START_CITY, '全部', ''),'--',END_PROVINCE,REPLACE(END_CITY, '全部', ''))) 
+			from t_driver_line_info a where a.driver_id =  t.id and a.START = 0 
+			<dynamic prepend=" ">
+				<isNotEmpty property="driverLinestart" prepend="  ">
+					and ((
+					<isNotEmpty property="startProvince" prepend=" ">a.START_PROVINCE = #startProvince#</isNotEmpty>
+					<isNotEmpty property="startCity" prepend="and ">a.START_CITY = #startCity#</isNotEmpty>
+					<isNotEmpty property="endProvince" prepend="and ">a.END_PROVINCE = #endProvince#</isNotEmpty>
+					<isNotEmpty property="endCity" prepend="and ">a.END_CITY = #endCity#</isNotEmpty>
+					)
+				</isNotEmpty>
+				<isEmpty property="driverLinestart" prepend=" ">
+					<isNotEmpty property="driverLineEnd" prepend=" ">
+						and ( (
+						<isNotEmpty property="startProvince" prepend="and ">a.START_PROVINCE = #startProvince#</isNotEmpty>
+						<isNotEmpty property="startCity" prepend="and ">a.START_CITY = #startCity#</isNotEmpty>
+						<isNotEmpty property="endProvince" prepend=" ">a.END_PROVINCE = #endProvince#</isNotEmpty>
+						<isNotEmpty property="endCity" prepend="and ">a.END_CITY = #endCity#</isNotEmpty>
+						)
+					</isNotEmpty>
+				</isEmpty>
+				<isNotEmpty property="driverLinestart" prepend=" or ">
+					(
+						<isNotEmpty property="startProvince" prepend=" ">
+							a.END_PROVINCE = #startProvince#
+							<isNotEmpty property="startCity" prepend="and ">a.END_CITY = #startCity#</isNotEmpty>
+							<isNotEmpty property="endProvince" prepend="and ">a.START_PROVINCE = #endProvince#</isNotEmpty>
+							<isNotEmpty property="endCity" prepend="and ">a.START_CITY = #endCity#</isNotEmpty>
+						</isNotEmpty>
+						<isEmpty property="startProvince" prepend=" ">
+							<isNotEmpty property="endProvince" prepend=" ">a.START_PROVINCE = #endProvince#</isNotEmpty>
+							<isNotEmpty property="endCity" prepend="and ">a.START_CITY = #endCity#</isNotEmpty>
+						</isEmpty>
+					)
+				</isNotEmpty>
+				<isNotEmpty property="driverLineEnd" prepend=" or ">
+					(
+						<isNotEmpty property="startProvince" prepend=" ">
+							a.END_PROVINCE = #startProvince#
+							<isNotEmpty property="startCity" prepend="and ">a.END_CITY = #startCity#</isNotEmpty>
+							<isNotEmpty property="endProvince" prepend="and ">a.START_PROVINCE = #endProvince#</isNotEmpty>
+							<isNotEmpty property="endCity" prepend="and ">a.START_CITY = #endCity#</isNotEmpty>
+						</isNotEmpty>
+						<isEmpty property="startProvince" prepend=" ">
+							<isNotEmpty property="endProvince" prepend=" ">a.START_PROVINCE = #endProvince#</isNotEmpty>
+							<isNotEmpty property="endCity" prepend="and ">a.START_CITY = #endCity#</isNotEmpty>
+						</isEmpty>
+					)
+				</isNotEmpty>
+				<isNotEmpty property="driverLinestart" prepend=" ">)</isNotEmpty>
+				<isEmpty property="driverLinestart" prepend=" ">
+					<isNotEmpty property="driverLineEnd" prepend="  "> )</isNotEmpty>
+				</isEmpty>
+			</dynamic>
+		) as DRIVERLINE
+		from
+		t_driver_user_info t ,t_location_collect_last_info b
+		where
+		t.id=b.driver_id ) as t1 WHERE
+		t1.name != '' and t1.name is not null and t1.CAR_LENGTH != '' and t1.CAR_LENGTH is not null
+		and t1.CAR_NUMBER != '' and t1.CAR_NUMBER is not null and t1.CAR_PLATE_TYPE != '' and t1.CAR_PLATE_TYPE is not null
+		and t1.CAR_BAR_TYPE != '' and t1.CAR_BAR_TYPE is not null
+		<dynamic prepend="and ">
+		 <isNotEmpty property="deleteFlag" prepend="and ">t1.DELETE_FLAG = #deleteFlag#</isNotEmpty>
+		 <isNotEmpty property="auditFlag" prepend="and ">t1.AUDIT_FLAG = #auditFlag#</isNotEmpty>
+		 <isNotEmpty property="carLength" prepend="and ">t1.CAR_LENGTH = #carLength#</isNotEmpty>
+		 <isNotEmpty property="carPlateType" prepend="and ">t1.CAR_PLATE_TYPE = #carPlateType#</isNotEmpty>
+		 <isNotEmpty property="carBarType" prepend="and ">t1.CAR_BAR_TYPE = #carBarType#</isNotEmpty>
+	     <isNotEmpty property="carWeight" prepend="and ">t1.CAR_WEIGHT = #carWeight#</isNotEmpty><!-- 车辆运力吨位 -->
+		 <isNotEmpty property="carCubage" prepend="and ">t1.CAR_CUBAGE = #carCubage#</isNotEmpty><!-- 车辆运力体积 -->
+		 <isNotEmpty property="code" prepend="and ">t1.code like CONCAT(#code#,'%')</isNotEmpty><!-- 手机号码 -->	
+		 <isNotEmpty property="carNumber" prepend="and ">t1.CAR_NUMBER like CONCAT(#carNumber#,'%')</isNotEmpty><!-- 车辆号码 -->		
+		 <isNotEmpty property="driverLinestart" prepend="and (">
+		 	t1.DRIVERLINE like CONCAT(#driverLinestart#,'%')
+		 	<isNotEmpty property="driverLineEnd" prepend=" or ">
+		 		t1.DRIVERLINE like CONCAT(#driverLineEnd#,'%')
+		 	</isNotEmpty>
+		 	 )
+		 </isNotEmpty>
+		 <isEmpty property="driverLinestart" prepend=" ">
+		 	<isNotEmpty property="driverLineEnd" prepend=" and ">
+		 		t1.DRIVERLINE like CONCAT(#driverLineEnd#,'%')
+		 	</isNotEmpty>
+		 </isEmpty>
+		 <isNotEmpty property="lastLocation" prepend="and ">t1.LASTLOCATION like CONCAT(#lastLocation#,'%')</isNotEmpty><!--当前位置 -->	
+		 <isNotEmpty property="province" prepend="and ">t1.PROVINCE = #province# </isNotEmpty><!--当前位置省 -->	
+		 <isNotEmpty property="city" prepend="and ">t1.CITY = #city# </isNotEmpty><!--当前位置市 -->	
+		</dynamic>
+		
+		order by t1.LAST_TIME DESC LIMIT $curPage$,$pageSize$
+   </select>
+   
+   
+   <!--首页当前车源信息分页-->
+   <select id="query_real_driver_car_byPage" parameterClass="java.util.HashMap" resultMap="driver_real_info_domain_result">
+		select 
+		t1.id,t1.code,t1.name,t1.CAR_NUMBER,t1.FREEZE_FLAG,t1.AUDIT_FLAG,t1.telephone,
+		t1.IDENTITY_LICENSE_NUM,t1.OPERATING_LICENSE,t1.DRIVERS_LICENSE,t1.CAR_LENGTH,t1.CAR_WEIGHT,
+		t1.REMARK,t1.DRIVING_LICENSE,t1.DELETE_FLAG,t1.CAR_STATE_TYPE,t1.CAR_CUBAGE,t1.CAR_PLATE_TYPE,
+		t1.CAR_BAR_TYPE,t1.CAR_TYPES,t1.LASTLOCATION,t1.PROVINCE,t1.CITY,t1.COUNTY,t1.DRIVERLINE,t1.BAIDU_CHANNEL_ID,t1.BAIDU_USER_ID 
+		from 
+		(select t.id,t.code,t.name,t.CAR_NUMBER,t.FREEZE_FLAG,t.AUDIT_FLAG,t.telephone,
+		t.IDENTITY_LICENSE_NUM,t.OPERATING_LICENSE,t.DRIVERS_LICENSE,t.CAR_LENGTH,t.CAR_WEIGHT,
+		t.REMARK,t.DRIVING_LICENSE,t.DELETE_FLAG,t.CAR_STATE_TYPE,t.CAR_CUBAGE,t.CAR_PLATE_TYPE,
+		t.CAR_BAR_TYPE,CAR_TYPES,t.BAIDU_CHANNEL_ID,t.BAIDU_USER_ID,
+		b.location as LASTLOCATION,b.PROVINCE,b.CITY,COUNTY,b.LAST_TIME,
+		(select GROUP_CONCAT(CONCAT(START_PROVINCE,REPLACE(START_CITY, '全部', ''),'--',END_PROVINCE,REPLACE(END_CITY, '全部', ''))) 
+			from t_driver_line_info a where a.driver_id =  t.id and a.START = 0 
+			<dynamic prepend=" ">
+				<isNotEmpty property="driverLinestart" prepend="  ">
+					and ((
+					<isNotEmpty property="startProvince" prepend=" ">a.START_PROVINCE = #startProvince#</isNotEmpty>
+					<isNotEmpty property="startCity" prepend="and ">a.START_CITY = #startCity#</isNotEmpty>
+					<isNotEmpty property="endProvince" prepend="and ">a.END_PROVINCE = #endProvince#</isNotEmpty>
+					<isNotEmpty property="endCity" prepend="and ">a.END_CITY = #endCity#</isNotEmpty>
+					)
+				</isNotEmpty>
+				<isEmpty property="driverLinestart" prepend=" ">
+					<isNotEmpty property="driverLineEnd" prepend=" ">
+						and ( (
+						<isNotEmpty property="startProvince" prepend="and ">a.START_PROVINCE = #startProvince#</isNotEmpty>
+						<isNotEmpty property="startCity" prepend="and ">a.START_CITY = #startCity#</isNotEmpty>
+						<isNotEmpty property="endProvince" prepend=" ">a.END_PROVINCE = #endProvince#</isNotEmpty>
+						<isNotEmpty property="endCity" prepend="and ">a.END_CITY = #endCity#</isNotEmpty>
+						)
+					</isNotEmpty>
+				</isEmpty>
+				<isNotEmpty property="driverLinestart" prepend=" or ">
+					(
+						<isNotEmpty property="startProvince" prepend=" ">
+							a.END_PROVINCE = #startProvince#
+							<isNotEmpty property="startCity" prepend="and ">a.END_CITY = #startCity#</isNotEmpty>
+							<isNotEmpty property="endProvince" prepend="and ">a.START_PROVINCE = #endProvince#</isNotEmpty>
+							<isNotEmpty property="endCity" prepend="and ">a.START_CITY = #endCity#</isNotEmpty>
+						</isNotEmpty>
+						<isEmpty property="startProvince" prepend=" ">
+							<isNotEmpty property="endProvince" prepend=" ">a.START_PROVINCE = #endProvince#</isNotEmpty>
+							<isNotEmpty property="endCity" prepend="and ">a.START_CITY = #endCity#</isNotEmpty>
+						</isEmpty>
+					)
+				</isNotEmpty>
+				<isNotEmpty property="driverLineEnd" prepend=" or ">
+					(
+						<isNotEmpty property="startProvince" prepend=" ">
+							a.END_PROVINCE = #startProvince#
+							<isNotEmpty property="startCity" prepend="and ">a.END_CITY = #startCity#</isNotEmpty>
+							<isNotEmpty property="endProvince" prepend="and ">a.START_PROVINCE = #endProvince#</isNotEmpty>
+							<isNotEmpty property="endCity" prepend="and ">a.START_CITY = #endCity#</isNotEmpty>
+						</isNotEmpty>
+						<isEmpty property="startProvince" prepend=" ">
+							<isNotEmpty property="endProvince" prepend=" ">a.START_PROVINCE = #endProvince#</isNotEmpty>
+							<isNotEmpty property="endCity" prepend="and ">a.START_CITY = #endCity#</isNotEmpty>
+						</isEmpty>
+					)
+				</isNotEmpty>
+				<isNotEmpty property="driverLinestart" prepend=" ">)</isNotEmpty>
+				<isEmpty property="driverLinestart" prepend=" ">
+					<isNotEmpty property="driverLineEnd" prepend="  "> )</isNotEmpty>
+				</isEmpty>
+			</dynamic>
+		) as DRIVERLINE
+		from
+		t_driver_user_info t ,t_location_collect_last_info b
+		where
+		t.id=b.driver_id ) as t1 
+		<dynamic prepend="WHERE ">
+		 <isNotEmpty property="deleteFlag" prepend="and ">t1.DELETE_FLAG = #deleteFlag#</isNotEmpty>
+		 <isNotEmpty property="auditFlag" prepend="and ">t1.AUDIT_FLAG = #auditFlag#</isNotEmpty>
+		 <isNotEmpty property="carLength" prepend="and ">t1.CAR_LENGTH = #carLength#</isNotEmpty>
+		 <isNotEmpty property="carPlateType" prepend="and ">t1.CAR_PLATE_TYPE = #carPlateType#</isNotEmpty>
+		 <isNotEmpty property="carBarType" prepend="and ">t1.CAR_BAR_TYPE = #carBarType#</isNotEmpty>
+	     <isNotEmpty property="carWeight" prepend="and ">t1.CAR_WEIGHT = #carWeight#</isNotEmpty><!-- 车辆运力吨位 -->
+		 <isNotEmpty property="carCubage" prepend="and ">t1.CAR_CUBAGE = #carCubage#</isNotEmpty><!-- 车辆运力体积 -->
+		 <isNotEmpty property="code" prepend="and ">t1.code like CONCAT(#code#,'%')</isNotEmpty><!-- 手机号码 -->	
+		 <isNotEmpty property="carNumber" prepend="and ">t1.CAR_NUMBER like CONCAT(#carNumber#,'%')</isNotEmpty><!-- 车辆号码 -->		
+		 <isNotEmpty property="driverLinestart" prepend="and (">
+		 	t1.DRIVERLINE like CONCAT(#driverLinestart#,'%')
+		 	<isNotEmpty property="driverLineEnd" prepend=" or ">
+		 		t1.DRIVERLINE like CONCAT(#driverLineEnd#,'%')
+		 	</isNotEmpty>
+		 	 )
+		 </isNotEmpty>
+		 <isEmpty property="driverLinestart" prepend=" ">
+		 	<isNotEmpty property="driverLineEnd" prepend=" and ">
+		 		t1.DRIVERLINE like CONCAT(#driverLineEnd#,'%')
+		 	</isNotEmpty>
+		 </isEmpty>
+		 <isNotEmpty property="lastLocation" prepend="and ">t1.LASTLOCATION like CONCAT(#lastLocation#,'%')</isNotEmpty><!--当前位置 -->	
+		 <isNotEmpty property="province" prepend="and ">t1.PROVINCE = #province# </isNotEmpty><!--当前位置省 -->	
+		 <isNotEmpty property="city" prepend="and ">t1.CITY = #city# </isNotEmpty><!--当前位置市 -->	
+		</dynamic>
+		order by t1.LAST_TIME DESC LIMIT $curPage$,$pageSize$
+   </select>
+   
+   
+    <!--首页当前车源信息(总数量)-->
+   <select id="query_real_driver_car_byPage_count" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+		select count(t1.id) from 
+		(select t.id,t.code,t.name,t.CAR_NUMBER,t.FREEZE_FLAG,t.AUDIT_FLAG,t.telephone,
+		t.IDENTITY_LICENSE_NUM,t.OPERATING_LICENSE,t.DRIVERS_LICENSE,t.CAR_LENGTH,t.CAR_WEIGHT,
+		t.REMARK,t.DRIVING_LICENSE,t.DELETE_FLAG,t.CAR_STATE_TYPE,t.CAR_CUBAGE,t.CAR_PLATE_TYPE,
+		t.CAR_BAR_TYPE,CAR_TYPES,
+		b.location as LASTLOCATION,b.PROVINCE,b.CITY,COUNTY,b.LAST_TIME,
+		(select GROUP_CONCAT(CONCAT(START_PROVINCE,REPLACE(START_CITY, '全部', ''),'--',END_PROVINCE,REPLACE(END_CITY, '全部', ''))) 
+			from t_driver_line_info a where a.driver_id =  t.id and a.START = 0 
+			<dynamic prepend=" ">
+				<isNotEmpty property="driverLinestart" prepend="  ">
+					and ((
+					<isNotEmpty property="startProvince" prepend=" ">a.START_PROVINCE = #startProvince#</isNotEmpty>
+					<isNotEmpty property="startCity" prepend="and ">a.START_CITY = #startCity#</isNotEmpty>
+					<isNotEmpty property="endProvince" prepend="and ">a.END_PROVINCE = #endProvince#</isNotEmpty>
+					<isNotEmpty property="endCity" prepend="and ">a.END_CITY = #endCity#</isNotEmpty>
+					)
+				</isNotEmpty>
+				<isEmpty property="driverLinestart" prepend=" ">
+					<isNotEmpty property="driverLineEnd" prepend=" ">
+						and ( (
+						<isNotEmpty property="startProvince" prepend="and ">a.START_PROVINCE = #startProvince#</isNotEmpty>
+						<isNotEmpty property="startCity" prepend="and ">a.START_CITY = #startCity#</isNotEmpty>
+						<isNotEmpty property="endProvince" prepend=" ">a.END_PROVINCE = #endProvince#</isNotEmpty>
+						<isNotEmpty property="endCity" prepend="and ">a.END_CITY = #endCity#</isNotEmpty>
+						)
+					</isNotEmpty>
+				</isEmpty>
+				<isNotEmpty property="driverLinestart" prepend=" or ">
+					(
+						<isNotEmpty property="startProvince" prepend=" ">
+							a.END_PROVINCE = #startProvince#
+							<isNotEmpty property="startCity" prepend="and ">a.END_CITY = #startCity#</isNotEmpty>
+							<isNotEmpty property="endProvince" prepend="and ">a.START_PROVINCE = #endProvince#</isNotEmpty>
+							<isNotEmpty property="endCity" prepend="and ">a.START_CITY = #endCity#</isNotEmpty>
+						</isNotEmpty>
+						<isEmpty property="startProvince" prepend=" ">
+							<isNotEmpty property="endProvince" prepend=" ">a.START_PROVINCE = #endProvince#</isNotEmpty>
+							<isNotEmpty property="endCity" prepend="and ">a.START_CITY = #endCity#</isNotEmpty>
+						</isEmpty>
+					)
+				</isNotEmpty>
+				<isNotEmpty property="driverLineEnd" prepend=" or ">
+					(
+						<isNotEmpty property="startProvince" prepend=" ">
+							a.END_PROVINCE = #startProvince#
+							<isNotEmpty property="startCity" prepend="and ">a.END_CITY = #startCity#</isNotEmpty>
+							<isNotEmpty property="endProvince" prepend="and ">a.START_PROVINCE = #endProvince#</isNotEmpty>
+							<isNotEmpty property="endCity" prepend="and ">a.START_CITY = #endCity#</isNotEmpty>
+						</isNotEmpty>
+						<isEmpty property="startProvince" prepend=" ">
+							<isNotEmpty property="endProvince" prepend=" ">a.START_PROVINCE = #endProvince#</isNotEmpty>
+							<isNotEmpty property="endCity" prepend="and ">a.START_CITY = #endCity#</isNotEmpty>
+						</isEmpty>
+					)
+				</isNotEmpty>
+				<isNotEmpty property="driverLinestart" prepend=" ">)</isNotEmpty>
+				<isEmpty property="driverLinestart" prepend=" ">
+					<isNotEmpty property="driverLineEnd" prepend="  "> )</isNotEmpty>
+				</isEmpty>
+			</dynamic>
+		) as DRIVERLINE
+		from
+		t_driver_user_info t ,t_location_collect_last_info b
+		where
+		t.id=b.driver_id ) as t1  
+		<dynamic prepend="WHERE ">
+		 <isNotEmpty property="deleteFlag" prepend="and ">t1.DELETE_FLAG = #deleteFlag#</isNotEmpty>
+		 <isNotEmpty property="auditFlag" prepend="and ">t1.AUDIT_FLAG = #auditFlag#</isNotEmpty>
+		 <isNotEmpty property="carLength" prepend="and ">t1.CAR_LENGTH = #carLength#</isNotEmpty>
+		 <isNotEmpty property="carPlateType" prepend="and ">t1.CAR_PLATE_TYPE = #carPlateType#</isNotEmpty>
+		 <isNotEmpty property="carBarType" prepend="and ">t1.CAR_BAR_TYPE = #carBarType#</isNotEmpty>
+	     <isNotEmpty property="carWeight" prepend="and ">t1.CAR_WEIGHT = #carWeight#</isNotEmpty><!-- 车辆运力吨位 -->
+		 <isNotEmpty property="carCubage" prepend="and ">t1.CAR_CUBAGE = #carCubage#</isNotEmpty><!-- 车辆运力体积 -->
+		 <isNotEmpty property="code" prepend="and ">t1.code like CONCAT(#code#,'%')</isNotEmpty><!-- 手机号码 -->	
+		 <isNotEmpty property="carNumber" prepend="and ">t1.CAR_NUMBER like CONCAT(#carNumber#,'%')</isNotEmpty><!-- 车辆号码 -->	
+		 <isNotEmpty property="driverLinestart" prepend="and (">
+		 	t1.DRIVERLINE like CONCAT(#driverLinestart#,'%')
+		 	<isNotEmpty property="driverLineEnd" prepend=" or ">
+		 		t1.DRIVERLINE like CONCAT(#driverLineEnd#,'%')
+		 	</isNotEmpty>
+		 	 )
+		 </isNotEmpty>
+		 <isEmpty property="driverLinestart" prepend=" ">
+		 	<isNotEmpty property="driverLineEnd" prepend=" and ">
+		 		t1.DRIVERLINE like CONCAT(#driverLineEnd#,'%')
+		 	</isNotEmpty>
+		 </isEmpty>
+		  <isNotEmpty property="lastLocation" prepend="and ">t1.LASTLOCATION like CONCAT(#lastLocation#,'%')</isNotEmpty><!--当前位置 -->
+		  <isNotEmpty property="province" prepend="and ">t1.PROVINCE = #province# </isNotEmpty><!--当前位置省 -->	
+		  <isNotEmpty property="city" prepend="and ">t1.CITY = #city# </isNotEmpty><!--当前位置市 -->			
+		</dynamic>
+		order by t1.LAST_TIME DESC
+   </select>
+  
+  <!-- 根据Id查询司机车辆 -->
+   <select id="query_driver_user_info_domain_byId" parameterClass="String" resultMap="driver_user_info_domain_result">
+		SELECT t.id,
+		t.code,
+		t.password,
+		t.name,
+		t.car_number,
+		t.freeze_flag,
+		t.audit_flag,
+		t.telephone,
+		t.identity_license_num,
+		t.operating_license,
+		t.car_length,
+		t.car_weight,
+		t.remark,
+		t.create_time,
+		t.modify_time,
+		t.driving_license,
+		t.drivers_license,
+		t.delete_flag,
+		t.car_state_type,
+		t.car_cubage,
+		t.car_plate_type,
+		t.car_bar_type,
+		t.car_types,
+		t.baidu_channel_id,
+		t.baidu_user_id,
+		(SELECT GROUP_CONCAT(CONCAT(REPLACE(start_province,'全部',''),REPLACE(start_city,'全部',''),'——',
+		REPLACE(end_province,'全部',''),REPLACE(end_city,'全部','')))
+     	FROM t_driver_line_info WHERE driver_id = t.id and start=0 ) driverLine,
+		(SELECT CONCAT(province,city,county) FROM t_location_collect_last_info where driver_id = t.id 
+		 ORDER BY last_time DESC LIMIT 1 ) lastLocation,
+		(SELECT DATE_FORMAT(modify_time,'%Y年%c月%d日 %H时') FROM t_location_collect_last_info  WHERE driver_id = t.id) location_modify_time,
+		(SELECT longitude FROM t_location_collect_last_info  WHERE driver_id = t.id) longitude,
+		(SELECT latitude FROM t_location_collect_last_info  WHERE driver_id = t.id) latitude 
+		 FROM  t_driver_user_info t 
+		 WHERE t.id = #id#
+   </select>
+   
+   <!-- 查询自己的所有司机车辆-不分页 -->
+   <select id="query_driver_user_info_domain" parameterClass="Map" resultMap="driver_user_info_domain_result">
+	SELECT *
+	FROM 
+	   (SELECT t.id,
+	    t.code,
+		t.password,
+		t.name,
+		t.car_number,
+		t.freeze_flag,
+		t.audit_flag,
+		t.telephone,
+		t.identity_license_num,
+		t.operating_license,
+		t.car_length,
+		t.car_weight,
+		t.remark,
+		t.create_time,
+		t.modify_time,
+		t.driving_license,
+		t.drivers_license,
+		t.delete_flag,
+		t.car_state_type,
+		t.car_cubage,
+		t.car_plate_type,
+		t.car_bar_type,
+		t.car_types,
+		t.baidu_channel_id,
+		t.baidu_user_id,
+		(SELECT GROUP_CONCAT(CONCAT(REPLACE(start_province,'全部',''),REPLACE(start_city,'全部',''),'——',
+		REPLACE(end_province,'全部',''),REPLACE(end_city,'全部','')))
+     	FROM t_driver_line_info WHERE driver_id = t.id and start=0 ) driverLine,
+		(SELECT CONCAT(province,city,county) FROM t_location_collect_last_info where driver_id = t.id 
+		and last_time<![CDATA[<=]]> NOW() ORDER BY last_time DESC LIMIT 1 ) lastLocation,
+		'' as longitude,'' as latitude ,null as location_modify_time 
+		 FROM  t_driver_user_info t WHERE t.delete_flag and EXISTS (SELECT 1 FROM t_user_driver_info u WHERE u.user_id = #userId# AND t.id = u.driver_id ) )d
+		 <dynamic prepend="WHERE">
+		  <!-- <isNotEmpty property="driverLine" prepend="AND"> d.driverLine like CONCAT('%',#driverLine#,'%') </isNotEmpty> -->
+		  <isNotEmpty property="name" prepend="AND"> d.name = #name# </isNotEmpty>
+		  <isNotEmpty property="code" prepend="AND"> d.code = #code# </isNotEmpty>
+		  <isNotEmpty property="lastLocation" prepend="AND"> d.lastLocation like CONCAT(#lastLocation#,'%') </isNotEmpty>
+		  
+		   <!-- 根据营业路线查询 -->
+					      <!-- 起始地路线-省 不为空,目的地路线-省 为空 -->
+					  	   <isEmpty property="endProvince">
+							<isNotEmpty property="startProvince" prepend="and ">
+							  EXISTS (select 1 from t_driver_line_info where  start=0 and start_province = #startProvince# 
+							     <isNotEmpty property="startCity" prepend="and">
+							       start_city = #startCity# 
+							     </isNotEmpty> 
+							   AND driver_id=d.id) 
+							</isNotEmpty>
+							</isEmpty>
+							 <!-- 目的地路线-省 不为空,起始地路线-省 为空 -->
+							<isEmpty property="startProvince">
+					  		<isNotEmpty property="endProvince" prepend="and ">
+					  		   EXISTS (select 1 from t_driver_line_info where start=0 and end_province = #endProvince#  
+					  		   <isNotEmpty property="endCity" prepend="and">
+					  		      end_city = #endCity# 
+					  		   </isNotEmpty>
+					  		   AND driver_id=d.id 
+					  		   )
+					  		</isNotEmpty> 
+					  		</isEmpty>
+					  <!-- 起始地路线-省 不为空and 目的地路线-省 不为空(双向查询) -->
+					  	<isNotEmpty property="startProvince" >
+					  		   <isNotEmpty property="endProvince" prepend="and ">
+					  		     (EXISTS (select 1 from t_driver_line_info where start=0 and start_province = #startProvince# and end_province = #endProvince#  
+					  		       <isNotEmpty property="startCity" prepend="and">
+					  		          start_city= #startCity# 
+					  		       </isNotEmpty>
+					  		       <isNotEmpty property="endCity" prepend="and">
+					  		        end_city = #endCity# 
+					  		       </isNotEmpty> 
+					  		       AND driver_id=d.id 
+					  		      ) 
+					  		      or EXISTS (select 1 from t_driver_line_info where start=0 and start_province = #endProvince# and end_province = #startProvince#  
+					  		       <isNotEmpty property="endCity" prepend="and">
+					  		          start_city= #endCity# 
+					  		       </isNotEmpty>
+					  		       <isNotEmpty property="startCity" prepend="and">
+					  		        end_city = #startCity# 
+					  		       </isNotEmpty> 
+					  		       AND driver_id=d.id 
+					  		      )) 
+					  		 </isNotEmpty> 
+					 </isNotEmpty> 
+		 </dynamic> 
+		 ORDER BY d.id 
+   </select>
+   
+     <!-- 查询自己的所有司机车辆-分页 -->
+   <select id="query_driver_user_info_domain_byPage" parameterClass="Map" resultMap="driver_user_info_domain_result">
+	SELECT *
+	FROM 
+	   (SELECT t.id,
+	    t.code,
+		t.password,
+		t.name,
+		t.car_number,
+		t.freeze_flag,
+		t.audit_flag,
+		t.telephone,
+		t.identity_license_num,
+		t.operating_license,
+		t.car_length,
+		t.car_weight,
+		t.remark,
+		t.create_time,
+		t.modify_time,
+		t.driving_license,
+		t.drivers_license,
+		t.delete_flag,
+		t.car_state_type,
+		t.car_cubage,
+		t.car_plate_type,
+		t.car_bar_type,
+		t.car_types,
+		t.baidu_channel_id,
+		t.baidu_user_id,
+		(SELECT GROUP_CONCAT(CONCAT(REPLACE(start_province,'全部',''),REPLACE(start_city,'全部',''),'——',
+		REPLACE(end_province,'全部',''),REPLACE(end_city,'全部','')))
+     	FROM t_driver_line_info WHERE start=0 and driver_id = t.id) driverLine,
+		(SELECT CONCAT(province,city,county) FROM t_location_collect_last_info where driver_id = t.id 
+		and last_time<![CDATA[<=]]> NOW() ORDER BY last_time DESC LIMIT 1 ) lastLocation,
+		'' as longitude,'' as latitude ,null as location_modify_time 
+		 FROM  t_driver_user_info t WHERE t.delete_flag = #deleteFlag# AND EXISTS (SELECT 1 FROM t_user_driver_info u WHERE u.user_id = #userId# AND t.id = u.driver_id ) )d 
+		 <dynamic prepend="WHERE">
+		  <!--  <isNotEmpty property="driverLine" prepend="AND"> d.driverLine like CONCAT('%',#driverLine#,'%') </isNotEmpty>-->
+		  <isNotEmpty property="name" prepend="AND"> d.name = #name# </isNotEmpty>
+		  <isNotEmpty property="code" prepend="AND"> d.code = #code# </isNotEmpty>
+		  <isNotEmpty property="lastLocation" prepend="AND"> d.lastLocation like CONCAT(#lastLocation#,'%') </isNotEmpty>
+		  <!-- 根据营业路线查询 -->
+					      <!-- 起始地路线-省 不为空,目的地路线-省 为空 -->
+					  	   <isEmpty property="endProvince">
+							<isNotEmpty property="startProvince" prepend="and ">
+							  EXISTS (select 1 from t_driver_line_info where start=0 and start_province = #startProvince# 
+							     <isNotEmpty property="startCity" prepend="and">
+							       start_city = #startCity# 
+							     </isNotEmpty> 
+							   AND driver_id=d.id) 
+							</isNotEmpty>
+							</isEmpty>
+							 <!-- 目的地路线-省 不为空,起始地路线-省 为空 -->
+							<isEmpty property="startProvince">
+					  		<isNotEmpty property="endProvince" prepend="and ">
+					  		   EXISTS (select 1 from t_driver_line_info where start=0 and end_province = #endProvince#  
+					  		   <isNotEmpty property="endCity" prepend="and">
+					  		      end_city = #endCity# 
+					  		   </isNotEmpty>
+					  		   AND driver_id=d.id 
+					  		   )
+					  		</isNotEmpty> 
+					  		</isEmpty>
+					  <!-- 起始地路线-省 不为空and 目的地路线-省 不为空(双向查询) -->
+					  	<isNotEmpty property="startProvince" >
+					  		   <isNotEmpty property="endProvince" prepend="and ">
+					  		     (EXISTS (select 1 from t_driver_line_info where start=0 and start_province = #startProvince# and end_province = #endProvince#  
+					  		       <isNotEmpty property="startCity" prepend="and">
+					  		          start_city= #startCity# 
+					  		       </isNotEmpty>
+					  		       <isNotEmpty property="endCity" prepend="and">
+					  		        end_city = #endCity# 
+					  		       </isNotEmpty> 
+					  		       AND driver_id=d.id 
+					  		      ) 
+					  		      or EXISTS (select 1 from t_driver_line_info where start=0 and start_province = #endProvince# and end_province = #startProvince#  
+					  		       <isNotEmpty property="endCity" prepend="and">
+					  		          start_city= #endCity# 
+					  		       </isNotEmpty>
+					  		       <isNotEmpty property="startCity" prepend="and">
+					  		        end_city = #startCity# 
+					  		       </isNotEmpty> 
+					  		       AND driver_id=d.id 
+					  		      )) 
+					  		 </isNotEmpty> 
+					 </isNotEmpty> 
+		 </dynamic> 
+		   ORDER BY d.id 
+		   LIMIT #beginNum#,#endNum#
+   </select>
+   
+   <!-- 计算自己车源的总记录数 -->
+   <select id="query_driver_user_info_domain_count" parameterClass="Map" resultClass="java.lang.Integer">
+	SELECT count(*)
+	FROM 
+	   (SELECT t.id,
+	    t.code,
+		t.name,
+		t.telephone,
+		t.delete_flag,
+		(SELECT GROUP_CONCAT(CONCAT(REPLACE(start_province,'全部',''),REPLACE(start_city,'全部',''),'——',
+		REPLACE(end_province,'全部',''),REPLACE(end_city,'全部','')))
+     	FROM t_driver_line_info WHERE start=0 and driver_id = t.id) driverLine,
+		(SELECT CONCAT(province,city,county) FROM t_location_collect_last_info where driver_id = t.id 
+		and last_time<![CDATA[<=]]> NOW() ORDER BY last_time DESC LIMIT 1 ) lastLocation
+		 FROM  t_driver_user_info t WHERE t.delete_flag = #deleteFlag# AND EXISTS (SELECT 1 FROM t_user_driver_info u WHERE u.user_id = #userId# AND t.id = u.driver_id ) )d
+		 <dynamic prepend="WHERE">
+		  <!--  <isNotEmpty property="driverLine" prepend="AND"> d.driverLine like CONCAT('%',#driverLine#,'%') </isNotEmpty>-->
+		  <isNotEmpty property="name" prepend="AND"> d.name = #name# </isNotEmpty>
+		  <isNotEmpty property="code" prepend="AND"> d.code = #code# </isNotEmpty>
+		  <isNotEmpty property="lastLocation" prepend="AND"> d.lastLocation like CONCAT(#lastLocation#,'%') </isNotEmpty>
+		  <!-- 根据营业路线查询 -->
+					      <!-- 起始地路线-省 不为空,目的地路线-省 为空 -->
+					  	   <isEmpty property="endProvince">
+							<isNotEmpty property="startProvince" prepend="and ">
+							  EXISTS (select 1 from t_driver_line_info where start=0 and start_province = #startProvince# 
+							     <isNotEmpty property="startCity" prepend="and">
+							       start_city = #startCity# 
+							     </isNotEmpty> 
+							   AND driver_id=d.id) 
+							</isNotEmpty>
+							</isEmpty>
+							 <!-- 目的地路线-省 不为空,起始地路线-省 为空 -->
+							<isEmpty property="startProvince">
+					  		<isNotEmpty property="endProvince" prepend="and ">
+					  		   EXISTS (select 1 from t_driver_line_info where start=0 and end_province = #endProvince#  
+					  		   <isNotEmpty property="endCity" prepend="and">
+					  		      end_city = #endCity# 
+					  		   </isNotEmpty>
+					  		   AND driver_id=d.id 
+					  		   )
+					  		</isNotEmpty> 
+					  		</isEmpty>
+					  <!-- 起始地路线-省 不为空and 目的地路线-省 不为空(双向查询) -->
+					  	<isNotEmpty property="startProvince" >
+					  		   <isNotEmpty property="endProvince" prepend="and ">
+					  		     (EXISTS (select 1 from t_driver_line_info where start=0 and start_province = #startProvince# and end_province = #endProvince#  
+					  		       <isNotEmpty property="startCity" prepend="and">
+					  		          start_city= #startCity# 
+					  		       </isNotEmpty>
+					  		       <isNotEmpty property="endCity" prepend="and">
+					  		        end_city = #endCity# 
+					  		       </isNotEmpty> 
+					  		       AND driver_id=d.id 
+					  		      ) 
+					  		      or EXISTS (select 1 from t_driver_line_info where start=0 and start_province = #endProvince# and end_province = #startProvince#  
+					  		       <isNotEmpty property="endCity" prepend="and">
+					  		          start_city= #endCity# 
+					  		       </isNotEmpty>
+					  		       <isNotEmpty property="startCity" prepend="and">
+					  		        end_city = #startCity# 
+					  		       </isNotEmpty> 
+					  		       AND driver_id=d.id 
+					  		      )) 
+					  		 </isNotEmpty> 
+					 </isNotEmpty> 
+		 </dynamic>
+   </select>
+   
+    <!-- 司机报价-不分页 -->
+   <select id="query_driver_quote_byOid" parameterClass="Map" resultMap="driver_quote_info_domain_result">
+      SELECT t.id,
+        t.code,
+		t.name,
+		t.car_number,
+		t.telephone,
+		t.car_length,
+		t.car_weight,
+		t.car_state_type,
+		t.car_cubage,
+		t.car_plate_type,
+		t.car_bar_type,
+		t.car_types,
+		(SELECT location  FROM t_location_collect_last_info where driver_id = t.id) lastLocation,
+		q.quote_type,
+		q.quote_fair 
+	FROM t_quote_info q,t_driver_user_info t 
+	WHERE q.CARGO_ID = #cargoId# and q.DRIVER_ID = t.id 
+   </select>
+   
+   <!-- 司机报价-分页 -->
+   <select id="query_driver_quote_byOid_page" parameterClass="Map" resultMap="driver_quote_info_domain_result">
+      SELECT t.id, 
+        t.code,
+		t.name,
+		t.car_number,
+		t.telephone,
+		t.car_length,
+		t.car_weight,
+		t.car_state_type,
+		t.car_cubage,
+		t.car_plate_type,
+		t.car_bar_type,
+		t.car_types,
+		(SELECT location FROM t_location_collect_last_info where driver_id = t.id) lastLocation,
+		q.quote_type,
+		q.quote_fair 
+	FROM t_quote_info q,t_driver_user_info t 
+	WHERE q.start=0 and q.CARGO_ID = #cargoId# and q.DRIVER_ID = t.id LIMIT #beginNum#,#endNum#
+   </select>
+   <!-- 司机报价记录数 -->
+   <select id="query_driver_quote_byOid_count" parameterClass="Map" resultClass="Integer">
+      SELECT count(*) 
+	FROM t_quote_info q,t_driver_user_info t 
+	WHERE q.start=0 and q.CARGO_ID = #cargoId# and q.DRIVER_ID = t.id 
+   </select>
+   
+   <update id="update_driver_car_deleteFlag_byId" parameterClass="Map">
+    UPDATE t_driver_user_info
+	SET delete_flag = #deleteFlag# 
+	WHERE id = #id#
+   </update>
+   
+ </sqlMap>
+
+ 

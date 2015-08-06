@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.hygl.dao.HyHwxxShfsbgMapper">
+
+	<!--根据主键取DOMAIN-->
+	<select id="selectHyHwxxShfsbgByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyHwxxShfsbgDomain">
+		select a.SHBG_DJXH as shbgDjxh,a.DD_DJXH as ddDjxh,a.XH as xh,a.SR_HJ as srHj,a.SR_YJ as srYj,
+	    a.SR_XF as srXf,a.SR_HDF as srHdf,a.SR_THF as srThf,a.SR_HF as srHf,a.SR_HK as srHk,
+	    a.SR_BJF as srBjf,a.SR_PSF as srPsf,a.SR_YSF as srYsf,
+	    a.CJR_CZY_DJXH as cjrCzyDjxh,(SELECT R.MC FROM QY_RYDJ R WHERE R.CZY_DJXH = A.CJR_CZY_DJXH) cjrMc,
+	    a.CJRQ as cjrq
+	    from HY_HWXX_SHFSBG a
+	    WHERE A.DD_DJXH = #ddDjxh#
+	      AND A.XH = #xh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertHyHwxxShfsbg"  parameterClass="com.cy.common.bo.HyHwxxShfsbg">
+		<selectKey keyProperty="shbgDjxh" resultClass="string" type="pre"> 
+			select SEQ_SHBG_DJXH.NEXTVAL as shbgDjxh from dual 
+		</selectKey> 
+		insert into HY_HWXX_SHFSBG(SHBG_DJXH,DD_DJXH,XH,SR_HJ,SR_YJ,
+			    SR_XF,SR_HDF,SR_THF,SR_HF,SR_HK,
+			    SR_BJF,SR_PSF,SR_YSF,CJR_CZY_DJXH,CJRQ)
+			SELECT #shbgDjxh:NUMERIC#,A.DD_DJXH,A.XH,A.SR_HJ,A.SR_YJ,
+			       A.SR_XF,A.SR_HDF,A.SR_THF,A.SR_HF,A.SR_HK,
+			       A.SR_BJF,A.SR_PSF,A.SR_YSF,#cjrCzyDjxh:NUMERIC#,to_date(#cjrq:DATE#,'yyyy-MM-dd')
+			  FROM HY_DD_HWMX A
+			 WHERE A.DD_DJXH = #ddDjxh#
+			   AND A.XH = #xh#
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateHyHwxxShfsbgByKey" parameterClass="com.cy.common.bo.HyHwxxShfsbg">
+        update HY_HWXX_SHFSBG set SHBG_DJXH=#shbgDjxh#,DD_DJXH=#ddDjxh#,XH=#xh#,SR_HJ=#srHj#,SR_YJ=#srYj#,
+		SR_XF=#srXf#,SR_HDF=#srHdf#,SR_THF=#srThf#,SR_HF=#srHf#,SR_HK=#srHk#,
+		SR_BJF=#srBjf#,SR_PSF=#srPsf#,SR_YSF=#srYsf#,CJR_CZY_DJXH=#cjrCzyDjxh#,CJRQ=to_date(#cjrq#, 'YYYY-MM-DD') where SHBG_DJXH=#shbgDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：软删除-->
+	<delete id="deleteHyHwxxShfsbgByKey" parameterClass="java.util.Map">
+		delete from HY_HWXX_SHFSBG where DD_DJXH=#ddDjxh# and XH = #xh#
+    </delete>
+</sqlMap>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.swp.dao.MarketingCargoCompanyContactsDao"><!-- 货源企业电话回访记录表 -->
+	<resultMap type="MarketingCargoCompanyContacts" id="marketing_company_contacts_result">
+	  <result property="id" column="id"/>
+	  <result property="contactTelephone" column="contact_telephone"/>
+	  <result property="contactMobilephone" column="contact_mobilephone"/>
+	  <result property="callTime" column="call_time"/>
+	  <result property="replyResult" column="reply_result"/>
+	  <result property="remark" column="remark"/>
+	  <result property="createTime" column="create_time"/>
+	  <result property="assisterId" column="ASSISTER_ID"/>
+	  <result property="assisterName" column="ASSISTER_NAME"/>
+	</resultMap>
+	
+	<!-- 添加货源企业电话回访记录 -->
+	<insert id="addCargoCompanyContacts" parameterType="MarketingCargoCompanyContacts" useGeneratedKeys="true" keyProperty="id">
+	INSERT INTO t_marketing_cargo_company_contacts(
+        contact_telephone,
+        contact_mobilephone,
+        call_time,
+        reply_result,
+        remark,
+        create_time,
+        ASSISTER_ID,
+        ASSISTER_NAME
+        ) VALUES(
+        #{contactTelephone},#{contactMobilephone},sysdate(), #{replyResult},#{remark},sysdate(),#{assisterId},#{assisterName})
+	</insert>
+	<!--  修改公司回复结果 -->
+	<update id="updateCompanyContacts" parameterType="MarketingCargoCompanyContacts">
+	  UPDATE t_marketing_cargo_company_contacts 
+	  SET call_time = SYSDATE(),
+	  reply_result = #{replyResult},
+	  remark = #{remark} 
+	  WHERE id = #{id} 
+	</update>
+	
+	
+	<!-- 根据电话号码查询企业的回复记录 -->
+	<select id="queryCompanyContactByTelephone" parameterType="String" resultMap="marketing_company_contacts_result">
+	  SELECT id,
+	    contact_telephone,
+        contact_mobilephone,
+        call_time,
+        reply_result,
+        remark,
+        create_time,
+        ASSISTER_ID,
+       	ASSISTER_NAME
+        FROM t_marketing_cargo_company_contacts 
+        where  contact_mobilephone = #{contactMobilephone} ORDER BY create_time DESC LIMIT 1 
+	</select>
+	
+	<!-- 根据电话号码查询企业的回复记录 List集合 -->
+	<select id="queryCompanyContactByTelephoneList" parameterType="String" resultMap="marketing_company_contacts_result">
+	  SELECT id,
+	    contact_telephone,
+        contact_mobilephone,
+        call_time,
+        reply_result,
+        remark,
+        create_time,
+        ASSISTER_ID,
+        ASSISTER_NAME
+        FROM t_marketing_cargo_company_contacts 
+        where  contact_mobilephone = #{contactMobilephone} ORDER BY create_time
+	</select>
+</mapper>

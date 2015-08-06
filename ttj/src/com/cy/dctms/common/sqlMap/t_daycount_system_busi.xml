@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cy.dctms.dao.DayCountSystemBusiDao">
+    <!-- 保存 -->
+    <insert id="countDaySystemBusi" parameterType="DayCountSystemBusi">
+		insert into t_daycount_system_busi
+		(record_day,app_downs,reg_users,endday_auth_users,supply_releases,supply_self,reg_drivers,endday_auth_drivers,for_orders,endday_reg_appusers,endday_reg_webusers,
+        d_survival_drivers,d_active_drivers,w_survival_drivers,w_active_drivers,m_survival_drivers,m_active_drivers,m2_survival_drivers,m2_active_drivers)
+		values
+		(date_add(curdate(), interval -1 day),#{appDowns},#{regUsers},#{enddayAuthUsers},#{supplyReleases},#{supplySelf},
+		#{regDrivers},#{enddayAuthDrivers},#{forOrders},#{enddayRegAppusers},#{enddayRegWebusers},
+		#{daySurvivalDrivers},#{dayActiveDrivers},#{weekSurvivalDrivers},#{weekActiveDrivers},#{monthSurvivalDrivers},#{monthActiveDrivers},#{month2SurvivalDrivers},#{month2ActiveDrivers})
+	</insert>
+
+    <!-- 当天app下载数 -->
+    <select id="queryDailyAppDownloadsNum" resultType="int">
+        <![CDATA[
+
+
+
+
+		select count(ID) from t_operation_log_info
+		where TYPE = 1 and OPERATION_TYPE = 4
+		and CREATE_TIME >= date_add(curdate(), interval -1 day) and CREATE_TIME < curdate()
+
+
+
+
+        ]]>
+	</select>
+    <!-- 当天注册企业数 -->
+    <select id="queryDailyCompanyRegisterNum" resultType="int">
+        <![CDATA[
+
+
+
+
+	    select count(ID) from t_company_info
+	    where DELETED_FLAG = 0 and CREATE_TIME >= date_add(curdate(), interval -1 day) and CREATE_TIME < curdate()
+
+
+
+
+        ]]>
+	</select>
+    <!-- 截止到当天认证司机总数 -->
+    <select id="queryEnddayAuthDrivers" resultType="int">
+        select count(id) from t_driver_user_info dui
+        where dui.DELETE_FLAG = 0 and dui.submit_type = 3 and dui.CREATE_TIME &lt; curdate()
+    </select>
+    <!-- 当天企业发布货源数 -->
+    <select id="queryDailyCompanyReleaseCargoNum" resultType="int">
+        <![CDATA[
+
+
+
+	    select count(id) from t_order_cargo_info
+	    where CARGO_ORIGIN = 0 and COMPANY_ID <> 1
+        and CREATE_TIME >= date_add(curdate(), interval -1 day) and CREATE_TIME< curdate()
+
+
+
+        ]]>
+    </select>
+    <!-- 当天人工导入或爬虫导入货源数 -->
+    <select id="queryDailyImportCargoNum" resultType="int">
+        <![CDATA[
+
+
+
+		select count(id) from t_order_cargo_info
+		where CARGO_ORIGIN = 2 and COMPANY_ID = 1
+		and CREATE_TIME >= date_add(curdate(), interval -1 day) and CREATE_TIME < curdate()
+
+
+
+        ]]>
+	</select>
+    <!-- 当天注册司机数 -->
+    <select id="queryDailyRegisterDriversNum" resultType="int">
+        <![CDATA[
+
+
+		select count(ID) from t_driver_user_info where DELETE_FLAG = 0 and
+		CREATE_TIME >= date_add(curdate(), interval -1 day) and CREATE_TIME < curdate()
+
+
+        ]]>
+	</select>
+    <!-- 截止到当天认证企业总数 TODO 后续认证标志需要移到t_company_info表 -->
+    <select id="queryEnddayAuthUsers" resultType="java.lang.Integer">
+        select count(id) from t_web_user_info wui
+        where wui.DELETED_FLAG = 0 and wui.submit_type = 3
+        and wui.CREATE_TIME &lt; curdate()
+    </select>
+    <!-- 当天订车数（当天交易数）当天的订单数，不论司机确认与否 -->
+    <select id="queryDailyBookCarsNum" resultType="int">
+        <![CDATA[
+
+		select count(id) from t_transaction_info
+		where CREATE_TIME >= date_add(curdate(), interval -1 day) and CREATE_TIME < curdate()
+
+        ]]>
+	</select>
+    <!-- 截止到当天app用户注册总数 -->
+    <select id="queryAppRegisterNumByNow" resultType="int">
+		select count(id) from t_driver_user_info
+		where DELETE_FLAG = 0
+		and CREATE_TIME &lt; curdate()
+	</select>
+    <!-- 截止到当天web用户注册总数 -->
+    <select id="queryWebRegisterNumByNow" resultType="int">
+		select count(id) from t_web_user_info
+		where DELETED_FLAG = 0 and CREATE_TIME &lt; curdate()
+	</select>
+    <!-- 司机日存活数 -->
+    <select id="queryDriverDaySurvival" resultType="int">
+      SELECT
+        COUNT(DISTINCT ldda.driver_id)
+      FROM t_dayrecord_driver_active ldda
+      WHERE ldda.record_day = date_add(curdate(), interval - 1 day)
+    </select>
+    <!-- 司机日活跃数 -->
+    <select id="queryDriverDayActive" resultType="int">
+      SELECT
+        COUNT(DISTINCT ldda.driver_id)
+      FROM t_dayrecord_driver_active ldda
+      WHERE ldda.initiative_links > 0
+        AND ldda.record_day = date_add(curdate(), interval - 1 day)
+    </select>
+    <!-- 司机周存活数 -->
+    <select id="queryDriverWeekSurvival" resultType="int">
+      SELECT
+        COUNT(DISTINCT ldda1.driver_id)
+      FROM t_dayrecord_driver_active ldda1
+      WHERE ldda1.record_day BETWEEN DATE_ADD(curdate(), INTERVAL - 1 WEEK) AND DATE_ADD(curdate(), INTERVAL - 1 DAY)
+    </select>
+    <!-- 司机周活跃数 -->
+    <select id="queryDriverWeekActive" resultType="int">
+      SELECT
+        COUNT(DISTINCT ldda2.driver_id)
+      FROM t_dayrecord_driver_active ldda2
+      WHERE ldda2.initiative_links > 0
+       AND ldda2.record_day BETWEEN DATE_ADD(curdate(), INTERVAL - 1 WEEK) AND DATE_ADD(curdate(), INTERVAL - 1 DAY)
+    </select>
+    <!-- 司机月存活数 -->
+    <select id="queryDriverMonthSurvival" resultType="int">
+        SELECT
+        COUNT(DISTINCT ldda1.driver_id)
+        FROM t_dayrecord_driver_active ldda1
+        WHERE ldda1.record_day BETWEEN DATE_ADD(curdate(), INTERVAL - 1 MONTH) AND DATE_ADD(curdate(), INTERVAL - 1 DAY)
+    </select>
+    <!-- 司机月活跃数 -->
+    <select id="queryDriverMonthActive" resultType="int">
+        SELECT
+        COUNT(DISTINCT ldda2.driver_id)
+        FROM t_dayrecord_driver_active ldda2
+        WHERE ldda2.initiative_links > 0
+        AND ldda2.record_day BETWEEN DATE_ADD(curdate(), INTERVAL - 1 MONTH) AND DATE_ADD(curdate(), INTERVAL - 1 DAY)
+    </select>
+    <!-- 司机2个月存活数 -->
+    <select id="queryDriverMonth2Survival" resultType="int">
+        SELECT
+        COUNT(DISTINCT ldda1.driver_id)
+        FROM t_dayrecord_driver_active ldda1
+        WHERE ldda1.record_day BETWEEN DATE_ADD(curdate(), INTERVAL - 2 MONTH) AND DATE_ADD(curdate(), INTERVAL - 1 DAY)
+    </select>
+    <!-- 司机2个月活跃数 -->
+    <select id="queryDriverMonth2Active" resultType="int">
+        SELECT
+        COUNT(DISTINCT ldda2.driver_id)
+        FROM t_dayrecord_driver_active ldda2
+        WHERE ldda2.initiative_links > 0
+        AND ldda2.record_day BETWEEN DATE_ADD(curdate(), INTERVAL - 2 MONTH) AND DATE_ADD(curdate(), INTERVAL - 1 DAY)
+    </select>
+</mapper>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	version="2.5">
+	<display-name>Archetype Created Web Application</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+
+	<!-- Filter 防止用户非法访问页面-->
+	<filter>   
+  		<filter-name>filterServlet</filter-name> 
+    	<filter-class>tf56.consignor.util.HttpFilterServlet</filter-class>   
+    	<init-param>   
+  			<param-name>freePages</param-name>   
+  			<param-value>/index.html;/logincs/login;/logincs/getInit;/logincs/getMainIp;</param-value>   
+    	</init-param>  
+    	<init-param>   
+      		<param-name>toPage</param-name>    
+     		<param-value>/logincs/login</param-value>   
+    	</init-param>   
+ 	</filter>
+	
+	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/views/*</url-pattern>
+	</filter-mapping>
+
+	<servlet>
+		<servlet-name>RestServlet</servlet-name>
+		<servlet-class>net.sf.serfj.RestServlet</servlet-class>
+		<load-on-startup>5</load-on-startup>
+	</servlet>
+
+	<!-- party信息-->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/partycs/*</url-pattern>
+	</servlet-mapping>
+	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/partycs/*</url-pattern>
+	</filter-mapping>
+	
+	<!-- 登录 -->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/logincs/*</url-pattern>
+	</servlet-mapping>
+	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/logincs/*</url-pattern>
+	</filter-mapping>
+
+	<!-- 账号管理-->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/operatorcs/*</url-pattern>
+	</servlet-mapping>
+	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/operatorcs/*</url-pattern>
+	</filter-mapping>
+	
+	<!-- 我的运单 -->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/waybillcs/*</url-pattern>
+	</servlet-mapping>
+	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/waybillcs/*</url-pattern>
+	</filter-mapping>
+	
+	<!-- 地图显示 -->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/lbsdevicecs/*</url-pattern>
+	</servlet-mapping>
+	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/lbsdevicecs/*</url-pattern>
+	</filter-mapping>
+	<filter>
+		<filter-name>EncodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+        <filter-name>EncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+	
+	<!--如果不设，默认为web.root,但最好设置，以免项目间冲突-->
+	<context-param>
+		<param-name>webAppRootKey</param-name>
+		<param-value>myappfuse.root.consignor</param-value>
+	</context-param>
+	<context-param>
+		<param-name>log4jConfigLocation</param-name>
+		<param-value>/WEB-INF/classes/config/log4j.properties</param-value>
+	</context-param>
+	<listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	</listener>
+
+	<!--错误跳转-->
+	<error-page>
+		<error-code>401</error-code>
+		<location>/error.html</location>
+	</error-page>
+	<error-page>
+		<error-code>403</error-code>
+		<location>/error.html</location>
+	</error-page>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/error.html</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/error.html</location>
+	</error-page>
+	<error-page>
+		<exception-type>java.lang.Exception</exception-type>
+		<location>/error.html</location>
+	</error-page>
+	<!-- 配置session过期间隔 8小时-->
+	<session-config>
+		<session-timeout>480</session-timeout>
+	</session-config>
+</web-app>

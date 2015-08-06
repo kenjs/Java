@@ -1,0 +1,20 @@
+@CHARSET "UTF-8";
+.info .t_span{color: red;margin-right:5px; }
+.sub_title{font-size: 14px;margin-left: 15px;font-weight: bold; border-bottom: 1px solid #d3d7d4;width: 900px;padding-bottom: 5px;}
+.basic_info{margin-left: 25px;width: 875px;margin-top: 20px;}
+.info td{padding: 6px 2px 6px 3px;font-size: 12px;color: #444444;}
+.info td input{height: 24px;line-height: 22px;width: 200px;color: #444444;}
+.line{
+	border-bottom: 1px solid #d3d7d4;width: 820px;margin-left: 67px;margin-top: -10px;
+}
+#btnimport{cursor: pointer;margin-left:10px;width: 70px;  height: 28px;font-size: 12px;
+    font-weight: bold;
+    line-height: 26px; }
+.t_left{text-align: right; width: 100px;}
+#import{ margin-left: 10px;width: 70px;}
+#description{width: 500px;height: 100px;}
+#insubmit{height: 28px;line-height: 26px;width: 70px;}
+#detailaddress{width: 270px;}
+.basic_info input[type=text]{
+	padding-left: 5px;
+}

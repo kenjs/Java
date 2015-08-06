@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.bggl.dao.Bus_bgglBggzrMapper">
+	<select id="selectBgGzrPage" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgGzrDomain">
+		SELECT A.JGBM AS jgbm,
+		       A.RQ AS rq,
+		       (SELECT DM.GZR_MC FROM DM_GZR DM WHERE DM.GZR_DM=A.GZR_DM ) AS gzrDm,
+		       (SELECT WEEKDAY.WEEKDAY_MC FROM DM_WEEKDAY WEEKDAY WHERE WEEKDAY.WEEKDAY_DM=A.WEEKDAY_DM) AS weekdayDm,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM BG_GZR A WHERE A.JGBM=#jgbm#
+		  <dynamic>
+		  	<isNotEmpty prepend="and" property="startTime">
+		  		<![CDATA[ A.RQ >= to_date(#startTime#,'yyyy-MM-dd')]]>
+		  	</isNotEmpty>
+		  </dynamic>
+		   <dynamic>
+		  	<isNotEmpty prepend="and" property="endTime">
+		  		<![CDATA[ A.RQ <= to_date(#endTime#,'yyyy-MM-dd')]]>
+		  	</isNotEmpty>
+		  </dynamic>
+		  $orderStr$
+    </select>
+    
+    <select id="selectBgGzrAll" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgGzrDomain">
+		SELECT A.JGBM AS jgbm,
+		       A.RQ AS rq,
+		       (SELECT DM.GZR_MC FROM DM_GZR DM WHERE DM.GZR_DM=A.GZR_DM ) AS gzrDm,
+		       (SELECT WEEKDAY.WEEKDAY_MC FROM DM_WEEKDAY WEEKDAY WHERE WEEKDAY.WEEKDAY_DM=A.WEEKDAY_DM) AS weekdayDm,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM BG_GZR A  WHERE A.JGBM=#jgbm#
+		  <dynamic>
+		  	  <isNotEmpty prepend="and" property="startTime">
+		  		<![CDATA[ A.RQ >= to_date(#startTime#,'yyyy-MM-dd')]]>
+		  	  </isNotEmpty>
+		  </dynamic>
+		  <dynamic>
+		  	 <isNotEmpty prepend="and" property="endTime">
+		  		<![CDATA[ A.RQ <= to_date(#endTime#,'yyyy-MM-dd')]]>
+		  	 </isNotEmpty>
+		  </dynamic>
+		  ORDER by A.JGBM ASC,A.RQ ASC
+    </select>
+
+	<select id="getBgGzrRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.JGBM) 
+		  FROM BG_GZR A WHERE A.JGBM=#jgbm#
+		<dynamic>
+		  	<isNotEmpty prepend="and" property="startTime">
+		  		<![CDATA[ A.RQ >= to_date(#startTime#,'yyyy-MM-dd')]]>
+		  	</isNotEmpty>
+		</dynamic>
+		   <dynamic>
+		<isNotEmpty prepend="and" property="endTime">
+		  		<![CDATA[ A.RQ <=to_date(#endTime#,'yyyy-MM-dd')]]>
+		  	</isNotEmpty>
+		</dynamic>
+    </select>
+    
+    <update id="updateGzrByJgbm" parameterClass="java.util.Map">
+    	update BG_GZR set GZR_DM='2' where jgbm=#jgbm# and rq=to_date(#rq#,'yyyy-MM-dd')
+    </update>
+    
+    <update id="updateJjrqByJgbm" parameterClass="java.util.Map">
+    	update BG_GZR set GZR_DM='1' where jgbm=#jgbm# and rq=to_date(#rq#,'yyyy-MM-dd')
+    </update>
+</sqlMap>

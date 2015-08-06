@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+	<typeHandler jdbcType="CLOB" javaType="java.lang.String" callback="org.springframework.orm.ibatis.support.ClobStringTypeHandler" />
+	<typeHandler jdbcType="BLOB" javaType="[B" callback="org.springframework.orm.ibatis.support.BlobByteArrayTypeHandler" />
+	<!-- 托运单管理模块start -->
+	
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/hy_tyd.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/hy_hwzt.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/hy_tyd_hwmx.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/hy_tyd_wfhxx.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/hy_mb_tyd.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/hy_mb_tyd_hwmx.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/hy_pc.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/hy_pc_hwxx.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/hy_pc_dhaj.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/hy_pc_hddj.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/js_srdz.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/js_srdz_qd.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/js_kpsq.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/js_kpsq_mx.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/hy_fydj_mx.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/hy_clgz.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/hy_pc_hwqs.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/hy_pz.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/hy_pz_hwxx.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/xyjs_srdz_qd.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/xyjs_srdz_qd_mx.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/xyjs_srdz.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/js_dd_hwxx.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/hy_hwqs.xml"/>
+	
+    <sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_hy_tydgl.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_hy_mbtyd.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_hy_tydwfhxx.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_hy_pcdhaj.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_hy_fydjgl.xml"/>
+    
+    <sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_hy_pcxxgl.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_hy_zpaj.xml"/>
+	   
+	<sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_hy_pchddj.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_hygl_hykpsqsh.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_hygl_ddcbsh.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_hygl_jsgl_srdz.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_hygl_jssrdzqd.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_hygl_jskpsq.xml"/> 
+	<sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_hygl_jskpdzqd.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_hygl_hwzt.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_hy_clgz.xml"/>
+	
+	<sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_hy_wlssdj.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/hy_wlssdj.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/hy_wlssdj_mx.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_hy_wlssdjgl.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_hy_wlssdjsh.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_hy_wlssdjzp.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_hy_hddjsh.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_jsgl_srdzcysh.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_hy_pchwqs.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_hygl_ddpzxxgl.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_hygl_xyjssrdzqd.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_hygl_xyjssrdz.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_jsgl_psfqr.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_hygl_sydzqdqr.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_hyhwqs.xml"/>
+	
+	
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/hy_pc_hwxx_hdqd.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/hy_pc_hwxx_hdqd_mx.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_hypchwxxhdqd.xml"/>
+    
+	<!-- 托运单管理模块end -->
+	
+	<!-- 下游转包对账begin xiay -->
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/xyjs_zb_yjdz.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_xyjszbyjdz.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_xyjszbyjdzsh.xml"/>
+	<!-- 下游转包对账end --> 
+	
+	<!-- 送货方式变更 -->
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/hy_hwxx_shfsbg_zb.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/hygl/hy_hwxx_shfsbg.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_hyhwxxshfsbg.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/hygl/bus_hyhwxxshfsbgzb.xml"/>
+	
+
+
+
+</sqlMapConfig>

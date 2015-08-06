@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.xtgl.dao.QyRyJsMapper">
+
+	<!--根据主键取DOMAIN-->
+	<select id="selectQyRyJsByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.YhjswhDomain">
+		select a.CZY_DJXH as czyDjxh,a.JS_DJXH as jsDjxh from QY_RY_JS a  where a.CZY_DJXH=#czyDjxh# and a.JS_DJXH=#jsDjxh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertQyRyJs"  parameterClass="com.cy.common.bo.QyRyJs">
+		insert into QY_RY_JS(CZY_DJXH,JS_DJXH)
+		values(#czyDjxh:NUMERIC#,#jsDjxh:NUMERIC#)
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateQyRyJsByKey" parameterClass="com.cy.common.bo.QyRyJs">
+        update QY_RY_JS set CZY_DJXH=#czyDjxh#,JS_DJXH=#jsDjxh# where CZY_DJXH=#czyDjxh# and JS_DJXH=#jsDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：软删除-->
+	<delete id="deleteQyRyJsByKey" parameterClass="java.util.Map">
+		delete from QY_RY_JS where CZY_DJXH=#czyDjxh#
+    </delete>
+</sqlMap>

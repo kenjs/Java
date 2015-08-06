@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.cwgl.dao.BusCwzjdbglMapper">
+	<select id="selectCwZjdbglPage" parameterClass="java.util.Map"
+		resultClass="com.cy.cwgl.domain.CwZjdbglDomain">
+	    SELECT DB.ZJDB_DJXH AS zjdbDjxh, DB.DC_DW_DJXH  AS dcDwDjxh, 
+	           (SELECT ZC.JC FROM QY_ZZJG ZC WHERE ZC.JGBM = DB.DC_DW_DJXH) AS dcDwMc, 
+	           DB.DR_DW_DJXH AS drDwDjxh, (SELECT ZR.JC FROM QY_ZZJG ZR WHERE ZR.JGBM = DB.DR_DW_DJXH) AS drDwMc,
+	           DB.zcfl_dm as zcflDm,DB.yh_csh_djxh as yhCshDjxh,
+	           DB.JE AS je,DB.RQ AS rq, 
+	           YF.YISF_JE AS yfJe, 
+	           (SELECT ZF.DJRQ FROM CW_ZFDJ ZF WHERE ZF.YSYF_DJXH = YF.YSYF_DJXH AND ROWNUM = 1) DBRQ,
+	           YS.YISF_JE AS ysJe,
+	           (SELECT SR.DJRQ FROM CW_SRDJ SR WHERE SR.YSYF_DJXH = YS.YSYF_DJXH AND ROWNUM = 1) JSRQ,
+	           DB.BZ AS bz,
+	           DB.CJR_CZY_DJXH AS cjrCzyDjxh,
+	           DB.CJRQ AS cjrq,
+	           DB.XGR_CZY_DJXH AS xgrCzyDjxh,
+	           DB.XGRQ AS xgrq,
+	           (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=DB.CJR_CZY_DJXH) cjrMc,
+	           (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=DB.XGR_CZY_DJXH) xgrMc
+	    FROM CW_ZJDB DB, CW_YSYF YF, CW_YSYF YS
+	    WHERE DB.ZJDB_DJXH = YF.YW_DJXH
+	      AND DB.ZJDB_DJXH = YS.YW_DJXH
+	      AND YF.YFJSF_DM = '22'
+	      AND YF.YFJSF_DJXH = DB.DR_DW_DJXH
+	      AND YS.YFJSF_DM = '22'
+	      AND YS.YFJSF_DJXH = DB.DC_DW_DJXH
+	      AND DB.YXBZ='Y'
+	      AND YF.YXBZ='Y'
+	      AND YS.YXBZ='Y'
+		  AND DB.DC_DW_DJXH = #dcDwDjxh#
+		  <dynamic> 
+			<isNotEmpty property="drDwDjxh" prepend="and">
+				DB.DR_DW_DJXH LIKE #drDwDjxh#
+			</isNotEmpty>
+			<isNotEmpty property="rqQ" prepend="and">
+				DB.RQ &gt;= TO_DATE(#rqQ#, 'yyyy-MM-dd')
+			</isNotEmpty>
+			<isNotEmpty property="rqZ" prepend="and">
+				DB.RQ &lt;= TO_DATE(#rqZ#, 'yyyy-MM-dd')
+			</isNotEmpty>
+		  </dynamic>
+		  $orderStr$
+    </select>
+    
+    <select id="selectCwZjdbglAll" parameterClass="java.util.Map"
+		resultClass="com.cy.cwgl.domain.CwZjdbglDomain">
+		SELECT DB.ZJDB_DJXH AS zjdbDjxh, DB.DC_DW_DJXH  AS dcDwDjxh, 
+	           (SELECT ZC.JC FROM QY_ZZJG ZC WHERE ZC.JGBM = DB.DC_DW_DJXH) AS dcDwMc, 
+	           DB.DR_DW_DJXH AS drDwDjxh, (SELECT ZR.JC FROM QY_ZZJG ZR WHERE ZR.JGBM = DB.DR_DW_DJXH) AS drDwMc,
+	           DB.zcfl_dm as zcflDm,DB.yh_csh_djxh as yhCshDjxh,
+	           DB.JE AS je,DB.RQ AS rq, YF.YISF_JE AS yfJe, YS.YISF_JE AS ysJe,
+	           DB.BZ AS bz,
+	           DB.CJR_CZY_DJXH AS cjrCzyDjxh,
+	           DB.CJRQ AS cjrq,
+	           DB.XGR_CZY_DJXH AS xgrCzyDjxh,
+	           DB.XGRQ AS xgrq,
+	           (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=DB.CJR_CZY_DJXH) cjrMc,
+	           (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=DB.XGR_CZY_DJXH) xgrMc
+	    FROM CW_ZJDB DB, CW_YSYF YF, CW_YSYF YS
+	    WHERE DB.ZJDB_DJXH = YF.YW_DJXH
+	      AND DB.ZJDB_DJXH = YS.YW_DJXH
+	      AND YF.YFJSF_DM = '22'
+	      AND YF.YFJSF_DJXH = DB.DC_DW_DJXH
+	      AND YS.YFJSF_DM = '22'
+	      AND YS.YFJSF_DJXH = DB.DR_DW_DJXH
+	      AND DB.YXBZ='Y'
+	      AND YF.YXBZ='Y'
+	      AND YS.YXBZ='Y'
+		  AND DB.DC_DW_DJXH = #dcDwDjxh#
+		  <dynamic> 
+			<isNotEmpty property="zrDwDjxh" prepend="and">
+				DB.DR_DW_DJXH LIKE #DrDwDjxh#
+			</isNotEmpty>
+			<isNotEmpty property="rqQ" prepend="and">
+				DB.RQ &gt;= TO_DATE(#rqQ#, 'yyyy-MM-dd')
+			</isNotEmpty>
+			<isNotEmpty property="rqZ" prepend="and">
+				DB.RQ &lt;= TO_DATE(#rqZ#, 'yyyy-MM-dd')
+			</isNotEmpty>
+		  </dynamic>
+		  ORDER by DB.ZJDB_DJXH ASC
+    </select>
+
+	<select id="getCwZjdbglRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(DB.ZJDB_DJXH) 
+		  FROM CW_ZJDB DB, CW_YSYF YF, CW_YSYF YS
+	    WHERE DB.ZJDB_DJXH = YF.YW_DJXH
+	      AND DB.ZJDB_DJXH = YS.YW_DJXH
+	      AND YF.YFJSF_DM = '22'
+	      AND YF.YFJSF_DJXH = DB.DC_DW_DJXH
+	      AND YS.YFJSF_DM = '22'
+	      AND YS.YFJSF_DJXH = DB.DR_DW_DJXH
+	      AND DB.YXBZ='Y'
+	      AND YF.YXBZ='Y'
+	      AND YS.YXBZ='Y'
+		  AND DB.DC_DW_DJXH = #dcDwDjxh#
+		  <dynamic> 
+			<isNotEmpty property="zrDwDjxh" prepend="and">
+				DB.DR_DW_DJXH LIKE #DrDwDjxh#
+			</isNotEmpty>
+			<isNotEmpty property="rqQ" prepend="and">
+				DB.RQ &gt;= TO_DATE(#rqQ#, 'yyyy-MM-dd')
+			</isNotEmpty>
+			<isNotEmpty property="rqZ" prepend="and">
+				DB.RQ &lt;= TO_DATE(#rqZ#, 'yyyy-MM-dd')
+			</isNotEmpty>
+		  </dynamic>
+    </select>
+    
+    <parameterMap class="java.util.Map" id="zjdbHxMap">
+		<parameter property="zjdbDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>	
+    	<parameter property="jgbm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="czyDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="rtnCode" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+		<parameter property="rtnMess" javaType="java.lang.String" jdbcType="VARCHAR" mode="OUT"/>	
+	</parameterMap>
+	
+	<procedure id="callPCwglZjdbHxcl" parameterMap="zjdbHxMap">
+		{call P_CWGL_ZJDB_HXCL(?,?,?,?,?)}
+	</procedure>
+</sqlMap>

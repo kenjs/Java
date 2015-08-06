@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cy.dctms.dao.TransactionInfoDao">
+
+    <resultMap id="transactionInfoMap" type="TransactionInfo">
+        <result column="CREATE_TIME" property="transactionDate" />
+        <result column="ORDER_NUMBER" property="orderNumber" />
+        <result column="CARGO_NAME" property="cargoName" />
+        <result column="DEPLOY_NAME" property="shipper" />
+        <result column="TRADE_START" property="orderStart" />
+        <result column="NAME" property="driverName" />
+        <result column="TELEPHONE" property="driverTelephone" />
+        <result column="CAR_NUMBER" property="carNumber" />
+        <result column="INVOICE" property="invoice" />
+        <result column="RECEIPT" property="receipt" />
+        <result column="DELIVERY_TIME" property="deliveryTime" />
+        <result column="ARRIVAL_TIME" property="arrivalTime" />
+        <result column="RECEIVE_TIME" property="receiveTime" />
+    </resultMap>
+
+    <select id="queryExportTransactionInfo" resultMap="transactionInfoMap" parameterType="map">
+        SELECT
+            t.CREATE_TIME,
+            t.ORDER_NUMBER,
+            c.CARGO_NAME,
+            (select w.`NAME` from t_web_user_info w where w.ID = c.DEPLOY_USERID) DEPLOY_NAME,
+            t.TRADE_START,
+            d.`NAME`,
+            d.TELEPHONE,
+            d.CAR_NUMBER,
+            (select count(r.ID) from t_transaction_receipt_path r where r.TRANSACTION_ID = t.ID and r.TYPE = 1) INVOICE,
+            (select count(r.ID) from t_transaction_receipt_path r where r.TRANSACTION_ID = t.ID and r.TYPE = 0) RECEIPT,
+            t.DELIVERY_TIME,t.ARRIVAL_TIME,t.RECEIVE_TIME
+        FROM
+            t_transaction_info t,
+            t_order_cargo_info c,
+            t_driver_user_info d
+        WHERE
+            t.CARGO_ID = c.ID
+        AND t.order_type = 2
+        AND t.DRIVER_ID = d.ID
+        AND t.ORDER_START = 0
+        AND t.COMPANY_ID = #{companyId}
+        AND DATE_FORMAT(t.CREATE_TIME,'%yyyy-%m-%d') &gt;= DATE_FORMAT(#{startTime},'%yyyy-%m-%d')
+        AND DATE_FORMAT(t.CREATE_TIME,'%yyyy-%m-%d') &lt;= DATE_FORMAT(#{endTime},'%yyyy-%m-%d')
+        order by t.CREATE_TIME desc
+    </select>
+</mapper>

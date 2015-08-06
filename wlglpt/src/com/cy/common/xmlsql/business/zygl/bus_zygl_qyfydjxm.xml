@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.zygl.dao.BusZyglQyFydjxmMapper">
+	<select id="selectQyFydjxmPage" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyFydjxmDomain">
+		select A.WH_XH AS whXh,A.SS_JGBM AS ssJgbm,A.FYDJ_XMMC AS fydjXmmc,A.SM AS sm,A.CLSX_DM AS clsxDm,
+               A.YXBZ AS yxbz,A.CJR_CZY_DJXH AS cjrCzyDjxh,A.CJRQ AS cjrq,A.XGR_CZY_DJXH AS xgrCzyDjxh,A.XGRQ AS xgrq,
+               (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) AS cjrMc,
+               (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) AS xgrMc,
+               (SELECT DM.CLSX_MC FROM DM_CLSX DM WHERE DM.CLSX_DM = A.CLSX_DM) AS clsxMc
+        from QY_FYDJXM A
+        WHERE A.YXBZ='Y' 
+		  AND A.SS_JGBM =#ssJgbm#
+		  <dynamic>
+			<isNotEmpty property="fydjXmmc" prepend="and">
+				A.FYDJ_XMMC like #fydjXmmc#
+			</isNotEmpty>
+			<isNotEmpty property="clsxDm" prepend="and">
+				A.CLSX_DM  = #clsxDm#
+			</isNotEmpty>
+		 </dynamic>
+		  $orderStr$
+    </select>
+    
+    <select id="selectQyFydjxmAll" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyFydjxmDomain">
+		select A.WH_XH AS whXh,A.SS_JGBM AS ssJgbm,A.FYDJ_XMMC AS fydjXmmc,A.SM AS sm,A.CLSX_DM AS clsxDm,
+               A.YXBZ AS yxbz,A.CJR_CZY_DJXH AS cjrCzyDjxh,A.CJRQ AS cjrq,A.XGR_CZY_DJXH AS xgrCzyDjxh,A.XGRQ AS xgrq,
+               (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) AS cjrMc,
+               (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) AS xgrMc,
+               (SELECT DM.CLSX_MC FROM DM_CLSX DM WHERE DM.CLSX_DM = A.CLSX_DM) AS clsxMc
+        from QY_FYDJXM A
+        WHERE A.YXBZ='Y' 
+		  AND A.SS_JGBM =#ssJgbm#
+		  <dynamic>
+			<isNotEmpty property="fydjXmmc" prepend="and">
+				A.FYDJ_XMMC like #fydjXmmc#
+			</isNotEmpty>
+			<isNotEmpty property="clsxDm" prepend="and">
+				A.CLSX_DM  = #clsxDm#
+			</isNotEmpty>
+		 </dynamic>
+		  ORDER by WH_XH ASC
+    </select>
+
+	<select id="getQyFydjxmRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(WH_XH) 
+		  from QY_FYDJXM
+		WHERE YXBZ='Y' 
+		  AND SS_JGBM =#ssJgbm#
+		  <dynamic>
+			<isNotEmpty property="fydjXmmc" prepend="and">
+				FYDJ_XMMC like #fydjXmmc#
+			</isNotEmpty>
+			<isNotEmpty property="clsxDm" prepend="and">
+				CLSX_DM  = #clsxDm#
+			</isNotEmpty>
+		 </dynamic>
+    </select>
+</sqlMap>

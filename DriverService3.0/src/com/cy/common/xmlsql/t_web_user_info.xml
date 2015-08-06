@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<resultMap class="com.cy.driver.user.domain.CompanyInfoDomain" id="CompanyInfoDomain">
+		<result property="companyName" column="COMPANY_NAME"/>
+		<result property="contactTelephone" column="CONTACT_TELEPHONE"/>
+		<result property="mobilephone" column="MOBILEPHONE"/>
+		<result property="userName" column="NAME"/>
+		<result property="flag" column="FLAG"/>
+		<result property="praise" column="PRAISE"/>
+		<result property="average" column="AVERAGE"/>
+		<result property="negativeFeedback" column="NEGATIVEFEEDBACK"/>
+	</resultMap>
+
+	<!-- 查询公司信息 -->
+	<select id="iBatisSelectCompanyInfoById" parameterClass="String" resultMap="CompanyInfoDomain">
+		SELECT t2.COMPANY_NAME,t2.CONTACT_TELEPHONE,t1.MOBILEPHONE,t1.`NAME`,
+			CASE WHEN t1.COMPANY_ID IS NULL THEN
+				t1.PERSONAGE_FLAG
+			ELSE
+				t1.ENTERPRISE_FLAG
+			END FLAG,
+ 			(SELECT count(c1.ID) FROM
+				t_driver_user_assess_info c1
+			WHERE  c1.USER_ID = t1.ID
+			AND c1.ASSESS_EVALUATE_SCORE = 3) PRAISE,
+ 			(SELECT count(c2.ID) FROM
+				t_driver_user_assess_info c2
+			WHERE c2.USER_ID = t1.ID
+			AND c2.ASSESS_EVALUATE_SCORE = 6) AVERAGE,
+ 			(SELECT count(c3.ID) FROM
+				t_driver_user_assess_info c3
+			WHERE c3.USER_ID = t1.ID
+			AND c3.ASSESS_EVALUATE_SCORE = 9) NEGATIVEFEEDBACK
+		FROM t_web_user_info t1 ,t_company_info t2			
+		WHERE t1.DELETED_FLAG = 0
+			AND t1.COMPANY_ID = t2.ID
+			AND t2.DELETED_FLAG = 0
+			AND t1.COMPANY_ID = #userId#
+	</select>
+	
+	<!-- 根据parentId 和 encoded 查询用户信息 -->
+	<select id="iBatisSelectWebUserInfoByParentIdAndEncoded" parameterClass="map" 
+																		resultClass="com.cy.driver.webUser.domain.WebUserInfoDomain">
+		SELECT
+			t.ARRIVAL_SURE as receiveSure,
+			t.`CODE` as code,
+			t.COMPANY_ID as companyId,
+			(select c.COMPANY_NAME from t_company_info c where c.ID = t.COMPANY_ID) companyName,
+			t.DELETED_FLAG as deletedFlag,
+			t.DELIVERY_FLAG as deliveryFlag,
+			t.EMAIL as email,
+			t.ENCODED as encoded,
+			t.ENTERPRISE_FLAG as enterpriseFlag,
+			t.ENTERPRISE_TIME as enterpriseTime,
+			t.ID as id,
+			t.ID_CARD_NUMBER as idCardNumber,
+			t.LOGIN_IP as loginIp,
+			t.LOGIN_TIME as loginTime,
+			t.MOBILEPHONE as mobilephone,
+			t.`NAME` as name,
+			t.PACT_CAR_DRIVER_FLAG as pactCarDriverFlag,
+			t.PANYMENT_FLAG as panymentFlag,
+			t.PANYMENT_TIME as panymentTime,
+			t.PARENT_ID as parentId,
+			t.PERSONAGE_FLAG as personageFlag,
+			t.PERSONAGE_TIME as personageTime,
+			t.RECEIVE_SURE as receiveSure,
+			t.SUBMIT_TYPE as submitType,
+			t.USER_IMAGES as userImages,
+			t.USER_ORIGIN as userOrigin,
+			t.USER_QQ as userQq,
+			t.USER_TYPE as userType
+		FROM
+			t_web_user_info t
+		WHERE
+			t.DELETED_FLAG = 0
+		AND t.USER_ORIGIN = 0
+		<dynamic>
+			<isNotEmpty prepend="and" property="parentId">
+				t.PARENT_ID = #parentId#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="encoded">
+				t.ENCODED = #encoded#
+			</isNotEmpty>
+		</dynamic>		
+	</select>
+
+</sqlMap>

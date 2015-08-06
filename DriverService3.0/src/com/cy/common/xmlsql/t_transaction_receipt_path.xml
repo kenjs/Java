@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="TransactionReceiptPathBo" type="com.cy.common.bo.TransactionReceiptPathBo"/>
+	
+	<!-- 新增 -->
+	<insert id="iBatisInsertTransactionReceiptPath" parameterClass="TransactionReceiptPathBo">
+		insert into t_transaction_receipt_path(TRANSACTION_ID,RECEIPT_PATH,CREATE_TIME,TYPE)
+		values (#transactionId#,#receiptPath#,sysdate(),#type#)
+		<selectKey keyProperty="id" resultClass="Integer">
+			select last_insert_id() as id
+		</selectKey>
+	</insert>
+	
+	<!-- 删除（多个） -->
+	<delete id="iBatisDeleteReceiptPpath" parameterClass="java.util.List">
+		delete from t_transaction_receipt_path where ID in 
+		<iterate open="(" close=")" conjunction=",">
+			#receiptIdList[]#
+		</iterate>
+	</delete>
+	
+	<!--  -->
+	<select id="iBatisSelectReceiptPathById" parameterClass="java.util.List" resultClass="string">
+		select RECEIPT_PATH from t_transaction_receipt_path where ID in
+		<iterate open="(" close=")" conjunction=",">
+			#receiptIdList[]#
+		</iterate>
+	</select>
+	
+	<select id="iBatisSelectReceiptListByTransactionId" parameterClass="map" resultClass="com.cy.driver.receipt.domain.TransactionReceiptPathDomain">
+		select t.ID as id,
+			t.TRANSACTION_ID as transactionId,
+			t.RECEIPT_PATH as receiptPath,
+			t.TYPE as type 
+		from t_transaction_receipt_path t
+			<dynamic prepend="where">
+				<isNotEmpty property="transactionId" prepend="and">
+					t.TRANSACTION_ID = #transactionId#
+				</isNotEmpty>
+				<isNotEmpty property="type" prepend="and">
+					t.TYPE = #type#
+				</isNotEmpty>
+			</dynamic>
+	</select>
+	
+	<!-- 根据id查询 -->
+	<select id="iBatisSelectById" parameterClass="string" resultClass="com.cy.driver.receipt.domain.TransactionReceiptPathDomain">
+		select t.ID as id,
+			t.TRANSACTION_ID as transactionId,
+			t.RECEIPT_PATH as receiptPath,
+			t.TYPE as type 
+		from t_transaction_receipt_path t where t.ID = #id#
+	</select>
+	
+	<!-- 查找物流公司id -->
+	<select id="iBatisSelectShipperCompanyId" parameterClass="map" resultClass="com.cy.driver.webUser.domain.WebUserInfoDomain">
+		SELECT
+			t.COMPANY_ID as companyId,
+			c.CONTACT_NAME as contactName,
+			c.CONTACT_TELEPHONE contactTelephone
+		FROM
+			t_web_user_info t,t_company_info c
+		WHERE
+			t.DELETED_FLAG = 0
+		and t.FREEZE_FLAG = 0
+		and t.COMPANY_ID = c.ID
+		and t.PARENT_ID = #deployUserId# and t.ENCODED = #shipperCompanyCode#
+	</select>
+</sqlMap>

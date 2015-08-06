@@ -1,0 +1,144 @@
+/* CSS Document */
+* {
+	 margin:0;
+	 padding:0;
+}
+body {
+	margin:0 auto;
+	background:#cfedcd;
+	font-size:12px;
+	width:800px;
+}
+#printarea{
+	margin-top:30px;
+	width:800px;
+	font-size:12px;
+	
+}
+#top{
+	height:50px;
+	line-height:50px;
+	padding-left:260px;
+	border-top:1px solid #ccc;
+	border-bottom:1px solid #ccc;
+}
+#head{
+	height:30px;
+	line-height:30px;
+	border-top:1px solid #ccc;
+	border-bottom:1px solid #ccc;
+}
+#head ul{
+	height:30px;
+	line-height:30px;
+	list-style-type:none;
+	
+}
+#head ul li{
+	text-align:center;
+	height:30px;
+	width:124px;
+	float:left;
+	
+}
+#head ul li input{
+	margin-left: 480px;
+	margin-top:5px;
+}
+/******************************Ö÷Ìåcss*************************************************/
+#content{
+	width:799px;
+	margin-top:5px;
+}
+table{
+	border-collapse:collapse;
+}
+table,td{
+	border:1px solid black;
+}
+.ctop{
+	
+	width:397px;
+	height:120px;
+	border:hidden;
+}
+.firstrow{
+	height:20px;
+	line-height:20px;
+	text-align:center;
+}
+.firstcol{
+	width:82px;
+	text-align:center;
+}
+.threecol{
+	width:79px;
+	text-align:center;
+}
+.secondcol{
+	width:75px;
+	
+}
+.fivecol{
+	width:77px;
+	text-align:center;
+}
+.sevencol{
+	width:77px;
+	text-align:center;
+}
+
+#ccenter{
+	text-align:center;
+	width:794px;
+	height:120px;
+	border:hidden;
+}
+.left_right{
+	width:80px;
+}
+.trcenter_fixed{
+	width:78.5px;
+}
+.trcenter_variable{
+	width:243.5px;
+}
+#cfooter{
+	text-align:center;
+	width:794px;
+	height:120px;
+	border:hidden;
+}
+.cfooter_firstrow{
+	width:198.5px;
+}
+.cfooter_secondrow{
+	width:132.3px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

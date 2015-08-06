@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="swp"
+  id="myeclipse.1413250365386"
+  context-root="/swp"
+  j2ee-spec="5.0"
+  archive="swp.war">
+  <attributes>
+    <attribute name="webrootdir" value="swp" />
+  </attributes>
+</project-module>
+

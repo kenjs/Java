@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/Project/!svn/ver/7387/consignor/trunk/consignor/src/tf56/consignor/util
+END
+PrimaryGenerater.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/Project/!svn/ver/7387/consignor/trunk/consignor/src/tf56/consignor/util/PrimaryGenerater.java
+END
+SessionUtil.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/Project/!svn/ver/7387/consignor/trunk/consignor/src/tf56/consignor/util/SessionUtil.java
+END
+AuthImage.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/Project/!svn/ver/7387/consignor/trunk/consignor/src/tf56/consignor/util/AuthImage.java
+END
+GetFormatDate.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/Project/!svn/ver/7387/consignor/trunk/consignor/src/tf56/consignor/util/GetFormatDate.java
+END
+ReadPropertiesFile.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/Project/!svn/ver/7387/consignor/trunk/consignor/src/tf56/consignor/util/ReadPropertiesFile.java
+END
+HttpFilterServlet.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/Project/!svn/ver/7387/consignor/trunk/consignor/src/tf56/consignor/util/HttpFilterServlet.java
+END

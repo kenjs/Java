@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.xtgl.dao.BusXtglQyjsMapper">
+	<select id="selectQyJsPage" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.QyJsDomain">
+		SELECT A.JS_DJXH AS jsDjxh,
+		       A.JS_MC AS jsMc,
+		       A.JS_JC AS jsJc,
+		       A.BZSM AS bzsm,
+		      (SELECT B.JC FROM QY_ZZJG B WHERE B.JGBM=A.SS_JGBM) AS sjMc,
+		       A.QYBZ AS qybz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM QY_JS A 
+		  WHERE A.YXBZ='Y' 
+		  <dynamic> 
+			<isNotEmpty property="ssJgbm" prepend="and">
+				A.SS_JGBM = #ssJgbm#
+			</isNotEmpty>
+		  </dynamic>
+		  $orderStr$
+    </select>
+    
+    <select id="selectQyJsAll" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.QyJsDomain">
+		SELECT 
+		       A.JS_MC AS jsMc,
+		       A.JS_JC AS jsJc,
+		       A.BZSM AS bzsm,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM QY_JS A 
+		  WHERE A.YXBZ='Y' 
+		  <dynamic> 
+			<isNotEmpty property="ssJgbm" prepend="and">
+				A.SS_JGBM = #ssJgbm#
+			</isNotEmpty>
+		  </dynamic>
+		  ORDER by A.JS_DJXH ASC
+    </select>
+
+     <!-- 总共的数量 -->
+	<select id="getQyJsRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.JS_DJXH) 
+		  FROM QY_JS A 
+		  WHERE A.YXBZ='Y' 
+		  <dynamic> 
+			<isNotEmpty property="ssJgbm" prepend="and">
+				A.SS_JGBM = #ssJgbm#
+			</isNotEmpty>
+		  </dynamic>
+    </select>
+    
+    <!--启用-->
+	<update id="startJs" parameterClass="java.util.Map">
+		update QY_JS 
+		set QYBZ='Y' 
+		where JS_DJXH=#jsDjxh#
+    </update>
+    
+        <!--停用-->
+    <update id="stopJs" parameterClass="java.util.Map">
+       update QY_JS 
+       set QYBZ='N' 
+       where JS_DJXH=#jsDjxh# 
+	</update>
+	
+	<!--  保存时,校验角色名称是否重复-->
+	<select id="getQyJsJsdJxhReRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		select count(*) 
+		from QY_JS 
+		where 
+		yxbz='Y'
+	   <dynamic> 
+			<isNotEmpty property="ssJgbm" prepend="and">
+				SS_JGBM =#ssJgbm#
+			</isNotEmpty>
+	   </dynamic>
+	   
+	   <dynamic> 
+			<isNotEmpty property="jsDjxh" prepend="and">
+				 <![CDATA[JS_DJXH<>#jsDjxh#]]>
+			</isNotEmpty>
+	   </dynamic>
+	  
+	   <dynamic> 
+			<isNotEmpty property="jsMc" prepend="and">
+				JS_MC =#jsMc#
+			</isNotEmpty>
+	   </dynamic> 
+
+    </select>
+    
+    <!-- 删除角色前，判断该角色是否正在使用 -->
+    <select id="getQyJsUsedRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		select count(*) 
+		from QY_RYDJ a, QY_RY_JS b 
+        where a.CZY_DJXH=b.CZY_DJXH
+        and a.YXBZ='Y' 
+
+		<dynamic> 
+			<isNotEmpty property="jsDjxh" prepend="and">
+				b.JS_DJXH=#jsDjxh#
+			</isNotEmpty>
+		  </dynamic>
+    </select>
+   
+    <select id="selectQyJsMcByJgbm" resultClass="com.cy.xtgl.domain.QyZzjgDomain" parameterClass="java.util.Map">
+    	select mc  from QY_ZZJG where jgbm=#jgbm#
+    </select>
+   
+</sqlMap>

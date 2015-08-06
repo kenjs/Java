@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.hygl.dao.BusHyhwxxshfsbgMapper">
+	<select id="selectHyHwxxShfsbgPage" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyHwxxShfsbgDomain">
+		SELECT A.SHBG_DJXH AS shbgDjxh,
+		       A.DD_DJXH AS ddDjxh,
+		       A.XH AS xh,
+		       A.SR_HJ AS srHj,
+		       A.SR_YJ AS srYj,
+		       A.SR_XF AS srXf,
+		       A.SR_HDF AS srHdf,
+		       A.SR_THF AS srThf,
+		       A.SR_HF AS srHf,
+		       A.SR_HK AS srHk,
+		       A.SR_BJF AS srBjf,
+		       A.SR_PSF AS srPsf,
+		       A.SR_YSF AS srYsf,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc
+		  FROM HY_HWXX_SHFSBG A 
+
+		  $orderStr$
+    </select>
+    
+    <select id="selectHyHwxxShfsbgAll" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyHwxxShfsbgDomain">
+		SELECT A.SHBG_DJXH AS shbgDjxh,
+		       A.DD_DJXH AS ddDjxh,
+		       A.XH AS xh,
+		       A.SR_HJ AS srHj,
+		       A.SR_YJ AS srYj,
+		       A.SR_XF AS srXf,
+		       A.SR_HDF AS srHdf,
+		       A.SR_THF AS srThf,
+		       A.SR_HF AS srHf,
+		       A.SR_HK AS srHk,
+		       A.SR_BJF AS srBjf,
+		       A.SR_PSF AS srPsf,
+		       A.SR_YSF AS srYsf,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc
+		  FROM HY_HWXX_SHFSBG A 
+
+		  ORDER by A.SHBG_DJXH ASC
+    </select>
+
+	<select id="getHyHwxxShfsbgRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.SHBG_DJXH) 
+		  FROM HY_HWXX_SHFSBG A 
+
+    </select>
+    <!-- 检查是否存在变更 -->
+    <select id="checkShfsbg" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		 select count(a.hwqs_djxh) 
+		 from hy_pc_hwqs a 
+		 where a.pc_djxh = #pcDjxh#  and a.yxbz = 'Y'
+    </select>
+    <!-- 检查是否还存在子表记录 -->
+   <select id="checkShfsbgZb" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		 select count(a.shbg_djxh) 
+		  from hy_hwxx_shfsbg_zb a 
+		 where a.dd_djxh = #ddDjxh#  and a.xh = #xh#
+    </select>
+</sqlMap>

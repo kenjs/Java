@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:flex="http://www.springframework.org/schema/flex"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context   
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+	http://www.springframework.org/schema/flex	http://www.springframework.org/schema/flex/spring-flex-1.0.xsd
+   http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
+
+
+ <!-- service start -->
+ <!-- 合同司机信息 service -->
+  <bean name="pactDriverInfoService" class="com.cy.dcts.pactDriverInfo.service.imp.PactDriverInfoServiceImp">
+   <property name="pactDriverInfoDao" ref="pactDriverInfoDao"></property>
+ </bean>
+ 
+ <!-- 司机对货源的点评 -->
+  <bean name="driverCargoAssessService" class="com.cy.dcts.driverCargoAssess.service.imp.DriverCargoAssessServiceImp">
+   <property name="driverCargoAssessDao" ref="driverCargoAssessDao"></property>
+ </bean>
+ <!-- 司机预约线路service -->
+ <bean name="driverCarLineService" class="com.cy.dcts.driverLine.service.imp.DriverCarLineServiceImp">
+   <property name="driverCarLineDao" ref="driverCarLineDao"></property>
+ </bean>
+ 
+ <!-- 保存货源service -->
+ <bean name="saveOrderCargoInfoService" class="com.cy.dcts.orderCargo.service.imp.SaveOrderCargoInfoServiceImp">
+   <property name="orderCargoInfoDao" ref="orderCargoInfoDao"></property>
+ </bean>
+ 
+ <!-- 查询货源service -->
+  <bean name="queryOrderCargoInfoService" class="com.cy.dcts.orderCargo.service.imp.QueryOrderCargoInfoServiceImp">
+   <property name="orderCargoInfoDao" ref="orderCargoInfoDao"></property>
+ </bean>
+ 
+ <!-- 货源历史记录service -->
+ <bean name="orderCargoLastService" class="com.cy.dcts.orderCargoLast.service.imp.OrderCargoLastServiceImp">
+   <property name="orderCargoLastDao" ref="orderCargoLastDao"></property>
+ </bean>
+ 
+ <!-- 车源service -->
+ <bean name="driverUserCarInfoService" class="com.cy.dcts.driverCar.service.imp.DriverUserCarInfoServiceImp">
+   <property name="driverUserCarInfoDao" ref="driverUserCarInfoDao"></property>
+ </bean>
+ 
+  <!-- 司机位置service -->
+ <bean name="locationInfoService" class="com.cy.dcts.location.service.imp.LocationInfoServiceImp">
+   <property name="locationInfoDao" ref="locationInfoDao"></property>
+ </bean>
+ 
+ <!-- 货主对司机的评价service -->
+ <bean name="userDriverAssessInfoService" class="com.cy.dcts.userDriverAssess.service.imp.UserDriverAssessInfoServiceImp">
+   <property name="userDriverAssessInfoDao" ref="userDriverAssessInfoDao"></property>
+ </bean>
+ 
+ <!-- 成交(订单)service -->
+ <bean name="transactionInfoService" class="com.cy.dcts.transaction.service.imp.TransactionInfoServiceImp">
+    <property name="transactionInfoDao" ref="transactionInfoDao"></property>
+   <property name="orderCargoInfoDao" ref="orderCargoInfoDao"></property>
+   <property name="webUserInfoDao" ref="webUserInfoDao"></property>
+ </bean>
+ 
+ <!-- 成交历史记录（订单历史记录）service -->
+  <bean name="transactionLastService" class="com.cy.dcts.transactionLast.service.imp.TransactionLastServiceImp">
+   <property name="transactionLastDao" ref="transactionLastDao"></property>
+ </bean>
+ 
+ <!-- 用户service -->
+ <bean name="queryWebUserInfoService" class="com.cy.dcts.webUser.service.imp.QueryWebUserInfoServiceImp">
+		<property name="webUserInfoDao" ref="webUserInfoDao"></property>
+ </bean>
+ 
+ <!-- 新增web用户 -->
+ <bean name="saveWebUserInfoService" class="com.cy.dcts.webUser.service.imp.SaveWebUserInfoServiceImp">
+		<property name="webUserInfoDao" ref="webUserInfoDao"></property>
+ </bean> 
+ 
+ <!-- 公司service -->
+ <bean name="companyService" class="com.cy.dcts.company.service.imp.CompanyServiceImp">
+		<property name="companyDao" ref="companyDao"></property>
+ </bean>
+ 
+ <!-- 短信service -->
+ <bean name="noteService" class="com.cy.dcts.note.service.imp.NoteServiceImp">
+		<property name="noteDao" ref="noteDao"></property>
+		<property name="sendNoteSDK" value="${dctms.download.sendNoteSDK}"></property>
+		<property name="sendNoteUSERID" value="${dctms.download.sendNoteUSERID}"></property>
+		<property name="sendNotePwdSDK" value="${dctms.download.sendNotePwdSDK}"></property>
+		<property name="sendNoteTERMID" value="${dctms.download.sendNoteTERMID}"></property>
+		<property name="sendNoteTIME" value="${dctms.download.sendNoteTIME}"></property>
+ </bean>
+ 
+ <!-- IP service -->
+ <bean name="ipUrlStrService" class="com.cy.dcts.ipUrlStr.service.imp.IpUrlStrServiceImp">
+		<property name="ipUrlStr" value="${dctms.download.ipUrlStr}"></property>
+ </bean>  
+ 
+ <!-- 个人中心账户管理  service-->
+ <bean name="accountManagementService" class="com.cy.dcts.webUser.service.imp.AccountManagementServiceImpl">
+ 		<property name="webUserInfoDao" ref="webUserInfoDao" />
+ 		<property name="companyDao" ref="companyDao"></property>
+ </bean>  
+ <!-- 个人中心修改密码 -->
+ <bean name="updatePwdService" class="com.cy.dcts.webUser.service.imp.UpdatePwdServiceImpl">
+ 	<property name="webUserInfoDao" ref="webUserInfoDao"></property>
+ </bean>
+ 
+ <!-- 个人中心评价管理 -->
+ <bean name="evaluationManagementService" class="com.cy.dcts.webUser.service.imp.EvaluationManagementServiceImpl">
+ 	<property name="userDriverAssessInfoLoadDao" ref="userDriverAssessInfoLoadDao"></property>
+ </bean>
+ 
+ <!-- 操作日志记录 -->
+ <bean name="operationLogService" class="com.cy.dcts.log.service.impl.OperationLogServiceImpl">
+ 	<property name="operationLogDao" ref="operationLogDao"/>
+ </bean>
+ 
+ <!-- 身份证信息验证 -->
+ <bean name="identityVerifyService" class="com.cy.dcts.identityVerify.service.impl.IdentityVerifyServiceImpl">
+ 	<property name="identityVerifyDao" ref="identityVerifyDao" />
+ 	<property name="authorizationFileName" value="${authorization.file.name}" />
+   	<property name="nciisServiceUrl" value="${nciis.service.url}" />
+   	<property name="nciisSbm" value="${nciis.sbm}" />
+ </bean>
+</beans>

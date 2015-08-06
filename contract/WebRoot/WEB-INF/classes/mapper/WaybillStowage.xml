@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<!--  -->
+<sqlMap >
+ <typeAlias type="tf56.contract.domain.WaybillStowage" alias="waybillStowage"/>
+ <resultMap id="waybillStowageFieldMap" class="waybillStowage">
+  <result column="waybillStowageId" property="waybillstowageid" jdbcType="VARCHAR" />   <!-- 配载单Id -->
+  <result column="driverName" property="drivername" jdbcType="VARCHAR" />   <!--  -->
+  <result column="carPlateNumber" property="carplatenumber" jdbcType="VARCHAR" />   <!--  -->
+  <result column="systemDispatchNumber" property="systemdispatchnumber" jdbcType="VARCHAR" />   <!--  -->
+  <result column="paperDispatchNumber" property="paperdispatchnumber" jdbcType="VARCHAR" />   <!--  -->
+  <result column="carType" property="cartype" jdbcType="VARCHAR" />   <!--  -->
+  <result column="driverMobile" property="drivermobile" jdbcType="VARCHAR" />   <!--  -->
+  <result column="dispatchDate" property="dispatchdate" jdbcType="VARCHAR" />   <!--  -->
+  <result column="inputMan" property="inputman" jdbcType="VARCHAR" />   <!-- 输入人 -->
+  <result column="inputDate" property="inputdate" jdbcType="VARCHAR" />   <!-- 输入日期 -->
+ </resultMap>
+
+ <!-- 新增记录 -->
+ <insert id="iBatisInsertWaybillStowage" parameterClass="waybillStowage">
+  insert into WaybillStowage(driverName,carPlateNumber,systemDispatchNumber,paperDispatchNumber,carType,driverMobile,dispatchDate,
+  carLoadDate,carBeginDate,carEndDate,status,fromPartyId,toPartyId,inputMan,inputDate)
+  values(#drivername:VARCHAR#,#carplatenumber:VARCHAR#,#systemdispatchnumber:VARCHAR#,#paperdispatchnumber:VARCHAR#,#cartype:VARCHAR#,
+  #drivermobile:VARCHAR#,#dispatchdate:VARCHAR#,#carloaddate:VARCHAR#,#carbegindate:VARCHAR#,#carenddate:VARCHAR#,#status:VARCHAR#,#frompartyid:VARCHAR#,
+  #topartyid:VARCHAR#,#inputman:VARCHAR#,#inputdate:VARCHAR#)
+  <selectKey resultClass="String" keyProperty="waybillstowageid">
+   select last_insert_id() as id
+  </selectKey>
+ </insert>
+
+ <!-- 新增记录 -->
+ <insert id="iBatisInsertWaybillStowageLog" parameterClass="tf56.contract.domain.WaybillStowageLog">
+  INSERT INTO WaybillStowageLog(waybillStowageId,systemDispatchNumber,status,trace,inputDate,inputMan)
+   values (#waybillstowageid:VARCHAR#,#systemdispatchnumber:VARCHAR#,#status:VARCHAR#,#trace:VARCHAR#,#inputdate:VARCHAR#,#inputman:VARCHAR#)
+  <selectKey resultClass="String" keyProperty="waybillstowagelogid">
+   select last_insert_id() as id
+  </selectKey>
+ </insert>
+ 	
+ <select id="iBatisSelectSystemdispatchnumberList" parameterClass="java.util.HashMap" resultClass="waybillStowage">
+  	SELECT * from WaybillStowage where systemDispatchNumber LIKE '%$systemdispatchnumber$%' order by waybillStowageId desc
+ </select>
+ 
+ <!-- 根据配载单号获取配载单id by yao.xia 2013-12-16 -->
+ <select id="iBatisSelectWaybillStowageIdList" parameterClass="java.util.HashMap" resultClass="java.lang.String">
+ 	select waybillStowageId from WaybillStowage where paperDispatchNumber like '%$paperdispatchnumber$%'
+ </select>
+ 
+ <!-- 根据配载单id查找配载单 -->
+ <select id="iBatisSelectWaybillStowageByKey" parameterClass="java.util.HashMap" resultClass="tf56.contract.domain.WaybillStowage">
+ 	select * from WaybillStowage where waybillStowageId=#waybillstowageid#
+ </select>
+
+<!-- 调度跟踪 -->
+<select id="iBatisSelectWaybillStowageList" parameterClass="java.util.HashMap" resultClass="tf56.contract.domain.WaybillStowage">
+	select ws.*,COUNT(A.waybillId) AS waybillnum ,SUM(A.factNum) AS factnum,SUM(A.factWeight) as factweight,SUM(A.factVolume) AS factvolume 
+	from WaybillStowage ws
+	left join(select w.*,SUM(g.factNum) AS factnum,SUM(g.factWeight) as factweight,SUM(g.factVolume) AS factvolume 
+	from Waybill w LEFT JOIN Goods g on w.waybillId=g.waybillId group by w.waybillId ) A 
+	on ws.waybillStowageId=A.waybillStowageId where ws.fromPartyId=#partyid#
+	<dynamic>
+		<isNotEmpty prepend="and" property="systemdispatchnumber">
+			ws.systemDispatchNumber like '%$systemdispatchnumber$%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="status">
+			ws.status=#status#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="fromdate">
+			ws.dispatchDate <![CDATA[>=]]> str_to_date(#fromdate#, '%Y-%m-%d %H:%i:%s')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="todate">
+			ws.dispatchDate <![CDATA[<=]]> str_to_date(#todate#, '%Y-%m-%d %H:%i:%s')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="carplatenumber">
+			ws.carPlateNumber like '%$carplatenumber$%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="drivermobile">
+			ws.driverMobile like '%$drivermobile$%' 
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="paperdispatchnumber">
+			ws.paperDispatchNumber like '%$paperdispatchnumber$%'
+		</isNotEmpty>
+	</dynamic>
+	GROUP BY ws.waybillStowageId 
+	ORDER BY ws.waybillStowageId DESC LIMIT $skipCount$,$pageSize$
+</select>
+
+<!-- 获取记录查询的条数 返回String -->
+<select id="iBatisSelectWaybillStowageListSize" parameterClass="java.util.HashMap" resultClass="java.lang.String">
+	select count(ws.waybillStowageId) from WaybillStowage ws where ws.fromPartyId=#partyid#
+	<dynamic>
+		<isNotEmpty prepend="and" property="systemdispatchnumber">
+			ws.systemDispatchNumber like '%$systemdispatchnumber$%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="status">
+			ws.status=#status#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="fromdate">
+			ws.dispatchDate <![CDATA[>=]]> str_to_date(#fromdate#, '%Y-%m-%d %H:%i:%s')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="todate">
+			ws.dispatchDate <![CDATA[<=]]> str_to_date(#todate#, '%Y-%m-%d %H:%i:%s')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="carplatenumber">
+			ws.carPlateNumber like '%$carplatenumber$%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="drivermobile">
+			ws.driverMobile like '%$drivermobile$%' 
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="paperdispatchnumber">
+			ws.paperDispatchNumber like '%$paperdispatchnumber$%'
+		</isNotEmpty>
+	</dynamic>
+</select>
+<!-- 装车确认,发车确认,到车确认 -->
+<update id="iBatisCarconfirm" parameterClass="java.util.HashMap">
+	UPDATE WaybillStowage SET status=#status#
+		<dynamic>
+			<isNotEmpty prepend="," property="carloaddate">
+				carLoadDate=#carloaddate#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="carenddate">
+				carEndDate=#carenddate#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="carbegindate">
+				carBeginDate=#carbegindate#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="inputman">
+				inputMan=#inputman#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="inputdate">
+				inputDate=#inputdate#
+			</isNotEmpty>
+		</dynamic>	
+	where waybillStowageId=
+		<dynamic>
+			<isNotEmpty property="waybillstowageid">
+				#waybillstowageid#
+			</isNotEmpty>
+			<isNotEmpty property="waybillid">
+				(select w.waybillStowageId from Waybill w where w.waybillId=#waybillid#)
+			</isNotEmpty>
+		</dynamic>
+</update>
+<!-- 删除调度单 -->
+<delete id="iBatisDeleteStowageById" parameterClass="java.util.HashMap">
+	delete from WaybillStowage where waybillStowageId=#waybillstowageid#
+</delete>
+<!-- 修改运单信息 -->
+<update id="iBatisUpdateWaybillInfor" parameterClass="java.util.HashMap">
+	UPDATE Waybill SET status=#waybillstatus#
+		<dynamic>
+			<isEqual property="action" compareValue="update">
+				<isNotEmpty prepend="," property="suredate">
+					sureDate=#suredate#
+				</isNotEmpty>
+				<isNotEmpty prepend="," property="sureman">
+					sureMan=#sureman#
+				</isNotEmpty>
+				<isNotEmpty prepend="," property="carenddate">
+					carEndDate=#carenddate#
+				</isNotEmpty>
+				<isNotEmpty prepend="," property="carbegindate">
+					carBeginDate=#carbegindate#
+				</isNotEmpty>
+			</isEqual>
+			<isEqual property="action" compareValue="delete" prepend=",">
+				sureDate=null,sureMan=null,carEndDate=null,carBeginDate=null
+			</isEqual>
+		</dynamic>	
+	where waybillStowageId=#waybillstowageid#
+		<isEqual prepend="and" property="waybillstatus" compareValue="已装车">
+			status not in ('已装车','已发车','已到车','已签收')
+		</isEqual>
+		<isEqual prepend="and" property="waybillstatus" compareValue="已发车">
+			status not in ('已发车','已到车','已签收')
+		</isEqual>
+		<isEqual prepend="and" property="waybillstatus" compareValue="已到车">
+			status not in ('已到车','已签收')
+		</isEqual>
+</update>
+<!-- 根据调度单id查找运单 -->
+<select id="iBatisSelectWaybillByWaybillStowageId" parameterClass="java.util.HashMap" resultClass="tf56.contract.domain.Waybill">
+	SELECT A.*,B.factnum,B.factweight,B.factvolume,B.packagename FROM Waybill A
+	LEFT JOIN (SELECT g.waybillId,g.packageName packagename,sum(g.factNum) factnum,sum(g.factWeight) factweight,sum(g.factVolume) factvolume 
+	FROM Goods g GROUP BY g.waybillId) B ON A.waybillId = B.waybillId
+    where A.waybillStowageId=#waybillstowageid#
+    order by A.waybillNumber desc
+</select>
+<!-- 根据调度单id查找调度单操作日志-->
+<select id="iBatisSelectWaybillStowageLogByWaybillStowageId" parameterClass="java.util.HashMap" resultClass="tf56.contract.domain.WaybillStowageLog"> 
+	select l.waybillStowageLogId,l.waybillStowageId,l.systemDispatchNumber,l.status,l.trace,
+	DATE_FORMAT(l.inputDate,"%Y-%m-%d %H:%i:%s") inputdate,l.inputMan from WaybillStowageLog l 
+	where l.waybillStowageId=#waybillstowageid# order by l.waybillStowageLogId desc
+</select>
+<!-- 根据运单id查找调度单-->
+<select id="iBatisSelectWaybillStowageByWaybillid" parameterClass="java.util.HashMap" resultClass="tf56.contract.domain.WaybillStowage"> 
+	select * from WaybillStowage where waybillStowageId=
+	(SELECT waybillStowageId from Waybill where waybillId=#waybillid#)
+</select>
+<!-- 根据调度单号，批量确认装车 by yao.xia 2013-12-16 -->
+<update id="iBatisLoadSureByStowageId"  parameterClass="java.util.HashMap">
+	update Waybill set sureDate=#suredate#,status='已装车' where waybillStowageId=#waybillStowageId#
+</update>
+
+<!-- 根据调度单号，批量发车确认 by yao.xia 2013-12-16 -->
+<update id="iBatisStartSureByStowageId" parameterClass="java.util.HashMap">
+	update Waybill set carBeginDate=#carbegindate#,status='已发车' where waybillStowageId=#waybillStowageId#
+</update>
+
+<!-- 根据调度单号，批量到车确认 by yao.xia 2013-12-16 -->
+<update id="iBatisArriveSureByStowageId" parameterClass="java.util.HashMap">
+	update Waybill set carEndDate=#carenddate#,status='已到车' where waybillStowageId=#waybillStowageId#
+</update>
+
+<!-- 删除调度单号 by yao.xia 2013-12-16 -->
+<update id="iBatisStowageCancelByStowageId" parameterClass="java.util.HashMap">
+	update Waybill set waybillStowageId='',status='已分派' where waybillStowageId=#waybillStowageId#
+</update>
+</sqlMap>

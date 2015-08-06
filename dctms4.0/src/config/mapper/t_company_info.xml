@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cy.dctms.entity.CompanyInfo">
+    
+    <!-- 根据公司名称查找公司ID -->
+	<select id="iBatisSelectIdByCompanyName" parameterType="java.lang.String"  resultType="java.lang.String">
+		SELECT t2.ID companyId FROM t_company_info t2 where t2.DELETED_FLAG = 0 and t2.COMPANY_NAME = #{companyName}
+	</select>
+	
+	<!-- 根据公司ID查找人员ID -->
+	<select id="iBatisSelectIdByCompanyId" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT t1.ID userId FROM t_web_user_info t1 where t1.DELETED_FLAG = 0 and t1.COMPANY_ID = #{companyId} 
+	</select>
+	
+	<insert id="insertCompanyInfo" parameterType="com.cy.dctms.entity.CompanyInfo" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_company_info(
+			COMPANY_NAME,DELETED_FLAG,USER_ORIGIN,CREATE_TIME,MODIFY_TIME
+		)VALUES(
+			#{companyName},
+			#{deletedFlag},
+			#{userOrigin},
+			sysdate(),
+			sysdate()
+		)
+	</insert>
+</mapper>

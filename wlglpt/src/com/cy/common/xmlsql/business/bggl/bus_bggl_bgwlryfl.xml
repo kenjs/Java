@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.bggl.dao.BusBgglBgwlryflMapper">
+	<select id="selectBgWlryFlPage" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgWlryFlDomain">
+		SELECT A.WLRY_FLXH AS wlryFlxh,
+		       A.JGBM AS jgbm,
+		       A.FLMC AS flmc,
+		       A.XJGXBZ AS xjgxbz,
+		       A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM BG_WLRY_FL A
+
+		WHERE A. JGBM=#jgbm#
+		<dynamic>
+       		<isNotEmpty prepend="and" property="flmc">
+       			A.FLMC LIKE #flmc#
+       		</isNotEmpty>
+       	</dynamic>
+			AND A.YXBZ='Y'
+
+		  $orderStr$
+    </select>
+    
+    <select id="selectBgWlryFlAll" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgWlryFlDomain">
+		SELECT A.WLRY_FLXH AS wlryFlxh,
+		       A.JGBM AS jgbm,
+		       A.FLMC AS flmc,
+		       A.XJGXBZ AS xjgxbz,
+		       A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM BG_WLRY_FL A
+		WHERE A. JGBM=#jgbm#
+		<dynamic>
+       		<isNotEmpty prepend="and" property="flmc">
+       			A.FLMC LIKE #flmc#
+       		</isNotEmpty>
+       	</dynamic>
+			AND A.YXBZ='Y'
+		  ORDER by A.WLRY_FLXH DESC
+    </select>
+
+	<select id="getBgWlryFlRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.WLRY_FLXH) 
+		  FROM BG_WLRY_FL A 
+		  WHERE A. JGBM=#jgbm#
+		<dynamic>
+       		<isNotEmpty prepend="and" property="flmc">
+       			A.FLMC LIKE #flmc#
+       		</isNotEmpty>
+       	</dynamic>
+			AND A.YXBZ='Y'
+    </select>
+</sqlMap>

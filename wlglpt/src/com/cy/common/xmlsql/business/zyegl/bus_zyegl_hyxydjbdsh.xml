@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.zyegl.dao.BusZyeglHyXydjbdshMapper">
+
+    <parameterMap class="java.util.Map" id="xydjbdshParMap">
+		<parameter property="czyDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="shbz" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="rqQ" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="rqZ" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="dataList" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" resultMap="xydjbdshResMap"/>
+	</parameterMap>
+	
+	<resultMap class="com.cy.zyegl.domain.HyXydjbdshDomain" id="xydjbdshResMap">
+		<result property="xh" column="XH"/>
+		<result property="wsspxh" column="WS_SPXH"/>
+		<result property="spxh" column="SPXH"/>
+		<result property="jdxh" column="JDXH"/>
+		<result property="fsthbz" column="FSTHBZ"/>
+		<result property="fsrmc" column="FSR_MC"/>
+		<result property="fsrq" column="FSRQ"/>
+		<result property="spjzsj" column="SPJZSJ"/>
+		<result property="cqbz" column="CQBZ"/>
+		<result property="sprmc" column="SPR_MC"/>
+		<result property="sprq" column="SPRQ"/>
+		<result property="spjg" column="SPJG"/>
+		<result property="pcdh" column="PCDH"/>
+		<result property="pcrq" column="PCRQ"/>
+		<result property="pcfsDm" column="PCFS_DM"/>
+		<result property="pcfsmc" column="PCFS_MC"/>
+		<result property="zcfsDm" column="ZCFS_DM"/>
+		<result property="zcfsmc" column="ZCFS_MC"/>
+		<result property="clhm" column="CYR_CLHM"/>
+		<result property="gchm" column="CYR_GCHM"/>
+		<result property="sjxm" column="CYR_SJXM"/>
+		<result property="yfhj" column="YF_HJ"/>
+		<result property="xyYfhj" column="XY_YF_HJ"/>
+		<result property="pcrmc" column="PCR_MC"/>
+		<result property="pcjgbm" column="PC_JGBM"/>
+		<result property="pcbmmc" column="PC_JGMC"/>
+		<result property="ssjgbm" column="SS_JGBM"/>
+		<result property="ssjgmc" column="SS_JGMC"/>
+		<result property="zrbmDm" column="ZRBM_DM"/>
+		<result property="zrbmmc" column="ZRBM_MC"/>
+		<result property="sfd" column="FHR_XZQH_MC"/>
+		<result property="mdd" column="SHR_XZQH_MC"/>
+		<result property="hwmc" column="HWMC"/>
+		<result property="bz" column="BZ"/>
+		<result property="sl" column="SL"/>
+		<result property="zl" column="ZL"/>
+		<result property="tj" column="TJ"/>
+		<result property="jssl" column="JS_SL"/>
+		<result property="xyJssl" column="XY_JS_SL"/>
+		<result property="fhrmc" column="FHR_MC"/>
+		<result property="fhrdz" column="FHR_DZ"/>
+		<result property="yqfhrq" column="YQ_FHRQ"/>
+		<result property="shrmc" column="SHR_MC"/>
+		<result property="shrdz" column="SHR_DZ"/>
+		<result property="yqddrq" column="YQ_DDRQ"/>
+		<result property="ddbh" column="DDBH"/>
+		<result property="ddDjxh" column="DD_DJXH"/>
+	</resultMap>
+	
+	<procedure id="queryHyXydjbdshList" parameterMap="xydjbdshParMap" resultMap="xydjbdshResMap">
+		{call P_HYGL_ZYGL_XYDJBDSH_CX(?,?,?,?,?)}
+	</procedure>
+    
+  
+</sqlMap>

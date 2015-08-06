@@ -1,0 +1,300 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="pragma" content="no-cache"/>
+    <meta http-equiv="Cache-Control" content="no-cache,must-revalidate"/>
+    <title>传化物流-会员中心</title>
+    <link type="text/css" rel="stylesheet" href="../css/reg/passport.base.css"/>
+    <link type="text/css" rel="stylesheet" href="../css/reg/regist.personal.css"/>
+	<link href="../js/sys/ymPrompt/skin/ch/ymPrompt.css" rel="stylesheet" />
+	<script src="../js/jquery/jquery-1.8.3.min.js" type=text/javascript>		</script>
+	<script src="../js/themes/trade/html5.js" type=text/javascript></script>
+	<script src="../js/themes/trade/jquery.validate.js" type=text/javascript></script>
+	<script src="../js/themes/trade/jquery.validate.ext.js" type=text/javascript></script>
+	<script src="../js/themes/trade/messages_cn.js" type=text/javascript></script>
+	<script src="../js/sys/ymPrompt/ymPrompt.js" type=text/javascript></script>
+	<script src="../js/sys/sys.js"></script>  
+	
+	<link href="../css/webui/main.css" rel="stylesheet" />	
+    <script src="../js/sys/webui/header.js"></script>    	
+    <script src="../js/sys/webui/logo.js"></script>   	 
+    <script src="../js/sys/webui/left.js"></script>
+	<link href="../css/webui/hgrid.css" rel="stylesheet" />
+    <script type="text/javascript" src="../js/sys/DatePicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="../js/sys/webui/hgrid.js"></script>
+	<style>
+		#right {
+			font-family:inherit;
+		    font-family:"宋体",Arial,sans-serif;
+		    font-size: 12px;
+		}
+		#main{width:998px;border:0px solid black;padding:0px;margin:0 auto;}
+	</style>
+	
+  	  
+    <script type="text/javascript">
+    var params;
+    $(document).ready(function(){
+    
+     });
+    </script>
+</head>
+ 
+<body>
+   				
+<!-- 顶部 --开始  此处须由js动态加入-->
+	<div id="header" class="c-header" >
+	
+	</div>
+	<!-- 顶部 --结束-->
+	
+	<!-- LOGON --开始   此处须由js动态加入-->
+	<div id="logo" class="c-logo" >
+		
+	</div>
+	<!-- LOGON --结束-->
+	
+	<!-- 工作区 --开始-->
+	<div id="main">
+		<!-- 左侧菜单 --开始  此处须由js动态加入-->
+  		<div id="left" class="c-left"> 
+		</div>
+		<div stye="clear:both;"></div>
+		<!-- 左侧菜单 --结束-->
+			
+		<!-- 右侧工作区 --开始-->
+  		<div id="right" class="c-right" style="margin-left:inherit;margin-top:inherit;" >
+
+			<div class="w" id="regist">
+				<div class="mt" style="height: 50px;">
+				    <h2 style="width: 800px;border-bottom: 1px solid #dddddd;margin-top: 15px;margin-left: 25px;">添加子操作员</h2>
+				    
+				</div>
+				<div class="mc" style="border: 0px solid red;">
+				 
+				 
+				<form  id="formpersonal" method="post" onsubmit="return false;" >
+				    <div class="form" style="border: 0px solid red;">
+				       <div class="item" style="border: 0px solid blue;">
+				            <span class="label"><b class="ftx04">*</b>子账号名：<span id="pername" style="background-color: #f5f5f5;">x</span></span>
+				            
+				            <div class="fl" style="border: 0px solid blue;">            
+				                <input type="text" id="username" name="username" class="text" tabindex="1" autocomplete="off" />
+				                <label id="username_succeed" class="blank"style="border: 0px solid red;"></label>
+				                <span class="clr"></span>
+				                <div id="username_error"></div>
+				            </div>
+				        </div>
+				        <div class="item">
+				            <span class="label">姓名：</span>
+				 
+				            <div class="fl">
+				                <input type="text" id="realname" name="realname" class="text" tabindex="1" autocomplete="off"/>
+				                <label id="realname_succeed" class="blank"></label>
+				                <span class="clr"></span>
+				 
+				                <div id="realname_error"></div>
+				            </div>
+				        </div>
+				        <div class="item">
+				            <span class="label">手机：</span>
+				 
+				            <div class="fl">
+				                <input type="text" id="mobileInfo" name="mobileInfo" class="text" tabindex="1"
+				                       style="ime-mode:disabled" autocomplete="off"/>
+				                <label id="mobileInfo_succeed" class="blank"></label>
+				                <span class="clr"></span>
+				 
+				                <div id="mobileInfo_error"></div>
+				            </div>
+				        </div>
+				        <div class="item">
+				            <span class="label">电话号码：</span>
+				 
+				            <div class="fl">
+				                <input type="text" id="tel" name="tel" class="text" tabindex="1"
+				                       style="ime-mode:disabled" autocomplete="off"/>
+				                <label id="tel_succeed" class="blank"></label>
+				                <span class="clr"></span>
+				 
+				                <div id="tel_error"></div>
+				            </div>
+				        </div>
+				        <div id="o-password">
+				            <div class="item">
+				                <span class="label"><b class="ftx04">*</b>设置密码：</span>
+				 
+				                <div class="fl">
+				                    <input type="password" id="pwd" name="pwd" class="text" tabindex="2" style="ime-mode:disabled;"/>
+				                    <label id="pwd_succeed" class="blank"></label>
+				                    <span class="clr"></span>
+				                    <label class="hide" id="pwdstrength"><span class="fl">安全程度：</span><b></b></label>
+				                    <label id="pwd_error"></label>
+				                </div>
+				            </div>
+				            <div class="item">
+				                <span class="label"><b class="ftx04">*</b>确认密码：</span>
+				 
+				                <div class="fl">
+				                    <input type="password" id="pwd2" name="pwd2" class="text" tabindex="3"/>
+				                    <label id="pwd2_succeed" class="blank"></label>
+				                    <span class="clr"></span>
+				                    <label id="pwd2_error"></label>
+				                </div>
+				            </div>
+				        </div>
+				       
+				    </div>
+				     <div class="item1" style="border: 0px solid red;height: 80px;">
+				            <!--<span class="label">&nbsp;</span>
+				            <input type="button"  class="btn-img btn-regist" id="submitregist1"  value="提   交" tabindex="8" />
+				            <input type="button" class="btn-img btn-regist" id="submitback"  value="返   回" tabindex="8""/>
+				        -->
+				         <div style="background: url('../imgs/login/btn/big2_buttom.jpg') no-repeat;height: 36px;width: 75px;border: 1px solid #ffffff; cursor:pointer;margin-left: 300px;" id="submitregist1" name="submitregist1">
+				              <div style="color:#ffffff;font-size:14px;font-weight:bold; margin-left: 22px; border: 0px solid blue;margin-top: 9px;" >提   交</div>
+				         </div>
+				         <div style="background: url('../imgs/login/btn/big2_buttom.jpg') no-repeat;height: 36px;width: 75px;border: 1px solid #ffffff; cursor:pointer;margin-left: 380px;margin-top:-38px;" id="submitback">
+				              <div style="color:#ffffff;font-size:14px;font-weight:bold; margin-left: 22px; border: 0px solid blue;margin-top: 9px;" >返   回</div>
+				         </div>
+				        
+				        </div>
+				</form>
+				</div>
+				
+				</div>	
+  		</div>
+  		<script type="text/javascript" src="../js/themes/operatorc/jdValidate.js?t=2012052101"></script>
+<script type="text/javascript" src="../js/themes/operatorc/jdValidate.personal.js?t=2012052101"></script>
+<!--<script type="text/javascript" src="../js/themes/regc/jdValidate.emReg.js?t=2012052101"></script>
+--><script type="text/javascript" src="../js/themes/operatorc/jdValidate.emailRegCompany.js"></script>
+   <script>
+  javascript:window.history.forward(1);
+    $(document).ready(function() {
+   
+     $.ajax({
+			   type : "post",
+			   url : "../operatorcs/addPartyName?random="+Math.random(),
+			   dataType: "json",
+			   error : function(){alert("操作失败")},
+			   success : function(data) {
+			       parname=data.msg;
+			   		$("#pername").text(data.msg+"/");
+			   }
+	  		});
+    
+    $("#submitback").click(function(){
+     // window.parent.location.reload();
+	 // window.top.document.getElementById("right-iframe").src="../operatorcs/list?random="+ Math.random();
+	  window.location="../operatorcs/index_list_contract?random="+ Math.random();
+      
+      })
+ //添加子操作员
+      $("#submitregist1").click(function() {
+    
+    /* alert($("#permission").attr("checked")+"xxss");
+     alert($("#permission").attr("value","aaaa"));
+     alert($("#permission").val());*/
+     //判断是否选择客户端权限
+     if($("#permission").attr("checked")){
+      $("#permission").attr("value","移动客户端登录权限")
+     }else{
+      $("#permission").attr("value","")
+     }
+      var username=$("#username").val();
+    $(this).attr({ "disabled": "disabled" }).attr({ "value": "提 交" });
+    
+    var flag = validateFunction.FORM_validate(); //验证
+    //alert("flag="+flag);  
+    if (flag) {
+    var parname1="username="+$("#username").val()+"&realname="+$("#realname").val()+"&mobileInfo="+$("#mobileInfo").val()+"&tel="+$("#tel").val()+"&pwd="+$("#pwd").val()+"&pwd2="+$("#pwd2").val()+"&securitypermission="+$("#permission").val()+"&random="+Math.random();
+   
+        $.ajax({
+            type: "POST",
+            url: "save.json",
+          //  contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            data: parname1,//$("#formpersonal").serialize(),
+            dataType: "json", 
+            success: function(data) {
+	        	if (data.msg =='ok') {
+                  
+					alert("保存成功!你的登陆名为："+parname+"/"+username);
+					
+					// window.top.document.getElementById("right-iframe").src="../operatorcs/list?random="+ Math.random();
+					window.location="../operatorcs/index_list_contract?random="+ Math.random();
+                } else {
+                	//alert("验证码错误")
+                	$("#submitregist").attr({ "disabled":"disabled" }).attr({ "value":"提 交" });
+                }
+	       }
+        });
+    } else {
+        $("#submitregist").removeAttr("disabled");
+        $("#submitregist").attr({ "value": "提 交" });
+    }
+});
+    
+    
+    });
+   
+   
+   
+ </script> 
+  		<!-- 右侧工作区 --开始-->
+	</div>
+	<!-- 工作区 --结束-->
+	
+	<!-- 底部 --开始  此处须由js动态加入-->
+	<div id="footer" class="c-footer">
+		
+	</div>
+	<!-- 底部 --结束-->
+			
+
+			
+	
+	
+	
+	 
+  <script type="text/javascript"> 
+  javascript:window.history.forward(1);	
+    (function($) {
+    	
+    	var arr=new Array('00','01');
+    	$.ajax({
+    		url:"../logincs/getInit?random="+Math.random(),
+    		dataType:"json",
+    		contentType: "application/json",
+	      	type:'get',
+	      	//timeout:1000,  
+	      	//data:params, //后台不能接收 
+	      	success:function(data){
+	      		var partytype=data.partytype;
+	      		if(partytype==null||partytype==''){
+	      			$("td[id='1']").attr('url','../personcs/edit?partytype=');
+	      		}else if(partytype=='个人'){
+	      			$("td[id='1']").attr('url','../personcs/edit?partytype=per');
+	      		}else{
+	      			$("td[id='1']").attr('url','../organizationcs/edit?partytype=org');
+	      		} 
+	      		$("#username").html("<a title="+data.username_all+" style='cursor:pointer;color:#6A6AFF;' size=2>"+data.username_part+"&nbsp;</a>,");
+				$("#logout").html("<a href=\"javascript:logout()\">[退出]</a>");
+	      	}, 
+	      	error:function(XMLHttpRequest, textStatus, errorThrown) {
+               //alert(XMLHttpRequest.status);
+              // alert(XMLHttpRequest.readyState);
+               //alert(textStatus); 
+	   		}
+    	});
+        
+    })(jQuery);
+        
+    
+    
+	</script>
+</body>
+</html>
+ 
+ 
+

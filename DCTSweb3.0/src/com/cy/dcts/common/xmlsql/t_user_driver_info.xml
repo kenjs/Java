@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+<typeAlias alias="UserDriverInfo" type="com.cy.dcts.common.bo.UserDriverInfo"/><!-- 司机车辆收藏表 -->
+<resultMap class="UserDriverInfo" id="user_driver_info_result">
+<result property="id" column="ID"/>
+<result property="userId" column="USER_ID"/>
+<result property="driverId" column="DRIVER_ID"/>
+<result property="start" column="START"/>
+<result property="createTime" column="CREATE_TIME"/>
+<result property="modifyTime" column="MODIFY_TIME"/>
+</resultMap>
+
+<select id="query_user_driver_info_byDriverID" parameterClass="Map" resultMap="user_driver_info_result">
+   SELECT id,
+        user_id,
+		driver_id,
+		start,
+		create_time,
+		modify_time 
+ FROM t_user_driver_info 
+ WHERE user_id = #userId# AND  driver_id = #driverId#
+</select>
+
+<insert id="insert_user_driver_info" parameterClass="Map">
+	 INSERT INTO t_user_driver_info (
+		user_id,
+		driver_id,
+		start,
+		create_time,
+		modify_time) 
+	 VALUES(
+		#userId#,
+		#driverId#,
+		#start#,
+		sysdate(),
+		sysdate())
+	<selectKey resultClass="String" keyProperty="id">
+	   SELECT last_insert_id() as id
+	</selectKey>
+</insert>
+
+</sqlMap>

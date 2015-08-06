@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.hygl.dao.BusQywlssyyMapper">
+	<select id="selectQyWlssyyPage" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.WlSsYyDomain">
+		SELECT A.WH_XH AS whXh,
+		       A.SS_JGBM AS ssJgbm,
+		       (select jc from qy_zzjg where jgbm=A.SS_JGBM) as ssJgbmMc,
+		       A.WLSSYY AS ssyy,
+		       A.SM AS sm,
+		       A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM QY_WLSSYY A 
+		  WHERE A.YXBZ='Y'
+		  AND A.SS_JGBM=#ssJgbm# 
+		  <dynamic>
+		  		<isNotEmpty prepend="and" property="ssyy">
+		  			A.WLSSYY like #ssyy#
+		  		</isNotEmpty>
+		  </dynamic>
+		  $orderStr$
+    </select>
+    
+    <select id="selectQyWlssyyAll" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.WlSsYyDomain">
+		SELECT A.WH_XH AS whXh,
+		       A.SS_JGBM AS ssJgbm,
+		       (select jc from qy_zzjg where jgbm=A.SS_JGBM) as ssJgbmMc,
+		       A.WLSSYY AS ssyy,
+		       A.SM AS sm,
+		       A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM QY_WLSSYY A 
+		  WHERE A.YXBZ='Y'
+		  AND A.SS_JGBM=#ssJgbm# 
+		   <dynamic>
+		  		<isNotEmpty prepend="and" property="ssyy">
+		  			A.WLSSYY like #ssyy#
+		  		</isNotEmpty>
+		  </dynamic>
+		  ORDER by A.WH_XH ASC
+    </select>
+
+	<select id="getQyWlssyyRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.WH_XH) 
+		  FROM QY_WLSSYY A 
+		  WHERE A.YXBZ='Y' 
+		  AND A.SS_JGBM=#ssJgbm# 
+			  <dynamic>
+		  		<isNotEmpty prepend="and" property="ssyy">
+		  			A.WLSSYY like #ssyy#
+		  		</isNotEmpty>
+		 	 </dynamic>
+    </select>
+</sqlMap>

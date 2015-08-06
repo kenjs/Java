@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="EntryPointsManager">
+    <entry_points version="2.0" />
+  </component>
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/DctmsTimerTask/WEB-INF/classes/artifacts/DctmsTimerTask_war_exploded/WEB-INF/classes/artifacts/DctmsTimerTask_war_exploded/WEB-INF/classes/DctmsTimerTask/WEB-INF/web.xml" />
+    <file type="web" url="file://$PROJECT_DIR$/DctmsTimerTask/WEB-INF/classes/artifacts/DctmsTimerTask_war_exploded/WEB-INF/classes/artifacts/DctmsTimerTask_war_exploded/WEB-INF/web.xml" />
+    <file type="web" url="file://$PROJECT_DIR$/DctmsTimerTask/WEB-INF/classes/artifacts/DctmsTimerTask_war_exploded/WEB-INF/classes/DctmsTimerTask/WEB-INF/web.xml" />
+    <file type="web" url="file://$PROJECT_DIR$/DctmsTimerTask/WEB-INF/classes/artifacts/DctmsTimerTask_war_exploded/WEB-INF/web.xml" />
+    <file type="web" url="file://$PROJECT_DIR$/DctmsTimerTask/WEB-INF/classes/DctmsTimerTask/WEB-INF/web.xml" />
+  </component>
+  <component name="IdProvider" IDEtalkID="E47620E9B915570F2F933527422F9C87" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="1.7" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/DctmsTimerTask/WEB-INF/classes" />
+  </component>
+  <component name="SvnBranchConfigurationManager">
+    <option name="mySupportsUserInfoFilter" value="true" />
+  </component>
+</project>
+

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.dzgl.dao.BusQyspwsxmflMapper">
+	<select id="selectQySpwsXmflPage" parameterClass="java.util.Map"
+		resultClass="com.cy.dzgl.domain.QySpwsXmflDomain">
+		SELECT A.XMFL_DJXH AS xmflDjxh,
+		       A.JGBM AS jgbm,
+		       A.WS_DM AS wsDm,
+		       A.XMFLMC AS xmflmc,
+		       A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc,
+		       B.WS_MC AS wsMc
+		  FROM QY_SPWS_XMFL A,DM_WS B
+		  WHERE A.YXBZ='Y' and A.WS_DM=B.WS_DM and A.JGBM=#jgbm#
+		  <dynamic>
+		  		<isNotEmpty prepend="and" property="wsDm">
+		  			A.WS_DM=#wsDm#
+		  		</isNotEmpty>
+		  </dynamic>
+
+		  $orderStr$
+    </select>
+    
+    <select id="selectQySpwsXmflAll" parameterClass="java.util.Map"
+		resultClass="com.cy.dzgl.domain.QySpwsXmflDomain">
+		SELECT A.XMFL_DJXH AS xmflDjxh,
+		       A.JGBM AS jgbm,
+		       A.WS_DM AS wsDm,
+		       A.XMFLMC AS xmflmc,
+		       A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc,
+		       B.WS_MC AS wsMc
+		  FROM QY_SPWS_XMFL A,DM_WS B
+		  WHERE A.YXBZ='Y' and A.WS_DM=B.WS_DM and A.JGBM=#jgbm#
+		  <dynamic>
+		  		<isNotEmpty prepend="and" property="wsDm">
+		  			A.WS_DM=#wsDm#
+		  		</isNotEmpty>
+		  </dynamic>
+		   ORDER by A.XMFL_DJXH ASC
+    </select>
+
+	<select id="getQySpwsXmflRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.XMFL_DJXH) 
+		  FROM QY_SPWS_XMFL A,DM_WS B 
+		  WHERE A.YXBZ='Y' and A.WS_DM=B.WS_DM and A.JGBM=#jgbm#
+		  <dynamic>
+		  		<isNotEmpty prepend="and" property="wsDm">
+		  			A.WS_DM=#wsDm#
+		  		</isNotEmpty>
+		  </dynamic>
+	</select>
+	
+	
+    <select id="checkQySpwsflMc" parameterClass="com.cy.common.bo.QySpwsXmfl"
+    resultClass="java.lang.Integer">
+    		select count(*) from QY_SPWS_XMFL 
+    			where JGBM=#jgbm# and trim(WS_DM)=#wsDm#
+    		 		and XMFLMC=#xmflmc# and yxbz='Y'
+    		  <dynamic>
+    		  	  <isNotEmpty prepend="and" property="xmflDjxh">
+    		      	   <![CDATA[   XMFL_DJXH<>#xmflDjxh# ]]>
+    		      </isNotEmpty>
+    		  </dynamic> 
+     </select>
+</sqlMap>

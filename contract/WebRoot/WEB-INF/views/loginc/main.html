@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">  
+<META HTTP-EQUIV="Pragma"CONTENT="no-cache">
+<META HTTP-EQUIV="Cache-Control"CONTENT="no-cache">
+<META HTTP-EQUIV="Expires"CONTENT="0">
+<title></title>
+<link href="../css/kendo/examples-offline.css" rel="stylesheet">
+<link href="../css/kendo/kendo.common.min.css" rel="stylesheet">
+<link href="../css/kendo/kendo.default.min.css" rel="stylesheet">     
+<script src="../js/kendo/jquery.min.js"></script>
+<script src="../js/kendo/kendo.web.min.js"></script>
+<script src="../js/kendo/console.js"></script>
+<script src="../js/sys/sys.js"></script>
+<style>
+html,body{margin:0px auto;border:0px;text-align:center;background-color:#ffffff;}
+#top{width:1000px;margin:0px auto;border:0px;padding:0px;text-align:center;}
+#aid{width:1000px;margin:0px auto;border:0px;padding:0px;text-align:center;}
+#banner-menu{width:1000px;height:60px;margin:0px auto;border:0px;padding:0px;text-align:center;}
+#main{width:1000px;border-style:solid;border-width:0px;border-color:#BEBEBE;margin:0px auto;text-align:center;}
+#left{width:150px;height:1500px;border-style:solid;border-top-width:0px;border-right-width:0px;border-bottom-width:1px;border-left-width:1px;border-color:#BEBEBE;margin:0px auto;float:left;background-color:#ffffff;}
+#right{width:835px;border-style:solid;border-width:1px;border-color:#BEBEBE;margin:0px auto;float:left;}
+/*top*/
+#top.c-ul{position:absolute;width:1000px;height:30px;margin:0px auto;padding:0px;verflow:hidden;}
+#top.c-ul li{width:100px;height:30px;text-align:center;display:inline;padding:0;float:left;}
+/*banner-menu*/
+#banner-menu.c-ul{height:60px;margin:0px auto;padding:0px;verflow:hidden;background-color:red;}
+#banner-menu.c-ul li{text-align:center;display:inline;padding:0;width:100px;height:60px;white-space:nowrap;}
+.c-right-frame{width:835px;height:1500px;}
+</style>
+<script>
+function getuserinfo(){
+	var url= document.URL;
+	var num=url.indexOf("?") 
+	username=url.substr(num+1);//alert(username);
+	return username;
+}
+</script>
+</head>
+<body>
+	<div id="top" class="k-content">
+		<ul id="menu" class="c-ul">
+	    	<li style="width:300px;">
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				
+	        </li>
+	    	<li id="login">
+				登 录
+	        </li>
+	        <li style="width:300px;">
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	        </li>	
+	        <li>
+	            	我是货主
+	            <ul>
+	                <li>我的货盘
+	                    <ul>
+	                        <li>Leisure Trainers</li>
+	                        <li>Running Shoes</li>
+	                        <li>Outdoor Footwear</li>
+	                        <li>Sandals/Flip Flops</li>
+	                        <li>Footwear Accessories</li>
+	                    </ul>
+	                </li>
+	                <li>Leisure Clothing
+	                    <ul>
+	                        <li>T-Shirts</li>
+	                        <li>Hoodies & Sweatshirts</li>
+	                        <li>Jackets</li>
+	                        <li>Pants</li>
+	                        <li>Shorts</li>
+	                    </ul>
+	                </li>
+	                <li>Sports Clothing
+	                    <ul>
+	                        <li>Football</li>
+	                        <li>Basketball</li>
+	                        <li>Golf</li>
+	                        <li>Tennis</li>
+	                        <li>Swimwear</li>
+	                    </ul>
+	                </li>
+	                <li>Accessories
+	                </li>
+	            </ul>
+	        </li>
+	        <li>
+	            	我是承运商
+	            <ul>
+	                <li>Footwear
+	                    <ul>
+	                        <li>Leisure Trainers</li>
+	                        <li>Running Shoes</li>
+	                        <li>Outdoor Footwear</li>
+	                        <li>Sandals/Flip Flops</li>
+	                        <li>Footwear Accessories</li>
+	
+	                    </ul>
+	                </li>
+	                <li>Leisure Clothing
+	                    <ul>
+	                        <li>T-Shirts</li>
+	                        <li>Jackets</li>
+	                    </ul>
+	                </li>
+	                <li>Sports Clothing
+	                    <ul>
+	                        <li>Basketball</li>
+	                        <li>Golf</li>
+	                        <li>Tennis</li>
+	                        <li>Swimwear</li>
+	                    </ul>
+	                </li>
+	                <li>Accessories
+	                </li>
+	            </ul>
+	        </li>
+	        <li>
+	            	我要团购
+	            <ul>
+	                <li>Footwear
+	                    <ul>
+	                        <li>Leisure Trainers</li>
+	                        <li>Running Shoes</li>
+	                        <li>Outdoor Footwear</li>
+	                        <li>Sandals/Flip Flops</li>
+	                        <li>Footwear Accessories</li>
+	                    </ul>
+	                </li>
+	                <li>Leisure Clothing
+	                    <ul>
+	                        <li>T-Shirts</li>
+	                        <li>Hoodies & Sweatshirts</li>
+	                        <li>Jackets</li>
+	                        <li>Pants</li>
+	                        <li>Shorts</li>
+	                    </ul>
+	                </li>
+	                <li>Sports Clothing
+	                    <ul>
+	                        <li>Football</li>
+	                        <li>Basketball</li>
+	                        <li>Rugby</li>
+	                        <li>Tennis</li>
+	                        <li>Swimwear</li>
+	                    </ul>
+	                </li>
+	                <li>Accessories
+	                </li>
+	            </ul>
+	        </li>
+	        <li>
+	            	待定中。。。
+	            <ul>
+	                <li>Footwear
+	                    <ul>
+	                        <li>Leisure Trainers</li>
+	                        <li>Running Shoes</li>
+	                        <li>Fitness Trainers</li>
+	                        <li>Sandals/Flip Flops</li>
+	                        <li>Footwear Accessories</li>
+	                    </ul>
+	                </li>
+	                <li>Leisure Clothing
+	                    <ul>
+	                        <li>T-Shirts</li>
+	                        <li>Hoodies & Sweatshirts</li>
+	                        <li>Jackets</li>
+	                        <li>Pants</li>
+	                        <li>Shorts</li>
+	                    </ul>
+	                </li>
+	                <li>Sports Clothing
+	                    <ul>
+	                        <li>Basketball</li>
+	                        <li>Tennis</li>
+	                        <li>Swimwear</li>
+	                    </ul>
+	                </li>
+	                <li>Accessories
+	                </li>
+	            </ul>
+	        </li>
+	        <li>
+	          	 待定中。。。
+	            <ul>
+	                <li>Mens</li>
+	                <li>Womens</li>
+	                <li>Juniors</li>
+	                <li>Childrens</li>
+	            </ul>
+	        </li>
+	    </ul>
+	</div>
+	<div id="aid">&nbsp;</div>
+	<div id="banner-menu" class="k-content">
+		<ul id="u-banner-menu" class="c-ul">
+	        <li>
+	            	我是承运商
+	        </li>
+	        <li>
+	            	我要团购
+	            <ul>
+	                <li>Footwear
+	                    <ul>
+	                        <li>Leisure Trainers</li>
+	                        <li>Running Shoes</li>
+	                        <li>Outdoor Footwear</li>
+	                        <li>Sandals/Flip Flops</li>
+	                        <li>Footwear Accessories</li>
+	                    </ul>
+	                </li>
+	                <li>Leisure Clothing
+	                    <ul>
+	                        <li>T-Shirts</li>
+	                        <li>Hoodies & Sweatshirts</li>
+	                        <li>Jackets</li>
+	                        <li>Pants</li>
+	                        <li>Shorts</li>
+	                    </ul>
+	                </li>
+	                <li>Sports Clothing
+	                    <ul>
+	                        <li>Football</li>
+	                        <li>Basketball</li>
+	                        <li>Rugby</li>
+	                        <li>Tennis</li>
+	                        <li>Swimwear</li>
+	                    </ul>
+	                </li>
+	                <li>Accessories
+	                </li>
+	            </ul>
+	        </li>
+	        <li>
+	            	待定中。。。
+	            <ul>
+	                <li>Footwear
+	                    <ul>
+	                        <li>Leisure Trainers</li>
+	                        <li>Running Shoes</li>
+	                        <li>Fitness Trainers</li>
+	                        <li>Sandals/Flip Flops</li>
+	                        <li>Footwear Accessories</li>
+	                    </ul>
+	                </li>
+	                <li>Sports Clothing
+	                    <ul>
+	                        <li>Basketball</li>
+	                        <li>Tennis</li>
+	                        <li>Swimwear</li>
+	                    </ul>
+	                </li>
+	                <li>
+	                Accessories
+	                </li>
+	            </ul>
+	        </li>
+	    </ul>
+	</div>
+	<div id="main" class="c-main">
+		<div id="left" class="k-content">
+            <div class="k-rtl">
+                <ul id="panelbar">
+                    <li class="k-state-active">
+                        	我的货盘
+                        <ul>
+                            <li id="1" ot="0" url="../bizginfocs/list_spub">已发布货盘</li>
+                            <li id="2" ot="0" url="../bizginfocs/list_sremove">已撤下货盘</li>
+                            <li id="3" ot="0" url="../bizginfocs/list_sfinish">已成交货盘</li>
+                            <li id="4" ot="0" url="../bizginfocs/list">历史数据</li>
+                        </ul>
+                    </li>
+                    <li class="k-state-active">
+                        	帐号管理
+                        <ul>
+                            <li id="5" ot="1" url="../partyrolecs/edit">密码修改</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <script>
+            javascript:window.history.forward(1);
+                 $(document).ready(function() {//alert($(window).width()); 
+                 	$("li").each(function(){//注册事件
+						var id=$(this).attr("id");
+						$("#"+id).bind("click",function(){
+							if($(this).attr("ot")=='0'){
+								document.getElementById("right-iframe").src=$(this).attr("url");   
+							}else{
+								f_open($(this).attr("url"),id);
+							}
+						});
+					});
+                 	$("#top").css("width",$(window).width()+"px");//处理ul li换行
+                    $("#panelbar").kendoPanelBar();
+                    ///top
+                    var getDirection = function(){return "default"};// top left right default
+				    var initMenu = function () {
+				        $("#menu").kendoMenu({
+				            direction: getDirection()
+				        }).css({
+				            marginRight: "0px"
+				        });
+				    };
+				    initMenu();
+				    $("#login").click(function(){
+				    	alert('你好！');
+				    });
+				    ////////top//////
+				    ///banner-menu
+                    var getDirection1 = function(){return "default"};// top left right default
+				    var initMenu1 = function () {
+				        $("#u-banner-menu").kendoMenu({
+				            direction: getDirection1()
+				        }).css({
+				            marginRight: "0px"
+				        });
+				    };
+				    initMenu1();
+				    ////////banner-menu//////
+                    $("#login").html("<font style='cursor:pointer;' size=2>"+getuserinfo()+" 你好！</font>");//登录后则显示用户名
+                });
+            </script>
+		</div>
+		<div id="right" class="c-right">
+		    <iframe id="right-iframe" class="c-right-frame" src="../bizginfocs/list_spub" frameBorder="0" scrolling="no"></iframe>
+		</div>
+	</div>  
+</body>
+</html>

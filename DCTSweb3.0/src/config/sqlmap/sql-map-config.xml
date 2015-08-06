@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+	<sqlMap resource="com/cy/dcts/common/xmlsql/t_web_user_info.xml"/>
+	<sqlMap resource="com/cy/dcts/common/xmlsql/t_company_info.xml"/>
+	<sqlMap resource="com/cy/dcts/common/xmlsql/t_note_log_info.xml"/>
+	<sqlMap resource="com/cy/dcts/common/xmlsql/t_order_cargo_info.xml"/>
+	<sqlMap resource="com/cy/dcts/common/xmlsql/t_driver_user_info.xml"/>
+	<sqlMap resource="com/cy/dcts/common/xmlsql/t_user_driver_assess_info.xml"/>
+	<sqlMap resource="com/cy/dcts/common/xmlsql/t_order_cargo_last_info.xml"/>
+	<sqlMap resource="com/cy/dcts/common/xmlsql/t_location_collect_last_info.xml"/>
+	<sqlMap resource="com/cy/dcts/common/xmlsql/t_location_collect_info.xml"/>
+	<sqlMap resource="com/cy/dcts/common/xmlsql/t_user_driver_info.xml"/>
+	<sqlMap resource="com/cy/dcts/common/xmlsql/t_driver_business_line_info.xml"/>
+	<sqlMap resource="com/cy/dcts/common/xmlsql/t_driver_line_info.xml"/>
+	<sqlMap resource="com/cy/dcts/common/xmlsql/t_driver_user_assess_info.xml"/>
+	<sqlMap resource="com/cy/dcts/common/xmlsql/t_operation_log_info.xml"/>
+	<sqlMap resource="com/cy/dcts/common/xmlsql/t_quote_info.xml"/>
+	<sqlMap resource="com/cy/dcts/common/xmlsql/t_transaction_info.xml"/>
+	<sqlMap resource="com/cy/dcts/common/xmlsql/t_transaction_last_info.xml"/>
+	<sqlMap resource="com/cy/dcts/common/xmlsql/t_driver_cargo_assess_info.xml"/>
+	<sqlMap resource="com/cy/dcts/common/xmlsql/t_pact_driver_info.xml"/>
+	<sqlMap resource="com/cy/dcts/common/xmlsql/t_transaction_receipt_path.xml"/>
+	<sqlMap resource="com/cy/dcts/common/xmlsql/t_effective_identity_info.xml"/>
+	<sqlMap resource="com/cy/dcts/common/xmlsql/t_identity_verify.xml"/>
+	<sqlMap resource="com/cy/dcts/common/xmlsql/t_user_account.xml"/>
+	<sqlMap resource="com/cy/dcts/common/xmlsql/t_user_consumer_record.xml"/>
+	<sqlMap resource="com/cy/dcts/common/xmlsql/t_user_recharge_info.xml"/>
+</sqlMapConfig>

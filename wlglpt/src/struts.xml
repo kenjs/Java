@@ -1,0 +1,54 @@
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<constant name="struts.devMode" value="false" />
+	<constant name="struts.i18n.reload" value="true" />
+	<constant name="struts.configuration.xml.reload" value="true" />
+	<constant name="struts.objectFactory" value="spring" />
+	<constant name="struts.ui.theme" value="simple" />
+	<constant name="struts.i18n.encoding" value="GBK" />
+	<!-- 单位为字节,若多个文件上传指总的文件大小,这里的大小为5M -->
+	<constant name="struts.multipart.maxSize" value="16777216" />
+	<constant name="struts.custom.i18n.resources" value="/config/business" />
+
+	<!-- 定义默认的json包，系统中用到json提交的action都继承此包，该包为系统默认，提供日志和异常拦截器 -->
+	<package name="basebusiness-json" extends="json-default">
+		<interceptors>
+			<interceptor name="sysLogger" class="com.cy.common.interceptor.SysIntegratedLoggerInterceptor" />
+			<interceptor name="systExceptioner" class="com.cy.common.interceptor.SysIntegratedExceptionInterceptor" />
+			<interceptor-stack name="sysStack">
+				<interceptor-ref name="sysLogger" />
+				<interceptor-ref name="systExceptioner" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="sysStack" />
+		
+		<global-results>
+			<result name="download">/common/download.jsp</result>
+			<result name="error">/common/service_error.jsp</result>
+		</global-results>
+		
+	</package>
+	
+	<!-- 定义struts包，提供日志和异常拦截器 -->
+	<package name="basebusiness-struts" extends="struts-default">
+		<interceptors>
+			<interceptor name="sysLogger" class="com.cy.common.interceptor.SysIntegratedLoggerInterceptor" />
+			<interceptor name="systExceptioner" class="com.cy.common.interceptor.SysIntegratedExceptionInterceptor"/>
+			<interceptor-stack name="sysStack">
+				<interceptor-ref name="sysLogger" />
+				<interceptor-ref name="systExceptioner" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="sysStack" />
+		
+		<global-results>
+			<result name="download">/common/download.jsp</result>
+			<result name="error">/common/service_error.jsp</result>
+		</global-results>
+	</package>
+</struts>

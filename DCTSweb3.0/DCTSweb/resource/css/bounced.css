@@ -1,0 +1,95 @@
+@charset "utf-8";
+/* CSS Document */
+
+	.aui_nw,.aui_ne{ width:16px; height:37px; overflow:hidden;}
+	.aui_sw,.aui_se{ width:16px; height:15px; overflow:hidden;}
+	.aui_nw{ background:url(../image/tanku/nw.png) no-repeat left top;}
+	.aui_ne{ background:url(../image/tanku/ne.png) no-repeat right top;}
+	.aui_n{ width:auto; height:37px; background:url(../image/tanku/n.png) repeat-x top;}
+	.aui_w{ background:url(../image/tanku/aw.png) repeat-y left;}
+	.aui_e{ background:url(../image/tanku/ae.png) repeat-y right;}
+	.aui_sw{ background:url(../image/tanku/sw.png) no-repeat left bottom;}
+	.aui_s{ background:url(../image/tanku/ec.png) repeat-x bottom;}
+	.aui_se{ background:url(../image/tanku/ew.png) no-repeat right bottom;}
+	.aui_titleber{ margin-top:8px; color:#fff;}
+	.aui_title{ float:left; height:28px; line-height:28px;}
+	.aui_close{ float:right; width:15px; height:15px; background:url(../image/tanku/xt.jpg) no-repeat; margin:0px 2px 0px 0px;}
+.buced{ width:405px;}	
+.buced h3{ height:30px;}
+.buced h3 i,.botcks i{ display:inline-block; width:20px; height:20px; overflow:hidden; background:url(../image/index/nan_03.jpg) no-repeat 0 -40px; float:right; cursor:pointer;}
+.ticks,.frcks{ margin-top:10px;}
+.ticks{ width:160px; text-align:right;}
+.frcks{ width:236px; height:70px; line-height:70px; font-size:14px; color:#313131;}
+.botcks{ clear:both; font-size:14px;  padding:35px 0 10px 0; overflow:hidden; }
+.botcks a{ color:#3364c0; margin:0 16px;}
+.botcks i{ background-position:-292px -45px; float:none; vertical-align:middle; margin-left:5px; _margin-top:3px;}
+.bucutf{ padding:30px 0 15px 0px; overflow:hidden; zoom:1;}
+.bucutf .tks{ width:80px;}
+.bucutf .frkst{ width:330px; font-size:14px; color:#333; line-height:24px; margin-top:10px;}
+.nowf{ clear:both; text-align:center; padding-top:26px;}
+.nowf a{ display:inline-block; width:70px; height:32px; line-height:32px; text-align:center;  background:url(../image/index/radius.jpg) no-repeat -122px -177px; color:#FFF; font-size:14px; }
+
+
+.laing_f{ width:340px; height:210px; padding:15px 0 0 60px; margin:0 auto; background:#FFF; color:#2a2a2a;}
+.laing_f ul{ position:relative;}
+.laing_f ul li{ padding-top:15px; overflow:hidden; zoom:1;}
+.laing_f ul li label{ display:inline-block; width:45px; text-align:left;}
+.int_t{ width:162px; height:38px; line-height:38px; border:none; background:url(../image/index/radius.jpg) no-repeat 0 -25px; padding:0 12px 0 12px; }
+.mort{ width:235px; font-size:14px;} 
+.mort span{ float:right;}
+.mort a{ color:#106dca;}
+.lanot_t a{ display:inline-block; width:72px; height:36px; line-height:36px; text-align:center; background:url(../image/index/radius.jpg) no-repeat 0 -68px; font-size:14px; color:#121212;}
+.lanot_t a:hover,.lanot_t .hoa{ background-position:-74px -68px; color:#fefefe;}
+.mr10{ margin-right:40px;}
+
+.pick_fl{ width:600px; padding-left:14px;}
+.pick_fr{ width:280px; height:478px; padding-left:24px; border-left:dashed 1px #dbdbdb;}
+.newi{ display:inline-block; width:12px; height:17px; background:url(../image/index/nan_03.jpg) no-repeat -372px -45px; margin:0px 5px 0 0; overflow:hidden; vertical-align:middle; }
+.ckpt{ height:30px;/** line-height:26px;*/ overflow:hidden; zoom:1;}
+.divtab { width:960px; height:255px;  border:solid 1px #dbdbdb; overflow:auto;}
+.divtab table{ width:530px; margin:0 10px; color:#333; overflow:hidden; table-layout:fixed;}
+.divtab thead tr td{ border-bottom:solid 2px #ddd; height:50px; line-height:50px; overflow:hidden;}
+.divtab tr td{ height:40px; line-height:40px; border-bottom:dashed 1px #dbdbdb; text-overflow:ellipsis; white-space:nowrap; overflow:hidden;}
+.divtab tr td input{ margin:0 5px;}
+.pick_fr ul li label,.matc ul li label{ display:inline-block; width:65px; text-align:left; color:#2a2a2a;}
+.pick_fr ul li select,.matc ul li select{ width:135px; height:28px; line-height:28px; top:30%; border:solid 1px #cbcbcb; border-radius:4px; padding:3px 0px;}
+.fint{ width:162px; height:28px; line-height:28px; border:none; background:url(../image/index/radius.jpg) no-repeat 0 -110px; padding:0 12px 0 12px; color:#999; }
+.pick_fr .sel65{ width:65px;}
+.pick_fr .fint100{ width:92px; background-position:0 -180px;}
+.pick_fr textarea{ width:165px; height:58px; border:none; background:url(../image/index/radius.jpg) no-repeat 0 -213px; padding:10px;}
+.pick_fr ul li{ padding-bottom:20px;}
+.pick_fr div{ margin-top:10px;}
+.subf{ width:74px; height:30px; line-height:30px; font-size:14px; background:url(../image/index/radius.jpg) no-repeat -122px -178px; color:#fff;}
+.bot_n{ width:238px; height:50px; clear:both; text-align:right;}
+.bot_n a{ display:inline-block; width:86px; height:38px; line-height:38px; text-align:center; background:url(../image/index/radius.jpg) no-repeat -194px -176px; font-size:14px; color:#fff;}
+.now15{ margin-top:26px;}
+.mt2{ margin-top:12px;}
+.matc textarea{ width:310px; height:58px; padding:10px; border:none; background:url(../image/index/tar.jpg) no-repeat;}
+.matc ul li select{ margin-right:10px;}
+.matc{ padding:13px 0 3px 26px; width:420px;}
+.matc ul{ margin:9px 0 0 0;}
+.matc ul li{ padding-bottom:19px;}
+.pick_fr ul{ margin-top:10px;}
+
+.pick_fr .in65{ width:41px; background-position:-201px -326px; height:30px; line-height:30px;}
+.bucef{ width:364px; padding:10px 12px;}
+.newf{ border:solid 1px #ffcd68; background:#fff4bc; height:60px; line-height:34px; overflow:hidden; color:#333; }
+.newf i{ display:inline-block; width:15px; height:15px; background:url(../image/index/nan_03.jpg) no-repeat -344px -46px; margin:11px 4px 0 5px; overflow:hidden; }
+.newf a{ color:#468cc8;}
+.tilef{ height:50px; line-height:50px; color:#2a2a2a;}
+.tarut textarea{ width:348px; height:62px; border:solid 1px #ccc; border-radius:5px; padding:7px; color:#999; font-size:12px;}
+.tarut dd{ text-align:center; height:56px; line-height:56px; padding-top:18px;}
+.tarut dd a{ display:inline-block; width:70px; height:30px; line-height:30px; text-align:center; color:#333; background:url(../image/index/radius.jpg) no-repeat 0 -144px; font-size:14px;}
+.tarut .sure{ background-position:-122px -178px; color:#fff; margin-left:10px;}
+#about{position:absolute; z-index:999; background:#FFF; left:38%; top:30%; display:none;}
+
+.divtab1{ height:174px; margin-top:15px;}
+.divtab1 a{ color:#4a6ba5;}
+
+.retun{ color:#F00; margin-left:20px; display:none;}
+
+.divth{ height:338px;}
+
+/*.acut{background:#f3f3f3;}*/
+.seef{ text-align:right;}
+.seef a{ display:inline-block; background:#fafafa; border-radius:3px; border:solid 1px #cacaca; padding:0 10px; color:#1f76bd;}

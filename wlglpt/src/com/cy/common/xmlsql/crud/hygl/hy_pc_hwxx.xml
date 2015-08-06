@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.hygl.dao.HyPcHwxxMapper">
+
+	<!--根据主键取DOMAIN  兼取送货变更信息-->
+	<select id="selectHyPcHwxxByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyPcHwxxDomain">
+		select a.PC_DJXH as pcDjxh,a.WFH_DJXH wfhDjxh,
+		a.HWMC as hwmc,a.HDBH,
+		a.HW_SL as hwSl,a.HW_SL_JLDW_DM as hwSlJldwDm,(SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '01' AND DM.JLDW_DM = A.HW_SL_JLDW_DM) hwSlJldwMc,
+		a.HW_ZL as hwZl,a.HW_ZL_JLDW_DM as hwZlJldwDm,(SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '02' AND DM.JLDW_DM = A.HW_ZL_JLDW_DM) hwZlJldwMc,
+		a.HW_TJ as hwTj,a.HW_TJ_JLDW_DM as hwTjJldwDm,(SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '03' AND DM.JLDW_DM = A.HW_TJ_JLDW_DM) hwTjJldwMc,
+		A.JS_SL jsSl,
+		a.SHFS_DM as shfsDm,a.BZ as bz,
+		D.HW_SL+A.HW_SL kfHwsl,a.PCHW_CLFS_DM pchwClfsDm,
+		A.ZRBM_DJXH zrbmDjxh,A.ZRBM_DZ zrbmDz,A.ZRBM_LXR zrbmLxr,A.ZRBM_LXDH zrbmLxdh,A.ZRBM_XZQH_DM zrbmXzqhDm,
+		A.YF_SJS yfSjs,A.ZC_HDF ZCHDF,A.ZC_THF ZCTHF,(A.ZC_HDF+A.ZC_THF)||'/'||(S.ZC_HDF+S.ZC_THF) bgDf,
+        NVL(HW.SR_HDF,0) + NVL(HW.SR_THF,0)-
+              NVL((SELECT SUM(NVL(P.ZC_HDF,0)+NVL(P.ZC_THF,0)+NVL(P.YF_SJS,0))
+                 FROM HY_PC_HWXX P
+                WHERE P.DD_DJXH = HW.DD_DJXH
+                  AND P.XH = HW.XH
+                  AND P.YXBZ = 'Y' AND P.PC_DJXH &lt;&gt; #pcDjxh#),0) srdf
+		from HY_PC_HWXX a,HY_DD_WFHXX D, HY_DD_HWMX HW,HY_HWXX_SHFSBG_ZB S
+		where HW.DD_DJXH = D.DD_DJXH
+        AND HW.XH = D.XH
+		AND a.WFH_DJXH = D.WFH_DJXH
+		AND A.PC_DJXH = S.PC_DJXH(+)
+        AND A.WFH_DJXH = S.WFH_DJXH(+)
+		AND a.PC_DJXH=#pcDjxh# and a.WFH_DJXH = #wfhDjxh#
+    </select>
+    
+    <!-- 到付：若司机收大于0，则证明到付由该派车单收，否则若司机收=0且已经有派车单收了该货物的到付，则到付置0，否则初始化到付 -->
+    <select id="selectHyPcHwxxFromLsbByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyPcHwxxDomain">
+		select a.PCHW_LSXH as pchwLsxh,a.WFH_DJXH wfhDjxh,HW.HWMC as hwmc,A.HDBH,HW.SHFS_DM shfsDm,
+			    a.HW_SL as hwSl,HW.HW_SL_JLDW_DM as hwSlJldwDm,(SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '01' AND DM.JLDW_DM = HW.HW_SL_JLDW_DM) hwSlJldwMc,
+			    a.HW_ZL as hwZl,HW.HW_ZL_JLDW_DM as hwZlJldwDm,(SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '02' AND DM.JLDW_DM = HW.HW_ZL_JLDW_DM) hwZlJldwMc,
+			    a.HW_TJ as hwTj,HW.HW_TJ_JLDW_DM as hwTjJldwDm,(SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '03' AND DM.JLDW_DM = HW.HW_TJ_JLDW_DM) hwTjJldwMc,
+			    A.JS_SL jsSl,
+			    WFH.HW_SL kfHwsl,a.PCHW_CLFS_DM pchwClfsDm,
+			    A.ZRBM_DJXH zrbmDjxh,A.ZRBM_DZ zrbmDz,A.ZRBM_LXR zrbmLxr,A.ZRBM_LXDH zrbmLxdh,A.ZRBM_XZQH_DM zrbmXzqhDm,
+			    A.YF_SJS yfSjs,
+		          NVL(HW.SR_HDF,0) + NVL(HW.SR_THF,0)-
+		              NVL((SELECT SUM(NVL(P.ZC_HDF,0)+NVL(P.ZC_THF,0)+NVL(P.YF_SJS,0))
+		                 FROM HY_PC_HWXX P
+		                WHERE P.DD_DJXH = HW.DD_DJXH
+		                  AND P.XH = HW.XH
+		                  AND P.YXBZ = 'Y'),0) srdf
+		    from HY_PC_HWXX_TMP a, HY_DD_HWMX HW, HY_DD_WFHXX WFH
+		    WHERE HW.DD_DJXH = WFH.DD_DJXH
+		      AND HW.XH = WFH.XH
+		      AND A.WFH_DJXH = WFH.WFH_DJXH  
+			  AND a.PCHW_LSXH=#pchwLsxh# and a.WFH_DJXH = #wfhDjxh#
+    </select>
+    
+    <select id="selectHyPcHwxxDomainByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyPcHwxxDomain">
+		select a.PC_DJXH as pcDjxh,a.DD_DJXH as ddDjxh,a.XH as xh,a.FHR_MC as fhrMc,a.FHR_DZ as fhrDz,
+		a.FHR_LXR as fhrLxr,a.FHR_LXDH as fhrLxdh,a.FHR_XZQH_DM as fhrXzqhDm,a.SHR_MC as shrMc,a.SHR_DZ as shrDz,
+		a.SHR_LXR as shrLxr,a.SHR_LXDH as shrLxdh,
+		a.SHR_XZQH_DM as shrXzqhDm,(SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = A.SHR_XZQH_DM) shrXzqhMc,
+		a.HWMC as hwmc,a.HW_DJXH as hwDjxh,
+		a.HWXH_DJXH as hwxhDjxh,a.HW_BZ_HLDW_DM as hwBzHldwDm,
+		A.JS_SL jsSl,
+		a.HW_SL as hwSl,a.HW_SL_JLDW_DM as hwSlJldwDm,(SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '01' AND DM.JLDW_DM = A.HW_SL_JLDW_DM) hwSlJldwMc,
+		a.HW_ZL as hwZl,a.HW_ZL_JLDW_DM as hwZlJldwDm,(SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '02' AND DM.JLDW_DM = A.HW_ZL_JLDW_DM) hwZlJldwMc,
+		a.HW_TJ as hwTj,a.HW_TJ_JLDW_DM as hwTjJldwDm,(SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '03' AND DM.JLDW_DM = A.HW_TJ_JLDW_DM) hwTjJldwMc,
+		(SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = A.JLDW_FL_DM AND DM.JLDW_DM = A.JS_JLDW_DM) jsJldwMc,
+		a.YQ_FHRQ as yqFhrq,a.YQ_DDRQ as yqDdrq,
+		a.SHFS_DM as shfsDm,a.BZ as bz,a.WFH_DJXH as wfhDjxh,HW.HDBH 
+		from HY_PC_HWXX a, HY_DD_HWMX HW
+		where A.DD_DJXH = HW.DD_DJXH 
+		AND A.XH = HW.XH
+		AND a.PC_DJXH=#pcDjxh# and a.WFH_DJXH = #wfhDjxh#
+    </select>
+    
+    <insert id="savePcHwxxToFormalTab" parameterClass="java.util.Map">
+    	insert into HY_PC_HWXX(PC_DJXH,WFH_DJXH,DD_DJXH,XH,FHR_DJXH,FHR_MC,FHR_DZ,
+	          FHR_LXR,FHR_LXDH,FHR_XZQH_DM,SHR_DJXH,SHR_MC,SHR_DZ,
+	          SHR_LXR,SHR_LXDH,SHR_XZQH_DM,HWMC,HW_DJXH,
+	          HWXH_DJXH,HW_BZ_HLDW_DM,JS_SL,JS_JLDW_DM,JLDW_FL_DM,HW_SL,HW_SL_JLDW_DM,HW_ZL,
+	          HW_ZL_JLDW_DM,HW_TJ,HW_TJ_JLDW_DM,YQ_FHRQ,YQ_DDRQ,
+	          SHFS_DM,BZ,PCHW_CLFS_DM,ZRBM_DM, ZRBM_DJXH, ZC_HJ, ZC_YJ, ZC_XF,ZC_HDF,
+	        ZC_THF, ZC_HF, ZC_HK,BBH,YXBZ,ZRBM_DZ,ZRBM_LXR,ZRBM_LXDH,ZRBM_XZQH_DM,HDBH,YF_SJS)
+	          SELECT #pcDjxh:NUMERIC#,T.WFH_DJXH,C.DD_DJXH,C.XH,C.FHR_DJXH,C.FHR_MC,C.FHR_DZ,
+	                 C.FHR_LXR, C.FHR_LXDH, C.FHR_XZQH_DM, B.SHR_DJXH,B.SHR_MC, B.SHR_DZ,
+	                 B.SHR_LXR, B.SHR_LXDH, B.SHR_XZQH_DM, B.HWMC, B.HW_DJXH,
+	                 B.HWXH_DJXH, B.HW_BZ_HLDW_DM,T.JS_SL, B.JS_JLDW_DM,B.JS_JLDW_FL_DM,
+	                 T.HW_SL, B.HW_SL_JLDW_DM,T.HW_ZL,
+	                 B.HW_ZL_JLDW_DM, T.HW_TJ,B.HW_TJ_JLDW_DM, B.YQ_FHRQ, B.YQ_DDRQ,
+	                 B.SHFS_DM, T.BZ,T.PCHW_CLFS_DM,T.ZRBM_DM, T.ZRBM_DJXH, T.ZC_HJ, 
+	                 T.ZC_YJ, T.ZC_XF,T.ZC_HDF,T.ZC_THF,
+	                T.ZC_HF, T.ZC_HK,T.BBH,'Y',
+	                T.ZRBM_DZ,T.ZRBM_LXR,T.ZRBM_LXDH,T.ZRBM_XZQH_DM,T.HDBH,T.YF_SJS
+	          FROM HY_DD_HWMX B, HY_DD_WFHXX C,HY_PC_HWXX_TMP T
+	          WHERE B.DD_DJXH = C.DD_DJXH
+	          AND B.XH = C.XH
+	          AND C.WFH_DJXH = T.WFH_DJXH
+	          AND T.PCHW_LSXH = #pchwLsxh#
+    </insert>
+
+	<!--插入数据-->
+	<insert id="insertHyPcHwxx"  parameterClass="com.cy.common.bo.HyPcHwxx">
+		insert into HY_PC_HWXX(PC_DJXH,WFH_DJXH,DD_DJXH,XH,FHR_DJXH,FHR_MC,FHR_DZ,
+	        FHR_LXR,FHR_LXDH,FHR_XZQH_DM,SHR_DJXH,SHR_MC,SHR_DZ,
+	        SHR_LXR,SHR_LXDH,SHR_XZQH_DM,HWMC,HW_DJXH,
+	        HWXH_DJXH,HW_BZ_HLDW_DM,JS_SL,JS_JLDW_DM,JLDW_FL_DM,HW_SL,HW_SL_JLDW_DM,HW_ZL,
+	        HW_ZL_JLDW_DM,HW_TJ,HW_TJ_JLDW_DM,YQ_FHRQ,YQ_DDRQ,
+	        SHFS_DM,BZ,PCHW_CLFS_DM,ZRBM_DM, ZRBM_DJXH, ZC_HJ, ZC_YJ, ZC_XF,ZC_HDF,
+    		ZC_THF, ZC_HF, ZC_HK,BBH,YXBZ,ZRBM_DZ,ZRBM_LXR,ZRBM_LXDH,ZRBM_XZQH_DM,HDBH,YF_SJS)
+	        SELECT #pcDjxh:NUMERIC#,#wfhDjxh:NUMERIC#,C.DD_DJXH,C.XH,C.FHR_DJXH,C.FHR_MC,C.FHR_DZ,
+	               C.FHR_LXR, C.FHR_LXDH, C.FHR_XZQH_DM, B.SHR_DJXH,B.SHR_MC, B.SHR_DZ,
+	               B.SHR_LXR, B.SHR_LXDH, B.SHR_XZQH_DM, B.HWMC, B.HW_DJXH,
+	               B.HWXH_DJXH, B.HW_BZ_HLDW_DM,#jsSl:NUMERIC#, B.JS_JLDW_DM,B.JS_JLDW_FL_DM,
+	               #hwSl:NUMERIC#, B.HW_SL_JLDW_DM,#hwZl:NUMERIC#,
+	               B.HW_ZL_JLDW_DM, #hwTj:NUMERIC#,B.HW_TJ_JLDW_DM, B.YQ_FHRQ, B.YQ_DDRQ,
+	               B.SHFS_DM, A.BZ,#pchwClfsDm:NUMERIC#,#zrbmDm:NUMERIC#, #zrbmDjxh:NUMERIC#, #zcHj:NUMERIC#, #zcYj:NUMERIC#, #zcXf:NUMERIC#,
+	               T.ZC_HDF,T.ZC_THF,
+       			   #zcHf:NUMERIC#, #zcHk:NUMERIC#,#bbh:NUMERIC#,#yxbz:VARCHAR#,
+       			   #zrbmDz:VARCHAR#,#zrbmLxr:VARCHAR#,#zrbmLxdh:VARCHAR#,#zrbmXzqhDm:VARCHAR#,B.HDBH,T.YF_SJS
+	        FROM HY_DD A, HY_DD_HWMX B, HY_DD_WFHXX C,HY_PC_HWXX_TMP T
+	        WHERE A.DD_DJXH = B.DD_DJXH
+	        AND B.DD_DJXH = C.DD_DJXH
+	        AND B.XH = C.XH
+	        AND C.WFH_DJXH = T.WFH_DJXH
+	        AND C.WFH_DJXH = #wfhDjxh#
+	        AND T.PCHW_LSXH = #pchwLsxh#
+	</insert>
+	<!-- 送货方式变更 -->
+	<update id="updateHyPcHwxxWhenShfsbg" parameterClass="java.util.Map">
+		 update HY_PC_HWXX 
+		    set ZC_HDF=#zcHdf#,ZC_THF=#zcThf#,SHFS_DM=#shfsDm#
+		  WHERE PC_DJXH=#pcDjxh# AND WFH_DJXH=#wfhDjxh#
+	</update>
+	<!-- 送货方式变更  删除 -->
+	<update id="updatePcWhenDeleteShfsbg" parameterClass="java.util.Map">
+		update HY_PC_HWXX A
+		   set (A.ZC_HDF,A.ZC_THF,A.SHFS_DM)=
+		(select B.ZC_HDF,B.ZC_THF,#shfsDm# FROM HY_HWXX_SHFSBG_ZB B WHERE B.PC_DJXH=#pcDjxh# AND B.WFH_DJXH=#wfhDjxh#)
+		 where A.PC_DJXH=#pcDjxh# AND A.WFH_DJXH=#wfhDjxh#
+	</update>
+	<!--更新派车货物表中的货物数量等信息   若不为直送，则置到付或提货付或货到付；若为直送且页面选择由司机收则置司机收到付-->
+    <update id="updateHyPcHwxxByKey" parameterClass="com.cy.common.bo.HyPcHwxx">
+        update HY_PC_HWXX set (HW_SL,HW_ZL,HW_TJ,JS_SL,HDBH,PCHW_CLFS_DM,BZ,BBH
+        <dynamic>
+        	<isNotEqual property="pcfsDm" compareValue="1">
+        		,ZC_HDF,ZC_THF,YF_SJS
+        	</isNotEqual>
+        </dynamic>
+        	) =	(SELECT #hwSl#,#hwZl#,#hwTj#,#jsSl#,#hdbh#,#pchwClfsDm#,#bz#,C.BBH
+        <dynamic>
+        	<isNotEqual property="pcfsDm" compareValue="1">
+        		,CASE WHEN #pchwClfsDm# = '21' OR #pchwClfsDm# = '31' OR #pchwClfsDm# = '24' THEN 0 WHEN B.SHFS_DM = '2' THEN #srdf# ELSE 0 END,
+          		CASE WHEN #pchwClfsDm# = '21' OR #pchwClfsDm# = '31' OR #pchwClfsDm# = '24' THEN 0 WHEN B.SHFS_DM = '1' THEN #srdf# ELSE 0 END,
+          		#yfSjs#
+        	</isNotEqual>
+        </dynamic>
+          		FROM HY_DD_HWMX B,HY_DD_WFHXX C
+          		WHERE B.DD_DJXH = C.DD_DJXH AND B.XH = C.XH
+          		AND C.WFH_DJXH = #wfhDjxh#)
+        	where PC_DJXH=#pcDjxh# and WFH_DJXH = #wfhDjxh#
+    </update>
+    
+    <update id="updatePcHwxxTmp" parameterClass="com.cy.common.bo.HyPcHwxx">
+    	update HY_PC_HWXX_TMP set (HW_SL,HW_ZL,HW_TJ,JS_SL,HDBH,PCHW_CLFS_DM,BZ,BBH
+			<dynamic>
+	        	<isNotEqual property="pcfsDm" compareValue="1">
+	        		,ZC_HDF,ZC_THF,YF_SJS
+	        	</isNotEqual>
+	        </dynamic>
+			) = (SELECT #hwSl#,#hwZl#,#hwTj#,#jsSl#,#hdbh#,#pchwClfsDm#,#bz#,C.BBH
+			<dynamic>
+	        	<isNotEqual property="pcfsDm" compareValue="1">
+	        		,CASE WHEN #pchwClfsDm# = '21' OR #pchwClfsDm# = '31' OR #pchwClfsDm# = '24' THEN 0 WHEN B.SHFS_DM = '2' THEN #srdf# ELSE 0 END,
+	          		CASE WHEN #pchwClfsDm# = '21' OR #pchwClfsDm# = '31' OR #pchwClfsDm# = '24' THEN 0 WHEN B.SHFS_DM = '1' THEN #srdf# ELSE 0 END,
+	          		#yfSjs#
+	        	</isNotEqual>
+	        </dynamic>
+          		FROM HY_DD_HWMX B,HY_DD_WFHXX C
+          		WHERE B.DD_DJXH = C.DD_DJXH AND B.XH = C.XH
+          		AND C.WFH_DJXH = #wfhDjxh#)
+        	where PCHW_LSXH=#pchwLsxh# and WFH_DJXH = #wfhDjxh#
+    </update>
+    
+    <delete id="deleteWfhxxTmp4Pc" parameterClass="java.util.Map">
+		DELETE FROM HY_PC_HWXX_TMP TMP 
+			WHERE $xhsIn$
+			AND TMP.PCHW_LSXH = #lsxh#
+	</delete>
+    
+	<!--根据主键删除表数据：软删除-->
+	<update id="deleteHyPcHwxxByKey" parameterClass="java.util.Map">
+		UPDATE HY_PC_HWXX SET YXBZ = 'N', BBH = #bbh#
+			WHERE WFH_DJXH = #wfhDjxh#
+			AND PC_DJXH = #pcDjxh#
+	</update>
+</sqlMap>

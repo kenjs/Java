@@ -1,0 +1,78 @@
+@CHARSET "UTF-8";
+body{
+	width:800px;height:100%;
+	border:0px solid black;
+	margin:0px 0px 0px 0px;
+}
+
+#workspacediv{
+	width:800px;height:100%;
+	border:0px solid green;
+	margin:2px 0px 0px 0px;
+	
+}
+#blankdiv{
+	width:800px;height:1px;
+	margin:0px 0px 0px 0px;
+	padding:0px 0px 0px 0px;
+	background:#E6E6FA;
+}
+#btncontentdiv{
+	width:800px;height:25px;
+	padding:1px 0px 0px 0px;
+	/*background:url(sys/tf/images/btnBanner.png) repeat-x;
+	background:#FFF0F5;*/
+	margin:0px auto;
+	vertical-align: middle;
+}
+#tfgridmain{
+	width:800px;
+}
+table{
+	border-collapse:collapse; /*合并表格边框*/
+}
+#findtable{
+	width:800px;height:30px;
+	border: 0px solid red;
+	margin: 5px 0px 0px 0px;
+	padding: 0px;
+}
+/*查找窗口*/
+#findformdiv{
+	width:800px;
+	height:40px;
+	border:0px solid green;
+	padding:0px;
+	background:url(images/findBanner.png) ;
+}
+#findform{
+	width:800px;height:30px;
+	border: 0px solid red;
+	margin: 5px 0px 0px 0px;
+	padding: 0px;
+	position:relative;		
+}
+td.tdlabeldate{
+	width:20px;height:20px;
+	padding: 0px 0px 0px 0px;
+	border: 0px;
+	margin: 0px auto;
+	font-size:13px;
+	text-align:center;
+}
+td.tdlabel{
+	width:70px;height:20px;
+	padding: 0px 0px 0px 0px;
+	border: 0px;
+	margin: 0px auto;
+	font-size:13px;
+	text-align:center;
+}
+td.tddata{
+	width:96px;height:20px;
+	padding: 0px 0px 0px 0px;
+	border: 0px;
+	margin: 0px auto;
+	font-size:13px;
+	text-align:center;
+}

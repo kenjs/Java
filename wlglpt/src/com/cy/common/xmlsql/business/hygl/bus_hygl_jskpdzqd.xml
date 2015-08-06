@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.hygl.dao.JsKpDzqdMapper">
+	<select id="selectJsKpDzqdPage" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.JsKpDzqdDomain">
+		SELECT A.KPSQ_DJXH AS kpsqDjxh,
+		A.KH_DJXH AS khDjxh,
+		K.KHMC AS khmc,
+		A.SQ_KPJE_HJ AS sqKpjeHj,to_char(A.SQ_KPRQ,'yyyy-mm-dd') AS sqKprq,
+		A.FPKJBZ AS fpkjbz,A.FPKJJE AS fpkjje,to_char(A.FPKJRQ,'yyyy-mm-dd') AS fpkjrq,
+		A.YKP_QDHX AS ykpQdhx,A.YHXJE AS yhxje,
+		A.DJR_CZY_DJXH AS djrCzyDjxh,(SELECT MC FROM QY_RYDJ DM WHERE DM.CZY_DJXH = A.DJR_CZY_DJXH) AS djrMc,
+		to_char(A.DJRQ,'yyyy-mm-dd') AS djrq,
+		A.DJ_JGBM AS djJgbm,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = A.DJ_JGBM) AS djJgmc,
+		A.SS_JGBM AS ssJgbm,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = A.SS_JGBM) AS ssJgmc
+		FROM JS_KPSQ A,QY_KH_DJXX K
+		WHERE A.YXBZ = 'Y'
+		AND A.KH_DJXH = K.KH_DJXH(+)
+		AND A.KPSQFS_DM = 2 
+	    AND (A.SPBZ = 'N' OR (A.SPBZ = 'Y' AND A.WSSPZT_DM = 3))
+		  <dynamic>
+		  	<isNotEmpty property="djJgbm" prepend="and">
+				A.DJ_JGBM =#djJgbm#
+			</isNotEmpty>
+			<isNotEmpty property="ssJgbm" prepend="and">
+				A.SS_JGBM =#ssJgbm#
+			</isNotEmpty>
+			<isNotEmpty property="khDjxh" prepend="and">
+				A.KH_DJXH = #khDjxh#
+			</isNotEmpty>
+			<isNotEmpty property="khmc" prepend="and">
+				K.KHMC LIKE '%'||#khmc#||'%'
+			</isNotEmpty>
+			<isNotEmpty property="djrqQ" prepend="and">
+				A.DJRQ &gt;= TO_DATE(#djrqQ#, 'yyyy-MM-dd')
+			</isNotEmpty>
+			<isNotEmpty property="djrqZ" prepend="and">
+				A.DJRQ &lt;= TO_DATE(#djrqZ#, 'yyyy-MM-dd')
+			</isNotEmpty>
+		  </dynamic>
+		  $orderStr$
+    </select>
+    
+    <select id="findJsKpSqByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.JsKpDzqdDomain">
+		SELECT A.KPSQ_DJXH AS kpsqDjxh,
+		A.KH_DJXH AS khDjxh,
+		(SELECT DM.KHMC FROM QY_KH_DJXX DM WHERE DM.KH_DJXH = A.KH_DJXH) AS khmc,
+		A.SQ_KPJE_HJ AS sqKpjeHj,to_char(A.SQ_KPRQ,'yyyy-mm-dd') AS sqKprq,
+		A.FPKJBZ AS fpkjbz,A.FPKJJE AS fpkjje,to_char(A.FPKJRQ,'yyyy-mm-dd') AS fpkjrq,
+		A.YKP_QDHX AS ykpQdhx,A.YHXJE AS yhxje,
+		A.DJR_CZY_DJXH AS djrCzyDjxh,(SELECT MC FROM QY_RYDJ DM WHERE DM.CZY_DJXH = A.DJR_CZY_DJXH) AS djrMc,
+		to_char(A.DJRQ,'yyyy-mm-dd') AS djrq,
+		A.DJ_JGBM AS djJgbm,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = A.DJ_JGBM) AS djJgmc,
+		A.SS_JGBM AS ssJgbm,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = A.SS_JGBM) AS ssJgmc,
+		A.BZSM AS bzsm
+		FROM JS_KPSQ A
+		WHERE A.YXBZ = 'Y'
+		AND A.KPSQFS_DM = 2 
+	    AND (A.SPBZ = 'N' OR (A.SPBZ = 'Y' AND A.WSSPZT_DM = 3))
+	    AND A.KPSQ_DJXH = #kpsqDjxh#
+   </select> 
+     
+   <select id="selectJsKpDzqdAll" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.JsKpDzqdDomain">
+		SELECT A.KPSQ_DJXH AS kpsqDjxh,
+		A.KH_DJXH AS khDjxh,
+		K.KHMC AS khmc,
+		A.SQ_KPJE_HJ AS sqKpjeHj,to_char(A.SQ_KPRQ,'yyyy-mm-dd') AS sqKprq,
+		A.FPKJBZ AS fpkjbz,A.FPKJJE AS fpkjje,to_char(A.FPKJRQ,'yyyy-mm-dd') AS fpkjrq,
+		A.YKP_QDHX AS ykpQdhx,A.YHXJE AS yhxje,
+		A.DJR_CZY_DJXH AS djrCzyDjxh,(SELECT MC FROM QY_RYDJ DM WHERE DM.CZY_DJXH = A.DJR_CZY_DJXH) AS djrMc,
+		to_char(A.DJRQ,'yyyy-mm-dd') AS djrq,
+		A.DJ_JGBM AS djJgbm,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = A.DJ_JGBM) AS djJgmc,
+		A.SS_JGBM AS ssJgbm,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = A.SS_JGBM) AS ssJgmc
+		FROM JS_KPSQ A,QY_KH_DJXX K
+		WHERE A.YXBZ = 'Y'
+		AND A.KH_DJXH = K.KH_DJXH(+)
+		AND A.KPSQFS_DM = 2 
+	    AND (A.SPBZ = 'N' OR (A.SPBZ = 'Y' AND A.WSSPZT_DM = 3))
+		  <dynamic>
+		  	<isNotEmpty property="djJgbm" prepend="and">
+				A.DJ_JGBM =#djJgbm#
+			</isNotEmpty>
+			<isNotEmpty property="ssJgbm" prepend="and">
+				A.SS_JGBM =#ssJgbm#
+			</isNotEmpty>
+			<isNotEmpty property="khDjxh" prepend="and">
+				A.KH_DJXH = #khDjxh#
+			</isNotEmpty>
+			<isNotEmpty property="khmc" prepend="and">
+				K.KHMC LIKE '%'||#khmc#||'%'
+			</isNotEmpty>
+			<isNotEmpty property="djrqQ" prepend="and">
+				A.DJRQ &gt;= TO_DATE(#djrqQ#, 'yyyy-MM-dd')
+			</isNotEmpty>
+			<isNotEmpty property="djrqZ" prepend="and">
+				A.DJRQ &lt;= TO_DATE(#djrqZ#, 'yyyy-MM-dd')
+			</isNotEmpty>
+		  </dynamic>
+		  ORDER by A.KPSQ_DJXH ASC
+    </select>
+
+	<select id="getJsKpDzqdRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.KPSQ_DJXH) 
+		  FROM JS_KPSQ A 
+		  WHERE A.YXBZ='Y' 
+		  AND A.KPSQFS_DM = 2 
+	      AND (A.SPBZ = 'N' OR (A.SPBZ = 'Y' AND A.WSSPZT_DM = 3))
+		  <dynamic>
+		  	<isNotEmpty property="djJgbm" prepend="and">
+				A.DJ_JGBM =#djJgbm#
+			</isNotEmpty>
+			<isNotEmpty property="ssJgbm" prepend="and">
+				A.SS_JGBM =#ssJgbm#
+			</isNotEmpty>
+			<isNotEmpty property="khDjxh" prepend="and">
+				A.KH_DJXH = #khDjxh#
+			</isNotEmpty>
+			<isNotEmpty property="djrqQ" prepend="and">
+				A.DJRQ &gt;= TO_DATE(#djrqQ#, 'yyyy-MM-dd')
+			</isNotEmpty>
+			<isNotEmpty property="djrqZ" prepend="and">
+				A.DJRQ &lt;= TO_DATE(#djrqZ#, 'yyyy-MM-dd')
+			</isNotEmpty>
+		  </dynamic>
+    </select>
+    
+    
+    <select id="selectJsKpDzqdList" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.JsKpDzqdDomain">
+		SELECT A.QD_DJXH AS qdDjxh,
+		A.QDMC AS qdmc,
+		A.QD_DJXH || ' ' || A.QDMC AS queryName,
+		A.HE_JE AS heJe,
+		A.YSQ_KPJE AS ysqKpJe,
+		A.WSQ_KPJE AS wsqKpJe
+        FROM JS_SRDZ_QD A
+        WHERE A.YXBZ = 'Y'
+        AND A.WSQ_KPJE > 0
+        AND A.SS_JGBM = #ssJgbm#
+        AND A.KH_DJXH = #khDjxh#
+    </select>
+    
+    <select id="selectJsKpDzqdByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.JsKpDzqdDomain">
+		SELECT A.QD_DJXH AS qdDjxh,
+		A.QDMC AS qdmc,
+		A.QD_DJXH || ' ' || A.QDMC AS queryName,
+		A.HE_JE AS heJe,
+		A.YSQ_KPJE AS ysqKpJe,
+		A.WSQ_KPJE AS wsqKpJe
+        FROM JS_SRDZ_QD A
+        WHERE A.YXBZ = 'Y'
+        AND A.WSQ_KPJE > 0
+        AND A.QD_DJXH = #qdDjxh#
+    </select>
+    <select id="findJsKpDzqdByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.JsKpDzqdDomain">
+        SELECT A.QD_DJXH AS qdDjxh,
+        A.QDMC AS qdmc,
+        A.QD_DJXH || ' ' || A.QDMC AS queryName,
+        A.HE_JE AS heJe,
+        A.YSQ_KPJE AS ysqKpJe,
+        A.WSQ_KPJE AS wsqKpJe,
+        B.SQ_KPJE AS sqKpje,
+        B.BZSM AS bzsm
+        FROM JS_SRDZ_QD A,JS_KPSQ_MX B
+        WHERE A.YXBZ = 'Y'
+        AND B.YXBZ = 'Y'
+        AND A.QD_DJXH = B.YW_DJXH
+        AND A.WSQ_KPJE > 0
+        AND A.QD_DJXH = #qdDjxh#
+        AND B.KPSQ_DJXH = #kpsqDjxh#
+    </select>
+
+    <select id="selectYhxList" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.JsKpDzqdDomain">
+        SELECT A.KPSQMX_DJXH AS kpsqmxDjxh,
+        B.QD_DJXH AS qdDjxh,
+        B.QDMC AS qdmc,
+        B.HE_JE AS heJe,
+        A.SQ_KPJE AS sqKpje,
+        A.BZSM AS bzsm
+        FROM Js_Kpsq_Mx A,JS_SRDZ_QD B
+        WHERE A.YW_DJXH = B.QD_DJXH
+        AND A.YXBZ = 'Y'
+        AND A.KPSQ_DJXH = #kpsqDjxh# 
+    </select>      
+</sqlMap>

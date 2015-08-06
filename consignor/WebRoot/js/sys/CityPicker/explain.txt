@@ -1,0 +1,71 @@
+地区插件说明：
+
+
+1.引入两个css文件：
+<link href="../js/sys/CityPicker/cityLayout.css" rel="stylesheet" type="text/css" />
+<link href="../js/sys/CityPicker/buju.css" rel="stylesheet" type="text/css" />
+
+
+
+2.input地区搜索框：
+<input name="" id="" autocomplete="off" type="text" value="请选择/输入城市名称" class="city_input  inputFocus proCityQueryAll proCitySelAll" ov="请选择/输入城市名称" />
+
+
+
+
+3.在页面最下方引入隐藏的代码：位置不用太在意，放到最下面闭合M</body>的前面就可以了
+
+<!--弹出省省市开始-->
+<div class="provinceCityAll">
+  <div class="tabs clearfix">
+    <ul class="">
+      <li><a href="javascript:" class="current" tb="hotCityAll">热门城市</a></li>
+      <li><a href="javascript:" tb="provinceAll">省份</a></li>
+      <li><a href="javascript:" tb="cityAll" id="cityAll">城市</a></li>
+      <li><a href="javascript:" tb="countyAll" id="countyAll">区县</a></li>
+    </ul>
+  </div>
+  <div class="con">
+    <div class="hotCityAll invis">
+      <div class="pre"><a></a></div>
+      <div class="list">
+        <ul>
+          <!-- 					<li><a href="javascript:"  class="current">南京</a></li> -->
+        </ul>
+      </div>
+      <div class="next"><a class="can"></a></div>
+    </div>
+    <div class="provinceAll invis">
+      <div class="pre"><a></a></div>
+      <div class="list">
+        <ul>
+          <!-- 					<li><a href="javascript:"  class="current">江西省</a></li> -->
+        </ul>
+      </div>
+      <div class="next"><a class="can"></a></div>
+    </div>
+    <div class="cityAll invis">
+      <div class="pre"><a></a></div>
+      <div class="list">
+        <ul>
+          <!-- 					<li><a href="javascript:"  class="current">南京</a></li> -->
+        </ul>
+      </div>
+      <div class="next"><a class="can"></a></div>
+    </div>
+    <div class="countyAll invis">
+      <div class="pre"><a></a></div>
+      <div class="list">
+        <ul>
+        </ul>
+      </div>
+      <div class="next"><a class="can"></a></div>
+    </div>
+  </div>
+</div>
+
+<!--弹出省省市结算-->
+
+
+4.引入js文件一个：注意，这个js文件一定要放在3的代码后面。
+<script src="../js/sys/CityPicker/public.js"></script>

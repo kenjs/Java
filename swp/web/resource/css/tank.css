@@ -1,0 +1,11 @@
+@charset "utf-8";
+/* CSS Document */
+.tracks{ width:450px; overflow:hidden; border:2px #CCC;}
+.tracks td{ height:24px; line-height:24px; }
+.tracks td label{ width:72px; display:inline-block; text-align:right;}
+.canvos{ margin:10px 0 0 15px;}
+.canvos h3{ height:30px;}
+.canvos label{ display:inline-block; width:112px; height:26px;}
+.canvos label input{ margin-right:3px;}
+.canvos textarea { width:320px; height:60px; padding:10px; border:solid 1px #CCC;}
+.canvos .return{ width:320px; text-align:center;}

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.cwgl.dao.CwZjdbglMapper">
+
+    <!--根据主键取DOMAIN-->
+		<select id="selectCwZjdbglByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.common.bo.CwZjdb">
+		select a.ZJDB_DJXH as zjdbDjxh,a.DC_DW_DJXH as dcDwDjxh,a.DR_DW_DJXH as drDwDjxh,
+		       a.zcfl_dm as zcflDm,a.yh_csh_djxh as yhCshDjxh,a.JE as je,a.RQ as rq,
+			   a.BZ as bz,a.YXBZ as yxbz,a.CJR_CZY_DJXH as cjrCzyDjxh,
+			   a.CJRQ as cjrq,a.XGR_CZY_DJXH as xgrCzyDjxh,a.XGRQ as xgrq,a.SPBZ as spbz,a.WSSPZT_DM as wsspztDm,
+			   a.WS_SPXH as wsSpxh from CW_ZJDB a  
+		 where a.ZJdb_DJXH=#zjdbDjxh#
+		</select>
+
+	<!--插入数据-->
+		<insert id="insertCwZjdbgl"  parameterClass="com.cy.common.bo.CwZjdb">
+		<selectKey keyProperty="zjdbDjxh" resultClass="String" type="pre"> 
+			select SEQ_CW_DJXH.nextval as zjdbDjxh from dual 
+		</selectKey> 
+		insert into CW_ZJDB(ZJDB_DJXH,RQ,DC_DW_DJXH,JE,
+		zcfl_dm,yh_csh_djxh,BZ,
+		DR_DW_DJXH,YXBZ,SPBZ,WSSPZT_DM,WS_SPXH,
+		CJR_CZY_DJXH,CJRQ,XGR_CZY_DJXH,XGRQ)
+		values(#zjdbDjxh:NUMERIC#,to_date(#rq:DATE#,'yyyy-MM-dd'),#dcDwDjxh:NUMERIC#,#je:NUMERIC#,
+		#zcflDm:NUMERIC#,#yhCshDjxh:NUMERIC#,#bz:VARCHAR#,#drDwDjxh:NUMERIC#,#yxbz:VARCHAR#,
+		#spbz:VARCHAR#,#wsspztDm:NUMERIC#,#wsSpxh:NUMERIC#,
+		#cjrCzyDjxh:NUMERIC#,to_date(#cjrq:DATE#,'yyyy-MM-dd'),#xgrCzyDjxh:NUMERIC#,to_date(#xgrq:DATE#,'yyyy-MM-dd')) 
+		</insert>
+
+	<!--根据主键删除表数据：软删除-->
+	<delete id="deleteCwZjdbglByKey" parameterClass="java.util.Map">
+		update CW_ZJDB set yxbz='N' where ZJDB_DJXH=#zjdbDjxh#
+    </delete>
+</sqlMap>

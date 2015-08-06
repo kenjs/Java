@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.interfaceService.dao.BaiduPushDao">
+
+    <resultMap id="driverUserMap" type="DriverUserInfo">
+        <result column="baidu_channel_id" property="baiduChannelId" />
+        <result column="baidu_user_id" property="baiduUserId" />
+        <result column="registration_id" property="registrationId" />
+        <result column="app_version" property="appVersion" />
+    </resultMap>
+
+    <!-- 根据司机ID查找司机信息 -->
+    <select id="queryDriverUserInfoById" parameterType="string" resultMap="driverUserMap">
+        SELECT * FROM t_driver_user_info WHERE id = #{driverId}
+    </select>
+
+    <insert id="addPushLogInfo" parameterType="PushLogInfo" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO t_push_log_info
+        (tag_name, driver_id, push_title, push_content, push_time,
+         returned_value,baidu_channel_id, baidu_user_id,event_from)
+        VALUES
+            (#{tagName},#{driverId},#{pushTitle},#{pushContent},sysdate(),
+             #{returnedValue},#{baiduChannelId},#{baiduUserId},#{eventFrom})
+    </insert>
+    
+    <update id="updatePushLogInfoById" parameterType="PushLogInfo">
+        UPDATE t_push_log_info
+        <set>
+            <if test="returnedValue != null and returnedValue != ''">
+                returned_value = #{returnedValue},
+            </if>
+            <if test="driverId != null and driverId != ''">
+                driver_id = #{driverId},
+            </if>
+            <if test="tagName != null and tagName != ''">
+                tag_name = #{tagName},
+            </if>
+            <if test="isClicked != null and isClicked != ''">
+                is_clicked = 1,
+            </if>
+            <if test="clickedTime != null and clickedTime != ''">
+                clicked_time = #{clickedTime}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

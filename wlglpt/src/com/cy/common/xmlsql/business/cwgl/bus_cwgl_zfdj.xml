@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.cwgl.dao.BusCwglCwZfdjMapper">
+    
+    <select id="selectCwZfdjAll" parameterClass="java.util.Map"
+		resultClass="com.cy.cwgl.domain.CwZfdjDomain">
+    	select 
+              (SELECT DM.YFJSF_MC FROM DM_YFJSF DM WHERE DM.YFJSF_DM = A.yfjsf_dm) yfjsfMc,
+              A.yfjsf_djxh yfjsfDjxh,
+              A.yfjsf_dm,
+              YSF.YFJSF_DJXH,
+             (CASE WHEN A.YFJSF_DM = 11 THEN (SELECT XXZJJC FROM QY_XXZJ_DJXX DM WHERE DM.XXZJ_DJXH = YSF.YFJSF_DJXH)
+                  WHEN A.YFJSF_DM = 12 THEN (SELECT CZ_XM || '(' || CLHM || ')' FROM QY_YL_CLXX DM WHERE DM.CL_DJXH = YSF.YFJSF_DJXH)
+                  WHEN A.YFJSF_DM = 21 THEN (SELECT KHJC FROM QY_KH_DJXX DM WHERE DM.KH_DJXH = YSF.YFJSF_DJXH)
+                  WHEN A.YFJSF_DM = 22 THEN (SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = YSF.YFJSF_DJXH)
+                  WHEN A.YFJSF_DM = 23 THEN (SELECT FBSJC FROM QY_FBS_DJXX DM WHERE DM.FBS_DJXH = YSF.YFJSF_DJXH)
+                  WHEN A.YFJSF_DM = 41 THEN (SELECT RY.MC FROM QY_RYDJ RY WHERE RY.CZY_DJXH = YSF.YFJSF_DJXH)
+                  ELSE NULL
+             END) YFJSF_DJMC,
+              (SELECT DM.kmdl_mc FROM DM_KMDL DM where DM.kmdl_dm = A.KMDL_DM) kmdlMc,
+              (SELECT DM.kmxl_mc FROM DM_KMXL DM where DM.kmxl_dm = A.KMXL_DM) kmxlMc,
+              (SELECT YSYFLY_MC FROM DM_YSYFLY DM where DM.ysyfly_dm = A.YSYFLY_DM) ysyflyMc,
+              A.YW_DJXH ywDjxh,
+              A.CSRQ csrq,
+              (SELECT YSYFZT_MC FROM DM_YSYFZT DM WHERE DM.ysyfzt_dm = A.YSYFZT_DM) ysyfztMc,
+              A.YSF_JE ysfJe,
+              A.YISF_JE yisfJe,
+              A.WSF_JE wsfJe,
+              A.SM sm,
+              A.DJ_JGBM AS djJgbm,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = A.DJ_JGBM) AS djJgmc,
+               A.SS_JGBM AS ssJgbm,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = A.SS_JGBM) AS ssJgmc
+       from cw_ysyf A,CW_YSYF YSF
+       WHERE A.yxbz = 'Y'
+ 		and A.YSYF_DJXH = #ysyfDjxh#                                                                                                                                                                 
+    </select>
+    
+    <parameterMap class="java.util.Map" id="cwZfdjParMapForSelect">
+    	<parameter property="zgsbm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="ssJgbm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="csrqQ" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="csrqZ" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="yfjsfDm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="yfjsfDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="yfjsfDjmc" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="zt" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="ddbh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="ysyflyDm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="kmxlDm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	
+    	<parameter property="start" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+    	<parameter property="pagSize" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+    	<parameter property="pageCount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+    	<parameter property="pageCurcount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+    	<parameter property="dataList" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" resultMap="cwZfdjResMap"/>
+    </parameterMap>
+    
+    <resultMap class="com.cy.cwgl.domain.CwZfdjDomain" id="cwZfdjResMap">
+    	<result property="ysyfDjxh" column="YSYF_DJXH" />
+		<result property="yfjsfDm" column="YFJSF_DM"/>
+    	<result property="yfjsfMc" column="YFJSF_MC" />
+    	<result property="yfjsfDjxh" column="YFJSF_DJXH" />
+    	<result property="yfjsfDjmc" column="YFJSF_DJMC" />
+    	<result property="kmdlMc" column="KMDL_MC" />
+    	<result property="kmxlMc" column="KMXL_MC"/>
+    	<result property="ysyflyDm" column="YSYFLY_DM" />
+    	<result property="ysyflyMc" column="YSYFLY_MC" />
+    	<result property="ywDjxh" column="YW_DJXH" />
+    	<result property="ddbh" column="DDBH" />
+    	<result property="csrq" column="CSRQ" />
+    	<result property="ysyfztDm" column="YSYFZT_DM" />
+    	<result property="ysyfztMc" column="YSYFZT_MC" />
+    	<result property="ysfJe" column="YSF_JE" />
+    	<result property="yisfJe" column="YISF_JE" />
+    	<result property="wsfJe" column="WSF_JE" />
+    	<result property="sm" column="SM" />
+    	<result property="djJgmc" column="DJ_JGMC" />
+    	<result property="ssJgmc" column="SS_JGMC" />
+    </resultMap>
+    
+    <procedure id="cwZfdj" parameterMap="cwZfdjParMapForSelect" resultMap="cwZfdjResMap">
+    	{call P_HYGL_CWGL_ZFDJ_CX(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}
+    </procedure>
+    
+    
+    <parameterMap class="java.util.Map" id="cwZfdjParMap">
+    	<parameter property="zfDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="bz" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="rtnCode" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+    	<parameter property="errMesge" javaType="java.lang.String" jdbcType="VARCHAR" mode="OUT"/>
+    </parameterMap>
+    
+    <procedure id="callPHyglCwglZfdjHxcl" parameterMap="cwZfdjParMap">
+    	{call P_HYGL_CWGL_ZFDJ_HXCL(?,?,?,?)}
+    </procedure>
+    
+	<select id="getCwZfdjList" parameterClass="java.util.Map"
+		resultClass="com.cy.cwgl.domain.CwZfdjDomain">
+		select A.ZF_DJXH zfDjxh,
+       		A.YSYF_DJXH ysyfDjxh,
+       		A.YFJSF_DM yfjsfDm,
+       		A.YFJSF_DJXH yfjsfDjxh,
+       		A.SKFMC skfmc,
+       		A.JE je,
+    		A.RQ rq,
+       		(select AA.zffs_mc from DM_ZFFS AA where AA.zffs_dm = A.ZFFS_DM) zffsMc,
+     		(select AA.zcfl_mc from DM_ZCFL AA where AA.zcfl_dm = A.ZCFL_DM) zcflMc,
+   		    A.YH_CSH_DJXH yhCshDjxh,
+   		    (SELECT ZH FROM cw_hbzc_csh DM WHERE DM.CSH_DJXH = A.YH_CSH_DJXH) AS zh,
+			(SELECT YHMC FROM cw_hbzc_csh DM WHERE DM.CSH_DJXH = A.YH_CSH_DJXH) AS yhmc,
+   		    A.LKR lkr,
+   		    A.LKR_ZJLX_DM lkrZjlxDm,
+   		    A.LKR_ZJHM lkrZjhm,
+  		    A.LKRQ lkrq,
+  		    A.YHMC yhmc,
+  		    A.HM hm,
+       		A.ZH zh,
+   		    A.ZZRQ zzrq,
+      		(select AA.mc from qy_rydj AA where AA.czy_djxh = A.JBR_CZY_DJXH) jbrCzyMc,
+      		A.SHR_CZY_DJXH shrCzyDjxh,
+       		A.SHRQ shrq,
+    		A.YXBZ yxbz,
+       		A.BZ bz,
+       		(select AA.mc from qy_rydj AA where AA.czy_djxh = A.DJR_CZY_DJXH) djrCzyMc,
+       		A.DJRQ djrq,
+       		A.DJ_JGBM djJgbm,
+       		A.SS_JGBM ssJgbm
+  		from cw_zfdj A
+ 		where A.yxbz = 'Y'
+ 		and A.YSYF_DJXH = #ysyfDjxh#
+	</select>
+	
+	<select id="getYsyfZfdj" parameterClass="java.util.Map"
+		resultClass="com.cy.cwgl.domain.CwZfdjDomain">
+	    SELECT A.YSYF_DJXH AS ysyfDjxh,
+           A.YFJSF_DM AS yfjsfDm,(SELECT YFJSF_MC FROM DM_YFJSF DM WHERE DM.YFJSF_DM = A.YFJSF_DM) AS yfjsfMc,
+           A.YFJSF_DJXH AS yfjsfDjxh,
+          (CASE WHEN A.YFJSF_DM = 11 THEN (SELECT XXZJJC FROM QY_XXZJ_DJXX DM WHERE DM.XXZJ_DJXH = A.YFJSF_DJXH)
+                WHEN A.YFJSF_DM = 12 THEN (SELECT CZ_XM || '(' || CLHM || ')' FROM QY_YL_CLXX DM WHERE DM.CL_DJXH = A.YFJSF_DJXH)
+                WHEN A.YFJSF_DM = 21 THEN (SELECT KHJC FROM QY_KH_DJXX DM WHERE DM.KH_DJXH = A.YFJSF_DJXH)
+                WHEN A.YFJSF_DM = 22 THEN (SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = A.YFJSF_DJXH)
+                WHEN A.YFJSF_DM = 23 THEN (SELECT FBSJC FROM QY_FBS_DJXX DM WHERE DM.FBS_DJXH = A.YFJSF_DJXH)
+                WHEN A.YFJSF_DM = 41 THEN (SELECT RY.MC FROM QY_RYDJ RY WHERE RY.CZY_DJXH = A.YFJSF_DJXH)
+                ELSE NULL
+           END) AS yfjsfDjmc,
+           A.KMDL_DM AS kmdlDm,(SELECT KMDL_MC FROM DM_KMDL DM WHERE DM.KMDL_DM = A.KMDL_DM) AS kmdlMc,
+           A.KMXL_DM AS kmxlDm,(SELECT KMXL_MC FROM DM_KMXL DM WHERE DM.KMXL_DM = A.KMXL_DM) AS kmxlMc,
+           A.YSYFLY_DM AS ysyflyDm,(SELECT YSYFLY_MC FROM DM_YSYFLY DM WHERE DM.YSYFLY_DM = A.YSYFLY_DM) AS ysyflyMc,
+           A.YW_DJXH AS ywDjxh,
+           TO_CHAR(A.CSRQ,'yyyy-mm-dd') AS csrq,
+           A.YSYFZT_DM AS ysyfztDm,(SELECT YSYFZT_MC FROM DM_YSYFZT DM WHERE DM.YSYFZT_DM = A.YSYFZT_DM) AS ysyfztMc,
+           A.YSF_JE AS ysfJe,
+           A.YISF_JE AS yisfJe,
+           A.WSF_JE AS wsfJe,
+           A.SM AS sm,
+           A.DJ_JGBM AS djJgbm,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = A.DJ_JGBM) AS djJgmc,
+           A.SS_JGBM AS ssJgbm,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = A.SS_JGBM) AS ssJgmc
+      FROM CW_YSYF A
+     WHERE A.yxbz = 'Y' 
+     AND A.YSYF_DJXH = #ysyfDjxh#
+    </select>
+</sqlMap>

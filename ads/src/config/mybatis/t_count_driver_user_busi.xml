@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.driver.dao.CountDriverUserBusiDao">
+
+    <resultMap id="countDriverUserBusiDomainMap" type="CountDriverUserBusiDomain">
+        <result property="id" column="id" />
+        <result property="driverId" column="driver_id" />
+    </resultMap>
+
+    <!-- 查 -->
+    <select id="queryCountDriverUserBusi" parameterType="integer" resultMap="countDriverUserBusiDomainMap">
+        SELECT *
+        FROM
+            t_count_driver_user_busi
+        WHERE
+            driver_id = #{driverId}
+    </select>
+
+    <select id="queryCountDriverUserBusiColumn" parameterType="map" resultType="integer">
+        SELECT ${column}
+        FROM
+            t_count_driver_user_busi
+        WHERE
+            driver_id = #{driverId}
+    </select>
+
+    <!-- 增 -->
+    <insert id="insertCountDriverUserBusi" parameterType="map" useGeneratedKeys="true" keyProperty="id">
+        insert into t_count_driver_user_busi (${column}) values (${value})
+    </insert>
+
+    <!-- 改 -->
+    <update id="updateCountDriverUserBusi" parameterType="map">
+        update t_count_driver_user_busi set ${column} = #{value} where driver_id = #{driverId}
+    </update>
+
+</mapper>

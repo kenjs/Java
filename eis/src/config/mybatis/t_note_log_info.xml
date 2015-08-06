@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.interfaceService.dao.NoteDao">
+
+    <!-- 新增 -->
+    <insert id="addNoteLogInfo" parameterType="NoteLogInfo" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_note_log_info(
+        MOBILEPHONE,SEND_START,RETURNED_VALUE,VISIT_IP,CHANNEL_TYPE,SNDE_TIME,NOTE_CONTENT,CREATE_TIME,COMPANY_ID,
+                event_from,kind
+        )VALUES(
+        #{phoneNum},
+        #{sendStart},
+        #{returnedValue},
+        #{requestIp},
+        #{channelType},
+        sysdate(),
+        #{content},
+        sysdate(),
+        #{companyId},
+        #{eventFrom},
+        #{kind}
+        )
+    </insert>
+</mapper>

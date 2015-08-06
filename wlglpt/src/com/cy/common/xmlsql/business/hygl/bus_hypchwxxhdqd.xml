@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.hygl.dao.BusHypchwxxhdqdMapper">
+	<select id="selectHyPcHwxxHdqdPage" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyPcHwxxHdqdDomain">
+		SELECT A.HDQD_DJXH AS hdqdDjxh,A.QDMC AS qdmc,A.JSZT AS jszt,
+		       A.FS_GSBM AS fsGsbm,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = A.FS_GSBM) fsGsmc,
+		       A.JS_GSBM AS jsGsbm,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = A.JS_GSBM) jsGsmc,
+		       A.BZ AS bz,
+		       A.SS_JGBM AS ssJgbm,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = A.SS_JGBM) ssJgmc,
+		       A.DJ_JGBM AS djJgbm,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = A.DJ_JGBM) djJgmc,
+		       A.DBR_CZY_DJXH AS dbrCzyDjxh,(SELECT MC FROM QY_RYDJ DM WHERE DM.CZY_DJXH = A.DBR_CZY_DJXH) dbrMc,
+		       A.DBRQ AS dbrq,
+		       A.YXBZ AS yxbz
+		   FROM HY_PC_HWXX_HDQD A 
+		  WHERE A.YXBZ='Y' 
+		 <dynamic>
+			<isEqual property="qdCxBz" compareValue="0" prepend="and">
+				(A.FS_GSBM =#ssJgbm# OR A.JS_GSBM =#ssJgbm#)
+			</isEqual>
+			<isEqual property="qdCxBz" compareValue="1" prepend="and">
+				A.FS_GSBM =#ssJgbm#
+			</isEqual>
+			<isEqual property="qdCxBz" compareValue="2" prepend="and">
+				A.JS_GSBM =#ssJgbm#
+			</isEqual>
+		 </dynamic>
+		 <dynamic>
+				<isNotEmpty property="rqQ" prepend="and">
+					A.DBRQ &gt;= TO_DATE(#rqQ#, 'yyyy-MM-dd')
+				</isNotEmpty>
+				<isNotEmpty property="rqZ" prepend="and">
+					A.DBRQ &lt;= TO_DATE(#rqZ#, 'yyyy-MM-dd')
+				</isNotEmpty>
+		</dynamic>
+		  $orderStr$
+    </select>
+    
+    <select id="selectHyPcHwxxHdqdAll" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyPcHwxxHdqdDomain">
+		SELECT A.HDQD_DJXH AS hdqdDjxh,A.QDMC AS qdmc,A.JSZT AS jszt,
+		       A.FS_GSBM AS fsGsbm,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = A.FS_GSBM) fsGsmc,
+		       A.JS_GSBM AS jsGsbm,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = A.JS_GSBM) jsGsmc,
+		       A.BZ AS bz,
+		       A.SS_JGBM AS ssJgbm,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = A.SS_JGBM) ssJgmc,
+		       A.DJ_JGBM AS djJgbm,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = A.DJ_JGBM) djJgmc,
+		       A.DBR_CZY_DJXH AS dbrCzyDjxh,(SELECT MC FROM QY_RYDJ DM WHERE DM.CZY_DJXH = A.DBR_CZY_DJXH) dbrMc,
+		       A.DBRQ AS dbrq,
+		       A.YXBZ AS yxbz
+		  FROM HY_PC_HWXX_HDQD A 
+		 WHERE A.YXBZ='Y' 
+		  <dynamic>
+			<isEqual property="qdCxBz" compareValue="0" prepend="and">
+				(A.FS_GSBM =#ssJgbm# OR A.JS_GSBM =#ssJgbm#)
+			</isEqual>
+			<isEqual property="qdCxBz" compareValue="1" prepend="and">
+				A.FS_GSBM =#ssJgbm#
+			</isEqual>
+			<isEqual property="qdCxBz" compareValue="2" prepend="and">
+				A.JS_GSBM =#ssJgbm#
+			</isEqual>
+		 </dynamic>
+		  <dynamic>
+				<isNotEmpty property="rqQ" prepend="and">
+					A.DBRQ &gt;= TO_DATE(#rqQ#, 'yyyy-MM-dd')
+				</isNotEmpty>
+				<isNotEmpty property="rqZ" prepend="and">
+					A.DBRQ &lt;= TO_DATE(#rqZ#, 'yyyy-MM-dd')
+				</isNotEmpty>
+		</dynamic>
+
+		  ORDER by A.HDQD_DJXH ASC
+    </select>
+
+	<select id="getHyPcHwxxHdqdRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.HDQD_DJXH) 
+		  FROM HY_PC_HWXX_HDQD A 
+		  WHERE A.YXBZ='Y' 
+		  <dynamic>
+			<isEqual property="qdCxBz" compareValue="0" prepend="and">
+				(A.FS_GSBM =#ssJgbm# OR A.JS_GSBM =#ssJgbm#)
+			</isEqual>
+			<isEqual property="qdCxBz" compareValue="1" prepend="and">
+				A.FS_GSBM =#ssJgbm#
+			</isEqual>
+			<isEqual property="qdCxBz" compareValue="2" prepend="and">
+				A.JS_GSBM =#ssJgbm#
+			</isEqual>
+		 </dynamic>
+		  <dynamic>
+				<isNotEmpty property="rqQ" prepend="and">
+					A.DBRQ &gt;= TO_DATE(#rqQ#, 'yyyy-MM-dd')
+				</isNotEmpty>
+				<isNotEmpty property="rqZ" prepend="and">
+					A.DBRQ &lt;= TO_DATE(#rqZ#, 'yyyy-MM-dd')
+				</isNotEmpty>
+		</dynamic>
+    </select>
+    
+    <select id="selectHyPcHwxxHdPage" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyPcHwxxHdqdDomain">
+		SELECT AA.HD_DJXH HDDJXH,AA.PC_DJXH PCDJXH,AA.WFH_DJXH WFHDJXH,AA.DD_DJXH DDDJXH,AA.XH XH,
+		       AA.SZ_HW_SL SZHWSL,AA.SZ_HW_ZL SZHWZL,AA.SZ_HW_TJ SZHWTJ,TO_CHAR(AA.YQ_DDRQ,'YYYY-MM-DD') YQDDRQ,AA.SHFS_DM SHFSDM,
+		       AA.SZ_JS_SL SZJSSL,AA.HDBH HDBH,TO_CHAR(AA.HDJSRQ,'YYYY-MM-DD') HDJSRQ,AA.BZ BZ,AA.SPBZ SPBZ,AA.PCDH,
+		       AA.PCFS_DM,(SELECT PCFS_MC FROM DM_PCFS DM WHERE DM.PCFS_DM = AA.PCFS_DM) PCFSMC,
+		       AA.ZCFS_DM,(SELECT ZCFS_MC FROM DM_ZCFS DM WHERE DM.ZCFS_DM = AA.ZCFS_DM) ZCFSMC,
+		       AA.CYR_CLHM CYRCLHM,AA.CYR_GCHM CYRGCHM,AA.CYR_SJXM CYRSJXM,DECODE(AA.YF_HJ,0,NULL,AA.YF_HJ) YFHJ,
+		       DECODE(AA.YF_YFYF,0,NULL,AA.YF_YFYF) YFYFYF,TO_CHAR(AA.PCRQ,'YYYY-MM-DD'),
+		       AA.PCR_CZY_DJXH,(SELECT MC FROM QY_RYDJ DM WHERE DM.CZY_DJXH = AA.PCR_CZY_DJXH) PCRMC,
+		       AA.PC_JGBM,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = AA.PC_JGBM) PCJGMC,
+		       AA.SS_JGBM,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = AA.SS_JGBM) SSJGMC
+		FROM (SELECT A.HD_DJXH,A.PC_DJXH,A.WFH_DJXH,A.DD_DJXH,A.XH,
+			       A.SZ_HW_SL,A.SZ_HW_ZL,A.SZ_HW_TJ,A.YQ_DDRQ,A.SHFS_DM,
+			       A.SZ_JS_SL,A.HDBH,A.HDJSRQ,A.BZ,A.SPBZ,
+			       P.PCDH,
+			       P.PCFS_DM,(SELECT PCFS_MC FROM DM_PCFS DM WHERE DM.PCFS_DM = P.PCFS_DM) PCFS_MC,
+			       P.ZCFS_DM,(SELECT ZCFS_MC FROM DM_ZCFS DM WHERE DM.ZCFS_DM = P.ZCFS_DM) ZCFS_MC,
+			       P.CYR_CLHM,P.CYR_GCHM,P.CYR_SJXM,DECODE(P.YF_HJ,0,NULL,P.YF_HJ) YF_HJ,
+			       DECODE(P.YF_YFYF,0,NULL,P.YF_YFYF) YF_YFYF,P.PCRQ,
+			       P.PCR_CZY_DJXH,(SELECT MC FROM QY_RYDJ DM WHERE DM.CZY_DJXH = P.PCR_CZY_DJXH) PCR_MC,
+			       P.PC_JGBM,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = P.PC_JGBM) PC_JGMC,
+			       P.SS_JGBM,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = P.SS_JGBM) SS_JGMC
+			 FROM HY_PC_HWXX_HDDJ A,HY_PC P
+			WHERE A.SS_JGBM=#ssJgbm#
+			AND P.PC_DJXH = A.PC_DJXH
+			AND P.YXBZ='Y'
+			AND A.YXBZ='Y'
+			<dynamic>
+				<isNotEmpty property="rqQ" prepend="and">
+					A.HDJSRQ &gt;= TO_DATE(#rqQ#, 'yyyy-MM-dd')
+				</isNotEmpty>
+				<isNotEmpty property="rqZ" prepend="and">
+					A.HDJSRQ &lt;= TO_DATE(#rqZ#, 'yyyy-MM-dd')
+				</isNotEmpty>
+			</dynamic>
+			AND NOT EXISTS (SELECT 1 FROM HY_PC_HWXX_HDQD_MX Q  WHERE Q.HD_DJXH = A.HD_DJXH)
+			UNION ALL
+			SELECT A.HD_DJXH,A.PC_DJXH,A.WFH_DJXH,A.DD_DJXH,A.XH,
+			       A.SZ_HW_SL,A.SZ_HW_ZL,A.SZ_HW_TJ,A.YQ_DDRQ,A.SHFS_DM,
+			       A.SZ_JS_SL,A.HDBH,A.HDJSRQ,A.BZ,A.SPBZ,
+			       P.PCDH,
+			       P.PCFS_DM,(SELECT PCFS_MC FROM DM_PCFS DM WHERE DM.PCFS_DM = P.PCFS_DM) PCFS_MC,
+			       P.ZCFS_DM,(SELECT ZCFS_MC FROM DM_ZCFS DM WHERE DM.ZCFS_DM = P.ZCFS_DM) ZCFS_MC,
+			       P.CYR_CLHM,P.CYR_GCHM,P.CYR_SJXM,DECODE(P.YF_HJ,0,NULL,P.YF_HJ) YF_HJ,
+			       DECODE(P.YF_YFYF,0,NULL,P.YF_YFYF) YF_YFYF,P.PCRQ,
+			       P.PCR_CZY_DJXH,(SELECT MC FROM QY_RYDJ DM WHERE DM.CZY_DJXH = P.PCR_CZY_DJXH) PCR_MC,
+			       P.PC_JGBM,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = P.PC_JGBM) PC_JGMC,
+			       P.SS_JGBM,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = P.SS_JGBM) SS_JGMC
+			FROM HY_PC_HWXX_HDDJ A,HY_PC P
+			WHERE P.PC_DJXH = A.PC_DJXH
+			AND P.YXBZ='Y'
+			AND A.YXBZ='Y'
+			<dynamic>
+				<isNotEmpty property="rqQ" prepend="and">
+					A.HDJSRQ &gt;= TO_DATE(#rqQ#, 'yyyy-MM-dd')
+				</isNotEmpty>
+				<isNotEmpty property="rqZ" prepend="and">
+					A.HDJSRQ &lt;= TO_DATE(#rqZ#, 'yyyy-MM-dd')
+				</isNotEmpty>
+			</dynamic>
+			AND EXISTS (SELECT 1 FROM hy_pc_hwxx_hdqd_mx qdmx,hy_pc_hwxx_hdqd qd
+			where qdmx.hd_djxh = a.hd_djxh
+			AND QDMX.HDQD_DJXH = QD.HDQD_DJXH
+			AND ((QD.JSZT=2 AND QD.JS_GSBM =#ssJgbm# AND QDMX.DQZTBZ=1) OR (QD.JSZT=3 AND QD.FS_GSBM=#ssJgbm# AND QDMX.DQZTBZ=1)))) AA
+			$orderStr$
+    </select>
+    <select id="getHyPcHwxxHdRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(AA.HD_DJXH) 
+		  FROM (SELECT A.HD_DJXH,A.PC_DJXH,A.WFH_DJXH,A.DD_DJXH,A.XH,
+			       A.SZ_HW_SL,A.SZ_HW_ZL,A.SZ_HW_TJ,A.YQ_DDRQ,A.SHFS_DM,
+			       A.SZ_JS_SL,A.HDBH,A.HDJSRQ,A.BZ,A.SPBZ,
+			       P.PCDH,
+			       P.PCFS_DM,(SELECT PCFS_MC FROM DM_PCFS DM WHERE DM.PCFS_DM = P.PCFS_DM) PCFS_MC,
+			       P.ZCFS_DM,(SELECT ZCFS_MC FROM DM_ZCFS DM WHERE DM.ZCFS_DM = P.ZCFS_DM) ZCFS_MC,
+			       P.CYR_CLHM,P.CYR_GCHM,P.CYR_SJXM,DECODE(P.YF_HJ,0,NULL,P.YF_HJ) YF_HJ,
+			       DECODE(P.YF_YFYF,0,NULL,P.YF_YFYF) YF_YFYF,P.PCRQ,
+			       P.PCR_CZY_DJXH,(SELECT MC FROM QY_RYDJ DM WHERE DM.CZY_DJXH = P.PCR_CZY_DJXH) PCR_MC,
+			       P.PC_JGBM,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = P.PC_JGBM) PC_JGMC,
+			       P.SS_JGBM,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = P.SS_JGBM) SS_JGMC
+			 FROM HY_PC_HWXX_HDDJ A,HY_PC P
+			WHERE A.SS_JGBM=#ssJgbm#
+			AND P.PC_DJXH = A.PC_DJXH
+			AND P.YXBZ='Y'
+			AND A.YXBZ='Y'
+			<dynamic>
+				<isNotEmpty property="rqQ" prepend="and">
+					A.HDJSRQ &gt;= TO_DATE(#rqQ#, 'yyyy-MM-dd')
+				</isNotEmpty>
+				<isNotEmpty property="rqZ" prepend="and">
+					A.HDJSRQ &lt;= TO_DATE(#rqZ#, 'yyyy-MM-dd')
+				</isNotEmpty>
+			</dynamic>
+			AND NOT EXISTS (SELECT 1 FROM HY_PC_HWXX_HDQD_MX Q  WHERE Q.HD_DJXH = A.HD_DJXH)
+			UNION ALL
+			SELECT A.HD_DJXH,A.PC_DJXH,A.WFH_DJXH,A.DD_DJXH,A.XH,
+			       A.SZ_HW_SL,A.SZ_HW_ZL,A.SZ_HW_TJ,A.YQ_DDRQ,A.SHFS_DM,
+			       A.SZ_JS_SL,A.HDBH,A.HDJSRQ,A.BZ,A.SPBZ,
+			       P.PCDH,
+			       P.PCFS_DM,(SELECT PCFS_MC FROM DM_PCFS DM WHERE DM.PCFS_DM = P.PCFS_DM) PCFS_MC,
+			       P.ZCFS_DM,(SELECT ZCFS_MC FROM DM_ZCFS DM WHERE DM.ZCFS_DM = P.ZCFS_DM) ZCFS_MC,
+			       P.CYR_CLHM,P.CYR_GCHM,P.CYR_SJXM,DECODE(P.YF_HJ,0,NULL,P.YF_HJ) YF_HJ,
+			       DECODE(P.YF_YFYF,0,NULL,P.YF_YFYF) YF_YFYF,P.PCRQ,
+			       P.PCR_CZY_DJXH,(SELECT MC FROM QY_RYDJ DM WHERE DM.CZY_DJXH = P.PCR_CZY_DJXH) PCR_MC,
+			       P.PC_JGBM,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = P.PC_JGBM) PC_JGMC,
+			       P.SS_JGBM,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = P.SS_JGBM) SS_JGMC
+			FROM HY_PC_HWXX_HDDJ A,HY_PC P
+			WHERE P.PC_DJXH = A.PC_DJXH
+			AND P.YXBZ='Y'
+			AND A.YXBZ='Y'
+			<dynamic>
+				<isNotEmpty property="rqQ" prepend="and">
+					A.HDJSRQ &gt;= TO_DATE(#rqQ#, 'yyyy-MM-dd')
+				</isNotEmpty>
+				<isNotEmpty property="rqZ" prepend="and">
+					A.HDJSRQ &lt;= TO_DATE(#rqZ#, 'yyyy-MM-dd')
+				</isNotEmpty>
+			</dynamic>
+			AND EXISTS (SELECT 1 FROM hy_pc_hwxx_hdqd_mx qdmx,hy_pc_hwxx_hdqd qd
+			where qdmx.hd_djxh = a.hd_djxh
+			AND QDMX.HDQD_DJXH = QD.HDQD_DJXH
+			AND ((QD.JSZT=2 AND QD.JS_GSBM =#ssJgbm# AND QDMX.DQZTBZ=1) OR (QD.JSZT=3 AND QD.FS_GSBM=#ssJgbm# AND QDMX.DQZTBZ=1)))) AA
+    </select>
+    <select id="checkTh" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+    	select count(qd.hdqd_djxh) 
+		  from hy_pc_hwxx_hdqd qd
+		 where qd.hdqd_djxh=#hdqdDjxh#
+		   and exists (
+		      select 1 from hy_pc_hwxx_hdqd_mx qdmx
+		       where qdmx.hdqd_djxh=qd.hdqd_djxh
+		         and qdmx.dqztbz=0)
+	</select>
+    <update id="updatejsztWhenJs" parameterClass="java.util.Map">
+        update HY_PC_HWXX_HDQD set JSZT=2 where HDQD_DJXH=#hdqdDjxh#
+    </update>
+    <update id="updatejsztWhenTh" parameterClass="java.util.Map">
+        update HY_PC_HWXX_HDQD set JSZT=3 where HDQD_DJXH=#hdqdDjxh#
+    </update>
+    <select id="selectHdByHdqdDjxh" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyPcHwxxHdqdDomain">
+		 select a.hd_djxh hdDjxh from hy_pc_hwxx_hdqd_mx a where a.hdqd_djxh=#hdqdDjxh#
+    </select>
+    <select id="selectQdByHdDjxhWhenDelete" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyPcHwxxHdqdDomain">
+		select a.hdqd_djxh hdqdDjxh from hy_pc_hwxx_hdqd_mx a,hy_pc_hwxx_hdqd b
+		 where a.hd_djxh=#hdDjxh#
+		   and a.hdqd_djxh=b.hdqd_djxh
+		   and b.js_gsbm=#ssJgbm#
+		   and rownum = 1
+		   order by a.hdqd_djxh desc
+    </select>
+    <select id="queryHdByQd" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyPcHwxxHdqdDomain">
+    SELECT AA.HD_DJXH HDDJXH,AA.PC_DJXH PCDJXH,AA.WFH_DJXH WFHDJXH,AA.DD_DJXH DDDJXH,AA.XH XH,
+           AA.SZ_HW_SL SZHWSL,AA.SZ_HW_ZL SZHWZL,AA.SZ_HW_TJ SZHWTJ,TO_CHAR(AA.YQ_DDRQ,'YYYY-MM-DD') YQDDRQ,AA.SHFS_DM SHFSDM,
+           AA.SZ_JS_SL SZJSSL,AA.HDBH HDBH,TO_CHAR(AA.HDJSRQ,'YYYY-MM-DD') HDJSRQ,AA.BZ BZ,AA.SPBZ SPBZ,AA.PCDH,
+           AA.PCFS_DM,(SELECT PCFS_MC FROM DM_PCFS DM WHERE DM.PCFS_DM = AA.PCFS_DM) PCFSMC,
+           AA.ZCFS_DM,(SELECT ZCFS_MC FROM DM_ZCFS DM WHERE DM.ZCFS_DM = AA.ZCFS_DM) ZCFSMC,
+           AA.CYR_CLHM CYRCLHM,AA.CYR_GCHM CYRGCHM,AA.CYR_SJXM CYRSJXM,DECODE(AA.YF_HJ,0,NULL,AA.YF_HJ) YFHJ,
+           DECODE(AA.YF_YFYF,0,NULL,AA.YF_YFYF) YFYFYF,TO_CHAR(AA.PCRQ,'YYYY-MM-DD'),
+           AA.PCR_CZY_DJXH,(SELECT MC FROM QY_RYDJ DM WHERE DM.CZY_DJXH = AA.PCR_CZY_DJXH) PCRMC,
+           AA.PC_JGBM,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = AA.PC_JGBM) PCJGMC,
+           AA.SS_JGBM,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = AA.SS_JGBM) SSJGMC
+    FROM (SELECT A.HD_DJXH,A.PC_DJXH,A.WFH_DJXH,A.DD_DJXH,A.XH,
+             A.SZ_HW_SL,A.SZ_HW_ZL,A.SZ_HW_TJ,A.YQ_DDRQ,A.SHFS_DM,
+             A.SZ_JS_SL,A.HDBH,A.HDJSRQ,A.BZ,A.SPBZ,
+             P.PCDH,
+             P.PCFS_DM,(SELECT PCFS_MC FROM DM_PCFS DM WHERE DM.PCFS_DM = P.PCFS_DM) PCFS_MC,
+             P.ZCFS_DM,(SELECT ZCFS_MC FROM DM_ZCFS DM WHERE DM.ZCFS_DM = P.ZCFS_DM) ZCFS_MC,
+             P.CYR_CLHM,P.CYR_GCHM,P.CYR_SJXM,DECODE(P.YF_HJ,0,NULL,P.YF_HJ) YF_HJ,
+             DECODE(P.YF_YFYF,0,NULL,P.YF_YFYF) YF_YFYF,P.PCRQ,
+             P.PCR_CZY_DJXH,(SELECT MC FROM QY_RYDJ DM WHERE DM.CZY_DJXH = P.PCR_CZY_DJXH) PCR_MC,
+             P.PC_JGBM,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = P.PC_JGBM) PC_JGMC,
+             P.SS_JGBM,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = P.SS_JGBM) SS_JGMC
+       FROM HY_PC_HWXX_HDDJ A,HY_PC P,HY_PC_HWXX_HDQD_MX MX
+      WHERE MX.HDQD_DJXH=#hdqdDjxh#
+      AND MX.HD_DJXH=A.HD_DJXH
+      AND P.PC_DJXH = A.PC_DJXH
+      AND P.YXBZ='Y'
+      AND A.YXBZ='Y') AA
+    </select>
+</sqlMap>

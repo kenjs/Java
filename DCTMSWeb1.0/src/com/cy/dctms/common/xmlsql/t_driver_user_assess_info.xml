@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="driverUserAssessInfoDomain" type="com.cy.dctms.common.domain.DriverUserAssessInfoDomain"/>
+	
+	
+	<resultMap class="driverUserAssessInfoDomain" id="driverUserAssess_info_domain_result">
+		<result property="id" column="ID"/>
+		<result property="cargoId" column="cargo_id"/>
+		<result property="cargoName" column="cargo_name"/>
+		<result property="driverId" column="driver_id"/>
+		<result property="driverCode" column="driver_code"/>
+		<result property="driverName" column="driver_name"/>
+		<result property="userId" column="user_id"/>
+		<result property="userCode" column="user_code"/>
+		<result property="userName" column="user_name"/>
+		<result property="transactionId" column="transaction_id"/>
+		<result property="orderNumber" column="order_number"/>
+		<result property="assessEvaluateScore" column="assess_evaluate_score"/>
+		<result property="assess" column="assess"/>
+		<result property="createTime" column="create_time" />
+		<result property="modifyTime" column="modify_time" />
+	</resultMap>
+	
+	<select id="query_driverUserAssess_info_count"  resultClass="Integer">
+		select count(t.id)
+			from
+				t_driver_user_assess_info t,
+				t_driver_user_info t1,
+				t_web_user_info t2,
+				t_transaction_info t3,
+				t_order_cargo_info t4
+			
+			where
+				t.user_id = t2.id
+			and t.driver_id = t1.id
+			and t.transaction_id = t3.id
+			and t.cargo_id = t4.id 
+		  <isNotEmpty prepend="and" property="cargoId">   
+                t.cargo_id = #cargoId#   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="cargoName">   
+                t4.cargo_name like concat('%', #cargoName# ,'%')   
+         </isNotEmpty>
+		   <isNotEmpty prepend="and" property="driverId">   
+                t.driver_id = #driverId#    
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="driverCode">   
+                t1.code = #driverCode# 
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="driverName">   
+                t1.name like concat('%', #driverName# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="userId">   
+                t.user_id = #userId#   
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="userCode">   
+                t2.code = #userCode#   
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="userName">   
+                t2.name like concat('%', #userName# ,'%')   
+         </isNotEmpty>
+		   <isNotEmpty prepend="and" property="transactionId">   
+                t.transaction_id = #transactionId#  
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="orderNumber">   
+                t3.order_number like concat('%', #orderNumber# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="assessEvaluateScore">   
+                t.assess_evaluate_score like concat('%', #assessEvaluateScore# ,'%')   
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="queryTimeQ">   
+                <![CDATA[t.create_time >= #queryTimeQ#  ]]>   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="queryTimeZ">   
+                <![CDATA[t.create_time <= date_sub(#queryTimeZ#,interval -1 day) ]]> 
+         </isNotEmpty>	
+	</select>
+	
+	<select id="query_driverUserAssess_info_by_page" parameterClass="java.util.Map" resultMap="driverUserAssess_info_domain_result">
+		select
+				t.id,
+				t.cargo_id,
+				t4.cargo_name,
+				 t.driver_id,
+				t1. code as driver_code,
+				t1. name as driver_name,
+				t.user_id,
+				t2. code as user_code,
+				t2. name as user_name,
+				t.transaction_id,
+				t3.order_number,
+				t.assess_evaluate_score,
+				t.assess,
+				t.create_time,
+				t.modify_time
+			from
+				t_driver_user_assess_info t,
+				t_driver_user_info t1,
+				t_web_user_info t2,
+				t_transaction_info t3,
+				t_order_cargo_info t4
+			
+			where
+				t.user_id = t2.id
+			and t.driver_id = t1.id
+			and t.transaction_id = t3.id
+			and t.cargo_id = t4.id 
+		 <isNotEmpty prepend="and" property="cargoId">   
+                t.cargo_id = #cargoId#   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="cargoName">   
+                t4.cargo_name like concat('%', #cargoName# ,'%')   
+         </isNotEmpty>
+		   <isNotEmpty prepend="and" property="driverId">   
+                t.driver_id = #driverId#    
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="driverCode">   
+                t1.code = #driverCode# 
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="driverName">   
+                t1.name like concat('%', #driverName# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="userId">   
+                t.user_id = #userId#   
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="userCode">   
+                t2.code = #userCode#   
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="userName">   
+                t2.name like concat('%', #userName# ,'%')   
+         </isNotEmpty>
+		   <isNotEmpty prepend="and" property="transactionId">   
+                t.transaction_id = #transactionId#  
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="orderNumber">   
+                t3.order_number like concat('%', #orderNumber# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="assessEvaluateScore">   
+                t.assess_evaluate_score like concat('%', #assessEvaluateScore# ,'%')   
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="queryTimeQ">   
+                <![CDATA[t.create_time >= #queryTimeQ#  ]]>   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="queryTimeZ">   
+                <![CDATA[t.create_time <= date_sub(#queryTimeZ#,interval -1 day) ]]> 
+         </isNotEmpty>	
+         order by t.id desc
+		  limit  #start#,#pageSize#
+	</select>
+	
+	<select id="export_driverUserAssess_info" parameterClass="java.util.Map" resultMap="driverUserAssess_info_domain_result">
+				select
+				t.id,
+				t.cargo_id,
+				t4.cargo_name,
+				 t.driver_id,
+				t1. code as driver_code,
+				t1. name as driver_name,
+				t.user_id,
+				t2. code as user_code,
+				t2. name as user_name,
+				t.transaction_id,
+				t3.order_number,
+				t.assess_evaluate_score,
+				t.assess,
+				t.create_time,
+				t.modify_time
+			from
+				t_driver_user_assess_info t,
+				t_driver_user_info t1,
+				t_web_user_info t2,
+				t_transaction_info t3,
+				t_order_cargo_info t4
+			
+			where
+				t.user_id = t2.id
+			and t.driver_id = t1.id
+			and t.transaction_id = t3.id
+			and t.cargo_id = t4.id 
+		  <isNotEmpty prepend="and" property="cargoId">   
+                t.cargo_id = #cargoId#   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="cargoName">   
+                t4.cargo_name like concat('%', #cargoName# ,'%')   
+         </isNotEmpty>
+		   <isNotEmpty prepend="and" property="driverId">   
+                t.driver_id = #driverId#    
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="driverCode">   
+                t1.code = #driverCode# 
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="driverName">   
+                t1.name like concat('%', #driverName# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="userId">   
+                t.user_id = #userId#   
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="userCode">   
+                t2.code = #userCode#   
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="userName">   
+                t2.name like concat('%', #userName# ,'%')   
+         </isNotEmpty>
+		   <isNotEmpty prepend="and" property="transactionId">   
+                t.transaction_id = #transactionId#  
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="orderNumber">   
+                t3.order_number like concat('%', #orderNumber# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="assessEvaluateScore">   
+                t.assess_evaluate_score like concat('%', #assessEvaluateScore# ,'%')   
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="queryTimeQ">   
+                <![CDATA[t.create_time >= #queryTimeQ#  ]]>   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="queryTimeZ">   
+                <![CDATA[t.create_time <= date_sub(#queryTimeZ#,interval -1 day) ]]> 
+         </isNotEmpty>	
+         order by t.id desc
+	</select>
+	
+	<select id="query_driverUserAssess_info_by_id" parameterClass="String" resultMap="driverUserAssess_info_domain_result">
+		select
+				t.id,
+				t.cargo_id,
+				t4.cargo_name,
+				 t.driver_id,
+				t1. code as driver_code,
+				t1. name as driver_name,
+				t.user_id,
+				t2. code as user_code,
+				t2. name as user_name,
+				t.transaction_id,
+				t3.order_number,
+				t.assess_evaluate_score,
+				t.assess,
+				t.create_time,
+				t.modify_time
+			from
+				t_driver_user_assess_info t,
+				t_driver_user_info t1,
+				t_web_user_info t2,
+				t_transaction_info t3,
+				t_order_cargo_info t4
+			
+			where
+				t.user_id = t2.id
+			and t.driver_id = t1.id
+			and t.transaction_id = t3.id
+			and t.cargo_id = t4.id 
+	</select>
+	
+
+	
+	<!-- 保存司机评论信息 -->
+	<update id="modify_driverUserAssess_info" parameterClass="com.cy.dctms.common.bo.DriverUserAssessInfo">
+		update t_driver_user_assess_info t
+		   set 
+		   	t.cargo_id = #cargoId#,
+		   	t.driver_id = #driverId#,
+		   	t.user_id = #userId#,
+		   	t.transaction_id = #transactionId#,
+		   	t.assess_evaluate_score = #assessEvaluateScore#,
+		   	t.assess = #assess#,
+			t.modify_time = now()
+		 where t.id = #id#
+	</update>	
+	
+</sqlMap>

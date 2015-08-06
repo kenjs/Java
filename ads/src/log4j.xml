@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<appender name="stdout" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p %-5c{3}:%L %x - %m%n" />
+		</layout>
+	</appender>
+
+
+	<appender name="R" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="..\\logs\\ads.log" />
+		<param name="MaxBackupIndex" value="500" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p %-5c{3}:%L %x - %m%n" />
+		</layout>
+	</appender>
+
+	<logger name="com.cy">
+		<level value="DEBUG" />
+	</logger>
+	<logger name="org.springframework">
+		<level value="DEBUG" />
+	</logger>
+
+	<logger name="com.ibatis">
+		<level value="DEBUG" />
+	</logger>
+	<logger name="java.sql.PreparedStatement">
+		<level value="DEBUG" />
+	</logger>
+	<logger name="java.sql.Statement">
+		<level value="DEBUG" />
+	</logger>
+	<logger name="java.sql.Connection">
+		<level value="DEBUG" />
+	</logger>
+	<logger name="java.sql.ResultSet">
+		<level value="WARN" />
+	</logger>
+
+	<root>
+		<priority value="WARN" />
+		<appender-ref ref="R" />
+		<appender-ref ref="stdout" />
+		<!-- <appender-ref ref="database"/> -->
+		<!-- <appender-ref ref="mail"/> only company use -->
+	</root>
+
+</log4j:configuration>

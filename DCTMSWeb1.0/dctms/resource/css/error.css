@@ -1,0 +1,9 @@
+@charset "utf-8";
+/* CSS Document */
+
+a{text-decoration:none;}
+.main{width:960px; margin:100px auto;}
+img{float:left; margin-top:20px;}
+.titlebox{height:80px;}
+.title{margin-left:20px;  height:80px; line-height:80px; font-size:40px; font-family:"宋体"; float:left;width:800px; padding-bottom:20px; background: url(../images/trBg.png); background-position:bottom; background-repeat:repeat-x;}
+.before{margin-left:100px; margin-top:80px; font-size:18px;font-family:"微软雅黑";}

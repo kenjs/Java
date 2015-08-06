@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.driver.dao.LocationLastInfoDao">
+	<!-- 位置信息上传 -->
+	<insert id="insertLastLocation" parameterType="LocationCollectLastInfoBo" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_location_collect_last_info (
+			DRIVER_ID,
+			LONGITUDE,
+			LATITUDE,
+			PROVINCE,
+			CITY,
+			COUNTY,
+			TOWN,
+			LOCATION,
+			LAST_TIME,
+			CREATE_TIME,
+			MODIFY_TIME
+		)
+		VALUES
+			(
+			#{driverId},
+			#{longitude},
+			#{latitude},
+			#{province},
+			#{city},
+			#{county},
+			#{town},
+			#{location},
+			#{lastTime},
+            #{createTime},
+            #{modifyTime})
+	</insert>
+	
+	<!-- 更新位置信息 -->
+	<update id="updateLastLocation" parameterType="LocationCollectLastInfoBo">
+		update t_location_collect_last_info
+        <set>
+            <if test="longitude != null and longitude != ''">
+                LONGITUDE = #{longitude},
+            </if>
+            <if test="latitude != null and latitude != ''">
+                LATITUDE = #{latitude},
+            </if>
+            <if test="province != null and province != ''">
+                PROVINCE = #{province},
+            </if>
+            <if test="city != null and city != ''">
+                CITY = #{city},
+            </if>
+            <if test="county != null and county != ''">
+                COUNTY = #{county},
+            </if>
+            <if test="town != null and town != ''">
+                TOWN = #{town},
+            </if>
+            <if test="location != null and location != ''">
+                LOCATION = #{location},
+            </if>
+            <if test="lastTime != null and lastTime != ''">
+                LAST_TIME = #{lastTime},
+            </if>
+            <if test="modifyTime != null and modifyTime != ''">
+                MODIFY_TIME = #{modifyTime},
+            </if>
+        </set>
+		where DRIVER_ID = #{driverId}
+	</update>
+
+    <!-- 位置信息上传 -->
+    <insert id="insertLocation" parameterType="LocationCollectLastInfoBo" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO t_location_collect_info (
+        DRIVER_ID,
+        LONGITUDE,
+        LATITUDE,
+        PROVINCE,
+        CITY,
+        COUNTY,
+        TOWN,
+        LOCATION,
+        COLLECT_TIME,
+        CREATE_TIME
+        )
+        VALUES
+        (
+        #{driverId},
+        #{longitude},
+        #{latitude},
+        #{province},
+        #{city},
+        #{county},
+        #{town},
+        #{location},
+        #{collectTime},
+        #{createTime})
+    </insert>
+	
+	<!-- 查看司机是否已经上传位置信息 -->
+	<select id="checkLocationExist" parameterType="string" resultType="integer">
+		select count(ID) from t_location_collect_last_info where DRIVER_ID = #{driverId}
+	</select>
+</mapper>

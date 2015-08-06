@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.xtgl.dao.BusCwkhysglMapper">
+	<select id="selectCwKhysglPage" parameterClass="java.util.Map"
+		resultClass="com.cy.cwgl.domain.CwKhysglDomain">
+		SELECT A.SR_DJXH AS srDjxh,
+		       A.KH_DJXH AS khDjxh,
+		       (select khmc from qy_kh_djxx qy where qy.kh_djxh=A.KH_DJXH) as khMc,
+		       A.JE AS je,
+		       A.YXBZ AS yxbz,
+		       A.DJR_DJXH AS djrDjxh,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.DJR_DJXH )as djrMc,
+		       A.DJRQ AS djrq,
+		       A.DJ_JGBM AS djJgbm,
+		       (select jc from qy_zzjg qy where qy.jgbm=A.DJ_JGBM) as djBm,
+		       A.SS_SSJG AS ssSsjg,
+		       (select jc from qy_zzjg qy where qy.jgbm=A.SS_SSJG) as ssJgmc,
+		       A.XGR_DJXH AS xgrDjxh,
+		        (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_DJXH )as xgrMc,
+		       A.XGRQ AS xgrq
+		  FROM CW_KHYSGL A 
+		  WHERE  A.YXBZ='Y' 
+				and A.SS_SSJG=#jgbm#
+				<dynamic>
+					<isNotEmpty prepend="and" property="khDjxh">
+						A.KH_DJXH=#khDjxh#
+					</isNotEmpty>
+				</dynamic>
+				<dynamic>
+					<isNotEmpty prepend="and" property="rqq">
+						A.DJRQ >=  to_date(#rqq#,'YYYY-MM-DD')
+					</isNotEmpty>
+				</dynamic>
+				<dynamic>
+					<isNotEmpty prepend="and" property="rqz">
+					 <![CDATA[	A.DJRQ <= to_date(#rqz#,'YYYY-MM-DD')  ]]>
+					</isNotEmpty>
+				</dynamic>
+				<dynamic>
+					<isNotEmpty prepend="and" property="fhr">
+						A.KHMC like #fhr#
+					</isNotEmpty>
+				</dynamic>
+		  $orderStr$
+    </select>
+    
+    <select id="selectCwKhysglAll" parameterClass="java.util.Map"
+		resultClass="com.cy.cwgl.domain.CwKhysglDomain">
+		SELECT A.SR_DJXH AS srDjxh,
+		       A.KH_DJXH AS khDjxh,
+		       (select khmc from qy_kh_djxx qy where qy.kh_djxh=A.KH_DJXH) as khMc,
+		       A.JE AS je,
+		       A.YXBZ AS yxbz,
+		       A.DJR_DJXH AS djrDjxh,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.DJR_DJXH )as djrMc,
+		       A.DJRQ AS djrq,
+		       A.DJ_JGBM AS djJgbm,
+		       (select jc from qy_zzjg qy where qy.jgbm=A.DJ_JGBM) as djBm,
+		       A.SS_SSJG AS ssSsjg,
+		       (select jc from qy_zzjg qy where qy.jgbm=A.SS_SSJG) as ssJgmc,
+		       A.XGR_DJXH AS xgrDjxh,
+		        (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_DJXH )as xgrMc,
+		       A.XGRQ AS xgrq
+		  FROM CW_KHYSGL A 
+		  WHERE  A.YXBZ='Y' 
+				and A.SS_SSJG=#jgbm#
+				<dynamic>
+					<isNotEmpty prepend="and" property="khDjxh">
+						A.KH_DJXH=#khDjxh#
+					</isNotEmpty>
+				</dynamic>
+				<dynamic>
+					<isNotEmpty prepend="and" property="rqq">
+						A.DJRQ >=  to_date(#rqq#,'YYYY-MM-DD')
+					</isNotEmpty>
+				</dynamic>
+				<dynamic>
+					<isNotEmpty prepend="and" property="rqz">
+					 <![CDATA[	A.DJRQ <= to_date(#rqz#,'YYYY-MM-DD')  ]]>
+					</isNotEmpty>
+				</dynamic>
+				<dynamic>
+					<isNotEmpty prepend="and" property="fhr">
+						A.KHMC like #fhr#
+					</isNotEmpty>
+				</dynamic>
+		  ORDER by A.SR_DJXH ASC
+    </select>
+
+	<select id="getCwKhysglRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.SR_DJXH) 
+		  FROM CW_KHYSGL A 
+		  WHERE A.YXBZ='Y' 
+				and A.SS_SSJG=#jgbm#
+				<dynamic>
+					<isNotEmpty prepend="and" property="khDjxh">
+						A.KH_DJXH=#khDjxh#
+					</isNotEmpty>
+				</dynamic>
+				<dynamic>
+					<isNotEmpty prepend="and" property="rqq">
+						A.DJRQ >=  to_date(#rqq#,'YYYY-MM-DD')
+					</isNotEmpty>
+				</dynamic>
+				<dynamic>
+					<isNotEmpty prepend="and" property="rqz">
+					 <![CDATA[	A.DJRQ <= to_date(#rqz#,'YYYY-MM-DD')  ]]>
+					</isNotEmpty>
+				</dynamic>
+				<dynamic>
+					<isNotEmpty prepend="and" property="fhr">
+						A.KHMC like #fhr#
+					</isNotEmpty>
+				</dynamic>
+    </select>
+    
+    <select id="selectKhMcByKhDjxh" parameterClass="java.util.Map" resultClass="string" >
+    	select khmc from qy_kh_djxx qy where qy.kh_djxh=#khDjxh#
+    </select>
+    
+    <select id="selectKhJeByKhDjxh" parameterClass="java.util.Map" resultClass="string" >
+    	select nvl(je,0) from CW_KHYSGL qy where qy.sr_djxh=#srDjxh#
+    </select>
+    
+    <select id="selectKhMcBySrDjxh" parameterClass="java.util.Map" resultClass="string" >
+    	select (select khmc from qy_kh_djxx qy where qy.kh_djxh=a.kh_djxh) from CW_KHYSGL a where a.sr_djxh=#srDjxh#
+    </select>
+    
+    	<!--插入数据-->
+	<insert id="insertCwKhYsGlMx"  parameterClass="com.cy.cwgl.domain.CwKhysglMxDomain">
+		<selectKey keyProperty="mxXh" resultClass="string" type="pre"> 
+			select SEQ_SR_DJXH.nextval as mxXh from dual 
+		</selectKey> 
+		insert into CW_KHYSGL_MX(SR_DJXH,MX_XH,KHMC,JE,ZFFS_DM,
+		ZCFL_DM,YH_CSH_DJXH,YHHDH,JBR_CZY_DJXH,CZXFBZ,JBRQ,YSYFDJXH,
+		BZ,YXBZ)
+		values(#srDjxh:NUMERIC#,#mxXh:NUMERIC#,#khmc:VARCHAR#,#je:NUMERIC#,#zffsDm:NUMERIC#,
+		#zcflDm:NUMERIC#,#yhCshDjxh:NUMERIC#,#yhhdh:VARCHAR#,#jbrCzyDjxh:NUMERIC#,#czxfBz:VARCHAR#,to_date(#jbrq:DATE#,'yyyy-MM-dd'),#ysyfDjxh:NUMERIC#,
+		#bz:VARCHAR#,#yxbz:VARCHAR#)
+	</insert>
+	
+	<!--插入数据-->
+	<insert id="insertCwYsyf"  parameterClass="com.cy.common.bo.CwYsyf">
+		<selectKey keyProperty="ysyfDjxh" resultClass="string" type="pre"> 
+			select SEQ_YSYF_DJXH.nextval as ysyfDjxh from dual 
+		</selectKey> 
+		insert into CW_YSYF(YSYF_DJXH,YFJSF_DM,YFJSF_DJXH,KMDL_DM,KMXL_DM,
+		ZDY_KMZL_DM,YSYFLY_DM,YW_DJXH,CSRQ,YSYFZT_DM,
+		YSF_JE,YISF_JE,WSF_JE,SM,YXBZ,
+		DJ_JGBM,SS_JGBM)
+		values(#ysyfDjxh:NUMERIC#,#yfjsfDm:NUMERIC#,#yfjsfDjxh:NUMERIC#,#kmdlDm:NUMERIC#,#kmxlDm:NUMERIC#,
+		#zdyKmzlDm:NUMERIC#,#ysyflyDm:NUMERIC#,#ywDjxh:NUMERIC#,to_date(#csrq:DATE#,'yyyy-MM-dd'),#ysyfztDm:NUMERIC#,
+		#ysfJe:NUMERIC#,#yisfJe:NUMERIC#,#wsfJe:NUMERIC#,#sm:VARCHAR#,#yxbz:VARCHAR#,
+		#djJgbm:NUMERIC#,#ssJgbm:NUMERIC#)
+	</insert>
+	
+	<!--根据主键删除表数据：硬删除-->
+	<update id="deleteCwKhysglMxByKey" parameterClass="java.util.Map">
+		update CW_KHYSGL_MX set yxbz='N' where SR_DJXH=#srDjxh# and mx_xh=#xh#
+    </update>
+    
+    <update id="updateKhSrJe" parameterClass="java.util.Map">
+    	update cw_khysgl set je=je-#je# where SR_Djxh=#srDjxh#
+    </update>
+    
+    
+    
+    <select id="queryCwYsGlMx" parameterClass="java.util.Map" resultClass="com.cy.cwgl.domain.CwKhysglMxDomain">
+    	select a.SR_DJXH as srDjxh,a.MX_XH as mxXh,a.KHMC as khmc,a.JE as je,a.ZFFS_DM as zffsDm,
+    	(select AA.zffs_mc from DM_ZFFS AA where AA.zffs_dm = a.ZFFS_DM) zffsMc,
+     	(select AA.zcfl_mc from DM_ZCFL AA where AA.zcfl_dm = a.ZCFL_DM) zcflMc,
+     	(SELECT ZH FROM cw_hbzc_csh DM WHERE DM.CSH_DJXH = a.YH_CSH_DJXH) AS yhzh,
+		(SELECT YHMC FROM cw_hbzc_csh DM WHERE DM.CSH_DJXH = a.YH_CSH_DJXH) AS yhmc,
+		(SELECT MC FROM QY_RYDJ DM WHERE DM.CZY_DJXH = a.JBR_CZY_DJXH) AS jbrCzyDjmc,
+		a.ZCFL_DM as zcflDm,a.YH_CSH_DJXH as yhCshDjxh,a.YHHDH as yhhdh,a.JBR_CZY_DJXH as jbrCzyDjxh,a.JBRQ as jbrq,a.CZXFBZ as czxfBz,
+		a.BZ as bz,a.YXBZ as yxbz from CW_KHYSGL_MX a  where a.SR_DJXH=#srDjxh# and a.yxbz='Y'
+    </select>
+    
+    <select id="checkZcFlByJgbm" parameterClass="java.util.Map" resultClass="string">
+    	select qybz from cw_hbzc_csh where ss_jgbm=#jgbm# and zcfl_dm=#zcfl# and yxbz='Y'
+    </select>
+    
+    <select id="selectCountCwYsYfByMxDjxh" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+    	SELECT COUNT(*) 
+    		FROM CW_YSYF
+			   WHERE YXBZ = 'Y'
+			     AND YSYFLY_DM = 34
+			     AND KMXL_DM = '312'
+			     AND YW_DJXH = #mxDjxh#
+			     AND YISF_JE > 0
+    </select>
+    
+    <delete id="deleteCwYsYfByMxDjxh" parameterClass="java.util.Map">
+    	DELETE FROM CW_YSYF YSF WHERE YSF.YW_DJXH = #xh#
+			AND YSF.YSYFLY_DM = '34' AND YSF.KMXL_DM = '312' 
+    </delete>
+    
+    <select id="selectCwSrDjxhByKhDjxh" parameterClass="java.util.Map" resultClass="com.cy.cwgl.domain.CwKhysglDomain">
+    		select a.sr_djxh,a.khmc from cw_khysgl a where a.kh_djxh=#khDjxh# and a.ss_ssjg=#jgbm#
+    </select>
+    
+    <select id="getCwYsLrMxJeBySrDjxh" parameterClass="java.util.Map" resultClass="com.cy.cwgl.domain.CwKhysglDomain">
+    		select je from cw_khysgl_mx where sr_djxh=#srDjxh# and yxbz='Y' and czxfbz='2' and ysyfdjxh=#ysyfDjxh#
+    </select>
+    
+    <update id="deleteCwKhysglMxBySrDjxh" parameterClass="java.util.Map">
+		update CW_KHYSGL_MX set yxbz='N' where SR_DJXH=#srDjxh# and czxfbz='2' and ysyfdjxh=#ysyfDjxh#
+    </update>
+</sqlMap>

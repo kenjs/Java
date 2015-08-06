@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="pragma" content="no-cache"/>
+    <meta http-equiv="Cache-Control" content="no-cache,must-revalidate"/>
+    <title>传化物流-会员中心</title>
+    
+    <link rel="stylesheet" href="../js/themes/trade/css/style2_contract.css" />
+	<link href="../css/kendo/examples-offline.css" rel="stylesheet" />
+	<link href="../css/kendo/kendo.common.min.css" rel="stylesheet" />
+	<link href="../css/kendo/kendo.default.min.css" rel="stylesheet" /> 
+	<script src="../js/jquery/jquery-1.8.3.min.js" type=text/javascript>		</script>
+	<script src="../js/themes/trade/html5.js" type=text/javascript></script>
+	<script src="../js/themes/trade/jquery.validate.js" type=text/javascript></script>
+	<script src="../js/themes/trade/jquery.validate.ext.js" type=text/javascript></script>
+	<script src="../js/themes/trade/messages_cn.js" type=text/javascript></script>
+	<script src="../js/sys/city.js"></script>
+	<script src="../js/kendo/kendo.web.min.js"></script>
+	<script src="../js/kendo/console.js"></script>
+	<script src="../js/sys/sys.js"></script>  
+  	
+  	
+  	<link href="../css/webui/main.css" rel="stylesheet" />	
+    <script src="../js/sys/webui/contract/header.js"></script>    	
+    <script src="../js/sys/webui/logo.js"></script>   	 
+    <script src="../js/sys/webui/contract/left.js"></script>
+	<link href="../js/sys/ymPrompt/skin/ch/ymPrompt.css" rel="stylesheet">
+    <script type="text/javascript" src="../js/sys/DatePicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="../js/sys/ymPrompt/ymPrompt.js"></script>
+	<style>
+		#right {
+			font-family:inherit;
+		    font-family:"宋体",Arial,sans-serif;
+		    font-size: 12px;
+		}
+		#main{width:998px;border:0px solid black;padding:0px;margin:0 auto;}
+	</style>
+  	
+  	<script type=text/javascript>
+javascript:window.history.forward(1);
+  function getid2(){
+	var idUrl= document.URL;
+	var num=idUrl.indexOf("?") 
+	idUrl=idUrl.substr(num+1);
+	return idUrl;
+}
+		function reback(){
+			window.location="../operatorcs/index_list_contract?order=21"; 
+		}
+ 
+  		var paras=getid2();
+		$.ajax({
+		   type:"get",
+		   url:"../operatorcs/list_query_detail_json",
+		   dataType: "json",
+		   data: paras,
+		   error : function(){alert("加载错误")},
+		   success:function(data){
+		   if(data!=null){		   
+			   $('#operator').html(data.operator);
+			   $('#realname').html(data.realname);
+			   $('#telephonenumber').html(data.telephonenumber);
+			   $('#mobilenumber').html(data.mobilenumber);
+			   $('#securitypermission').html(data.securitypermission);
+		     }             
+			}
+		});
+		
+</script>
+  	
+</head>
+ 
+<body>
+
+	<!-- 顶部 --开始  此处须由js动态加入-->
+	<div id="header" class="c-header" >
+	
+	</div>
+	<!-- 顶部 --结束-->
+	
+	<!-- LOGON --开始   此处须由js动态加入-->
+	<div id="logo" class="c-logo" >
+		
+	</div>
+	<!-- LOGON --结束-->
+	
+	<!-- 工作区 --开始-->
+	<div id="main">
+		<!-- 左侧菜单 --开始  此处须由js动态加入-->
+  		<div id="left" class="c-left"> 
+		</div>
+		<div stye="clear:both;"></div>
+		<!-- 左侧菜单 --结束-->
+			
+		<!-- 右侧工作区 --开始-->
+  		<div id="right" class="c-right" >
+   			<table style="width:100%;margin-top:15px;">
+				<tr style="width:100%;">
+				<td style="width:5%;"></td>
+				<td style="width:90%;">
+				<div style="width:100%;">
+							<div class="conner-top border-b t-box">
+								<h1 class="con-box-title f14">操作员详情</h1>
+							</div>
+							<form id="frmEdit">
+								<h3 class="con-section-title conner-all">操作员信息</h3>
+								<div class="sexbox" style="padding: 0;">
+									<table class="sextable detailTable">
+										<tr>
+											<th>操作员账号</th>
+											<td colspan="3"><span id="operator"></span></td>
+											<th>密码</th>
+											<td colspan="3"><span>*******</span></td>
+										</tr>
+										<tr>
+											<th>姓名</th>
+											<td colspan="3"><span id="realname"></span></td>
+											<th>手机号码</th>
+											<td colspan="3"><span id="mobilenumber"></span></td>
+										</tr>
+										<tr>
+											<th>电话号码</th>
+											<td colspan="3"><span id="telephonenumber"></span></td>
+											<th>权限</th>
+											<td colspan="3"><span id="securitypermission"></span></td>
+										</tr>
+										
+									</table>
+								</div>
+				
+							</form>
+							<hr />
+							<table class="sextable" border="0">
+								<tr>
+									<th>
+										&nbsp;
+									</th>
+									<td colspan="3" class="fullwidth">
+										<input type="button" id="backtolist"
+											class="btn-all conner-all btn-gray btn-inline f14 w120"
+											value="返回" onclick="reback()" />
+									</td>
+								</tr>
+							</table>
+							</div>
+				</td>			
+				<td style="width:5%;"></td>
+				</tr>
+				</table>
+  		</div>
+  		<!-- 右侧工作区 --开始-->
+	</div>
+	<!-- 工作区 --结束-->
+	
+	<!-- 底部 --开始  此处须由js动态加入-->
+	<div id="footer" class="c-footer">
+		
+	</div>
+	<!-- 底部 --结束-->
+</body>
+</html>
+ 
+ 
+

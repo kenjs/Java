@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.driver.dao.CountSystemBusiDao">
+
+    <!-- 查 -->
+    <select id="queryCountSystemBusi" resultType="CountSystemBusiDomain">
+        SELECT
+            id as id,
+            total_app_downs AS totalAppDowns,
+            total_truck_orders AS totalTruckOrders,
+            total_transactions as totalTransactions,
+            total_reg_users as totalRegUsers,
+            total_auth_users as totalAuthUsers,
+            total_supply_releases as totalSupplyReleases,
+            total_supply_self as totalSupplySelf,
+            total_reg_drivers as totalRegDrivers,
+            total_auth_drivers as totalAuthDrivers,
+            total_supply_finds as totalSupplyFinds
+        FROM
+            t_count_system_busi
+    </select>
+
+    <select id="queryCountSystemBusiColumn" resultType="integer" parameterType="string">
+        SELECT ${_parameter}
+        FROM
+            t_count_system_busi
+    </select>
+
+    <!-- 增 -->
+    <insert id="insertCountSystemBusi" parameterType="map" useGeneratedKeys="true" keyProperty="id">
+        insert into t_count_system_busi (${column}) values (${value})
+    </insert>
+
+    <!-- 改 -->
+    <update id="updateCountSystemBusi" parameterType="map">
+        update t_count_system_busi set ${column} = #{value}
+    </update>
+
+</mapper>

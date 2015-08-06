@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.zygl.dao.QyKhJsjgMapper">
+
+    <!--根据主键取DOMAIN-->
+		<select id="selectQyKhJsjgByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyKhJsjgDomain">
+		select a.JSJG_DJXH as jsjgDjxh,a.SS_JGBM as ssJgbm,a.KH_DJXH as khDjxh,a.SFD_XZQH_DM as sfdXzqhDm,a.MDD_XZQH_DM as mddXzqhDm,
+		(select jc from qy_zzjg where jgbm=a.SS_JGBM) as sjMc,
+		 (select b.khmc from qy_kh_djxx b where b.kh_djxh=a.KH_DJXH) as khMc,
+	    (SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM =  a.SFD_XZQH_DM) as fhrXzqhMc,
+		(SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM =  a.MDD_XZQH_DM) as shrXzqhMc,
+		a.LCS as lcs,a.DDTS as ddts,a.SYFW as syfw,a.HW_DJXH as hwDjxh,a.HWXH_DJXH as hwxhDjxh,
+		a.JLDW_FL_DM as jldwFlDm,a.JLDW_DM as jldwDm,a.JGJSGS as jgjsgs,a.XTGS as xtgs,a.JGSM as jgsm,
+		a.YXQ_Q as yxqQ,a.YXQ_Z as yxqZ,a.YXBZ as yxbz,a.CJR_CZY_DJXH as cjrCzyDjxh,a.CJRQ as cjrq,
+		a.XGR_CZY_DJXH as xgrCzyDjxh,a.XGRQ as xgrq from QY_KH_JSJG a  where a.JSJG_DJXH=#jsjgDjxh#
+		</select>
+
+	<!--插入数据-->
+			<insert id="insertQyKhJsjg"  parameterClass="com.cy.common.bo.QyKhJsjg">
+		<selectKey keyProperty="jsjgDjxh" resultClass="string" type="pre"> 
+			select SEQ_ZY_DJXH.nextval as jsjgDjxh from dual 
+		</selectKey> 
+		insert into QY_KH_JSJG(JSJG_DJXH,SS_JGBM,KH_DJXH,SFD_XZQH_DM,MDD_XZQH_DM,
+		LCS,DDTS,SYFW,HW_DJXH,HWXH_DJXH,
+		JLDW_FL_DM,JLDW_DM,JGJSGS,XTGS,JGSM,
+		YXQ_Q,YXQ_Z,YXBZ,CJR_CZY_DJXH,CJRQ,
+		XGR_CZY_DJXH,XGRQ)
+		values(#jsjgDjxh:NUMERIC#,#ssJgbm:NUMERIC#,#khDjxh:NUMERIC#,#sfdXzqhDm:VARCHAR#,#mddXzqhDm:VARCHAR#,
+		#lcs:NUMERIC#,#ddts:NUMERIC#,#syfw:VARCHAR#,#hwDjxh:NUMERIC#,#hwxhDjxh:NUMERIC#,
+		#jldwFlDm:VARCHAR#,#jldwDm:VARCHAR#,#jgjsgs:VARCHAR#,#xtgs:VARCHAR#,#jgsm:VARCHAR#,
+		to_date(#yxqQ:DATE#,'yyyy-MM-dd'),to_date(#yxqZ:DATE#,'yyyy-MM-dd'),#yxbz:VARCHAR#,#cjrCzyDjxh:NUMERIC#,to_date(#cjrq:DATE#,'yyyy-MM-dd'),
+		#xgrCzyDjxh:NUMERIC#,to_date(#xgrq:DATE#,'yyyy-MM-dd')) 
+		</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+        <update id="updateQyKhJsjgByKey" parameterClass="com.cy.common.bo.QyKhJsjg">
+		update  QY_KH_JSJG set SS_JGBM=#ssJgbm#,KH_DJXH=#khDjxh#,SFD_XZQH_DM=#sfdXzqhDm#,MDD_XZQH_DM=#mddXzqhDm#,
+		 LCS=#lcs#,DDTS=#ddts#,SYFW=#syfw#,HW_DJXH=#hwDjxh#,HWXH_DJXH=#hwxhDjxh#,JLDW_FL_DM=#jldwFlDm#,JLDW_DM=#jldwDm#,
+		 JGJSGS=#jgjsgs#,XTGS=#xtgs#,JGSM=#jgsm#,YXQ_Q=to_date(#yxqQ#,'yyyy-MM-dd'),
+		  YXQ_Z=to_date(#yxqZ#,'yyyy-MM-dd'),YXBZ=#yxbz#,CJR_CZY_DJXH=#cjrCzyDjxh#,CJRQ=to_date(#cjrq#,'yyyy-MM-dd'),
+		  XGR_CZY_DJXH=#xgrCzyDjxh#,XGRQ=to_date(#xgrq#,'yyyy-MM-dd') where JSJG_DJXH=#jsjgDjxh#
+		</update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteQyKhJsjgByKey" parameterClass="java.util.Map">
+		update QY_KH_JSJG set yxbz='N' where JSJG_DJXH=#jsjgDjxh#
+    </delete>
+</sqlMap>

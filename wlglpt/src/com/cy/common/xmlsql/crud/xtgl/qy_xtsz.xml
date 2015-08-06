@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.xtgl.dao.QyRydjMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectXtszByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.XtszDomain">
+		select a.CZY_DJXH as czyDjxh,a.MC as mc,a.QY_ZCXH as qyZcxh,a.QYBM as qybm,a.ZH as zh,
+		a.PWD as pwd,a.SJHM as sjhm,a.SJDH as sjdh,a.BGDH as bgdh,a.BGDHAO as bgdhao,
+		a.JTDH as jtdh,a.QQ as qq,a.MSN as msn,a.EMAIL as email,a.XTGLYBZ as xtglybz,
+		a.RYLB_DM as rylbDm,a.DLYZFS_DM as dlyzfsDm,a.QYBZ as qybz,a.YXBZ as yxbz,a.CJR_CZY_DJXH as cjrCzyDjxh,
+		a.CJRQ as cjrq,a.XGR_CZY_DJXH as xgrCzyDjxh,a.XGRQ as xgrq,a.QX_JGBM as qxJgbm ,
+		(select zz.mc from qy_zzjg zz where jgbm = ( select gw.ss_jgbm from qy_ry_gw gw where gw.zjbz ='Y' and gw.czy_djxh =  a.qy_zcxh))  zbm
+		from QY_RYDJ a  where a.CZY_DJXH=#czyDjxh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertXtsz"  parameterClass="com.cy.common.bo.XtglXtsz">
+		<selectKey keyProperty="czyDjxh" resultClass="long" type="pre"> 
+			select SEQ_CZY_DJXH.nextval as czyDjxh from dual 
+		</selectKey> 
+		insert into QY_RYDJ(CZY_DJXH,MC,QY_ZCXH,QYBM,ZH,
+		PWD,SJHM,SJDH,BGDH,BGDHAO,
+		JTDH,QQ,MSN,EMAIL,XTGLYBZ,
+		RYLB_DM,DLYZFS_DM,QYBZ,YXBZ,CJR_CZY_DJXH,
+		CJRQ,XGR_CZY_DJXH,XGRQ,QX_JGBM)
+		values(#czyDjxh:NUMERIC#,#mc:VARCHAR#,#qyZcxh:NUMERIC#,#qybm:VARCHAR#,#zh:VARCHAR#,
+		#pwd:VARCHAR#,#sjhm:VARCHAR#,#sjdh:VARCHAR#,#bgdh:VARCHAR#,#bgdhao:VARCHAR#,
+		#jtdh:VARCHAR#,#qq:VARCHAR#,#msn:VARCHAR#,#email:VARCHAR#,#xtglybz:VARCHAR#,
+		#rylbDm:NUMERIC#,#dlyzfsDm:NUMERIC#,#qybz:VARCHAR#,#yxbz:VARCHAR#,#cjrCzyDjxh:NUMERIC#,
+		to_date(#cjrq:DATE#,'yyyy-MM-dd'),#xgrCzyDjxh:NUMERIC#,to_date(#xgrq:DATE#,'yyyy-MM-dd'),#qxJgbm:NUMERIC#)
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateXtszByKey" parameterClass="com.cy.common.bo.XtglXtsz">
+        update QY_RYDJ set CZY_DJXH=#czyDjxh#,MC=#mc#,QY_ZCXH=#qyZcxh#,QYBM=#qybm#,ZH=#zh#,
+		PWD=#pwd#,SJHM=#sjhm#,SJDH=#sjdh#,BGDH=#bgdh#,BGDHAO=#bgdhao#,
+		JTDH=#jtdh#,QQ=#qq#,MSN=#msn#,EMAIL=#email#,XTGLYBZ=#xtglybz#,
+		RYLB_DM=#rylbDm#,DLYZFS_DM=#dlyzfsDm#,QYBZ=#qybz#,YXBZ=#yxbz#,CJR_CZY_DJXH=#cjrCzyDjxh#,
+		CJRQ=to_date(#cjrq#, 'YYYY-MM-DD'),XGR_CZY_DJXH=#xgrCzyDjxh#,XGRQ=to_date(#xgrq#, 'YYYY-MM-DD'),QX_JGBM=#qxJgbm# where CZY_DJXH=#czyDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteXtszByKey" parameterClass="java.util.Map">
+		update QY_RYDJ set yxbz='N' where CZY_DJXH=#czyDjxh#
+    </delete>
+    
+     <update id="updateXtszXtcs" parameterClass="java.util.Map">
+     	update XT_XTCS set CSMRZ=#csmrz# where CSXH=#csxh#
+     </update>
+</sqlMap>

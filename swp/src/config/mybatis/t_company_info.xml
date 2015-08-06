@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.swp.dao.CompanyDao">
+
+    <resultMap type="CompanyInfo" id="company_info_result">
+        <result property="id" column="ID"/>
+        <result property="companyName" column="COMPANY_NAME"/>
+        <result property="companyProvince" column="COMPANY_PROVINCE"/>
+        <result property="companyCity" column="COMPANY_CITY"/>
+        <result property="companyCounty" column="COMPANY_COUNTY"/>
+        <result property="companyAddress" column="COMPANY_ADDRESS"/>
+        <result property="businessLicence" column="BUSINESS_LICENCE"/>
+        <result property="organizationCode" column="ORGANIZATION_CODE"/>
+        <result property="businessImages" column="BUSINESS_IMAGES"/>
+        <result property="contactName" column="CONTACT_NAME"/>
+        <result property="contactTelephone" column="CONTACT_TELEPHONE"/>
+        <result property="deletedFlag" column="DELETED_FLAG"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="modifyTime" column="MODIFY_TIME"/>
+        <result property="organizationImages" column="ORGANIZATION_IMAGES"/>
+        <result property="userOrigin" column="USER_ORIGIN"/>
+        <!--20140808(货主版新增字段1个) 所属物流企业标识（父级0，子级为父级id） -->
+        <result property="parentCompanyId" column="PARENT_COMPANY_ID"/>
+        <result property="companyType" column="COMPANY_TYPE"/>
+    </resultMap>
+	
+
+    <!-- 根据公司电话查询 -->
+    <!-- query_company_info_by_id -->
+    <select id="queryCompanyInfoByTelephone" parameterType="string" resultMap="company_info_result">
+        select * from t_company_info t where t.CONTACT_TELEPHONE = #{contactTelephone} LIMIT 1 
+    </select>
+
+</mapper>

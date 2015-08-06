@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<!--  -->
+<sqlMap >
+	 <typeAlias type="tf56.contract.domain.ContractDictionary" alias="contractDictionary"/>
+	 <resultMap id="contractDictionaryFieldMap" class="contractDictionary">
+	  <result column="contractDictionaryId" property="contractdictionaryid" jdbcType="VARCHAR" />   <!--  -->
+	  <result column="type" property="type" jdbcType="VARCHAR" />   <!--  -->
+	  <result column="text" property="text" jdbcType="VARCHAR" />   <!--  -->
+	  <result column="description" property="description" jdbcType="VARCHAR" />   <!--  -->
+	  <result column="inputDate" property="inputdate" jdbcType="VARCHAR" />   <!-- 输入时间 -->
+	  <result column="updateDate" property="updatedate" jdbcType="VARCHAR" />   <!--  -->
+	 </resultMap>
+
+ <!-- 新增记录 -->
+ 	<insert id="iBatisInsertContractDictionary" parameterClass="contractDictionary">
+	  insert into ContractDictionary (type,text,description,inputDate,updateDate) values (#type:VARCHAR#,#text:VARCHAR#,#description:VARCHAR#,#inputdate:VARCHAR#,#updatedate:VARCHAR#)
+	  <selectKey resultClass="String" keyProperty="contractdictionaryid">
+	   select last_insert_id() as id
+	  </selectKey>
+	 </insert>
+
+ <!-- 删除用户对象 -->
+	 <delete id="iBatisDeleteContractDictionary" parameterClass="java.util.HashMap">
+	  delete from ContractDictionary where contractDictionaryId=#contractdictionaryid#
+	 </delete>
+
+ <!-- 更新用户对象 -->
+	 <update id="iBatisUpdateContractDictionary" parameterClass="contractDictionary">
+	  update ContractDictionary set type=#type:VARCHAR#,text=#text:VARCHAR#,description=#description:VARCHAR#,inputDate=#inputdate:VARCHAR#,updateDate=#updatedate:VARCHAR# where contractDictionaryId=#contractdictionaryid#
+	 </update>
+
+ <!-- 获取多条记录查询列表 返回List -->
+	 <select id="iBatisSelectContractDictionaryList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	  select contractDictionaryId,type,text,description, DATE_FORMAT(inputDate,'%Y-%m-%d %H:%i:%s') as inputDate,DATE_FORMAT(updateDate,'%Y-%m-%d %H:%i:%s') as updateDate from ContractDictionary
+	  	<dynamic prepend="WHERE">  
+	            <isNotEmpty prepend="AND" property="type">  
+	                ( type LIKE '%$type$%')  
+	            </isNotEmpty>  
+	            <isNotEmpty prepend="AND" property="text">  
+	                ( text LIKE '%$text$%')  
+	            </isNotEmpty>  
+	    </dynamic> 
+	   order by contractDictionaryId desc limit $skipCount$,$pageSize$
+	 </select>
+
+<!-- 获取多条记录查询列表的条数  返回String -->
+	 <select id="iBatisSelectContractDictionaryListCount" parameterClass="java.util.HashMap" resultClass="java.lang.String">
+	  select count(*) from ContractDictionary 
+	  <dynamic prepend="WHERE">  
+	            <isNotEmpty prepend="AND" property="type">  
+	                ( type LIKE '%$type$%')
+	            </isNotEmpty>  
+	            <isNotEmpty prepend="AND" property="text">  
+	                ( text LIKE '%$text$%')
+	            </isNotEmpty>  
+	  </dynamic>
+	 </select>
+ 
+ <!-- 获取text列表 返回List -->
+	 <select id="iBatisSelectContractDictionaryTextList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	  select text from ContractDictionary where type like '%$type$%'
+	 </select>
+ 
+ <!-- 根据id获得用户对象, 返回bean -->
+	 <select id="iBatisSelectContractDictionaryById" parameterClass="java.util.HashMap" resultMap="contractDictionaryFieldMap">
+	  select * from ContractDictionary where contractDictionaryId=#contractdictionaryid#
+	 </select>
+
+ <!-- 验证是否存在 -->
+	 <select id="iBatisSelectContractDictionaryValidateCount" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+	  select count(*) from ContractDictionary where text=#text# and type=#type#
+	  <isNotEmpty prepend="AND" property="contractdictionaryid">
+	  	( contractDictionaryId!=#contractdictionaryid#)
+	  </isNotEmpty>
+	 </select>
+ <!-- 根据字典类型获取对应的字典文本 -->
+	 <select id="iBatisSelectListByType" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+		select contractDictionaryId as contractdictionaryid,text,description from ContractDictionary where type=#type:VARCHAR#
+	 </select>
+</sqlMap>

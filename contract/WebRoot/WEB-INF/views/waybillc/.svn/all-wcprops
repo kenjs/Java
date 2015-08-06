@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/Project/!svn/ver/10983/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/waybillc
+END
+waybillAdd.html
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/waybillc/waybillAdd.html
+END
+waybillSignAdd.html
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/waybillc/waybillSignAdd.html
+END
+waybillManager.html
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/waybillc/waybillManager.html
+END
+waybillList.html
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/waybillc/waybillList.html
+END
+waybillStartSure.html
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/waybillc/waybillStartSure.html
+END
+waybillupdate_list.html
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/waybillc/waybillupdate_list.html
+END
+waybillLoadSure.html
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/waybillc/waybillLoadSure.html
+END
+waybill_detail.html
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/waybillc/waybill_detail.html
+END
+waybillStowageAdd.html
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/Project/!svn/ver/10983/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/waybillc/waybillStowageAdd.html
+END
+waybillEdit.html
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/waybillc/waybillEdit.html
+END
+waybillArriveSure.html
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/waybillc/waybillArriveSure.html
+END
+waybillupdate_edit.html
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/waybillc/waybillupdate_edit.html
+END

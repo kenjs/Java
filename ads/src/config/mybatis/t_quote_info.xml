@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.driver.dao.QuoteInfoDao">
+	<resultMap type="QuoteInfoDomain" id="quoteInfoDomainMap">
+		<result property="id" column="ID"/>
+		<result property="cargoId" column="CARGO_ID"/>
+		<result property="cargoType" column="CARGO_TYPE"/>
+		<result property="cargoName" column="CARGO_NAME"/>
+		<result property="startProvince" column="START_PROVINCE"/>
+		<result property="startCity" column="START_CITY"/>
+		<result property="startCounty" column="START_COUNTY"/>
+		<result property="startTown" column="START_TOWN"/>
+		<result property="endProvince" column="END_PROVINCE"/>
+		<result property="endCity" column="END_CITY"/>
+		<result property="endCounty" column="END_COUNTY"/>
+		<result property="endTown" column="END_TOWN"/>
+		<result property="requestStartTime" column="REQUEST_START_TIME"/>
+		<result property="requestEndTime" column="REQUEST_END_TIME"/>
+		<result property="requestCarLength" column="REQUEST_CAR_LENGTH"/>
+		<result property="requestCarPlateType" column="REQUEST_CAR_PLATE_TYPE"/>
+		<result property="contactName" column="CONTACT_NAME"/>
+		<result property="contactMobilephone" column="CONTACT_MOBILEPHONE"/>
+		<result property="contactTelephone" column="CONTACT_TELEPHONE"/>
+		<result property="cargoWeight" column="CARGO_WEIGHT"/>
+		<result property="cargoCubage" column="CARGO_CUBAGE"/>
+		<result property="remark" column="REMARK"/>
+		<result property="freight" column="FREIGHT"/>
+		<result property="cargoFlag" column="CARGO_FLAG"/>
+		<result property="quoteFair" column="QUOTE_FAIR"/>
+		<result property="quoteType" column="QUOTE_TYPE"/>
+	</resultMap>
+	
+	<!-- 所有报过价的订单列表 -->
+	<select id="selectQuoteTransactionList" parameterType="map" resultMap="quoteInfoDomainMap">
+		SELECT
+			lt.ID,			
+			lt.QUOTE_TYPE,
+			lt.CARGO_ID,
+			rt.CARGO_TYPE,
+			rt.CARGO_NAME,
+			rt.START_PROVINCE,
+			rt.START_CITY,
+			rt.START_COUNTY,
+			rt.START_TOWN,
+			rt.END_PROVINCE,
+			rt.END_CITY,
+			rt.END_COUNTY,
+			rt.END_TOWN,
+			rt.REQUEST_START_TIME,
+			rt.REQUEST_END_TIME,
+			rt.REQUEST_CAR_LENGTH,
+			rt.REQUEST_CAR_PLATE_TYPE,
+			rt.CONTACT_NAME,
+			rt.CONTACT_MOBILEPHONE,
+			rt.CONTACT_TELEPHONE,
+			rt.CARGO_WEIGHT,
+			rt.CARGO_CUBAGE,
+			rt.REMARK,
+			rt.FREIGHT,
+			rt.CARGO_FLAG,
+			lt.QUOTE_FAIR
+		FROM
+			t_quote_info lt,
+			t_order_cargo_info rt
+		WHERE lt.CARGO_ID = rt.ID
+			and lt.DRIVER_ID = #{driverId}
+			and lt.START = 0
+			and rt.CARGO_FLAG = 0
+			and rt.DELETED_FLAG = 0
+			and rt.REQUEST_START_TIME <![CDATA[>=]]> DATE_FORMAT(SYSDATE(),'%Y-%m-%d')
+		order by rt.REQUEST_START_TIME asc
+		limit ${fromSize},${listSize}
+	</select>
+	
+	<!-- 修改货源 报价 -->
+	<update id="updateQuoteInfo" parameterType="QuoteInfoBo">
+		update t_quote_info set MODIFY_TIME = sysdate()
+        <if test="quoteFair != null and quoteFair != ''">
+            ,QUOTE_FAIR = #{quoteFair}
+        </if>
+        <if test="quoteType != null and quoteType != ''">
+            ,QUOTE_TYPE = #{quoteType}
+        </if>
+        <if test="remark != null and remark != ''">
+            ,REMARK = #{remark}
+        </if>
+        <if test="start != null and start != ''">
+            ,START = #{start}
+        </if>
+        <if test="cashAdvance != null and cashAdvance != ''">
+            ,CASH_ADVANCE = #{cashAdvance}
+        </if>
+        <if test="prepaidOilCard != null and prepaidOilCard != ''">
+            ,PREPAID_OIL_CARD = #{prepaidOilCard}
+        </if>
+		where ID = #{id}
+	</update>
+	
+	<!-- 根据货源id和司机id查找报价信息 -->
+	<select id="selectQuoteInfoByDriverAndCargoId" parameterType="map" resultType="QuoteInfoDomain">
+		select ID as id,
+				CARGO_ID as cargoId,
+				DRIVER_ID as driverId,
+				QUOTE_FAIR as quoteFair,
+				QUOTE_TYPE as quoteType,
+				REMARK as remark,
+				CREATE_TIME as createTime,
+				MODIFY_TIME as modifyTime,
+				CASH_ADVANCE as cashAdvance,
+				PREPAID_OIL_CARD as prepaidOilCard
+		 from t_quote_info where CARGO_ID = #{cargoId} and DRIVER_ID = #{driverId} and START = 0
+	</select>
+
+    <!-- 查找关注的货源数量 -->
+    <select id="selectAttentionCargoCount" parameterType="string" resultType="integer">
+        select count(CARGO_ID) from t_driver_cargo_collect_info where DRIVER_ID = #{driverId}
+    </select>
+
+    <resultMap type="OrderCargoInfoDomain" id="orderCargoInfoDomainDetail">
+        <result property="id" column="ID"/>
+        <result property="startProvince" column="START_PROVINCE"/>
+        <result property="startCity" column="START_CITY"/>
+        <result property="startCounty" column="START_COUNTY"/>
+        <result property="startTown" column="START_TOWN"/>
+        <result property="endProvince" column="END_PROVINCE"/>
+        <result property="endCity" column="END_CITY"/>
+        <result property="endCounty" column="END_COUNTY"/>
+        <result property="endTown" column="END_TOWN"/>
+        <result property="requestStartTime" column="REQUEST_START_TIME"/>
+        <result property="requestEndTime" column="REQUEST_END_TIME"/>
+        <result property="cargoName" column="CARGO_NAME"/>
+        <result property="cargoType" column="CARGO_TYPE"/>
+        <result property="cargoWeight" column="CARGO_WEIGHT"/>
+        <result property="cargoCubage" column="CARGO_CUBAGE"/>
+        <result property="remark" column="REMARK"/>
+        <result property="contactName" column="CONTACT_NAME"/>
+        <result property="contactMobilephone" column="CONTACT_MOBILEPHONE"/>
+        <result property="contactTelephone" column="CONTACT_TELEPHONE"/>
+        <result property="companyName" column="COMPANY_NAME" />
+    </resultMap>
+
+    <!-- 查找关注的货源集合 -->
+    <select id="selectAttentionCargoList" parameterType="map" resultMap="orderCargoInfoDomainDetail">
+        select
+        t2.ID,
+        t2.START_PROVINCE,
+        t2.START_CITY,
+        t2.START_COUNTY,
+        t2.START_TOWN,
+        t2.END_PROVINCE,
+        t2.END_CITY,
+        t2.END_COUNTY,
+        t2.END_TOWN,
+        t2.REQUEST_START_TIME,
+        t2.REQUEST_END_TIME,
+        t2.CARGO_NAME,
+        t2.CARGO_TYPE,
+        t2.CARGO_WEIGHT,
+        t2.CARGO_CUBAGE,
+        t2.REMARK,
+        t2.CONTACT_NAME,
+        t2.CONTACT_MOBILEPHONE,
+        t2.CONTACT_TELEPHONE,
+        t2.COMPANY_NAME
+        from
+        t_driver_cargo_collect_info t1,t_order_cargo_info t2
+        where
+        t1.DRIVER_ID = #{driverId}
+        and
+        t1.CARGO_ID = t2.ID
+        and
+        t2.DELETED_FLAG = 0
+        and
+        t2.CARGO_FLAG = 0
+        and
+        t2.REQUEST_START_TIME <![CDATA[>=]]> DATE_FORMAT(SYSDATE(),'%Y-%m-%d')
+        order by t2.REQUEST_START_TIME asc
+        limit ${fromSize},${listSize}
+    </select>
+
+    <!-- 待评价订单 -->
+    <select id="selectWaitEvaluationTransactionList" parameterType="map" resultType="TransactionInfoDomain">
+        SELECT
+        t.ID as id,
+        t.CARGO_ID as cargoId,
+        t.COMPANY_ID as companyId,
+        t.CREATE_TIME as createTime,
+        t.DEPLOY_USERID as deployUserid,
+        t.DRIVER_ID as driverId,
+        t.MODIFY_TIME as modifyTime,
+        t.ORDER_NUMBER as orderNumber,
+        t.REMARK as remark,
+        t.TRADE_FAIR as tradeFair,
+        t.TRADE_CANCEL_ORIGIN as tradeCancelOrigin,
+        t.TRADE_START_TIME as tradeStartTime,
+        t.TRADE_START as tradeStart,
+        t2.CARGO_TYPE as cargoType,
+        t2.CARGO_NAME as cargoName,
+        t2.CARGO_WEIGHT as cargoWeight,
+        t2.CARGO_CUBAGE as cargoCubage,
+        t2.CONTACT_NAME as contactName,
+        t2.CONTACT_MOBILEPHONE as contactMobilephone,
+        t2.CONTACT_TELEPHONE as contactTelephone,
+        t2.REQUEST_CAR_BAR_TYPE as requestCarBarType,
+        t2.REQUEST_CAR_LENGTH as requestCarLength,
+        t2.REQUEST_CAR_PLATE_TYPE as requestCarPlateType,
+        t2.START_PROVINCE as startProvince,
+        t2.START_CITY as startCity,
+        t2.START_COUNTY as startCounty,
+        t2.START_TOWN as startTown,
+        t2.END_PROVINCE as endProvince,
+        t2.END_CITY as endCity,
+        t2.END_COUNTY as endCounty,
+        t2.END_TOWN as endTown,
+        t2.REQUEST_START_TIME as requestStartTime,
+        t2.REQUEST_END_TIME as requestEndTime,
+        t2.FREIGHT as freight,
+        (SELECT c.COMPANY_NAME FROM t_company_info c WHERE c.ID = t.COMPANY_ID) companyName
+        FROM
+        t_transaction_info t,
+        t_order_cargo_info t2
+        WHERE
+        t.DRIVER_ID = #{driverId}
+        AND t.CARGO_ID = t2.ID
+        AND t.ORDER_START = 0
+        AND t.TRADE_START in (4,5,7)
+        AND t.ORDER_TYPE = 1
+        AND NOT EXISTS (
+        SELECT
+        1
+        FROM
+        t_driver_user_assess_info a
+        WHERE
+        a.CARGO_ID = t.CARGO_ID
+        AND a.DRIVER_ID = t.DRIVER_ID
+        )
+        order by t.ORDER_NUMBER desc
+        limit ${fromSize},${listSize}
+    </select>
+
+    <!-- 我的记录（已经成交的订单） -->
+    <select id="selectDealedTransactionInMyLog" parameterType="map" resultType="TransactionInfoDomain">
+        SELECT
+        t.ID as id,
+        t.CARGO_ID as cargoId,
+        t.COMPANY_ID as companyId,
+        t.CREATE_TIME as createTime,
+        t.DEPLOY_USERID as deployUserid,
+        t.DRIVER_ID as driverId,
+        t.MODIFY_TIME as modifyTime,
+        t.ORDER_NUMBER as orderNumber,
+        t.REMARK as remark,
+        t.TRADE_FAIR as tradeFair,
+        t.TRADE_CANCEL_ORIGIN as tradeCancelOrigin,
+        t.TRADE_START as tradeStart,
+        t2.CARGO_TYPE as cargoType,
+        t2.CARGO_NAME as cargoName,
+        t2.CARGO_WEIGHT as cargoWeight,
+        t2.CARGO_CUBAGE as cargoCubage,
+        t2.CONTACT_NAME as contactName,
+        t2.CONTACT_MOBILEPHONE as contactMobilephone,
+        t2.CONTACT_TELEPHONE as contactTelephone,
+        t2.REQUEST_CAR_BAR_TYPE as requestCarBarType,
+        t2.REQUEST_CAR_LENGTH as requestCarLength,
+        t2.REQUEST_CAR_PLATE_TYPE as requestCarPlateType,
+        t2.START_PROVINCE as startProvince,
+        t2.START_CITY as startCity,
+        t2.START_COUNTY as startCounty,
+        t2.START_TOWN as startTown,
+        t2.END_PROVINCE as endProvince,
+        t2.END_CITY as endCity,
+        t2.END_COUNTY as endCounty,
+        t2.END_TOWN as endTown,
+        t2.REQUEST_START_TIME as requestStartTime,
+        t2.REQUEST_END_TIME as requestEndTime,
+        t2.FREIGHT as freight,
+        t.TRADE_START_TIME as tradeStartTime,
+        (SELECT c.COMPANY_NAME FROM t_company_info c WHERE c.ID = t.COMPANY_ID) companyName
+        FROM
+        t_transaction_info t,
+        t_order_cargo_info t2
+        WHERE
+        t.DRIVER_ID = #{driverId}
+        AND (t.TRADE_START in (5,6,7) or t.TRADE_CANCEL_ORIGIN in (1,2))
+        AND t.ORDER_START = 0
+        AND t.CARGO_ID = t2.ID
+        AND t.ORDER_TYPE = 1
+        order by t.ORDER_NUMBER desc
+        limit ${fromSize},${listSize}
+    </select>
+
+    <!-- 我的记录（已经成交的订单） -->
+    <select id="selectImportDealedTransactionList" parameterType="map" resultType="TransactionInfoDomain">
+        SELECT
+        t.ID as id,
+        t.CARGO_ID as cargoId,
+        t.COMPANY_ID as companyId,
+        t.CREATE_TIME as createTime,
+        t.DEPLOY_USERID as deployUserid,
+        t.DRIVER_ID as driverId,
+        t.MODIFY_TIME as modifyTime,
+        t.ORDER_NUMBER as orderNumber,
+        t.REMARK as remark,
+        t.TRADE_FAIR as tradeFair,
+        t.TRADE_CANCEL_ORIGIN as tradeCancelOrigin,
+        t.TRADE_START as tradeStart,
+        t.SHIPPER_ORDER_NO as shipperOrderNo,
+        t.RECEIVER_ORDER_NO as receiverOrderNo,
+        t2.CARGO_TYPE as cargoType,
+        t2.CARGO_NAME as cargoName,
+        t2.CARGO_WEIGHT as cargoWeight,
+        t2.CARGO_CUBAGE as cargoCubage,
+        t2.CONTACT_NAME as contactName,
+        t2.CONTACT_MOBILEPHONE as contactMobilephone,
+        t2.CONTACT_TELEPHONE as contactTelephone,
+        t2.REQUEST_CAR_BAR_TYPE as requestCarBarType,
+        t2.REQUEST_CAR_LENGTH as requestCarLength,
+        t2.REQUEST_CAR_PLATE_TYPE as requestCarPlateType,
+        t2.START_PROVINCE as startProvince,
+        t2.START_CITY as startCity,
+        t2.START_COUNTY as startCounty,
+        t2.START_TOWN as startTown,
+        t2.END_PROVINCE as endProvince,
+        t2.END_CITY as endCity,
+        t2.END_COUNTY as endCounty,
+        t2.END_TOWN as endTown,
+        t2.REQUEST_START_TIME as requestStartTime,
+        t2.REQUEST_END_TIME as requestEndTime,
+        t2.FREIGHT as freight,
+        t.TRADE_START_TIME as tradeStartTime,
+        (select count(r.ID) from t_transaction_receipt_path r where r.TRANSACTION_ID = t.ID and r.TYPE = 0) receipt,
+        (SELECT c.COMPANY_NAME FROM t_company_info c WHERE c.ID = t.COMPANY_ID) companyName,
+        t.SHIPPER_COMPANY_ID as shipperCompanyId,
+        (select p.COMPANY_NAME from t_company_info p where p.ID = t.SHIPPER_COMPANY_ID) shipperCompanyName,
+        t.SHIPPER_CODE_ID as shipperCodeId,
+        (select p.COMPANY_NAME from t_company_info p where p.ID =
+        (select usr.COMPANY_ID from t_web_user_info usr where usr.ID = t.SHIPPER_CODE_ID)) shipperCodeName,
+        t.RECEIVER_CODE_ID as receiverCodeId,
+        (select p.COMPANY_NAME from t_company_info p where p.ID =
+        (select usr.COMPANY_ID from t_web_user_info usr where usr.ID = t.RECEIVER_CODE_ID)) receiverCodeName
+        FROM
+        t_transaction_info t,
+        t_order_cargo_info t2
+        WHERE
+        t.DRIVER_ID = #{driverId}
+        AND (t.TRADE_START in (5,6,7) or t.TRADE_CANCEL_ORIGIN in (1,2))
+        AND t.ORDER_START = 0
+        AND t.CARGO_ID = t2.ID
+        AND t.ORDER_TYPE = 2
+        order by t.ORDER_NUMBER desc
+        limit ${fromSize},${listSize}
+    </select>
+
+    <select id="queryImportSuccessTransactions" parameterType="map" resultType="TransactionInfoDomain">
+        SELECT
+        t.ID as id,
+        t.CARGO_ID as cargoId,
+        t.COMPANY_ID as companyId,
+        t.CREATE_TIME as createTime,
+        t.DEPLOY_USERID as deployUserid,
+        t.DRIVER_ID as driverId,
+        t.MODIFY_TIME as modifyTime,
+        t.ORDER_NUMBER as orderNumber,
+        t.REMARK as remark,
+        t.TRADE_FAIR as tradeFair,
+        t.TRADE_CANCEL_ORIGIN as tradeCancelOrigin,
+        t.TRADE_START as tradeStart,
+        t.SHIPPER_ORDER_NO as shipperOrderNo,
+        t.RECEIVER_ORDER_NO as receiverOrderNo,
+        t2.CARGO_TYPE as cargoType,
+        t2.CARGO_NAME as cargoName,
+        t2.CARGO_WEIGHT as cargoWeight,
+        t2.CARGO_CUBAGE as cargoCubage,
+        t2.CONTACT_NAME as contactName,
+        t2.CONTACT_MOBILEPHONE as contactMobilephone,
+        t2.CONTACT_TELEPHONE as contactTelephone,
+        t2.REQUEST_CAR_BAR_TYPE as requestCarBarType,
+        t2.REQUEST_CAR_LENGTH as requestCarLength,
+        t2.REQUEST_CAR_PLATE_TYPE as requestCarPlateType,
+        t2.START_PROVINCE as startProvince,
+        t2.START_CITY as startCity,
+        t2.START_COUNTY as startCounty,
+        t2.START_TOWN as startTown,
+        t2.END_PROVINCE as endProvince,
+        t2.END_CITY as endCity,
+        t2.END_COUNTY as endCounty,
+        t2.END_TOWN as endTown,
+        t2.REQUEST_START_TIME as requestStartTime,
+        t2.REQUEST_END_TIME as requestEndTime,
+        t2.FREIGHT as freight,
+        t.TRADE_START_TIME as tradeStartTime,
+        (select count(r.ID) from t_transaction_receipt_path r where r.TRANSACTION_ID = t.ID and r.TYPE = 0) receipt,
+        (SELECT c.COMPANY_NAME FROM t_company_info c WHERE c.ID = t.COMPANY_ID) companyName,
+        t.SHIPPER_COMPANY_ID as shipperCompanyId,
+        (select p.COMPANY_NAME from t_company_info p where p.ID = t.SHIPPER_COMPANY_ID) shipperCompanyName,
+        t.SHIPPER_CODE_ID as shipperCodeId,
+        (select p.COMPANY_NAME from t_company_info p where p.ID =
+        (select usr.COMPANY_ID from t_web_user_info usr where usr.ID = t.SHIPPER_CODE_ID)) shipperCodeName,
+        t.RECEIVER_CODE_ID as receiverCodeId,
+        (select p.COMPANY_NAME from t_company_info p where p.ID =
+        (select usr.COMPANY_ID from t_web_user_info usr where usr.ID = t.RECEIVER_CODE_ID)) receiverCodeName
+        FROM
+        t_transaction_info t,
+        t_order_cargo_info t2
+        WHERE
+        t.DRIVER_ID = #{driverId}
+        AND t.TRADE_START in (5,7)
+        AND t.ORDER_START = 0
+        AND t.CARGO_ID = t2.ID
+        AND t.ORDER_TYPE = 2
+        order by t.ORDER_NUMBER desc
+        limit ${fromSize},${listSize}
+    </select>
+
+    <!-- 根据交易状态查询导入订单信息 -->
+    <select id="selectImportTransactionListByTradeStart" parameterType="map" resultType="TransactionInfoDomain">
+        SELECT
+        t.ID as id,
+        t.CARGO_ID as cargoId,
+        t.COMPANY_ID as companyId,
+        t.CREATE_TIME as createTime,
+        t.DEPLOY_USERID as deployUserid,
+        t.DRIVER_ID as driverId,
+        t.MODIFY_TIME as modifyTime,
+        t.ORDER_NUMBER as orderNumber,
+        t.REMARK as remark,
+        t.TRADE_FAIR as tradeFair,
+        t.TRADE_START as tradeStart,
+        t.TRADE_CANCEL_ORIGIN as tradeCancelOrigin,
+        t.SHIPPER_ORDER_NO as shipperOrderNo,
+        t.RECEIVER_ORDER_NO as receiverOrderNo,
+        t2.CARGO_TYPE as cargoType,
+        t2.CARGO_NAME as cargoName,
+        t2.CARGO_WEIGHT as cargoWeight,
+        t2.CARGO_CUBAGE as cargoCubage,
+        t2.CONTACT_NAME as contactName,
+        t2.CONTACT_MOBILEPHONE as contactMobilephone,
+        t2.CONTACT_TELEPHONE as contactTelephone,
+        t2.REQUEST_CAR_BAR_TYPE as requestCarBarType,
+        t2.REQUEST_CAR_LENGTH as requestCarLength,
+        t2.REQUEST_CAR_PLATE_TYPE as requestCarPlateType,
+        t2.START_PROVINCE as startProvince,
+        t2.START_CITY as startCity,
+        t2.START_COUNTY as startCounty,
+        t2.START_TOWN as startTown,
+        t2.END_PROVINCE as endProvince,
+        t2.END_CITY as endCity,
+        t2.END_COUNTY as endCounty,
+        t2.END_TOWN as endTown,
+        t2.REQUEST_START_TIME as requestStartTime,
+        t2.REQUEST_END_TIME as requestEndTime,
+        t2.FREIGHT as freight,
+        t.TRADE_START_TIME as tradeStartTime,
+        (select count(r.ID) from t_transaction_receipt_path r where r.TRANSACTION_ID = t.ID and r.TYPE = 1) invoice,
+        (SELECT c.COMPANY_NAME FROM t_company_info c WHERE c.ID = t.COMPANY_ID) companyName,
+        t.SHIPPER_COMPANY_ID as shipperCompanyId,
+        (select p.COMPANY_NAME from t_company_info p where p.ID = t.SHIPPER_COMPANY_ID) shipperCompanyName,
+        t.SHIPPER_CODE_ID as shipperCodeId,
+        (select p.COMPANY_NAME from t_company_info p where p.ID =
+        (select usr.COMPANY_ID from t_web_user_info usr where usr.ID = t.SHIPPER_CODE_ID)) shipperCodeName,
+        t.RECEIVER_CODE_ID as receiverCodeId,
+        (select p.COMPANY_NAME from t_company_info p where p.ID =
+        (select usr.COMPANY_ID from t_web_user_info usr where usr.ID = t.RECEIVER_CODE_ID)) receiverCodeName
+        FROM
+        t_transaction_info t,
+        t_order_cargo_info t2
+        WHERE
+        t.DRIVER_ID = #{driverId}
+        AND t.TRADE_START = #{tradeStart}
+        AND t.ORDER_START = 0
+        AND t.CARGO_ID = t2.ID
+        AND t.TRADE_CANCEL_ORIGIN = 0
+        AND t.ORDER_TYPE = 2
+        order by t.ORDER_NUMBER desc
+        limit ${fromSize},${listSize}
+    </select>
+
+    <!-- 新增货源报价 -->
+    <insert id="addNewQuoteInfo" parameterType="QuoteInfoBo" useGeneratedKeys="true" keyProperty="id">
+        insert into t_quote_info (CARGO_ID,DRIVER_ID,QUOTE_FAIR,QUOTE_TYPE,REMARK,START,CREATE_TIME,MODIFY_TIME,CASH_ADVANCE,PREPAID_OIL_CARD)
+        values (#{cargoId},#{driverId},#{quoteFair},#{quoteType},#{remark},0,sysdate(),sysdate(),#{cashAdvance},#{prepaidOilCard})
+    </insert>
+
+    <!-- 根据交易状态查询 -->
+    <select id="selectTransactionListByStatus" parameterType="map" resultType="TransactionInfoDomain">
+        SELECT
+        t.ID as id,
+        t.CARGO_ID as cargoId,
+        t.COMPANY_ID as companyId,
+        t.CREATE_TIME as createTime,
+        t.DEPLOY_USERID as deployUserid,
+        t.DRIVER_ID as driverId,
+        t.MODIFY_TIME as modifyTime,
+        t.ORDER_NUMBER as orderNumber,
+        t.REMARK as remark,
+        t.TRADE_FAIR as tradeFair,
+        t.TRADE_START as tradeStart,
+        t.TRADE_CANCEL_ORIGIN as tradeCancelOrigin,
+        t2.CARGO_TYPE as cargoType,
+        t2.CARGO_NAME as cargoName,
+        t2.CARGO_WEIGHT as cargoWeight,
+        t2.CARGO_CUBAGE as cargoCubage,
+        t2.CONTACT_NAME as contactName,
+        t2.CONTACT_MOBILEPHONE as contactMobilephone,
+        t2.CONTACT_TELEPHONE as contactTelephone,
+        t2.REQUEST_CAR_BAR_TYPE as requestCarBarType,
+        t2.REQUEST_CAR_LENGTH as requestCarLength,
+        t2.REQUEST_CAR_PLATE_TYPE as requestCarPlateType,
+        t2.START_PROVINCE as startProvince,
+        t2.START_CITY as startCity,
+        t2.START_COUNTY as startCounty,
+        t2.START_TOWN as startTown,
+        t2.END_PROVINCE as endProvince,
+        t2.END_CITY as endCity,
+        t2.END_COUNTY as endCounty,
+        t2.END_TOWN as endTown,
+        t2.REQUEST_START_TIME as requestStartTime,
+        t2.REQUEST_END_TIME as requestEndTime,
+        t2.FREIGHT as freight,
+        t.TRADE_START_TIME as tradeStartTime,
+        (SELECT c.COMPANY_NAME FROM t_company_info c WHERE c.ID = t.COMPANY_ID) companyName
+        FROM
+        t_transaction_info t,
+        t_order_cargo_info t2
+        WHERE
+        t.DRIVER_ID = #{driverId}
+        AND t.TRADE_START = #{tradeStart}
+        AND t.ORDER_START = 0
+        AND t.CARGO_ID = t2.ID
+        AND t.TRADE_CANCEL_ORIGIN = 0
+        AND t.ORDER_TYPE = 1
+        order by t.ORDER_NUMBER desc
+        limit ${fromSize},${listSize}
+    </select>
+</mapper>

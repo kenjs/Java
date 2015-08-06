@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.dctms.dao.NoteSendRecoreDao">
+	<resultMap type="NoteSendRecord" id="note_send_record_result">
+		<!-- 主键（自增长）y -->
+        <result property="id" column="ID"/>
+        <!-- 类型（0 企业，1 司机） y-->
+        <result property="type" column="TYPE"/>
+        <!-- 备注 y-->
+        <result property="remark" column="REMARK"/>
+        <!-- 手机号码 y-->
+        <result property="telephone" column="TELEPHONE"/>
+        <!-- 短信内容 y-->
+        <result property="content" column="CONTENT"/>
+        <!-- 短信发送返回状态 y-->
+        <result property="returnStatus" column="RETURN_STATUS"/>
+        <!-- 创建时间 y-->
+        <result property="createTime" column="CREATE_TIME"/>
+        <!-- 1 营销平台 2 快到网网站 3 app服务端 -->
+        <result property="eventFrom" column="EVENT_FROM"/>
+        <!-- 短信日志记录表主键(pk-t_note_log_info.id)(自2014-11-21日起增加) -->
+        <result property="noteSendedId" column="NOTE_SENDED_ID"/>
+		<result property="useFor" column="USE_FOR"/>
+	</resultMap>
+	
+	<resultMap type="NoteSendRecord" id="note_send_record_result_list">
+        <!-- 手机号码 -->
+        <result property="telephone" column="TELEPHONE"/>
+	</resultMap>
+
+
+	<insert id="insertIntoTemp" parameterType="NoteSendRecord" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_note_send_record(
+			TYPE,EVENT_FROM,NOTE_SENDED_ID,TELEPHONE,CONTENT,RETURN_STATUS,REMARK,USE_FOR,CREATE_TIME
+		)VALUES(
+			#{type},#{eventFrom},#{noteSendedId},#{telephone},#{content},#{returnStatus},#{remark},#{useFor},sysdate()
+		)
+	</insert>
+
+	<select id="selectNoteSendRecore" parameterType="map" resultMap="note_send_record_result">
+		SELECT
+			t.CONTENT as content,
+			t.CREATE_TIME as createTime,
+			t.REMARK as remark,
+			t.EVENT_FROM as eventFrom,
+			t.ID as id,
+			t.RETURN_STATUS as returnStatus,
+			t.TELEPHONE as telephone,
+			t.NOTE_SENDED_ID as noteSendedId,
+			t.TYPE as type,
+			t.USE_FOR as useFor
+		FROM
+	t_note_send_record t
+	where DATE_FORMAT(t.CREATE_TIME,'%Y-%m-%d') = DATE_FORMAT(sysdate(),'%Y-%m-%d')
+			<if test="null != telephone and '' != telephone">
+				and t.TELEPHONE = #{telephone}
+			</if>
+			<if test="null != type and '' != type">
+				and t.TYPE = #{type} 
+			</if>
+			<if test="null != useFor and '' != useFor">
+				and t.USE_FOR = #{useFor}
+			</if>
+	</select>
+
+	<select id="selectNoteSendRecoreUseFor" parameterType="map" resultMap="note_send_record_result">
+		SELECT
+		t.CONTENT as content,
+		DATEDIFF(SYSDATE(),t.CREATE_TIME) as createTime,
+		t.REMARK as remark,
+		t.EVENT_FROM as eventFrom,
+		t.ID as id,
+		t.RETURN_STATUS as returnStatus,
+		t.TELEPHONE as telephone,
+		t.NOTE_SENDED_ID as noteSendedId,
+		t.TYPE as type,
+		t.USE_FOR as useFor
+		FROM
+		t_note_send_record t
+		where 1 = 1
+		<if test="null != telephone and '' != telephone">
+			and t.TELEPHONE = #{telephone}
+		</if>
+		<if test="null != type and '' != type">
+			and t.TYPE = #{type}
+		</if>
+		<if test="null != useFor and '' != useFor">
+			and t.USE_FOR = #{useFor}
+		</if>
+		ORDER BY id DESC LIMIT 1
+	</select>
+
+	<!-- 查询当天已经发送三条短信的司机手机号码 -->
+	<select id="queryNoteSendRecoreList" resultMap="note_send_record_result_list">
+		select t.TELEPHONE from t_note_send_record t where 
+		DATE_FORMAT(t.CREATE_TIME,'%Y-%m-%d') = DATE_FORMAT(SYSDATE(),'%Y-%m-%d')
+		and t.TYPE = 1 GROUP BY t.TELEPHONE having count(t.TELEPHONE) = 3
+	</select>
+</mapper>

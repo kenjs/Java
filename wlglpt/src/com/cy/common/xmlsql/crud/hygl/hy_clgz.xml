@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.hygl.dao.HyClgzMapper">
+
+     <!--根据主键取DOMAIN-->
+	<select id="getHyClgz" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyClgzDomain">
+		SELECT CLGZ_DJXH AS clgzDjxh,
+		PC_DJXH AS pcDjxh,
+		RQ AS rq,
+		SM AS sm,
+		SZQY_XZQH_DM AS szqyXzqhDm,
+		(SELECT XZQH_MC FROM DM_XZQH DM WHERE DM.XZQH_DM = SZQY_XZQH_DM) AS	szqyXzqhMc,
+		XXDZ AS xxdz,
+		TO_CHAR(YJ_DDRQ, 'yyyy-mm-dd') AS yjDdrq,
+		LLBZ AS llbz,
+		YXBZ AS yxbz,
+		DJ_JGBM AS djJgbm,
+		(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = DJ_JGBM) AS djJgmc,
+		CJR_CZY_DJXH AS cjrCzyDjxh,
+		TO_CHAR(CJRQ, 'yyyy-mm-dd') AS cjrq,
+		XGR_CZY_DJXH AS xgrCzyDjxh,
+		TO_CHAR(XGRQ, 'yyyy-mm-dd') AS xgrq
+		FROM HY_CLGZ
+		WHERE CLGZ_DJXH = #clgzDjxh#
+		AND YXBZ = 'Y'
+	</select>
+
+
+	<!--插入数据-->
+	<insert id="insertHyClgz"  parameterClass="com.cy.common.bo.HyClgz">
+	    <selectKey keyProperty="clgzDjxh" resultClass="string" type="pre">
+			select SEQ_CLGZ_DJXH.nextval as kpsqmxDjxh from dual 
+		</selectKey>
+		insert into HY_CLGZ(CLGZ_DJXH,PC_DJXH,RQ,
+		SM,SZQY_XZQH_DM,XXDZ,
+		YJ_DDRQ,LLBZ,YXBZ,DJ_JGBM,
+		CJR_CZY_DJXH,CJRQ,XGR_CZY_DJXH,XGRQ)
+		values(#clgzDjxh:NUMERIC#,#pcDjxh:NUMERIC#,to_date(#rq:timestamp#,'yyyy-MM-dd hh24:mi:ss'),
+		#sm:VARCHAR#,#szqyXzqhDm:VARCHAR#,#xxdz:VARCHAR#,
+		to_date(#yjDdrq:DATE#,'yyyy-MM-dd'),#llbz:VARCHAR#,#yxbz:VARCHAR#,#djJgbm:NUMERIC#,
+		#cjrCzyDjxh:NUMERIC#,to_date(#cjrq:DATE#,'yyyy-MM-dd'),#xgrCzyDjxh:NUMERIC#,to_date(#xgrq:DATE#,'yyyy-MM-dd'))
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateHyClgzByKey" parameterClass="com.cy.common.bo.HyClgz">
+       update HY_CLGZ
+       set CLGZ_DJXH=#clgzDjxh#,PC_DJXH=#pcDjxh#,RQ=to_date(#rq#, 'yyyy-MM-dd HH24:mi:ss'),
+       SM=#sm#,SZQY_XZQH_DM=#szqyXzqhDm#,XXDZ=#xxdz#,
+       YJ_DDRQ=to_date(#yjDdrq#, 'YYYY-MM-DD'),LLBZ= #llbz#,
+       YXBZ=#yxbz#,CJR_CZY_DJXH=#cjrCzyDjxh#,CJRQ=to_date(#cjrq#, 'YYYY-MM-DD'),XGR_CZY_DJXH=#xgrCzyDjxh#,XGRQ=to_date(#xgrq#, 'YYYY-MM-DD')
+       where CLGZ_DJXH = #clgzDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：软删除-->
+	<delete id="deleteHyClgzByKey" parameterClass="java.util.Map">
+		update HY_CLGZ set yxbz='N' where CLGZ_DJXH=#clgzDjxh#
+    </delete>
+    
+	
+</sqlMap>

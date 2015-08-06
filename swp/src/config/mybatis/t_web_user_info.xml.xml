@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+<mapper namespace="com.cy.swp.dao.WebUserInfoDao">
+<resultMap type="WebUserInfo" id="web_userInfo_result">
+		<result property="id" column="ID"/>
+		<result property="code" column="CODE"/>
+		<result property="password" column="PASSWORD"/>
+		<result property="name" column="NAME"/>
+		<result property="companyId" column="COMPANY_ID"/>
+		<result property="mobilephone" column="MOBILEPHONE"/>
+		<result property="userQq" column="USER_QQ"/>
+		<result property="email" column="EMAIL"/>
+		<result property="idCardNumber" column="ID_CARD_NUMBER"/>
+		<result property="userImages" column="USER_IMAGES"/>
+		<result property="deletedFlag" column="DELETED_FLAG"/>
+		<result property="loginIp" column="LOGIN_IP"/>
+		<result property="loginTime" column="LOGIN_TIME"/>
+		<result property="enterpriseFlag" column="ENTERPRISE_FLAG"/>
+		<result property="enterpriseTime" column="ENTERPRISE_TIME"/>
+		<result property="panymentFlag" column="PANYMENT_FLAG"/>
+		<result property="panymentTime" column="PANYMENT_TIME"/>
+		<result property="personageFlag" column="PERSONAGE_FLAG"/>
+		<result property="personageTime" column="PERSONAGE_TIME"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="modifyTime" column="MODIFY_TIME"/>
+		<result property="newoldUserType" column="NEWOLD_USER_TYPE"/>
+		<result property="userOrigin" column="USER_ORIGIN"/><!-- 用户来源(0.自己注册，1.导入的)20140716 -->
+		<result property="submitType" column="SUBMIT_TYPE"/>
+		
+		<result property="userType" column="USER_TYPE"/><!-- 注册用户类型（物流企业0、发货方1、收货方2） -->
+		<result property="encoded" column="ENCODED"/><!-- 编码代码 -->
+		<result property="parentId" column="PARENT_ID"/><!-- 所属物流企业（用户表）标识（父级0，子级为父级id） -->
+		<result property="deliveryFlag" column="DELIVERY_FLAG"/><!-- 发货确认权限（1有权限，0无权限） -->
+		<result property="arrivalSure" column="ARRIVAL_SURE"/><!--发货确认权限（1有权限，0无权限） -->
+		<result property="receiveSure" column="RECEIVE_SURE"/><!--收货确认权限（1有权限，0无权限） -->
+		
+		<result property="pactCarDriverFlag" column="PACT_CAR_DRIVER_FLAG"/><!-- VIP会员功能权限标识（0无权限1有权限） -->
+		<result property="pactCardFlag" column="PACT_CARD_FLAG"/><!--身份证查询功能权限标识（0无权限1有权限） -->
+		<result property="pactCargoFlag" column="PACT_CARGO_FLAG"/><!--货主版功能权限标识（0无权限1有权限） -->
+	</resultMap>
+	
+	
+	
+	<!-- 根据用户手机号查询 -->
+	<select id="queryWebUserInfoByMobilephone" parameterType="string" resultMap="web_userInfo_result">
+		select 
+		t.ID,t.CODE,t.PASSWORD,t.NAME,t.COMPANY_ID,t.MOBILEPHONE,t.USER_QQ,t.EMAIL,
+		t.ID_CARD_NUMBER,
+		t.USER_IMAGES,
+		t.DELETED_FLAG,
+		t.LOGIN_IP,
+		t.LOGIN_TIME,
+		t.ENTERPRISE_FLAG,
+		t.ENTERPRISE_TIME,
+		t.PANYMENT_FLAG,
+		t.PANYMENT_TIME,
+		t.PERSONAGE_FLAG,
+		t.PERSONAGE_TIME,
+		t.CREATE_TIME,
+		t.MODIFY_TIME,
+		t.USER_ORIGIN,
+		t.SUBMIT_TYPE,
+		t.PACT_CAR_DRIVER_FLAG,
+		t.NEWOLD_USER_TYPE,
+		t.USER_TYPE,
+		t.ENCODED,
+		t.PARENT_ID,
+		t.DELIVERY_FLAG,
+		t.ARRIVAL_SURE,
+		t.RECEIVE_SURE,
+		t.PACT_CARD_FLAG,
+		t.PACT_CARGO_FLAG 
+		from t_web_user_info t where t. MOBILEPHONE = #{mobilephone}  LIMIT 1 
+	</select>
+	
+</mapper>

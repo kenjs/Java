@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.dzgl.dao.QySpwsSplcszMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectQySpwsSplcszByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.dzgl.domain.QySpwsSplcszDomain">
+		select a.SPLC_SZXH as splcSzxh,a.SS_JGBM as ssJgbm,a.WS_DM as wsDm,a.XMFL_DJXH as xmflDjxh,a.SPLC as splc,
+		a.ZSSX as zssx,a.GZRBZ as gzrbz,a.QZXSBZ as qzxsbz,a.YXBZ as yxbz,a.CJR_CZY_DJXH as cjrCzyDjxh,
+		a.CJRQ as cjrq,a.XGR_CZY_DJXH as xgrCzyDjxh,a.XGRQ as xgrq from QY_SPWS_SPLCSZ a  where a.SPLC_SZXH=#splcSzxh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertQySpwsSplcsz"  parameterClass="com.cy.common.bo.QySpwsSplcsz">
+		<selectKey keyProperty="splcSzxh" resultClass="long" type="pre"> 
+			select SEQ_SPLC_SZXH.nextval as splcSzxh from dual 
+		</selectKey> 
+		insert into QY_SPWS_SPLCSZ(SPLC_SZXH,SS_JGBM,WS_DM,XMFL_DJXH,SPLC,
+		ZSSX,GZRBZ,QZXSBZ,YXBZ,CJR_CZY_DJXH,
+		CJRQ,XGR_CZY_DJXH,XGRQ)
+		values(#splcSzxh:NUMERIC#,#ssJgbm:NUMERIC#,#wsDm:VARCHAR#,#xmflDjxh:NUMERIC#,#splc:VARCHAR#,
+		#zssx:NUMERIC#,#gzrbz:VARCHAR#,#qzxsbz:VARCHAR#,#yxbz:VARCHAR#,#cjrCzyDjxh:NUMERIC#,
+		to_date(#cjrq:DATE#,'yyyy-MM-dd'),#xgrCzyDjxh:NUMERIC#,to_date(#xgrq:DATE#,'yyyy-MM-dd'))
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateQySpwsSplcszByKey" parameterClass="com.cy.common.bo.QySpwsSplcsz">
+        update QY_SPWS_SPLCSZ set SPLC_SZXH=#splcSzxh#,SS_JGBM=#ssJgbm#,WS_DM=#wsDm#,XMFL_DJXH=#xmflDjxh#,SPLC=#splc#,
+		ZSSX=#zssx#,GZRBZ=#gzrbz#,QZXSBZ=#qzxsbz#,YXBZ=#yxbz#,CJR_CZY_DJXH=#cjrCzyDjxh#,
+		CJRQ=to_date(#cjrq#, 'YYYY-MM-DD'),XGR_CZY_DJXH=#xgrCzyDjxh#,XGRQ=to_date(#xgrq#, 'YYYY-MM-DD') where SPLC_SZXH=#splcSzxh#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteQySpwsSplcszByKey" parameterClass="java.util.Map">
+		update QY_SPWS_SPLCSZ set yxbz='N' where SPLC_SZXH=#splcSzxh#
+    </delete>
+    
+    <delete id="deleteSpjcBySplcSzxh" parameterClass="java.util.Map">
+    	UPDATE QY_SPWS_SPLCSZ_ZB SPZB SET SPZB.YXBZ = 'N'
+			WHERE SPZB.SPLC_SZXH = #splcSzxh#
+    </delete>
+    
+    <!--根据主键取DOMAIN-->
+	<select id="selectQySpwsSplcszZbByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.dzgl.domain.QySpwsSplcszZbDomain">
+		select a.SPLC_SZXH as splcSzxh,a.JDXH as jdxh,a.SPJDSM as spjdsm,a.SPJGJB_DM as spjgjbDm,
+		(SELECT JG.SJ_JGBM FROM QY_ZZJG JG WHERE JG.JGBM = a.SP_JGBM) as dwDm,
+		a.SP_JGBM as spJgbm,a.GW_DJXH as gwDjxh,a.SPHJSM as sphjsm,
+		a.SPYJL as spyjl,a.SPQM as spqm,a.YXZS_BZ as yxzsBz,a.ZSTJ as zstj,a.SPSX as spsx,
+		a.GZRBZ as gzrbz,a.QZXS as qzxs,a.YXBZ as yxbz,a.CJR_CZY_DJXH as cjrCzyDjxh,a.CJRQ as cjrq,
+		a.XGR_CZY_DJXH as xgrCzyDjxh,a.XGRQ as xgrq,a.FSBZ as fsbz from QY_SPWS_SPLCSZ_ZB a  where a.SPLC_SZXH=#splcSzxh# and a.JDXH=#jdxh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertQySpwsSplcszZb"  parameterClass="com.cy.common.bo.QySpwsSplcszZb">
+		insert into QY_SPWS_SPLCSZ_ZB(SPLC_SZXH,JDXH,SPJDSM,SPJGJB_DM,SP_JGBM,GW_DJXH,SPHJSM,
+		SPYJL,SPQM,YXZS_BZ,ZSTJ,SPSX,
+		GZRBZ,QZXS,YXBZ,CJR_CZY_DJXH,CJRQ,
+		XGR_CZY_DJXH,XGRQ,FSBZ)
+		(SELECT #splcSzxh:NUMERIC#,NVL(MAX(SPZB.JDXH),0)+1,#spjdsm:VARCHAR#,#spjgjbDm:NUMERIC#,#spJgbm:NUMERIC#,#gwDjxh:NUMERIC#,#sphjsm:VARCHAR#,
+		#spyjl:VARCHAR#,#spqm:VARCHAR#,#yxzsBz:VARCHAR#,#zstj:VARCHAR#,#spsx:NUMERIC#,
+		#gzrbz:VARCHAR#,#qzxs:NUMERIC#,#yxbz:VARCHAR#,#cjrCzyDjxh:NUMERIC#,#cjrq:DATE#,
+		#xgrCzyDjxh:NUMERIC#,#xgrq:DATE#,#fsbz:VARCHAR#
+		FROM QY_SPWS_SPLCSZ_ZB SPZB
+		WHERE SPZB.SPLC_SZXH = #splcSzxh#
+		AND SPZB.YXBZ = 'Y')
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateQySpwsSplcszZbByKey" parameterClass="com.cy.common.bo.QySpwsSplcszZb">
+        update QY_SPWS_SPLCSZ_ZB set SPLC_SZXH=#splcSzxh#,JDXH=#jdxh#,SPJDSM=#spjdsm#,SPJGJB_DM=#spjgjbDm#,SP_JGBM=#spJgbm#,GW_DJXH=#gwDjxh#,SPHJSM=#sphjsm#,
+		SPYJL=#spyjl#,SPQM=#spqm#,YXZS_BZ=#yxzsBz#,ZSTJ=#zstj#,SPSX=#spsx#,
+		GZRBZ=#gzrbz#,QZXS=#qzxs#,YXBZ=#yxbz#,CJR_CZY_DJXH=#cjrCzyDjxh#,CJRQ=#cjrq#,
+		XGR_CZY_DJXH=#xgrCzyDjxh#,XGRQ=#xgrq#,FSBZ=#fsbz# where SPLC_SZXH=#splcSzxh# and JDXH=#jdxh#
+    </update>
+    
+	<!--根据主键删除表数据：软删除-->
+	<delete id="deleteSplcZb" parameterClass="java.util.Map">
+		DELETE FROM  QY_SPWS_SPLCSZ_ZB where SPLC_SZXH=#splcSzxh# 
+		and JDXH=(
+			SELECT NVL(MAX(SPZB.JDXH),0) FROM QY_SPWS_SPLCSZ_ZB SPZB
+			WHERE SPZB.SPLC_SZXH = #splcSzxh#
+			AND SPZB.YXBZ = 'Y'
+		)
+    </delete>
+    
+    <select id="queryNextJdxh" parameterClass="java.util.Map" 
+    	resultClass="java.lang.Long">    	
+		SELECT NVL(MAX(SPZB.JDXH),0)+1 FROM QY_SPWS_SPLCSZ_ZB SPZB
+		WHERE SPZB.SPLC_SZXH = #splcSzxh#
+		AND SPZB.YXBZ = 'Y'
+    </select>
+</sqlMap>

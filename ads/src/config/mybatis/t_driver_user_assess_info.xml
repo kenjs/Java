@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.driver.dao.DriverUserAssessInfoDao">
+	<!-- 新增评价 -->
+	<insert id="addNewDriverUserAssessInfo" parameterType="DriverUserAssessInfoBo" useGeneratedKeys="true" keyProperty="id">
+		insert into t_driver_user_assess_info
+		(CARGO_ID,DRIVER_ID,USER_ID,TRANSACTION_ID,ASSESS_EVALUATE_SCORE,ASSESS,CREATE_TIME,MODIFY_TIME) 
+		values
+		(#{cargoId},#{driverId},#{userId},#{transactionId},#{assessEvaluateScore},#{assess},sysdate(),sysdate())
+	</insert>
+	
+	<!-- 更改评价 -->
+	<update id="updateDriverUserAssessInfo" parameterType="DriverUserAssessInfoBo">
+		update t_driver_user_assess_info set 		
+		MODIFY_TIME = sysdate()
+        <if test="assessEvaluateScore != null and assessEvaluateScore != ''">
+            ,ASSESS_EVALUATE_SCORE = #{assessEvaluateScore}
+        </if>
+        <if test="assess != null and assess != ''">
+            ,ASSESS = #{assess}
+        </if>
+		where id = #{id}
+	</update>
+	
+	<!-- 判断是否已评价 -->
+	<select id="selectAssessNum" parameterType="DriverUserAssessInfoBo" resultType="object">
+		select ID from t_driver_user_assess_info where CARGO_ID = #{cargoId} and DRIVER_ID = #{driverId}
+                                                       and USER_ID = #{userId} and TRANSACTION_ID = #{transactionId}
+	</select>
+	
+	<!-- 根据订单id查找评价 -->
+	<select id="selectDriverUserAssess" parameterType="string" resultType="integer">
+		select count(ID) from t_driver_user_assess_info where TRANSACTION_ID = #{transactionId}
+	</select>
+
+    <!-- 查询用户对司机的评价信息 -->
+    <select id="selectUserDriverAssessNum" parameterType="string" resultType="AssessDomain">
+        SELECT
+        t.TRADE_EVALUATE_SCORE score,count(t.ID) level
+        FROM
+        t_user_driver_assess_info t
+        WHERE
+        t.DRIVER_ID = #{driverId}
+        GROUP BY
+        t.TRADE_EVALUATE_SCORE
+        ORDER BY
+        t.TRADE_EVALUATE_SCORE DESC
+    </select>
+
+    <resultMap type="UserDriverAssessInfoDomain" id="userDriverAssessInfoDomainMap">
+        <result property="driverId" column="DRIVER_ID"/>
+        <result property="cargoId" column="CARGO_ID"/>
+        <result property="transactionId" column="TRANSACTION_ID"/>
+        <result property="tradeEvaluateScore" column="TRADE_EVALUATE_SCORE"/>
+        <result property="assess" column="ASSESS"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="name" column="NAME"/>
+        <result property="companyId" column="COMPANY_ID"/>
+        <result property="mobilephone" column="MOBILEPHONE"/>
+        <result property="companyName" column="COMPANY_NAME"/>
+        <result property="contactName" column="CONTACT_NAME"/>
+        <result property="contactTelephone" column="CONTACT_TELEPHONE"/>
+    </resultMap>
+    <select id="selectUserDriverAssessInfoList" parameterType="map" resultMap="userDriverAssessInfoDomainMap">
+        SELECT
+        t1.DRIVER_ID,
+        t1.CARGO_ID,
+        t1.TRANSACTION_ID,
+        t1.TRADE_EVALUATE_SCORE,
+        t1.ASSESS,
+        t1.USER_ID,
+        t2.`NAME`,
+        t2.COMPANY_ID,
+        t2.MOBILEPHONE,
+        t3.COMPANY_NAME,
+        t3.CONTACT_NAME,
+        t3.CONTACT_TELEPHONE
+        FROM
+        t_user_driver_assess_info t1,
+        t_web_user_info t2,
+        t_company_info t3
+        WHERE
+        t1.USER_ID = t2.ID
+        AND t2.COMPANY_ID = t3.ID
+        AND t2.DELETED_FLAG = 0
+        AND t3.DELETED_FLAG = 0
+        and t1.DRIVER_ID = #{driverId}
+        ORDER BY t1.TRADE_EVALUATE_SCORE ASC
+        limit ${fromSize},${listSize}
+    </select>
+</mapper>

@@ -1,0 +1,485 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"/>
+    <meta http-equiv="pragma" content="no-cache"/>
+    <meta http-equiv="Cache-Control" content="no-cache,must-revalidate"/>
+    <title>传化物流-会员中心</title>
+    <link rel="stylesheet" href="../js/themes/trade/css/style2.css"/>
+    <link type="text/css" rel="stylesheet" href="../css/reg/passport.base.css"/>
+    <link type="text/css" rel="stylesheet" href="../css/reg/regist.personal.css"/>
+    <script type="text/javascript" src="../js/themes/regc/jquery-1.2.6.pack.js"></script>
+    <script  type="text/javascript" src="../js/sys/sys.js"></script>    
+    <script type="text/javascript">
+    javascript:window.history.forward(1);
+    var params;
+     javascript:window.history.forward(1);
+    $(document).ready(function(){
+    
+	     $("#btnSubmit").click(function()
+	     {
+	       if($("#tracetrade").val()=="输入运单号查询"){
+	       
+	       	return ;
+	       }
+	       params="toconsignornumber="+$("#tracetrade").val()+"&random="+Math.random();
+	    	window.open("../tradecs/trade_trace?"+params);
+	    });	
+	      $("#onscreen_click").click(function()
+	     {
+	     	window.location="../goodssourcecs/index_goodssource_onscreen";
+	     });
+	     $("#remover_click").click(function()
+	     {
+	     	window.location="../goodssourcecs/index_goodssource_removed";
+	     });
+	      $("#trading_click").click(function()
+	     {
+	     	window.location="../tradecs/vtrade";
+	     });
+	});
+	 //打开在屏货源
+	function goodsdetail(){
+		
+	};
+	function logout(){//退出
+		window.self.location = "../logincs/logout?random="+Math.random();
+	}
+	
+	
+             //判断跳转3pl,货源管理,配送管理权限
+    function checkpremission(preimission)
+	{
+    	//alert(preimission);
+	  //window.open("../goodssourcemodelcs/modeldetail?id="+goodsSourceModelId);
+	  $.ajax({
+			   type : "post",
+			   url : "../partycs/checkPermission?random="+Math.random()+"&premission="+encodeURIComponent(encodeURIComponent(preimission)),
+			   dataType: "json",
+			   error : function(){alert("操作失败")},
+			   success : function(data) {
+			   		if(data.msg=='ok'){
+			   			//刷新页面
+			   			if(preimission=='3pl'){
+			   				window.location="../logincs/main_3pl";
+			   			}
+			   			if(preimission=='配送'){
+			   				window.location="../todispermissioncs/ordermanage";
+			   			}
+			   			if(preimission=='发布货源'){
+			   				window.location="../goodssourcecs/fastpub";
+			   			}
+			   			
+			   		
+			       	}else{
+			       	alert("你还没有使用这个功能的权限，请申请！！");
+			       	}
+			   }
+	  		});
+	}
+	
+    </script>
+<style type="text/css">
+/*banner*/
+.c-div-banner{min-width:1000px;width:100%;height:85px;;background-color:#f8f8f8;margin:0px;border:0px;border-right:0px solid #999999;border-bottom:2px solid #ec6110;text-align:center;}
+.c-table-banner{width:1000px;height:85px;margin:0px auto;border:0px;border:0px solid #999999;text-align:center;}
+.c-table-banner .c-td-pic{width:80px;height:"85px";text-algin:center;margin:0px;padding:0px 24px 0px 0px;border:0px solid red;}
+
+.c-main{width:990px;height:900px;border:0px solid black;padding:0px;margin:0 auto;float:left;}
+.c-left{width:159px;background-color:#f5f5f5;margin-top:2px;margin-left:0px;border:0px solid #999999;padding:0px;float:left;}
+.c-right{width:800px;height:850px;padding-left:10px;margin-top:2px;border-top:1px solid #dddddd;border-bottom:1px solid #dddddd;padding:0px;float:left;}
+.c-table-menu{width:159px;height:200px;margin:0px;border:0px;padding:0px;}
+.c-tr{width:159px;margin:0px;border:0px;padding:0px;}
+.c-tr a{color:#333333;}
+.c-td-title-first{width:159px;height:37px;background:url(../imgs/login/menu/left_menu.jpg) no-repeat;margin:0px;border-right:0px solid #999999;padding:5px 0px 0px 8px;;font-weight:bold;color:#3f3f3f;font-size:14px;}
+.c-td-title{width:159px;height:32px;background:url(../imgs/login/menu/left_menu.jpg) no-repeat;margin:0px;border-right:0px solid #999999;padding:5px 0px 0px 8px;font-weight:bold;font-size:14px;}
+.c-td-memu{width:159px;height:36px;margin:0px;border-right:0px solid #999999;padding:4px 15px 0px 35px;cursor:pointer;font-size:14px;float:left;}
+.c-table-trace{width:150px;height:100px;margin:10px 0px 0px 0px;border:0px;padding:0px;}
+
+/*服务模块*/
+.c-div-service{width:159px;height:200px;margin:0px;border:0px;border-right:0px solid #999999;}
+
+/*左边菜单选中*/
+.clicked{width:159px;height:36px;margin:0px;border:0px solid red;font-size:14px;font-weight:bold;color:#ec6110;background:url(../imgs/login/menu/left_menu_hover.jpg) no-repeat 25px 0px;}
+.noclicked{width:159px;height:36px;margin:0px;border-right:0px solid #999999;font-size:14px;font-weight:normal;color:#3f3f3f;}
+
+
+.c-iframe{width:800px;height:600px;margin-top:0px;border:0px solid black;padding:0px;float:left;}
+* {margin:0;padding:0} 
+#middle_div {margin:0 auto;} 
+#middle_div ul {width:799px;height:165px;list-style:none} 
+#middle_div li {font-weight:bold;font-size:14px;background-color:#e3e3e3;border-left:1px solid #ccc;border-top:1px solid #ccc;float:left;width:378px;height:33px;text-align:center;line-height:33px} 
+#middle_div li.b {border-bottom:1px solid #ccc;background-color:#ffffff;height: 111px;} 
+#middle_div li.r {border-right:1px solid #ccc;} 
+#middle_div li.h {margin-left: 40px;}
+#middle_div li.b.m {margin-left: 40px;}
+#middle_div ul li div{margin-left:0px;font-size:14px;padding-top:30px;}
+#middle_div ul li div span{color:#e96131;letter-spacing: 0px;font-size: 14px;}
+#middle_div ul li div span.b{margin-left:18px;color: black;font-weight: normal; }
+#middle_div ul li div span.r{margin-left:1px; }
+#bottom_div{margin:0 auto;}
+#bottom_div ul{width:799px;height:165px;list-style:none}
+#bottom_div li{margin-left: 40px;float:left;font-size:14px;border:1px solid #ccc;width:756px;height:72px;line-height:72px;}
+#bottom_div ul li div{margin-left: 15px;width: 325px;height: 30px;float: left;}
+#bottom_div li div lable{padding-left: 8px;font-size:13px;}
+#bottom_div li div input{width: 220px;height: 27px;line-height: 27px;}
+#bottom_div ul li div.a{background-image: url('../imgs/goodssourcec/bt-search.jpg'); width: 80px;height: 30px;margin-top: 21px;margin-left: 0px; cursor: pointer;}
+#onscreen_click{cursor: pointer;}
+#trading_click{cursor: pointer;}
+#dfhyd_click{cursor: pointer;}
+#dcysslyd_click{cursor: pointer;}
+.c-wel{width:800px;height:600px;}
+</style>
+ <script type="text/javascript"> 
+    javascript:window.history.forward(1);
+		 $(document).ready(function(){
+		 var param="random="+Math.random();
+         $.ajax({   
+	      url:'../tradecs/tradeStatusCount',
+	      dataType:'json',
+	      type:'post',
+	      data:param,
+	      success:function(data){       
+	      $("#dfhyd").text(data.count1);
+	      $("#dcysslyd").text(data.count2);
+	      }
+	  }); 
+	    $.ajax({   
+	      url:'../goodssourcecs/goodsStatusCount',
+	      dataType:'json',
+	      type:'post',
+	      data:param,
+	      success:function(data){      
+	      $("#onscreennum").text(data.onscreennum);
+	      $("#tradingnum").text(data.tradingnum);
+	      }
+	  });   
+	  
+	    $.ajax({   
+	      url:'../logincs/initparty',
+	      dataType:'json',
+	      type:'post',
+	      data:param,
+	      success:function(data){       
+	      /* if(data.partytype=="")
+	       {
+	        $("#partyimage").attr("src","../imgs/login/wel/wrzhy_menber.png");
+	       }
+	       if(data.partytype=="个人")
+	       {
+	        $("#partyimage").attr("src","../imgs/login/wel/grzh_menber.png");
+	       }
+	       if(data.partytype=="企业")
+	       {
+	        $("#partyimage").attr("src","../imgs/login/wel/qyzh_menber.png");
+	       }*/
+	       $("#partyimage").attr("src","../imgs/login/wel/3pl-pic.jpg");
+	       $("#welname").text(data.welname);
+	       if(data.email=="")
+	       {
+	         $("#email").text("尚无邮箱信息");
+	       }
+	       else{
+	       $("#email").text(data.email);
+	       }
+	       if(data.mobilenumber=="")
+	       {
+	         $("#mobilenumber").text("尚无联系方式");
+	       }
+	       else{
+	       $("#mobilenumber").text(data.mobilenumber);
+	       }
+	      }
+	  }); 
+		 });
+    
+    </script>
+</head>
+ 
+<body>
+	<div id="shortcut">
+		<div class="w">
+			<ul class="fr lh">
+				<li class="fore1 ld" style="text-align:left;width:300px;margin-right:550px;border:0px solid red;" id="loginbar"><span id="username" style="width:200px;border:0px solid red;"></span> 您好！欢迎来到传化物流！</li>
+				<!--<li class="fore2 menu" data-widget="dropdown">
+					<dl>
+						<dt class="ld"><a href="#" target="_blank">友情链接<b></b></a></dt>
+						<dd>
+							<div><a href="http://bus.tf56.com" target="_blank">路港快线<b></b></a></div>
+							<div><a href="http://www.tf56.com" target="_blank">传化物流<b></b></a></div>
+						</dd>
+					</dl>
+				</li>
+				 --><!--<li class="fore4 menu" data-widget="dropdown">
+					<dl>
+						<dt class="ld"><a href="http://bus.tf56.com" target="_blank">路港快线<b></b></a></dt>
+					</dl>
+				</li>
+				<li class="fore5 menu" data-widget="dropdown">
+					<dl>
+						<dt class="ld"><a href="http://www.tf56.com" target="_blank">传化物流<b></b></a></dt>
+					</dl>
+				</li> -->
+				<!-- <li class="fore5 menu" data-widget="dropdown">
+					<dl>
+						<dt class="ld"><a href="#" target="_blank">我是货主<b></b></a></dt>
+						<dd>
+							<div><a href="#" onclick="f_open('../logincs/main_goodssource','')" target="_blank">我要发货</a></div>
+						</dd>
+					</dl>
+				</li>-->
+				<!--<li class="fore5 menu" data-widget="dropdown">
+					<dl>
+						<dt class="ld"><a href="#" target="_blank">用户设置</a></dt>
+						<dd>
+							<div><a href="../logincs/main_partycenter" target="_self">帐号管理</a></div>
+						</dd>
+					</dl>
+				</li>
+				<li class="fore6 menu" data-widget="dropdown">
+					<dl>
+						<dt class="ld"><a href="#" target="_blank">交易中心</a></dt>
+						<dd>
+							<div><a href="../logincs/main_3pl" target="_self">收发货管理</a></div>
+						</dd>
+					</dl>
+				</li> 
+				-->
+				<li class="fore2 " data-widget="dropdown">
+					<dl>
+						<dt class="ld"><a href="../front/index.html" target="_self">返回首页<b></b></a></dt>
+					</dl>
+				</li>
+				<li class="fore3 ld"><span id="logout"></span></li>
+			</ul>
+			<span class="clr"></span>
+		</div>
+	</div><!--shortcut end-->
+	<div class="c-div-banner" id="login-logo">
+		<table class="c-table-banner">
+			<tr><td colspan="4" style="width:100%;height:10px;"></td></tr>
+			<tr>
+				<td >
+					<a href="../logincs/index_main"><img src="../imgs/login/newlogin/logo.png" alt="传化物流" width="249px" height="57px"/></a>
+				</td>
+				<td style="width: 473px;margin:0px;border:0px solid red;"></td>
+				<td style="width:287px;height:62px;margin:0px;border:0px solid red;padding-top: 10px;">
+					<a href="#"><img src="../imgs/login/newlogin/login_tel.png" alt="传化物流" /></a>
+				</td>
+				<!--<td id="00" width="80px" height="90px" class="c-td-pic">
+					<a href="../logincs/main_3pl" target="_self" style="width:80px;height:90px;">
+						<img src="../imgs/login/banner/menu2_icon_hover.png" alt="" />
+					</a>
+				</td>
+				<td id="01" width="80px" height="90px" class="c-td-pic" >
+					<a href="#" target="_self" style="width:80px;height:90px;" onclick="checkpremission('发布货源')">
+						<img src="../imgs/goodssourcec/menu5_icon_link.png" alt="" />
+					</a>
+				</td>
+				
+				<td id="02" width="80px" height="90px" class="c-td-pic" >
+					<a href="../logincs/main_partycenter" target="_self" style="width:80px;height:90px;">
+						<img src="../imgs/login/banner/menu1_icon.png" alt="" />
+					</a>
+				</td>
+				
+				<td id="03" width="80px" height="90px" class="c-td-pic" >
+					  <a href="#" target="_self" style="width:80px;height:90px;" onclick="checkpremission('配送')">
+							<img src="../imgs/login/banner/menu3_icon.png" alt="" />
+					  </a>
+				</td>
+			--></tr>
+		</table>
+	</div>
+	<!-- 头部结束 -->
+	<div style="width:100%;height:25px;"></div>
+	<div class="w" id="regist">
+	<div class="mc">
+		<!--  <ul class="tab">
+		    <span style="font-size:15px;color:red;">3PL下单</span>
+		</ul>-->
+   		<div id="main" class="c-main">
+   			<div id="left" class="c-left">
+				<table class="c-table-menu">
+					<tr class="c-tr"><td class="c-td-title"><div style="width:150px;height:32px;margin-top:5px;border:0px;padding:0px 0px 0px 15px;font-weight:bold;float:left;">易配货</div></td></tr>
+					<tr class="c-tr"><td style="padding-top:5px;" class="c-td-memu"><a style="text-decoration:none" href="../goodssourcecs/index_fastpub" target="_self">发布货源</a></td></tr>
+					 <tr class="c-tr"><td style="padding-top:5px;" class="c-td-memu"><a style="text-decoration:none" href="../goodssourcecs/index_goodssource_onscreen" target="_self">在屏货源</a></td></tr><!--
+					 <tr class="c-tr"><td style="padding-top:5px;" class="c-td-memu"><a style="text-decoration:none" href="../goodssourcemodelcs/index_modellist" target="_self">模板管理</a></td></tr>
+					 <tr class="c-tr"><td style="padding-top:5px;" class="c-td-memu"><a style="text-decoration:none" href="../goodssourcecs/index_goodssource_transaction" target="_self">成交记录</a></td></tr>
+					 <tr class="c-tr"><td style="padding-top:5px;" class="c-td-memu"><a style="text-decoration:none;font-size: 14px;" href="../tradecs/unconfirmedtrade" target="_self">待确认成交</a></td></tr>	 -->
+					 <tr class="c-tr"><td style="padding-top:5px;" class="c-td-memu"><a style="text-decoration:none;font-size: 14px;" href="../tradecs/vtrade" target="_self">成交管理</a></td></tr>
+					 <tr class="c-tr"><td style="padding-top:5px;" class="c-td-memu"><a style="text-decoration:none;font-size: 14px;" href="../goodssourcecs/index_3pl_parkcarin" target="_self">网上车场</a></td></tr>
+					 <tr class="c-tr"><td style="padding-top:5px;" class="c-td-memu"><a style="text-decoration:none;font-size: 14px;" href="../goodssourcecs/goodssource_3pl_list" target="_blank">货源大厅</a></td></tr><!--
+				     <tr class="c-tr"><td style="padding-top:5px;" class="c-td-memu"><a style="text-decoration:none" href="../goodssourcecs/index_set_owner_information" target="_self">货主信息设置</a></td></tr> -->
+				     <tr class="c-tr"><td style="padding-top:5px;" class="c-td-memu"><a style="text-decoration:none;font-size: 14px;" href="../partycs/affirmprotocol" target="_self">三证查询</a></td></tr>
+					
+					<tr class="c-tr"><td class="c-td-title-first"><div style="width:150px;height:22px;margin-top:5px;border:0px;padding:0px 0px 0px 15px;font-weight:bold;float:left;">零担货</div></td></tr>
+					<tr class="c-tr"><td style="padding-top:5px;" class="c-td-memu"><a style="text-decoration:none" href="../tradecs/index_consignee_list" target="_self">我要收货</a></td></tr>
+					<tr class="c-tr"><td style="padding-top:5px;" class="c-td-memu"><a style="text-decoration:none" href="../tradecs/index_consignor_list" target="_self">我要发货</a></td></tr>
+					<tr class="c-tr"><td style="padding-top:5px;" class="c-td-memu"><a style="text-decoration:none" href="../consignorconsigneecs/index_list" target="_self">收发人管理</a></td></tr>
+					<tr class="c-tr"><td style="padding-top:5px;" class="c-td-memu"><a style="text-decoration:none" href="../tradecs/index_statistica_trade_list" target="_self">收货统计表</a></td></tr><!--
+					
+					<tr class="c-tr"><td class="c-td-title"><div style="width:150px;height:22px;margin-top:5px;border:0px;padding:0px 0px 0px 15px;font-weight:bold;float:left;">落地配管理</div></td></tr>
+					<tr class="c-tr"><td style="padding-top:5px;" class="c-td-memu"><a href="../todispermissioncs/index_ordermanage" style="text-decoration:none" target="_self">运单管理</a></td></tr>
+					
+					-->
+					<tr class="c-tr"><td class="c-td-title-first"><div style="width:150px;height:22px;margin-top:5px;border:0px;padding:0px 0px 0px 15px;font-weight:bold;float:left;">会员档案</div></td></tr>
+					<tr class="c-tr"><td style="padding-top:5px;" class="c-td-memu"><a style="text-decoration:none" href="../partycs/index_detail" target="_self">查看档案</a></td></tr>
+					 <!--<tr class="c-tr"><td style="padding-top:5px;" class="c-td-memu"><a style="text-decoration:none" href="../personcs/index_edit" target="_self">完善信息</a></td></tr>-->
+					<tr class="c-tr"><td style="padding-top:5px;" class="c-td-memu"><a style="text-decoration:none" href="../operatorcs/index_edit" target="_self">密码修改</a></td></tr>
+					<!--<tr class="c-tr"><td style="padding-top:5px;" class="c-td-memu"><a style="text-decoration:none" href="../partyrelationshipcs/index_list" target="_self">子会员管理</a></td></tr>
+					-->
+					<tr class="c-tr"><td style="padding-top:5px;" class="c-td-memu"><a style="text-decoration:none;font-size: 14px;" href="../accountcs/account_list" target="_self">账户管理</a></td></tr>
+					<tr class="c-tr"><td style="padding-top:5px;" class="c-td-memu"><a style="text-decoration:none" href="../operatorcs/index_list" target="_self">操作员管理</a></td></tr>
+				</table>
+				
+                
+			</div>
+   			<div id="right" class="c-right">
+   				<!--<iframe id="right-iframe" scrolling="no" class="c-iframe" frameborder="no" border="0" src="../logincs/main_welcome.html"></iframe>-->
+   				     <div id="wel" class="c-wel" style="text-align:left;">
+						<div style="width:720px;height:162px;">
+						<table border="0" style="width:720px;">
+						<tr style="height:47px;"></tr>
+						<tr style="height:85px;">
+						<td style="width:40px;"></td>
+						<td style="width:123px;">
+						<img src="" border="0" id="partyimage"></img>
+						</td>
+						<td width="557px;">
+				
+						<table style="width:557px;" border="0">
+						<tr style="height:28px;">
+						<td style="width:20px"></td>
+						<td style="width:537px" ><span  id="welname" style="color:#e96131;margin-right: 5px;"></span><span >欢迎您！</span></td>				
+						</tr>
+						</table>
+						<table style="width:557px;" border="0">
+						<tr style="height:28px;">
+						<td style="width:20px"></td>
+						<td style="width:20px"><img src="../imgs/login/wel/mail.png" border="0"></img></td>
+						<td style="width:10px"></td>
+						<td style="width:100px" id="email"></td>
+						<td style="width:20px"></td>
+						<td style="width:20px"><img src="../imgs/login/wel/tel.png" border="0"></img></td>
+						<td style="width:100px" id="mobilenumber"></td>
+						<td style="width:267px"></td>
+						</tr>
+						</table>
+						<table style="width:557px;">
+						<tr style="height:29px;">
+						<td style="width:20px"></td>
+						<!--<td style="width:80px"><a href="../personcs/index_edit" target="_top" style="text-decoration: none;color:rgb(36,148,243);">完善会员信息</a></td>
+						-->
+						<td style="width:80px"><a href="../goodssourcecs/index_fastpub" target="_top" style="text-decoration: none;color:rgb(36,148,243);">发布货源信息</a></td>
+						<td style="width:10px"></td>
+						<td style="width:60px"><a href="../tradecs/index_consignee_list" target="_self" style="text-decoration: none;color:rgb(36,148,243);">立即收货</a></td>
+						<td style="width:10px"></td>
+						<td style="width:105px"><a href="../consignorconsigneecs/index_list" target="_self"  style="text-decoration: none;color:rgb(36,148,243);">添加收发货人信息</a></td>
+						<td style="width:10px"></td>
+						<td style="width:105px" id="score"></td>  
+						<td style="width:10px"></td>
+						<td style="width:147px;"></td>
+						</tr>
+						</table>
+						</td>
+						</tr>
+						<tr style="height:30px;"></tr>
+						</table>
+						</div>
+						<div id="middle_div"> 
+							<ul> 
+								<li class="h">易配货</li> 
+								<li class="r">零担货</li> 
+								<li class="b m">
+									<div >
+										  <span class="b" >在屏货源</span><span id="onscreen_click"  class="onscreen_click"><span class="r">【<span id="onscreennum" >0</span>】</span></span>
+				        				  <span class="b" >近一月成交</span><span id="trading_click" class="trading_click"><span class="r">【<span id="tradingnum" >0</span>】</span></span>
+				        			</div>
+								</li> 
+								<li class="b r">
+									<div >
+										  <span class="b">待发货运单</span><span id="dfhyd_click" class="dfhyd_click"><span class="r">【<span id="dfhyd" >0</span>】</span></span>
+				        				  <span class="b">待承运商受理运单</span ><span id="dcysslyd_click" class="dcysslyd_click"><span class="r">【<span id="dcysslyd" >0</span>】</span></span>
+				        			</div>
+								</li>
+							</ul> 
+						</div> 
+				        <div id="bottom_div" style="display: none;">
+				        	<ul>
+				        		<li>
+				        			<div>
+					        			<label>运单查询：</label>
+					        			<input type="text" id="tracetrade" class="a" name="tracetrade" value="输入运单号查询" onfocus="if(this.value == '输入运单号查询') this.value = ''" onblur="if(this.value =='') this.value = '输入运单号查询'"/>
+				        			</div>
+				        			<div class="a"  id="btnSubmit">
+				        			</div>
+				        		</li>
+				        	</ul>
+				        </div>
+					</div>
+   			</div>
+   		</div>
+	</div>
+</div> 
+<div class="w">
+    <div id="footer">
+    </div>
+</div><!-- footer end -->
+  <script type="text/javascript"> 
+    (function($) {
+    	//调节高度start
+    	AdjustColumnsHeight = function(obj1,obj2){ 
+			 var h1 = $(obj1).outerHeight(); 
+			 var h2 = $(obj2).outerHeight(); 
+			 var mh = Math.max( h1, h2); 
+			 $(obj1).height(mh); 
+			 $(obj2).height(mh-1); 
+		}
+    	AdjustColumnsHeight(".c-left",".c-right");
+    	//调节高度end
+    	var arr=new Array('00','01');
+    	$.ajax({
+    		url:"../logincs/getInit?random="+Math.random(),
+    		dataType:"json",
+    		contentType: "application/json",
+	      	type:'get',
+	      	//timeout:1000,  
+	      	//data:params, //后台不能接收 
+	      	success:function(data){ 
+	      		$("#username").html("<a title="+data.username_all+" style='cursor:pointer;color:#6A6AFF;' size=2>"+data.username_part+"&nbsp;</a>,");
+				var partyName=data.username_all.split("/");
+				$("#logout").html("<a href=\"javascript:logout()\">[退出]</a>");
+				$("#score").html("<a href=\"http://119.6.78.179:8080/ScoreDate/sourcemanagerScore.action?userid="+partyName[0]+"\" target=\"_blank\"  style=\"text-decoration: none;color:rgb(36,148,243);\">我的积分</a>");
+	      	}, 
+	      	error:function(XMLHttpRequest, textStatus, errorThrown) {
+               //alert(XMLHttpRequest.status);
+              // alert(XMLHttpRequest.readyState);
+               //alert(textStatus); 
+	   		}
+    	});
+        $("#shortcut .menu").Jdropdown({delay: 50});
+        $("td").each(function(){//注册事件
+			var id=$(this).attr("id");
+				if(id.length>0&&id.length==1){//注册左边菜单
+					$("#"+id).bind("click",function(){
+						$('td[id!='+id+']').removeClass("clicked").addClass("noclicked");
+						$('td[id='+id+']').removeClass("noclicked").addClass("clicked");
+						if($(this).attr("ot")=='0'){//刷新iframe
+							document.getElementById("right-iframe").src=$(this).attr("url");   
+						}else{//弹出页面
+							f_open($(this).attr("url"),id);
+						}
+					});
+				}
+		});
+		
+    })(jQuery);
+   </script>
+</body>
+</html>
+ 
+ 
+

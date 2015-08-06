@@ -1,0 +1,66 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+*{margin:0; padding:0; font-size:14px;}
+li{list-style:none;}
+a{text-decoration:none;}
+.mainLeft{width:180px; float:left; border-bottom:1px solid #067dec; height:100%;border:1px solid #8cd0fe;border-top:none; padding-top:-5px;position:relative;}
+.mainLeft div{width:180px; overflow:hidden; background:#e6f4fe;  margin-top:-5px; padding-bottom:5px;}
+.mainLeft div ul{overflow:hidden;}
+.mainLeft h4{height:40px; background:url(../images/leftBg.png) left top repeat-x; padding-left:10px; border-top-left-radius:0px;border-top-right-radius:5px; font-weight:normal;}
+.mainLeft h4 a{font-size:16px;line-height:40px; color:#004f96; padding-left:20px; background:url(../images/arrowRight.png) left center no-repeat;}
+.mainLeft div ul{padding-left:30px;}
+.mainLeft div ul li{height:40px; padding-left:10px; background:url(../images/liBg.png) left center no-repeat;}
+.mainLeft div ul li a{line-height:40px; color:#004f96;}
+.mainLeft div ul li a:hover,.mainLeft h4 a:hover{color:red;}
+.mainLeft img{position:absolute; right:-5px; top:45%;}
+.mainRight{float:left; margin-left:5px;}
+table{border-collapse:collapse;}
+table.mainTable{word-break: break-all;table-layout: fixed;margin-top:10px; text-align:center;border:1px solid #8cd0fe;}
+.mainTable tr{border:1px solid #8cd0fe; height:25px; line-height:25px;}
+.mainTable tr td{border:1px solid #8cd0fe; color:#333; padding:0 10px;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.mainTopTr{background:#b4dffc; font-size:16px; color:#004f96;}
+.mxTable{ width:600px; margin:60px auto 0 auto; }
+.mxTable input{ border:1px solid #999;width:200px; height:24px; line-height:24px; padding:0px 10px; }
+.mxTable textarea{ border:solid 1px #d6d6d6; border-radius:4px; width:200px; padding:10px;}
+.mxTable tr td{ padding-bottom:12px;}
+.mxBtnTable{ width:600px; margin:15px auto;}
+.mxBtnTable td{ padding-left:167px;}
+.mxBtnTable input{ width:80px; border-radius:3px; height:30px; margin-left:10px; margin-right:20px;background:#2b94f1; 
+border:1px solid #3596f0; color:white; font-size:16px; cursor:pointer;}
+.conditionTable{word-break: break-all;table-layout: fixed;margin-top:10px;}
+.conditionTable tr{height:30px;}
+.conditionTable td{vertical-align:central; height:30px;}
+.revise{padding-left:16px; padding-right:20px; background:url(../images/revise.png) left center no-repeat;}
+.delete{padding-left:16px; background:url(../images/delete.png) left center no-repeat;}
+td a{color:#004f96;}
+td a:hover{color:red;}
+.numBox a{padding:0 5px;}
+.numBox input{margin:0 5px; cursor:auto;}
+.pageNum a{display:inline-block; width:12px;}
+.numberBox{ margin:0 auto;margin-top:10px; overflow:hidden;background:#b4dffc; padding:5px 0; text-align:center;}
+.numberBox a{color:black; padding:0 7px; line-height:30px;}
+.numberBox p{margin:0 20px; display:inline;}
+a.currentA{color:blue; font-weight:bold;}
+input.jump{margin:0 5px; width:40px; height:20px;border:1px gray solid;}
+input.go-botton{width:40px; height:25px; border:1px gray solid; background:#b2b2b2; margin:0 10px;cursor:pointer;}
+
+.selectBtn{width:60px; height:24px; background:#2b94f1; border:1px solid #3596f0; color:white; border-radius:3px;}
+
+/*日期框*/
+.ymdate {width:100px; border:#999 1px solid; height:20px; line-height:20px; padding-left:2px; background:url(../images/datePicker.gif) no-repeat right #fff; cursor:pointer;}
+.ymonth {width:80px; border:#999 1px solid; height:20px; line-height:20px; padding-left:2px; background:url(../images/datePicker.gif) no-repeat right #fff; cursor:pointer;}
+.year {width:60px; border:#999 1px solid; height:20px; line-height:20px; padding-left:2px; background:url(../images/datePicker.gif) no-repeat right #fff; cursor:pointer;}
+
+/*fontcolor*/
+.redfont {color:#f00;}
+
+/*弹出框*/
+.tabcs{ width:620px; margin-top:36px;}
+.tabcs td input,.tabcs td textarea{ margin:5px 10px 5px 0px;}
+.tabcs #mainForm_baiduPushDomain_title,.tabcs #mainForm_baiduPushDomain_telephone,.mable input{ border:1px solid #999;width:180px; height:24px; border:solid 1px #ccc; padding-left:6px; color:#666; }
+.tabcs #mainForm_baiduPushDomain_description{ width:260px; border:solid 1px #ccc;}
+.tabut td{ width:588px; height:60px; text-align:center;}
+.tabut input{ width:80px; border-radius:3px; height:30px; margin-left:10px; margin-right:20px;background:#2b94f1; border:1px solid #3596f0; color:white; font-size:16px; cursor:pointer;}
+.mable input{ margin:3px 0px;}

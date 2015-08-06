@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="operationLogDomain" type="com.cy.dctms.common.domain.OperationLogDomain"/>
+	
+	
+	<resultMap class="operationLogDomain" id="operationLog_info_domain_result">
+		<result property="id" column="ID"/>
+		<result property="userDriverId" column="user_driver_id"/>
+		<result property="userDriverCode" column="user_driver_code"/>
+		<result property="userDriverName" column="user_driver_name"/>
+		<result property="type" column="type"/>
+		<result property="operationType" column="operation_type"/>
+		<result property="operationName" column="operation_name"/>
+		<result property="remark" column="remark"/>
+		<result property="createTime" column="create_time" />
+	</resultMap>
+	
+	<select id="query_driver_operationLog_info_count"  resultClass="Integer">
+		select count(t.id)
+		from t_operation_log_info t , t_driver_user_info t2
+		  where   t.user_driver_id = t2.id 
+		  <isNotEmpty prepend="and" property="userDriverId">   
+                t.user_driver_id = #userDriverId#  
+         </isNotEmpty>
+         <isNotEmpty prepend="and" property="userDriverCode">   
+                t2.code = #userDriverCode#
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="userDriverName">   
+                t2.name like concat('%', #userDriverName# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="remark">   
+                t.remark like concat('%', #remark# ,'%')   
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="queryTimeQ">   
+                <![CDATA[t.create_time >= #queryTimeQ#  ]]>   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="queryTimeZ">   
+                <![CDATA[t.create_time <= date_sub(#queryTimeZ#,interval -1 day) ]]> 
+         </isNotEmpty>	
+	</select>
+	
+	<select id="query_driver_operationLog_info_by_page" parameterClass="java.util.Map" resultMap="operationLog_info_domain_result">
+		select
+		t.id,
+		t.user_driver_id,
+		t.type,
+		t2.code as user_driver_code,
+    	t2.name as user_driver_name,
+		 t.operation_type,
+		 t.operation_name,
+		 t.remark,
+		 t.create_time
+		from t_operation_log_info t , t_driver_user_info t2
+		  where   t.user_driver_id = t2.id
+		  <isNotEmpty prepend="and" property="userDriverId">   
+                t.user_driver_id = #userDriverId#  
+         </isNotEmpty>
+         <isNotEmpty prepend="and" property="userDriverCode">   
+                t2.code = #userDriverCode#
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="userDriverName">   
+                t2.name like concat('%', #userDriverName# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="remark">   
+                t.remark like concat('%', #remark# ,'%')   
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="queryTimeQ">   
+                <![CDATA[t.create_time >= #queryTimeQ#  ]]>   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="queryTimeZ">   
+                <![CDATA[t.create_time <= date_sub(#queryTimeZ#,interval -1 day) ]]> 
+         </isNotEmpty>	
+         order by t.id desc
+		  limit  #start#,#pageSize#
+	</select>
+	
+	<select id="export_driver_operationLog_info" parameterClass="java.util.Map" resultMap="operationLog_info_domain_result">
+		select
+		t.id,
+		t.user_driver_id,
+		t.type,
+		t2.code as user_driver_code,
+    	t2.name as user_driver_name,
+		 t.operation_type,
+		 t.operation_name,
+		 t.remark,
+		 t.create_time
+		from t_operation_log_info t , t_driver_user_info t2
+		  where   t.user_driver_id = t2.id
+		  <isNotEmpty prepend="and" property="userDriverId">   
+                t.user_driver_id = #userDriverId#  
+         </isNotEmpty>
+         <isNotEmpty prepend="and" property="userDriverCode">   
+                t2.code = #userDriverCode#
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="userDriverName">   
+                t2.name like concat('%', #userDriverName# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="remark">   
+                t.remark like concat('%', #remark# ,'%')   
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="queryTimeQ">   
+                <![CDATA[t.create_time >= #queryTimeQ#  ]]>   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="queryTimeZ">   
+                <![CDATA[t.create_time <= date_sub(#queryTimeZ#,interval -1 day) ]]> 
+         </isNotEmpty>	
+         order by t.id desc
+	</select>
+	
+	
+	
+	<select id="query_web_operationLog_info_count"  resultClass="Integer">
+		select count(t.id)
+		from t_operation_log_info t , t_web_user_info t2
+		  where   t.user_driver_id = t2.id
+		   <isNotEmpty prepend="and" property="userDriverId">   
+                t.user_driver_id = #userDriverId#  
+         </isNotEmpty>
+         <isNotEmpty prepend="and" property="userDriverCode">   
+                t2.code = #userDriverCode#
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="userDriverName">   
+               t2.name like concat('%', #userDriverName# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="remark">   
+                t.remark like concat('%', #remark# ,'%')   
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="queryTimeQ">   
+                <![CDATA[t.create_time >= #queryTimeQ#  ]]>   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="queryTimeZ">   
+                <![CDATA[t.create_time <= DATE_SUB(#queryTimeZ#,INTERVAL -1 DAY) ]]> 
+         </isNotEmpty>	
+	</select>
+	
+	<select id="query_web_operationLog_info_by_page" parameterClass="java.util.Map" resultMap="operationLog_info_domain_result">
+		select
+		t.id,
+		t.user_driver_id,
+		t.type,
+		t2.code as user_driver_code,
+    	t2.name as user_driver_name,
+		 t.operation_type,
+		 t.operation_name,
+		 t.remark,
+		 t.create_time
+		from t_operation_log_info t , t_web_user_info t2
+		  where   t.user_driver_id = t2.id
+		  <isNotEmpty prepend="and" property="userDriverId">   
+                t.user_driver_id = #userDriverId#  
+         </isNotEmpty>
+         <isNotEmpty prepend="and" property="userDriverCode">   
+                t2.code = #userDriverCode#
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="userDriverName">   
+                t2.name like concat('%', #userDriverName# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="remark">   
+                t.remark like concat('%', #remark# ,'%')   
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="queryTimeQ">   
+                <![CDATA[t.create_time >= #queryTimeQ#  ]]>   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="queryTimeZ">   
+                <![CDATA[t.create_time <= DATE_SUB(#queryTimeZ#,INTERVAL -1 DAY) ]]> 
+         </isNotEmpty>	
+		  limit  #start#,#pageSize#
+	</select>
+	
+	<select id="export_web_operationLog_info" parameterClass="java.util.Map" resultMap="operationLog_info_domain_result">
+		select
+		t.id,
+		t.user_driver_id,
+		t.type,
+		t2.code as user_driver_code,
+    	t2.name as user_driver_name,
+		 t.operation_type,
+		 t.operation_name,
+		 t.remark,
+		 t.create_time
+		from t_operation_log_info t , t_web_user_info t2
+		  where   t.user_driver_id = t2.id
+		  <isNotEmpty prepend="and" property="userDriverId">   
+                t.user_driver_id = #userDriverId#  
+         </isNotEmpty>
+         <isNotEmpty prepend="and" property="userDriverCode">   
+                t2.code = #userDriverCode#
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="userDriverName">   
+                t2.name like concat('%', #userDriverName# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="remark">   
+                t.remark like concat('%', #remark# ,'%')   
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="queryTimeQ">   
+                <![CDATA[t.create_time >= #queryTimeQ#  ]]>   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="queryTimeZ">   
+                <![CDATA[t.create_time <= DATE_SUB(#queryTimeZ#,INTERVAL -1 DAY) ]]> 
+         </isNotEmpty>	
+	</select>
+	
+	
+</sqlMap>

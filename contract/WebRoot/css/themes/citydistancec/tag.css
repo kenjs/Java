@@ -1,0 +1,10 @@
+@CHARSET "UTF-8";
+#rigthtag{
+	width: 100%;
+	padding-bottom: 7px;
+	border-bottom: 1px solid #E7e7e7;
+	}
+#rigthtag img{margin-bottom: -5px;}
+#rigthtag a,span{ margin-left: 7px;}
+#rigthtag a:hover{ color: #ec6110}
+#current{font-weight: bold;}

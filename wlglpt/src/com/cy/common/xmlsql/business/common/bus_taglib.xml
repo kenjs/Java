@@ -1,0 +1,1244 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.framework.dao.XtmlglMapper">
+
+	<!-- 取总公司下的所有分公司 -->
+	<select id="getFgsDdlbList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT ZZJG.JGBM dm,
+		<dynamic>
+			<isEqual compareValue="Y" property="mcContainDmBz">
+				ZZJG.JGBM || ' ' || ZZJG.JC mc
+			</isEqual>
+			<isNotEqual compareValue="Y" property="mcContainDmBz">
+				ZZJG.JC mc
+			</isNotEqual>
+		</dynamic>
+			FROM (SELECT JG.JGBM,JG.MC,JG.JC,JG.JBDM
+				FROM QY_ZZJG JG,QY_ZZJG DM
+				WHERE JG.JGLB_DM IN (1,2)  
+				AND JG.YXBZ = 'Y'
+				AND JG.QYBZ = 'Y' 
+				AND JG.JBDM LIKE DM.JBDM || '%'
+		<dynamic>
+			<isEqual compareValue="N" property="contaisDq">
+				AND JG.JGBM &lt;&gt; #ssGsbm#
+			</isEqual>
+		</dynamic>
+				AND DM.JGBM = #zgsJgbm#   
+				) ZZJG
+           ORDER BY ZZJG.JBDM
+    </select>
+	<!-- 取总转包下游-->
+	<select id="getXyzbList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT ZZJG.JGBM dm,
+		<dynamic>
+			<isEqual compareValue="Y" property="mcContainDmBz">
+				ZZJG.JGBM || ' ' || ZZJG.JC mc
+			</isEqual>
+			<isNotEqual compareValue="Y" property="mcContainDmBz">
+				ZZJG.JC mc
+			</isNotEqual>
+		</dynamic>
+			FROM (SELECT JG.JGBM,JG.MC,JG.JC,JG.JBDM
+				FROM QY_ZZJG JG,QY_ZZJG DM
+				WHERE JG.JGLB_DM IN (1,2)  
+				AND JG.YXBZ = 'Y'
+				AND JG.QYBZ = 'Y' 
+				AND JG.JBDM LIKE DM.JBDM || '%'
+		<dynamic>
+			<isEqual compareValue="N" property="contaisDq">
+				AND JG.JGBM &lt;&gt; #ssGsbm#
+			</isEqual>
+		</dynamic>
+				AND DM.JGBM = #zgsJgbm#   
+				) ZZJG
+           UNION ALL
+			SELECT F.FBS_DJXH DM,F.FBSJC MC
+			FROM QY_FBS_DJXX F
+			WHERE F.SS_JGBM = #ssGsbm#
+    </select>
+	<!--根据所有信息-->
+	<select id="getGsDdlbList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT JG.JGBM dm,
+		<dynamic>
+			<isEqual compareValue="Y" property="mcContainDmBz">
+				JG.JGBM || ' ' || JG.JC mc
+			</isEqual>
+			<isNotEqual compareValue="Y" property="mcContainDmBz">
+				JG.JC mc
+			</isNotEqual>
+		</dynamic>
+			FROM QY_ZZJG JG
+				WHERE JG.JGLB_DM IN (1,2)  
+				AND JG.YXBZ = 'Y'
+				AND JG.QYBZ = 'Y' 
+				AND JG.JGBM = #gsbm# 
+           ORDER BY JG.JBDM
+    </select>
+    
+    <!-- 取当前公司与所属所有分公司下拉列表 -->
+    <select id="getCurGsAngZgs" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.DmbGgDomain">
+    	SELECT A.JGBM dm,
+			<dynamic>
+				<isEqual compareValue="Y" property="mcContainDmBz">
+					A.JGBM || ' ' || A.JC mc
+				</isEqual>
+				<isNotEqual compareValue="Y" property="mcContainDmBz">
+					A.JC mc
+				</isNotEqual>
+			</dynamic>
+			FROM QY_ZZJG A
+		 WHERE A.YXBZ = 'Y'
+		   AND A.QYBZ = 'Y'
+		   AND (A.JGLB_DM = '1' OR A.JGLB_DM = '2')
+		   AND (A.SJ_JGBM = #ssGsbm# OR A.JGBM = #ssGsbm#)
+		 ORDER BY A.JGBM ASC
+    </select>
+    
+	<select id="getQxGsDdlbList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT ZZJG.JGBM dm,
+		<dynamic>
+			<isEqual compareValue="Y" property="mcContainDmBz">
+				ZZJG.JGBM || ' ' || ZZJG.JC mc
+			</isEqual>
+			<isNotEqual compareValue="Y" property="mcContainDmBz">
+				ZZJG.JC mc
+			</isNotEqual>
+		</dynamic>
+			FROM (SELECT JG.JGBM,JG.MC,JG.JC,JG.JBDM
+				FROM QY_ZZJG JG,QY_ZZJG DM
+				WHERE JG.JGLB_DM IN (1,2)  
+				AND JG.YXBZ = 'Y'
+				AND JG.QYBZ = 'Y' 
+				AND JG.JBDM LIKE DM.JBDM || '%'
+				AND DM.JGBM = #qxJgbm#   
+				) ZZJG
+           ORDER BY ZZJG.JBDM
+    </select>
+    
+    <!-- <select id="getGsBmDdlbList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT JG.JGBM dm,
+		
+		<dynamic>
+			<isEqual compareValue="Y" property="mcContainDmBz">
+				JG.JGBM || ' ' || JG.JC mc
+			</isEqual>
+			<isNotEqual compareValue="Y" property="mcContainDmBz">
+				JG.JC mc
+			</isNotEqual>
+		</dynamic>
+		
+			FROM QY_ZZJG JG
+			WHERE JG.JBDM LIKE 
+			(SELECT QX.JBDM FROM QY_ZZJG QX WHERE QX.JGBM = #qxJgbm#) || '%'
+			AND JG.YXBZ = 'Y'
+	      	AND JG.QYBZ = 'Y'
+    </select> -->
+    
+    <select id="getGsBmDdlbList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.JGBM dm, NVL(A.SJ_JGBM, 0) parDm, 
+		 (CASE WHEN A.JGLB_DM = '1' OR A.JGLB_DM = '2' THEN 'Y' ELSE 'N' END) openFlag, 
+		
+		<dynamic>
+			<isEqual compareValue="Y" property="mcContainDmBz">
+				A.JGBM || ' ' || LPAD(' ', 2*(level-1), ' ') || A.JC mc
+			</isEqual>
+			<isNotEqual compareValue="Y" property="mcContainDmBz">
+				LPAD(' ', 2*(level-1), ' ') || A.JC mc
+			</isNotEqual>
+		</dynamic>
+		
+			FROM (SELECT JG.*
+				FROM QY_ZZJG JG
+				      WHERE JG.JBDM LIKE 
+				      (SELECT QX.JBDM FROM QY_ZZJG QX WHERE QX.JGBM = #qxJgbm#) || '%'
+				      AND JG.YXBZ = 'Y'
+					      	AND JG.QYBZ = 'Y' ) A
+				          START WITH A.JGBM = #qxJgbm#
+				          CONNECT BY PRIOR JGBM = A.SJ_JGBM
+    </select>
+    
+    <select id="getBmDdlbList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT JG.JGBM dm,  
+		
+		<dynamic>
+			<isEqual compareValue="Y" property="mcContainDmBz">
+				JG.JGBM || ' ' || JG.JC mc
+			</isEqual>
+			<isNotEqual compareValue="Y" property="mcContainDmBz">
+				JG.JC mc
+			</isNotEqual>
+		</dynamic>
+		
+			FROM QY_ZZJG JG
+			WHERE JG.JGLB_DM = 4
+			AND JG.Sj_Jgbm = #sjJgbm#
+	      	AND JG.YXBZ = 'Y'
+	      	AND JG.QYBZ = 'Y'
+	      	ORDER BY JG.JBDM
+    </select>
+    
+    <select id="getGwList" parameterClass="java.util.Map"
+    	resultClass="com.cy.common.domain.DmbGgDomain">
+    	SELECT GW.GW_DJXH dm, 
+    	<dynamic>
+			<isEqual compareValue="Y" property="mcContainDmBz">
+				GW.GW_DJXH || ' ' || GW.GW_JC mc
+			</isEqual>
+			<isNotEqual compareValue="Y" property="mcContainDmBz">
+				GW.GW_JC  mc
+			</isNotEqual>
+		</dynamic>
+		FROM QY_GW GW 
+			WHERE GW.SS_JGBM = #bmdm#
+			AND GW.QYBZ = 'Y'
+			AND GW.YXBZ = 'Y'
+			ORDER BY GW.GW_MC
+    </select>
+    
+    <!-- պ代码-机构类别 -->
+	<select id="getJglbDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.JGLB_DM DM, A.JGLB_DM || ' ' || A.JGLB_MC MC
+		  FROM DM_JGLB A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.JGLB_DM
+	</select>
+	<!-- պ代码-岗位 -->
+	<select id="getGwDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.GW_DM DM, A.GW_DM || ' ' || A.GW_MC MC
+		  FROM DM_GW A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.GW_DM
+	</select>
+	<!-- 代码-角色 -->
+	<select id="getJsDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.JS_DM DM, A.JS_DM || ' ' || A.JS_MC MC
+		  FROM DM_JS A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.JS_DM
+	</select>
+	<!-- 代码-人员类别 -->
+	<select id="getRylbDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.RYLB_DM DM, A.RYLB_DM || ' ' || A.RYLB_MC MC
+		  FROM DM_RYLB A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.RYLB_DM
+	</select>
+	<!-- պ代码-系统用户分类 -->
+	<select id="getXtyhflDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.XTYHFL_DM DM, A.XTYHFL_DM || ' ' || A.XTYHFL_MC MC
+		  FROM DM_XTYHFL A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.XTYHFL_DM
+	</select>
+	<!-- պ代码-登录验证方式 -->
+	<select id="getDlyzfsDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.DLYZFS_DM DM, A.DLYZFS_DM || ' ' || A.DLYZFS_MC MC
+		  FROM DM_DLYZFS A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.DLYZFS_DM
+	</select>
+	<!-- 代码-数据项类别 -->
+	<select id="getSjxlbDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.SJXLB_DM DM, A.SJXLB_DM || ' ' || A.SJXLB_MC MC
+		  FROM DM_SJXLB A
+		 WHERE A.YXBZ = 'Y'
+		 AND A.XYBZ = 'Y'
+		 ORDER BY A.SJXLB_DM
+	</select>
+	<!-- պ代码-参数类别 -->
+	<select id="getCslbDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.CSLB_DM DM, A.CSLB_DM || ' ' || A.CSLB_MC MC
+		  FROM DM_CSLB A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.CSLB_DM
+	</select>
+	<!-- 代码-选择项目 -->
+	<select id="getXzxmDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.XZXM_DM DM, A.XZXM_DM || ' ' || A.XZXM_VALUE_MC MC
+		  FROM DM_XZXM A
+		 WHERE A.YXBZ = 'Y'
+		 AND A.XYBZ = 'Y'
+		 ORDER BY A.XZXM_DM
+	</select>
+	<!-- 代码-行政区划级别 -->
+	<select id="getXzqhjbDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.XZQHJB_DM DM, A.XZQHJB_DM || ' ' || A.XZQHJB_MC MC
+		  FROM DM_XZQHJB A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.XZQHJB_DM
+	</select>
+	<!-- պ代码-行政区划 -->
+	<select id="getXzqhDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.XZQH_DM DM, A.XZQH_DM || ' ' || A.XZQH_MC MC
+		  FROM DM_XZQH A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.XZQH_DM
+	</select>
+	<!-- 代码-证件类型 -->
+	<select id="getZjlxDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.ZJLX_DM DM, A.ZJLX_DM || ' ' || A.ZJLX_MC mc
+		  FROM DM_ZJLX A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.ZJLX_DM
+	</select>
+	<!-- 代码-货物状态 -->
+	<select id="getHwztDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.HWZT_DM DM, A.HWZT_DM || ' ' || A.HWZT_MC MC
+		  FROM DM_HWZT A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.HWZT_DM
+	</select>
+	<!-- 代码-车辆属性 -->
+	<select id="getClsxDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.CLSX_DM DM, A.CLSX_DM || ' ' || A.CLSX_MC MC
+		  FROM DM_CLSX A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.CLSX_DM
+	</select>
+	<!-- 代码-派车方式 -->
+	<select id="getPcfsDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.PCFS_DM DM, A.PCFS_DM || ' ' || A.PCFS_MC MC
+		  FROM DM_PCFS A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.PCFS_DM
+	</select>
+	<!-- 代码-运输方式 -->
+	<select id="getYsfsDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.YSFS_DM DM, A.YSFS_DM || ' ' || A.YSFS_MC MC
+		  FROM DM_YSFS A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.YSFS_DM
+	</select>
+	<!-- պ代码-装车方式 -->
+	<select id="getZcfsDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.ZCFS_DM DM, A.ZCFS_DM || ' ' || A.ZCFS_MC MC
+		  FROM DM_ZCFS A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.ZCFS_DM
+	</select>
+	<!-- 代码-安检结果 -->
+	<select id="getAjjgDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.AJJG_DM DM, A.AJJG_DM || ' ' || A.AJJG_MC MC
+		  FROM DM_AJJG A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.AJJG_DM
+	</select>
+	
+	<!-- 代码-货物分类 -->
+	<select id="getHwflDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.HWFL_DM DM, A.HWFL_DM || ' ' || A.HWFL_MC MC
+		  FROM DM_HWFL A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.HWFL_DM
+	</select>
+	<!-- 代码-提货分类 -->
+	<select id="getThflDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.THFL_DM DM, A.THFL_DM || ' ' || A.THFL_MC MC
+		  FROM DM_THFL A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.THFL_DM
+	</select>
+	<!-- 代码-转入部门 -->
+	<select id="getZrbmDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.ZRBM_DM DM, A.ZRBM_DM || ' ' || A.ZRBM_MC MC
+		  FROM DM_ZRBM A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.ZRBM_DM
+	</select>
+	<!-- 代码-运费结算方 -->	
+	<select id="getYfjsfDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.YFJSF_DM DM, A.YFJSF_DM || ' ' || A.YFJSF_MC MC
+		  FROM DM_YFJSF A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.YFJSF_DM
+	</select>
+	<!-- 信息共享方式 -->
+	<select id="getXxgxfsDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.XXGXFS_DM DM, A.XXGXFS_DM || ' ' || A.XXGXFS_MC MC
+		  FROM DM_XXGXFS A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.XXGXFS_DM
+	</select>
+    
+    <!-- պ企业数量计量单位,若当前部门没有维护则取上级，一直到总公司 -->
+	<select id="getQySlJldwDdlbList" parameterClass="java.util.Map" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.JLDW_DM DM, 
+		<dynamic>
+				<isEqual compareValue="Y" property="mcContainDmBz">
+					A.JLDW_DM || ' ' || A.JLDW_JC MC
+				</isEqual>
+				<isNotEqual compareValue="Y" property="mcContainDmBz">
+					A.JLDW_JC MC
+				</isNotEqual>
+			</dynamic>       
+	      FROM DM_JLDW A, QY_JCBM_JLDW B
+	      WHERE A.JLDW_DM=B.JLDW_DM
+	        AND B.Dj_Jgbm = (
+	            SELECT DJ_JGBM FROM (
+	            SELECT DJ_JGBM,C.JGLB_DM, ROWNUM RN
+	            FROM (
+	              SELECT COUNT(*),B.DJ_JGBM       
+	                    FROM DM_JLDW A, QY_JCBM_JLDW B
+	                    WHERE A.JLDW_DM=B.JLDW_DM 
+	                      AND A.JLDW_FL_DM='01'
+	                      AND B.YXBZ='Y'
+	                      AND B.QYBZ='Y'
+	                      AND A.YXBZ='Y'
+	                      AND B.Dj_Jgbm IN (
+	                      	SELECT JG.JGBM FROM QY_ZZJG JG, QY_ZZJG BM
+								WHERE BM.JBDM LIKE JG.JBDM || '%'
+								AND BM.JGBM = #bmbm#
+	                      )
+	                      GROUP BY B.DJ_JGBM        
+	              )D, QY_ZZJG C
+	            WHERE C.JGBM = D.DJ_JGBM 
+	            ORDER BY JGLB_DM DESC
+	            ) WHERE RN = 1
+	        )
+	        AND A.JLDW_FL_DM='01'
+	        AND B.YXBZ='Y'
+	        AND B.QYBZ='Y'
+	        AND A.YXBZ='Y'
+	        ORDER BY A.JLDW_DM
+	</select>
+	
+	<!-- պ企业重量计量单位 -->
+	<select id="getQyZlJldwDdlbList" parameterClass="java.util.Map" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.JLDW_DM DM, B.jbdwbz defaultFlag,
+		<dynamic>
+				<isEqual compareValue="Y" property="mcContainDmBz">
+					A.JLDW_DM || ' ' || A.JLDW_JC MC
+				</isEqual>
+				<isNotEqual compareValue="Y" property="mcContainDmBz">
+					A.JLDW_JC MC
+				</isNotEqual>
+			</dynamic>       
+	      FROM DM_JLDW A, QY_JCBM_JLDW B
+	      WHERE A.JLDW_DM=B.JLDW_DM
+	        AND B.Dj_Jgbm = (
+	            SELECT DJ_JGBM FROM (
+	            SELECT DJ_JGBM,C.JGLB_DM, ROWNUM RN
+	            FROM (
+	              SELECT COUNT(*),B.DJ_JGBM       
+	                    FROM DM_JLDW A, QY_JCBM_JLDW B
+	                    WHERE A.JLDW_DM=B.JLDW_DM 
+	                      AND A.JLDW_FL_DM='02'
+	                      AND B.YXBZ='Y'
+	                      AND B.QYBZ='Y'
+	                      AND A.YXBZ='Y'
+	                      AND B.Dj_Jgbm IN (
+	                        SELECT JG.JGBM FROM QY_ZZJG JG, QY_ZZJG BM
+								WHERE BM.JBDM LIKE JG.JBDM || '%'
+								AND BM.JGBM = #bmbm#
+	                      )
+	                      GROUP BY B.DJ_JGBM        
+	              )D, QY_ZZJG C
+	            WHERE C.JGBM = D.DJ_JGBM 
+	            ORDER BY JGLB_DM DESC
+	            ) WHERE RN = 1
+	        )
+	        AND A.JLDW_FL_DM='02'
+	        AND B.YXBZ='Y'
+	        AND B.QYBZ='Y'
+	        AND A.YXBZ='Y'
+	        ORDER BY A.JLDW_DM
+	</select>
+	
+	<!-- պ企业体积计量单位 -->
+	<select id="getQyTjJldwDdlbList" parameterClass="java.util.Map" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.JLDW_DM DM, 
+		<dynamic>
+				<isEqual compareValue="Y" property="mcContainDmBz">
+					A.JLDW_DM || ' ' || A.JLDW_JC MC
+				</isEqual>
+				<isNotEqual compareValue="Y" property="mcContainDmBz">
+					A.JLDW_JC MC
+				</isNotEqual>
+			</dynamic>       
+	      FROM DM_JLDW A, QY_JCBM_JLDW B
+	      WHERE A.JLDW_DM=B.JLDW_DM
+	        AND B.Dj_Jgbm = (
+	            SELECT DJ_JGBM FROM (
+	            SELECT DJ_JGBM,C.JGLB_DM, ROWNUM RN
+	            FROM (
+	              SELECT COUNT(*),B.DJ_JGBM       
+	                    FROM DM_JLDW A, QY_JCBM_JLDW B
+	                    WHERE A.JLDW_DM=B.JLDW_DM 
+	                      AND A.JLDW_FL_DM='03'
+	                      AND B.YXBZ='Y'
+	                      AND B.QYBZ='Y'
+	                      AND A.YXBZ='Y'
+	                      AND B.Dj_Jgbm IN (
+	                        SELECT JG.JGBM FROM QY_ZZJG JG, QY_ZZJG BM
+								WHERE BM.JBDM LIKE JG.JBDM || '%'
+								AND BM.JGBM = #bmbm#
+	                      )
+	                      GROUP BY B.DJ_JGBM        
+	              )D, QY_ZZJG C
+	            WHERE C.JGBM = D.DJ_JGBM 
+	            ORDER BY JGLB_DM DESC
+	            ) WHERE RN = 1
+	        )
+	        AND A.JLDW_FL_DM='03'
+	        AND B.YXBZ='Y'
+	        AND B.QYBZ='Y'
+	        AND A.YXBZ='Y'
+	        ORDER BY A.JLDW_DM
+	</select>
+	
+	<!-- պ企业长度计量单位 -->
+	<select id="getQyCdJldwDdlbList" parameterClass="java.util.Map" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.JLDW_DM DM, 
+		<dynamic>
+				<isEqual compareValue="Y" property="mcContainDmBz">
+					A.JLDW_DM || ' ' || A.JLDW_JC MC
+				</isEqual>
+				<isNotEqual compareValue="Y" property="mcContainDmBz">
+					A.JLDW_JC MC
+				</isNotEqual>
+			</dynamic>       
+	      FROM DM_JLDW A, QY_JCBM_JLDW B
+	      WHERE A.JLDW_DM=B.JLDW_DM
+	        AND B.Dj_Jgbm = (
+	            SELECT DJ_JGBM FROM (
+	            SELECT DJ_JGBM,C.JGLB_DM, ROWNUM RN
+	            FROM (
+	              SELECT COUNT(*),B.DJ_JGBM       
+	                    FROM DM_JLDW A, QY_JCBM_JLDW B
+	                    WHERE A.JLDW_DM=B.JLDW_DM 
+	                      AND A.JLDW_FL_DM='04'
+	                      AND B.YXBZ='Y'
+	                      AND B.QYBZ='Y'
+	                      AND A.YXBZ='Y'
+	                      AND B.Dj_Jgbm IN (
+	                        SELECT JG.JGBM FROM QY_ZZJG JG, QY_ZZJG BM
+								WHERE BM.JBDM LIKE JG.JBDM || '%'
+								AND BM.JGBM = #bmbm#
+	                      )
+	                      GROUP BY B.DJ_JGBM        
+	              )D, QY_ZZJG C
+	            WHERE C.JGBM = D.DJ_JGBM 
+	            ORDER BY JGLB_DM DESC
+	            ) WHERE RN = 1
+	        )
+	        AND A.JLDW_FL_DM='04'
+	        AND B.YXBZ='Y'
+	        AND B.QYBZ='Y'
+	        AND A.YXBZ='Y'
+	        ORDER BY A.JLDW_DM
+	</select>
+	
+	<!-- պ企业包装计量单位 -->
+	<select id="getQyBzJldwDdlbList" parameterClass="java.util.Map" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.JLDW_DM DM, 
+		<dynamic>
+				<isEqual compareValue="Y" property="mcContainDmBz">
+					A.JLDW_DM || ' ' || A.JLDW_JC MC
+				</isEqual>
+				<isNotEqual compareValue="Y" property="mcContainDmBz">
+					A.JLDW_JC MC
+				</isNotEqual>
+			</dynamic>       
+	      FROM DM_JLDW A, QY_JCBM_JLDW B
+	      WHERE A.JLDW_DM=B.JLDW_DM
+	        AND B.Dj_Jgbm = (
+	            SELECT DJ_JGBM FROM (
+	            SELECT DJ_JGBM,C.JGLB_DM, ROWNUM RN
+	            FROM (
+	              SELECT COUNT(*),B.DJ_JGBM       
+	                    FROM DM_JLDW A, QY_JCBM_JLDW B
+	                    WHERE A.JLDW_DM=B.JLDW_DM 
+	                      AND A.JLDW_FL_DM='07'
+	                      AND B.YXBZ='Y'
+	                      AND B.QYBZ='Y'
+	                      AND A.YXBZ='Y'
+	                      AND B.Dj_Jgbm IN (
+	                        SELECT JG.JGBM FROM QY_ZZJG JG, QY_ZZJG BM
+								WHERE BM.JBDM LIKE JG.JBDM || '%'
+								AND BM.JGBM = #bmbm#
+	                      )
+	                      GROUP BY B.DJ_JGBM        
+	              )D, QY_ZZJG C
+	            WHERE C.JGBM = D.DJ_JGBM 
+	            ORDER BY JGLB_DM DESC
+	            ) WHERE RN = 1
+	        )
+	        AND A.JLDW_FL_DM='07'
+	        AND B.YXBZ='Y'
+	        AND B.QYBZ='Y'
+	        AND A.YXBZ='Y'
+	        ORDER BY A.JLDW_DM
+	</select>
+	
+	<!-- պ企业所有计量单位 -->
+	<select id="getQyAllJldwDdlbList" parameterClass="java.util.Map" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.JLDW_DM DM, 
+			<dynamic>
+				<isEqual compareValue="Y" property="mcContainDmBz">
+					A.JLDW_DM || ' ' || A.JLDW_JC MC
+				</isEqual>
+				<isNotEqual compareValue="Y" property="mcContainDmBz">
+					A.JLDW_JC MC
+				</isNotEqual>
+			</dynamic>
+			FROM DM_JLDW A, QY_JCBM_JLDW B
+			WHERE A.JLDW_DM=B.JLDW_DM
+			    AND B.SS_JGBM=#ssJgbm#
+				AND B.YXBZ='Y'
+				AND B.QYBZ='Y'
+				AND A.YXBZ='Y'
+				AND A.JLDW_DM LIKE '05%'
+		    ORDER BY A.JLDW_DM
+	</select>
+	
+	<!-- պ根据公司检索分包商 -->
+	<select id="getGSFBSDdlbList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.FBS_DJXH dm,  
+		<dynamic>
+			<isEqual compareValue="Y" property="mcContainDmBz">
+				A.FBS_DJXH || ' ' || A.FBSJC mc
+			</isEqual>
+			<isNotEqual compareValue="Y" property="mcContainDmBz">
+				A.FBSJC mc
+			</isNotEqual>
+		</dynamic>
+		FROM QY_FBS_DJXX A
+		WHERE A.SS_JGBM = #sj#
+	      	AND A.YXBZ = 'Y'
+	      	AND A.QYBZ = 'Y'
+	      	ORDER BY mc asc
+    </select>
+    
+    <!-- պ根据公司检索客户 -->
+	<select id="getGSKHDdlbList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.KH_DJXH dm,  
+		<dynamic>
+			<isEqual compareValue="Y" property="mcContainDmBz">
+				A.KH_DJXH || ' ' || A.KHJC mc
+			</isEqual>
+			<isNotEqual compareValue="Y" property="mcContainDmBz">
+				A.KHJC mc
+			</isNotEqual>
+		</dynamic>
+		FROM QY_KH_DJXX A
+		WHERE A.SS_JGBM = #sj#
+	      	AND A.YXBZ = 'Y'
+	      	AND A.QYBZ = 'Y'
+	      	ORDER BY mc asc
+    </select>
+    
+    <!-- պ根据客户检索货物 -->
+	<select id="getKHHWDdlbList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.HW_DJXH dm,  
+		<dynamic>
+			<isEqual compareValue="Y" property="mcContainDmBz">
+				A.HW_DJXH || ' ' || A.HWJC mc
+			</isEqual>
+			<isNotEqual compareValue="Y" property="mcContainDmBz">
+				A.HWJC mc
+			</isNotEqual>
+		</dynamic>
+		FROM QY_KH_HWXX A
+		WHERE A.KH_DJXH = #sj#
+	      	AND A.YXBZ = 'Y'
+	      	AND A.QYBZ = 'Y'
+	      	ORDER BY mc asc
+    </select>
+    
+   
+    
+    <!-- պ根据部门检索用户 -->
+	<select id="getBMYHDdlbList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT AA.CZY_DJXH dm,  
+		<dynamic>
+			<isEqual compareValue="Y" property="mcContainDmBz">
+				AA.CZY_DJXH || ' ' || AA.MC mc
+			</isEqual>
+			<isNotEqual compareValue="Y" property="mcContainDmBz">
+				AA.MC mc
+			</isNotEqual>
+		</dynamic>
+		FROM (
+		  SELECT DISTINCT A.CZY_DJXH, A.MC
+			FROM QY_RYDJ A, QY_RY_GW B
+			WHERE A.CZY_DJXH=B.CZY_DJXH
+		    AND B.SS_JGBM = #sj#
+	      	AND A.YXBZ = 'Y'
+	      	AND A.QYBZ = 'Y'
+	      	ORDER BY A.MC ASC
+	    ) AA
+    </select>
+    
+    <!-- պ根据分包商检索线路 -->
+	<select id="getFBSXLDdlbList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.LX_DJXH dm,  
+		<dynamic>
+			<isEqual compareValue="Y" property="mcContainDmBz">
+				A.LX_DJXH || ' ' || A.LXJC mc
+			</isEqual>
+			<isNotEqual compareValue="Y" property="mcContainDmBz">
+				A.LXJC mc
+			</isNotEqual>
+		</dynamic>
+		FROM QY_FBS_LXDJ A
+		WHERE A.FBS_DJXH = #sj#
+	      	AND A.YXBZ = 'Y'
+	      	AND A.QYBZ = 'Y'
+	      	ORDER BY mc asc
+    </select>
+    
+    <!-- պ计量单位分类下拉 -->
+	<select id="getJldwFlDdlbList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.JLDW_FL_DM dm,  
+		<dynamic>
+			<isEqual compareValue="Y" property="mcContainDmBz">
+				A.JLDW_FL_DM || ' ' || A.JLDW_FL_MC mc
+			</isEqual>
+			<isNotEqual compareValue="Y" property="mcContainDmBz">
+				A.JLDW_FL_MC mc
+			</isNotEqual>
+		</dynamic>
+		FROM DM_JLDW_FL A
+		WHERE A.YXBZ = 'Y'
+	      	ORDER BY mc asc
+    </select>
+    
+    <!-- պ根据公司检索外联人员分类 -->
+	<select id="getGSWLRYFLDdlbList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.WLRY_FLXH dm,  
+		<dynamic>
+			<isEqual compareValue="Y" property="mcContainDmBz">
+				A.WLRY_FLXH || ' ' || A.FLMC mc
+			</isEqual>
+			<isNotEqual compareValue="Y" property="mcContainDmBz">
+				A.FLMC mc
+			</isNotEqual>
+		</dynamic>
+		FROM BG_WLRY_FL A
+		WHERE A.JGBM=#sj#
+	      	AND A.YXBZ = 'Y'
+    </select>
+    
+    <!-- պ单点登录登录方式下拉选择 -->
+	<select id="getDlfsDdlbList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.DLFS_DM dm,  
+		<dynamic>
+			<isEqual compareValue="Y" property="mcContainDmBz">
+				A.DLFS_DM || ' ' || A.DLFS_MC mc
+			</isEqual>
+			<isNotEqual compareValue="Y" property="mcContainDmBz">
+				A.DLFS_MC mc
+			</isNotEqual>
+		</dynamic>
+		FROM DM_DLFS A
+		WHERE A.YXBZ = 'Y'
+    </select>
+    
+    <!-- պ业务分类下拉选择 -->
+	<select id="getYwflDdlbList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.YWFL_DM dm,  
+		<dynamic>
+			<isEqual compareValue="Y" property="mcContainDmBz">
+				A.YWFL_DM || ' ' || A.YWFL_MC mc
+			</isEqual>
+			<isNotEqual compareValue="Y" property="mcContainDmBz">
+				A.YWFL_MC mc
+			</isNotEqual>
+		</dynamic>
+		FROM DM_YWFL A
+		WHERE A.YXBZ = 'Y'
+    </select>
+    
+    <!-- պ业务环节下拉选择 -->
+	<select id="getYWHJDdlbList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.YWHJ_DM dm,  
+		<dynamic>
+			<isEqual compareValue="Y" property="mcContainDmBz">
+				A.YWHJ_DM || ' ' || A.YWHJ_MC mc
+			</isEqual>
+			<isNotEqual compareValue="Y" property="mcContainDmBz">
+				A.YWHJ_MC mc
+			</isNotEqual>
+		</dynamic>
+		FROM DM_YWHJ A
+		WHERE A.YXBZ = 'Y'
+			AND A.YWFL_DM = #sj#
+    </select>
+    
+    <!-- պ审批文书下拉选择 -->
+	<select id="getSpwsDdlbList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.WS_DM dm,  
+		<dynamic>
+			<isEqual compareValue="Y" property="mcContainDmBz">
+				A.WS_DM || ' ' || A.WS_MC mc
+			</isEqual>
+			<isNotEqual compareValue="Y" property="mcContainDmBz">
+				A.WS_MC mc
+			</isNotEqual>
+		</dynamic>
+		FROM DM_WS A, QY_SPWS B
+		WHERE A.YXBZ = 'Y'
+			AND B.YXBZ='Y'
+			AND A.WS_DM=B.WS_DM
+			AND B.JGBM=#jgbm#
+			AND　A.Xmflbz='Y'
+    </select>
+    
+    <!-- պ文书审批模式下拉选择 -->
+	<select id="getSpwsMsDdList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.WSSPMS_DM dm,  
+		<dynamic>
+			<isEqual compareValue="Y" property="mcContainDmBz">
+				A.WSSPMS_DM || ' ' || A.WSSPMS_MC mc
+			</isEqual>
+			<isNotEqual compareValue="Y" property="mcContainDmBz">
+				A.WSSPMS_MC mc
+			</isNotEqual>
+		</dynamic>
+		FROM Dm_Wsspms A
+		WHERE A.YXBZ = 'Y'
+    </select>
+    
+    <select id="getSPWSXMFLDdlbList" parameterClass="java.util.Map"
+    	resultClass="com.cy.common.domain.DmbGgDomain">
+    	SELECT WSXM.XMFL_DJXH dm, 
+    	
+    	<dynamic>
+			<isEqual compareValue="Y" property="mcContainDmBz">
+				WSXM.XMFL_DJXH || ' ' || WSXM.XMFLMC mc
+			</isEqual>
+			<isNotEqual compareValue="Y" property="mcContainDmBz">
+				WSXM.XMFLMC mc
+			</isNotEqual>
+		</dynamic>
+    	
+			FROM QY_SPWS_XMFL WSXM,QY_SPWS SPWS
+			WHERE WSXM.YXBZ = 'Y'
+			AND SPWS.YXBZ='Y'
+			AND WSXM.JGBM=SPWS.JGBM
+			AND WSXM.WS_DM=SPWS.WS_DM
+			<!--  AND WSXM.JGBM = #jgbm# -->
+			AND WSXM.WS_DM = #sj#
+    </select>
+    
+    <select id="getCWYHDdlbList" parameterClass="java.util.Map"
+    	resultClass="com.cy.common.domain.DmbGgDomain">
+    	SELECT A.CSH_DJXH dm, A.CSH_DJXH || ' ' || A.YHMC || ',' || A.ZH || ',' || A.HM mc
+       FROM CW_HBZC_CSH A
+       WHERE A.ZCFL_DM='12'
+       AND A.SS_JGBM = #sj#
+       AND A.YXBZ='Y' AND A.QYBZ='Y'
+    </select>
+    
+    <!-- պ收货方式-->
+	<select id="getShfsDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.SHFS_DM DM, A.SHFS_DM || ' ' || A.SHFS_MC MC
+		  FROM DM_SHFS A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.SHFS_DM
+	</select>
+	<!-- պ余款结算方式-->
+	<select id="getYkjsfsDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.YKJSFS_DM DM, A.YKJSFS_DM || ' ' || A.YKJSFS_MC MC
+		  FROM DM_YKJSFS A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.YKJSFS_DM
+	</select>
+    <!-- 运价结算方式 -->
+    <select id="getYjjsfsDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.YJJSFS_DM DM, A.YJJSFS_DM || ' ' || A.YJJSFS_MC MC
+		  FROM DM_YJJSFS A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.YJJSFS_DM
+	</select>
+    
+    <select id="queryFbsByJgbm" parameterClass="java.util.Map"
+    	resultClass="com.cy.common.domain.DmbGgDomain">
+    	SELECT FBS.FBS_DJXH DM,  
+    	
+    	<dynamic>
+			<isEqual compareValue="Y" property="mcContainDmBz">
+				FBS.FBS_DJXH || ' ' || FBS.FBSJC mc
+			</isEqual>
+			<isNotEqual compareValue="Y" property="mcContainDmBz">
+				FBS.FBSJC mc
+			</isNotEqual>
+		</dynamic>
+    	
+			FROM QY_FBS_DJXX FBS
+			WHERE FBS.YXBZ = 'Y'
+			AND FBS.SS_JGBM = #ssJgbm#
+    </select>
+    
+    <select id="queryXxzjByJgbm" parameterClass="java.util.Map"
+    	resultClass="com.cy.common.domain.DmbGgDomain">
+    	SELECT A.XXZJ_DJXH AS dm,
+       <dynamic>
+			<isEqual compareValue="Y" property="mcContainDmBz">
+				A.XXZJ_DJXH || ' ' || A.XXZJJC mc
+			</isEqual>
+			<isNotEqual compareValue="Y" property="mcContainDmBz">
+				A.XXZJJC mc
+			</isNotEqual>
+		</dynamic>
+		  FROM QY_XXZJ_DJXX A 
+		  WHERE A.YXBZ='Y' 
+		  and A.SS_JGBM=#ssJgbm#
+    	  ORDER by xxzjjc
+    </select>
+    <!-- 代码-审批机构级别 -->
+	<select id="getSpjgjbDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.SPJGJB_DM DM, A.SPJGJB_DM || ' ' || A.SPJGJB_MC MC
+		  FROM DM_SPJGJB A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.SPJGJB_DM
+	</select>
+	<!-- 代码-对帐状态 -->
+	<select id="getDzztDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.DZZT_DM DM, A.DZZT_DM || ' ' || A.DZZT_MC MC
+		  FROM DM_DZZT A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.DZZT_DM
+	</select>
+    
+    <!-- 代码-资产分类 -->
+	<select id="getZcflDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.ZCFL_DM DM, A.ZCFL_DM || ' ' || A.ZCFL_MC MC
+		  FROM DM_ZCFL A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.ZCFL_DM
+	</select>
+	<!-- 代码-对帐差异原因 -->
+	<select id="getDzcyyyDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.DZCYYY_DM DM, A.DZCYYY_DM || ' ' || A.DZCYYY_MC MC
+		  FROM DM_DZCYYY A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.DZCYYY_DM
+	</select>
+	<!-- 代码-对帐差异处理方式 -->
+	<select id="getDzcyClfsDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.DZCY_CLFS_DM DM, A.DZCY_CLFS_DM || ' ' || A.DZCY_CLFS_MC MC
+		  FROM DM_DZCY_CLFS A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.DZCY_CLFS_DM
+	</select>
+		<!-- 代码-对帐差异处理方式 -->
+	<select id="getDzcyClfs3DdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.DZCY_CLFS_DM DM, A.DZCY_CLFS_DM || ' ' || A.DZCY_CLFS_MC MC
+		  FROM DM_DZCY_CLFS A
+		 WHERE A.YXBZ = 'Y'
+		 AND A.DZCY_CLFS_DM LIKE '3%'
+		 ORDER BY A.DZCY_CLFS_DM
+	</select>
+	<!-- 代码-派车方式 -->
+	<select id="queryPcfsRadioList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.PCFS_DM DM, ' ' || A.PCFS_MC MC
+		  FROM DM_PCFS A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.PCFS_DM
+	</select>
+	<!-- 代码-待结算数据来源 -->
+	<select id="getDjsSjlyDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.DJS_SJLY_DM DM, A.DJS_SJLY_DM || ' ' || A.DJS_SJLY_MC MC
+		  FROM DM_DJS_SJLY A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.DJS_SJLY_DM
+	</select>
+	<!-- 企业-车辆型号 -->
+	<select id="getQyClxhwhDdlbList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.CLXHWH_DJXH DM, 
+			<dynamic>
+				<isEqual property="mcContainDmBz" compareValue="Y">
+					A.CLXHWH_DJXH || ' ' || A.CLXH MC
+				</isEqual>
+				<isNotEqual property="mcContainDmBz" compareValue="Y">
+					A.CLXH MC
+				</isNotEqual>
+			</dynamic>
+		  FROM QY_CLXHWH A
+		 WHERE A.YXBZ = 'Y'
+		 AND A.SS_JGBM = #gsbm#
+		 ORDER BY A.CLXHWH_DJXH
+	</select>
+	
+	 <select id="getFLDWDdlbList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.JLDW_DM dm,  
+		<dynamic>
+			<isEqual compareValue="Y" property="mcContainDmBz">
+				A.JLDW_DM || ' ' || A.JLDW_JC mc
+			</isEqual>
+			<isNotEqual compareValue="Y" property="mcContainDmBz">
+				A.JLDW_JC mc
+			</isNotEqual>
+		</dynamic>
+		FROM dm_jldw A
+		WHERE A.JLDW_FL_DM = #sj#
+	      	AND A.YXBZ = 'Y'
+	      	ORDER BY mc asc
+    </select>
+	
+	<!-- 代码-参数分类 -->
+	<select id="getCsbmDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.CSBM_DM DM, A.CSBM_DM || ' ' || A.CSBM_MC MC
+		  FROM DM_CSBM A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.CSBM_DM
+	</select>
+	
+	<!-- 费用类别下拉 -->
+	<select id="getFylbDdlbList" resultClass="com.cy.common.domain.DmbGgDomain" 
+		parameterClass="java.util.Map">
+		SELECT A.FYLB_DM DM, A.FYLB_DM || ' ' || A.FYLB_MC MC
+      		FROM DM_FYLB A
+     	WHERE A.YXBZ = 'Y'
+     	<dynamic>
+     		<isNotEmpty prepend="AND" property="fydlDm">
+     			A.FYDL_DM = #fydlDm#
+     		</isNotEmpty>
+     	</dynamic>
+     	ORDER BY A.FYLB_DM
+	</select>
+	
+	<!-- 费用处理方式下拉 -->
+	<select id="getFyClFsDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.FYCLFS_DM DM, A.FYCLFS_DM || ' ' || A.FYCLFS_MC MC
+     		 FROM DM_FYCLFS A
+    	 WHERE A.YXBZ = 'Y'
+    	 ORDER BY A.FYCLFS_DM
+	</select>
+	
+	<!-- 企业-客户-货物型号 -->
+	<select id="getQYHWXHDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.HWXH_DJXH DM,
+		<dynamic>
+			<isEqual compareValue="Y" property="mcContainDmBz">
+				A.HWXH_DJXH || ' ' || A.XHJC mc
+			</isEqual>
+			<isNotEqual compareValue="Y" property="mcContainDmBz">
+				A.XHJC mc
+			</isNotEqual>
+		</dynamic>
+		  FROM QY_KH_HWXH A 
+		 WHERE A.YXBZ = 'Y'
+		 AND A.HW_DJXH=#sj#
+		 ORDER BY mc asc
+	</select>
+	
+	<select id="getKHMCDdlbList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT HPH.FHR_DJXH DM, HPH.FHR_DJXH || ' ' || HPH.FHR_MC MC
+          FROM HY_PC_HWXX HPH
+         WHERE HPH.PC_DJXH = #sj#
+	</select>
+
+		<!-- 代码-物流损失处理方式 -->
+	<select id="getWlssclfsDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.WLSSCLFS_DM DM, A.WLSSCLFS_DM || ' ' || A.WLSSCLFS_MC MC
+		  FROM DM_WLSSCLFS A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.WLSSCLFS_DM
+	</select>
+	
+		<!-- 代码-物流损失原因 -->
+	<select id="getWlssyyDdlbList" parameterClass="java.util.Map" resultClass="com.cy.common.domain.DmbGgDomain">
+		  SELECT A.WH_XH DM,
+		<dynamic>
+			<isEqual compareValue="Y" property="mcContainDmBz">
+				A.WH_XH DM || ' ' || A.WLSSYY MC
+			</isEqual>
+			<isNotEqual compareValue="Y" property="mcContainDmBz">
+				A.WLSSYY MC
+			</isNotEqual>
+		</dynamic>
+			from qy_wlssyy A
+		 WHERE A.YXBZ = 'Y' AND A.SS_JGBM = #zgs#
+		 ORDER BY A.WH_XH
+	</select>
+	
+		<!-- 代码-文书审批状态 -->
+	<select id="getWsspztDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.WSSPZT_DM DM, A.WSSPZT_DM || ' ' || A.WSSPZT_MC MC
+		  FROM DM_WSSPZT A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.WSSPZT_DM
+	</select>
+	<!-- 代码-支付方式 -->
+	<select id="getZffsDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.ZFFS_DM DM, A.ZFFS_DM || ' ' || A.ZFFS_MC MC
+		  FROM DM_ZFFS A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.ZFFS_DM
+	</select>
+	<!-- 单位-人员 -->
+	<select id="getGsryList" parameterClass="java.util.Map" resultClass="com.cy.common.domain.DmbGgDomain">
+		select distinct(QA.czy_djxh) DM,(select mc from qy_rydj qb where qa.czy_djxh = qb.czy_djxh) MC
+		    from QY_RY_GW qa, qy_rydj ry
+		    where qa.czy_djxh = ry.czy_djxh
+		    and ry.yxbz = 'Y'
+		    AND RY.QYBZ = 'Y'
+		    and exists(select jgbm
+				from QY_ZZJG a,(select jbdm from QY_ZZJG b where b.jgbm = #ssJgbm#) z
+				where qa.ss_jgbm = a.jgbm
+				and a.jbdm like (z.jbdm||'%'))
+			ORDER BY MC
+	</select>
+	<!-- 银行账号下拉 -->
+	<select id="getYhzhList" parameterClass="java.util.Map" resultClass="com.cy.common.domain.DmbGgDomain">
+		select csh_djxh as dm,yhmc||' '||zh as mc 
+		from cw_hbzc_csh 
+		where zcfl_dm = 12 
+		and ss_jgbm = #ssJgbm#
+		and yxbz='Y'
+		and qybz='Y'
+		ORDER BY csh_djxh
+	</select>
+	
+	<!-- 代码-对帐方式 -->
+	<select id="getDzfsDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.DZFS_DM DM, A.DZFS_DM || ' ' || A.DZFS_MC MC
+		  FROM DM_DZFS A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.DZFS_DM
+	</select>
+	
+	<!-- 费用项目 -->
+	<select id="getFyxmList" parameterClass="java.util.Map" resultClass="com.cy.common.domain.DmbGgDomain">
+		select WH_XH AS DM,FYDJ_XMMC AS MC from qy_fydjxm 
+		WHERE (CLSX_DM =#clsxDm# OR CLSX_DM IS NULL) 
+		and SS_JGBM =#ssJgbm#
+		and yxbz = 'Y'		
+		ORDER BY WH_XH ASC
+	</select>
+	
+	<!-- 财务-费用类别-维护 -->
+	<select id="getCwFylbDdlbList" parameterClass="java.util.Map" resultClass="com.cy.common.domain.DmbGgDomain">
+		 SELECT A.CW_DJXH DM,
+		<dynamic>
+			<isEqual compareValue="Y" property="mcContainDmBz">
+				A.CW_DJXH || ' ' || A.FYLB_MC MC
+			</isEqual>
+			<isNotEqual compareValue="Y" property="mcContainDmBz">
+				A.FYLB_MC MC
+			</isNotEqual>
+		</dynamic>
+			FROM CW_FYLB A
+		 WHERE A.YXBZ = 'Y' AND
+		 A.SS_JGBM=#zgs#
+		 ORDER BY A.CW_DJXH
+		 
+	</select>
+	
+		<!-- 财务-费用项目-维护 -->
+	<select id="getCwFyXmWhList" parameterClass="java.util.Map" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.CW_DJXH DM,
+		<dynamic>
+			<isEqual compareValue="Y" property="mcContainDmBz">
+				A.CW_DJXH || ' ' || A.FYXM_MC MC
+			</isEqual>
+			<isNotEqual compareValue="Y" property="mcContainDmBz">
+				A.FYXM_MC MC
+			</isNotEqual>
+		</dynamic>
+			FROM cw_fyxm_wh A
+		 WHERE A.YXBZ = 'Y' AND
+		  A.SS_JGBM=#zgs#
+		 ORDER BY A.CW_DJXH
+	</select>
+	
+		<!-- 通过费用分类取到费用项目-->
+	<select id="getFYFLXMDdlbList" parameterClass="java.util.Map" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.CW_DJXH DM, A.FYXM_MC MC,(select XMFLMC from QY_SPWS_XMFL where XMFL_DJXH=A.SPLC_XMFL_DJXH) openFlag
+			FROM cw_fyxm_wh A
+		 WHERE A.YXBZ = 'Y' and A.FYLB_CW_DJXH=#sj# AND  A.SS_JGBM=#zgs#
+		 ORDER BY A.CW_DJXH
+	</select>
+	
+	
+	<select id="getFyXmWhDdlbList" resultClass="com.cy.common.domain.DmbGgDomain" parameterClass="java.util.Map">
+	SELECT WSFL.XMFL_DJXH DM, WSFL.XMFL_DJXH || ' ' || WSFL.XMFLMC MC 
+	FROM QY_SPWS_XMFL WSFL 
+		WHERE WSFL.YXBZ = 'Y'
+ 		 AND WSFL.WS_DM = '100002'
+  			AND WSFL.JGBM = #zgs#
+	</select>
+	
+
+	<!-- 对账差异原因 -->
+	<select id="getQyDzcyyyDdlbList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT A.WH_XH DM, 
+			<dynamic>
+				<isEqual compareValue="Y" property="mcContainDmBz">
+					A.WH_XH || ' ' || A.DZCYYY MC
+				</isEqual>
+				<isNotEqual compareValue="Y" property="mcContainDmBz">
+					A.DZCYYY MC
+				</isNotEqual>
+			</dynamic>
+		  FROM QY_DZCYYY A
+		 WHERE A.YXBZ = 'Y'
+		 ORDER BY A.DZCYYY
+	</select>
+	    <!-- 代码-资产分类 和初始化序号 -->
+	<select id="getZcflDdlbAndCshList" resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT distinct A.ZCFL_DM DM, 
+			   (case A.ZCFL_DM 
+		       when 12 then A.ZCFL_DM || ' ' || A.ZCFL_MC
+		       else A.ZCFL_DM || ' ' || A.ZCFL_MC||' '||hb.csh_djxh END) MC
+	      FROM DM_ZCFL A,cw_hbzc_csh hb
+	     WHERE A.YXBZ = 'Y' 
+	       and hb.qybz(+) = 'Y'
+	       and a.zcfl_dm = hb.zcfl_dm(+)
+	       and hb.ss_jgbm(+) = #ssJgbm#
+	       ORDER BY A.ZCFL_DM
+	</select>
+	
+		<select id="getFyDffDdlbList" resultClass="com.cy.common.domain.DmbGgDomain" parameterClass="java.util.Map">
+		SELECT A.DFF_DJXH DM, A.DFF_DJXH || ' ' || A.DFF_MC MC 
+			FROM DM_DFF A 
+				WHERE A.YXBZ = 'Y'
+  					ORDER BY A.DFF_DJXH
+	</select>
+	<select id="getDmKmxlList" resultClass="com.cy.common.domain.DmbGgDomain" parameterClass="java.util.Map">
+		select d.kmxl_dm dm,d.kmxl_dm||' '||d.kmxl_mc mc  from dm_kmxl d 
+		where d.yxbz='Y' 
+		<dynamic>
+				<isEqual prepend="AND" compareValue="Y" property="srBz">
+					d.kmdl_dm in (1,3)
+				</isEqual>
+				<isNotEqual prepend="AND" compareValue="Y" property="srBz">
+					d.kmdl_dm in (2,4)
+				</isNotEqual>
+		</dynamic>
+		order by d.kmxl_dm asc
+	</select>
+	<select id="getDmYsyflyList" resultClass="com.cy.common.domain.DmbGgDomain">
+		select d.ysyfly_dm dm,d.ysyfly_dm||''||d.ysyfly_mc mc 
+		from dm_ysyfly d 
+		order by d.ysyfly_dm asc
+	</select>
+</sqlMap>

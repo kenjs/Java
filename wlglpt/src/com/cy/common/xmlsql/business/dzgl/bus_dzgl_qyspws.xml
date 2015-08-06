@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.dzgl.dao.BusDzglQyspwsMapper">
+	<select id="selectQySpwsPage" parameterClass="java.util.Map"
+		resultClass="com.cy.dzgl.domain.QySpwsDomain">
+		select A.JGBM as jgbm,
+	       B.XMFLBZ as xmflbz,
+	       B.WS_DM as wsDm,
+	       B.WS_MC as wsMc,
+	       B.WS_JC as wsJc,
+	       B.YWFL_DM as ywflDm,
+	       B.YWHJ_DM as ywhjDm,
+	       (SELECT YWFL.YWFL_MC FROM DM_YWFL YWFL WHERE YWFL.YWFL_DM=B.YWFL_DM) ywflMc,
+	       (SELECT YWHJ.YWHJ_MC FROM DM_YWHJ YWHJ WHERE YWHJ.YWHJ_DM=B.YWHJ_DM) ywHJMc,
+	       (select QZ.MC from Qy_Zzjg QZ where QZ.JGBM=A.JGBM) as dwMc,
+	       (SELECT QR.MC FROM QY_RYDJ QR WHERE QR.CZY_DJXH=A.CJR_CZY_DJXH) AS cjrMc,
+	       (SELECT QR.MC FROM QY_RYDJ QR WHERE QR.CZY_DJXH=A.XGR_CZY_DJXH) AS  xgrMc,
+	       A.CJRQ as cjrq,A.XGRQ as xgrq,A.WSSPMS_DM as wsspmsDm,B.Sm as sm
+		from QY_SPWS A, DM_WS B
+		WHERE A.WS_DM=B.WS_DM
+		AND   A.JGBM=#jgbm#
+		AND   A.YXBZ='Y'
+		AND   B.YXBZ='Y'
+		<dynamic>
+       		<isNotEmpty prepend="and" property="ywflDm">
+       			B.YWFL_DM=#ywflDm#
+       		</isNotEmpty>
+       	 </dynamic>
+       	 <dynamic>
+       		<isNotEmpty prepend="and" property="ywhjDm">
+       			B.YWHJ_DM=#ywhjDm#
+       		</isNotEmpty>
+       	 </dynamic>
+		UNION ALL
+			SELECT NULL,
+		       B.Xmflbz as xmflbz,
+		       B.WS_DM as wsDm,
+		       B.WS_MC as wsMc,
+		       B.WS_JC as wsJc,
+		       B.YWFL_DM as ywflDm,
+		       B.YWHJ_DM as ywhjDm,
+		       (SELECT YWFL.YWFL_MC FROM DM_YWFL YWFL WHERE YWFL.YWFL_DM=B.YWFL_DM) ywflMc,
+		       (SELECT YWHJ.YWHJ_MC FROM DM_YWHJ YWHJ WHERE YWHJ.YWHJ_DM=B.YWHJ_DM) ywHJMc,
+		       NULL AS dwMc,NULL AS cjrMc,NULL AS xgrMc,NULL AS cjrq,NULL AS xgrq,NULL AS wsspmsDm,
+		       B.Sm AS sm
+			from DM_WS B
+			where B.YXBZ='Y'
+			<dynamic>
+       		<isNotEmpty prepend="and" property="ywflDm">
+       			B.YWFL_DM=#ywflDm#
+       		</isNotEmpty>
+       	 </dynamic>
+       	 <dynamic>
+       		<isNotEmpty prepend="and" property="ywhjDm">
+       			B.YWHJ_DM=#ywhjDm#
+       		</isNotEmpty>
+       	 </dynamic>
+			AND NOT EXISTS (SELECT 1 FROM QY_SPWS A WHERE A.WS_DM=B.WS_DM AND A.JGBM=#jgbm# AND A.YXBZ='Y')
+			ORDER BY wsspmsDm desc, wsDm ASC
+
+    </select>
+    
+    <select id="selectQySpwsAll" parameterClass="java.util.Map"
+		resultClass="com.cy.dzgl.domain.QySpwsDomain">
+		select A.JGBM as jgbm,
+	       B.XMFLBZ as xmflbz,
+	       B.WS_DM as wsDm,
+	       B.WS_MC as wsMc,
+	       B.WS_JC as wsJc,
+	       B.YWFL_DM as ywflDm,
+	       B.YWHJ_DM as ywhjDm,
+	       (SELECT YWFL.YWFL_MC FROM DM_YWFL YWFL WHERE YWFL.YWFL_DM=B.YWFL_DM) ywflMc,
+	       (SELECT YWHJ.YWHJ_MC FROM DM_YWHJ YWHJ WHERE YWHJ.YWHJ_DM=B.YWHJ_DM) ywHJMc,
+	       (select QZ.MC from Qy_Zzjg QZ where QZ.JGBM=A.JGBM) as dwMc,
+	       (SELECT QR.MC FROM QY_RYDJ QR WHERE QR.CZY_DJXH=A.CJR_CZY_DJXH) AS cjrMc,
+	       (SELECT QR.MC FROM QY_RYDJ QR WHERE QR.CZY_DJXH=A.XGR_CZY_DJXH) AS  xgrMc,
+	       (select DW.WSSPMS_MC from Dm_Wsspms DW where DW.WSSPMS_DM=A.WSSPMS_DM) as wsspmsMc,
+	       A.CJRQ as cjrq,A.XGRQ as xgrq,A.WSSPMS_DM as wsspmsDm,B.Sm as sm
+		from QY_SPWS A, DM_WS B
+		WHERE A.WS_DM=B.WS_DM
+		AND   A.JGBM=#jgbm#
+		AND   A.YXBZ='Y'
+		AND   B.YXBZ='Y'
+		<dynamic>
+       		<isNotEmpty prepend="and" property="ywflDm">
+       			B.YWFL_DM=#ywflDm#
+       		</isNotEmpty>
+       	 </dynamic>
+       	 <dynamic>
+       		<isNotEmpty prepend="and" property="ywhjDm">
+       			B.YWHJ_DM=#ywhjDm#
+       		</isNotEmpty>
+       	 </dynamic>
+		UNION ALL
+			SELECT NULL,
+		       B.Xmflbz as xmflbz,
+		       B.WS_DM as wsDm,
+		       B.WS_MC as wsMc,
+		       B.WS_JC as wsJc,
+		       B.YWFL_DM as ywflDm,
+		       B.YWHJ_DM as ywhjDm,
+		       (SELECT YWFL.YWFL_MC FROM DM_YWFL YWFL WHERE YWFL.YWFL_DM=B.YWFL_DM) ywflMc,
+		       (SELECT YWHJ.YWHJ_MC FROM DM_YWHJ YWHJ WHERE YWHJ.YWHJ_DM=B.YWHJ_DM) ywHJMc,
+		       NULL AS dwMc,NULL AS cjrMc,NULL AS xgrMc,NULL AS wsspmsMc,NULL AS cjrq,NULL AS xgrq,NULL AS wsspmsDm,
+		       B.Sm AS sm
+			from DM_WS B
+			where B.YXBZ='Y'
+			<dynamic>
+       		<isNotEmpty prepend="and" property="ywflDm">
+       			B.YWFL_DM=#ywflDm#
+       		</isNotEmpty>
+       	 </dynamic>
+       	 <dynamic>
+       		<isNotEmpty prepend="and" property="ywhjDm">
+       			B.YWHJ_DM=#ywhjDm#
+       		</isNotEmpty>
+       	 </dynamic>
+			AND NOT EXISTS (SELECT 1 FROM QY_SPWS A WHERE A.WS_DM=B.WS_DM AND A.JGBM=#jgbm# AND A.YXBZ='Y')
+			ORDER BY wsspmsDm desc, wsDm ASC
+			
+    </select>
+
+	<select id="getQySpwsRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		select count(A.WS_DM) from Dm_Ws A where A.Yxbz='Y' 
+	 	<dynamic>
+       		<isNotEmpty prepend="and" property="ywflDm">
+       			A.YWFL_DM=#ywflDm#
+       		</isNotEmpty>
+       	 </dynamic>
+       	 <dynamic>
+       		<isNotEmpty prepend="and" property="ywhjDm">
+       			A.YWHJ_DM=#ywhjDm#
+       		</isNotEmpty>
+       	 </dynamic> 
+    </select>
+    
+</sqlMap>

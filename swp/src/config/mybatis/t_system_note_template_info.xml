@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.swp.dao.SystemNoteTemplateDao">
+
+	<resultMap type="SystemNoteTemplateInfo" id="system_note_template_info_result">
+		<result property="id" column="ID"/>
+		<!-- 业务类型（1主动2被动） -->
+		<result property="businessType" column="BUSINESS_TYPE"/>
+		<!-- 发送类型（1司机2企业） -->
+		<result property="sendType" column="SEND_TYPE"/>
+		<!-- 模板内容 -->
+		<result property="content" column="CONTENT"/>
+	</resultMap>
+	
+	<!--  查询短信模板返回list对象 -->
+	<select id="querySystemNoteTemplateInfo" parameterType="map"  resultMap="system_note_template_info_result">
+		SELECT 
+		t.ID,
+		t.BUSINESS_TYPE,
+		t.SEND_TYPE,
+		t.CONTENT
+		FROM t_system_note_template_info t WHERE t.status = 1
+		<if test="null != id and '' != id">
+			and t.ID = #{id}
+		</if>
+		<if test="null != businessType and '' != businessType">
+			and t.BUSINESS_TYPE = #{businessType}
+		</if>
+		<if test="null != sendType and '' != sendType">
+			and t.SEND_TYPE = #{sendType}
+		</if>
+	</select>
+
+	<!--  查询短信模板返回list对象 -->
+	<select id="querySystemNoteTemplateInfoById" parameterType="Integer"  resultMap="system_note_template_info_result">
+		SELECT
+		t.ID,
+		t.BUSINESS_TYPE,
+		t.SEND_TYPE,
+		t.CONTENT
+		FROM t_system_note_template_info t WHERE t.id = #{id}
+	</select>
+	
+</mapper>

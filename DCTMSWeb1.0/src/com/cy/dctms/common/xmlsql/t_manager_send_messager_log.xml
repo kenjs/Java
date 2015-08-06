@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="sendMessagerLogDomain" type="com.cy.dctms.common.domain.SendMessagerLogDomain"/>
+	
+	
+	
+	<insert id="add_sendMessagerLog_info" parameterClass="com.cy.dctms.common.bo.SendMessagerLog">
+		insert into t_manager_send_messager_log (
+			send_number,
+			content,
+			title,
+			send_state,
+			result_value,
+			send_time,
+			send_type,
+			manager_id,
+			origin,
+			channel_type
+		) values(
+			#sendNumber#,
+			#content#,
+			#title#,
+			#sendState#,
+			#resultValue#,
+			now(),
+			#sendType#,
+			#managerId#,
+			#origin#,
+			#channelType#
+		)
+	</insert>
+	
+		<insert id="add_bunch_messager_log_info" parameterClass="java.util.List">
+		insert into t_manager_send_messager_log (
+			send_number,
+			content,
+			title,
+			send_state,
+			result_value,
+			send_time,
+			send_type,
+			manager_id,
+			origin,
+			channel_type
+		) values
+		<iterate  conjunction=",">
+		(
+			#dataList[].sendNumber#,
+			#dataList[].content#,
+			#dataList[].title#,
+			#dataList[].sendState#,
+			#dataList[].resultValue#,
+			now(),
+			#dataList[].sendType#,
+			#dataList[].managerId#,
+			#dataList[].origin#,
+			#dataList[].channelType#
+		)
+		</iterate>
+	</insert>
+	
+</sqlMap>

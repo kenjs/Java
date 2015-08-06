@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.framework.dao.XtmlglMapper">
+
+	<!--根据所有信息-->
+	<select id="selectXtXtmlGnmkCztsList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.XtXtmlGnmkCztsDomain">
+		select a.XTML_XH as xtmlXh,a.GNMK_DM as gnmkDm,a.CZTS as czts from XT_XTML_GNMK_CZTS a 
+    </select>
+    
+</sqlMap>

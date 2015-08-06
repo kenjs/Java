@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.driver.dao.AppShareInfoDao">
+    <insert id="addAppShareInfo" parameterType="AppShareInfo" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+    	insert into t_app_share_info(recommended_mobile_num,recommend_mobile_num,create_time)
+    	values (#{recommendedMobileNum},#{recommendMobileNum},sysdate())
+    </insert>
+
+    <select id="selectAppShareInfoByNum" parameterType="string" resultType="int">
+    	select count(id) from t_app_share_info where recommended_mobile_num = #{recommendedMobileNum}
+    </select>
+</mapper>

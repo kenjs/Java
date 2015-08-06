@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.hygl.dao.HyHwDdxxMapper">
+
+	<!--根据主键取DOMAIN-->
+				<select id="selectHyHwDdxxByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.common.bo.HyHwDdxx">
+		select a.DD_DJXH as ddDjxh,a.HWLY_DM as hwlyDm,a.DDBH as ddbh,a.KH_DJXH as khDjxh,a.KH_MC as khMc,
+		a.KH_LXR as khLxr,a.KH_LXDH as khLxdh,a.KH_JSDH as khJsdh,a.FHR_MC as fhrMc,a.FHR_DZ as fhrDz,
+		a.FHR_LXR as fhrLxr,a.FHR_LXDH as fhrLxdh,a.FHR_XZQH_DM as fhrXzqhDm,a.SHR_MC as shrMc,a.SHR_DZ as shrDz,
+		a.SHR_LXR as shrLxr,a.SHR_LXDH as shrLxdh,a.SHR_XZQH_DM as shrXzqhDm,a.HWMC as hwmc,a.HW_DJXH as hwDjxh,
+		a.HWXH_DJXH as hwxhDjxh,a.HW_BZ_HLDW_DM as hwBzHldwDm,a.HW_SL as hwSl,a.HW_SL_JLDW_DM as hwSlJldwDm,a.HW_ZL as hwZl,
+		a.HW_ZL_JLDW_DM as hwZlJldwDm,a.HW_TJ as hwTj,a.HW_TJ_JLDW_DM as hwTjJldwDm,a.YQ_FHRQ as yqFhrq,a.YQ_DDRQ as yqDdrq,
+		a.CLYQ as clyq,a.BZ as bz,a.YFCSBZ as yfcsbz,a.SHFS_DM as shfsDm,a.DJR_CZY_DJXH as djrCzyDjxh,
+		a.DJRQ as djrq,a.DJ_JGBM as djJgbm,a.SS_JGBM as ssJgbm,a.HWZT_DM as hwztDm,a.YXBZ as yxbz,
+		a.CJR_CZY_DJXH as cjrCzyDjxh,a.CJRQ as cjrq,a.XGR_CZY_DJXH as xgrCzyDjxh,a.XGRQ as xgrq from HY_HW_DDXX a  where a.DD_DJXH=#ddDjxh#
+		</select>
+
+	<!--插入数据-->
+		<insert id="insertHyHwDdxx"  parameterClass="com.cy.common.bo.HyHwDdxx">
+		insert into HY_HW_DDXX(DD_DJXH,HWLY_DM,DDBH,KH_DJXH,KH_MC,
+		KH_LXR,KH_LXDH,KH_JSDH,FHR_MC,FHR_DZ,
+		FHR_LXR,FHR_LXDH,FHR_XZQH_DM,SHR_MC,SHR_DZ,
+		SHR_LXR,SHR_LXDH,SHR_XZQH_DM,HWMC,HW_DJXH,
+		HWXH_DJXH,HW_BZ_HLDW_DM,HW_SL,HW_SL_JLDW_DM,HW_ZL,
+		HW_ZL_JLDW_DM,HW_TJ,HW_TJ_JLDW_DM,YQ_FHRQ,YQ_DDRQ,
+		CLYQ,BZ,YFCSBZ,SHFS_DM,DJR_CZY_DJXH,
+		DJRQ,DJ_JGBM,SS_JGBM,HWZT_DM,YXBZ,
+		CJR_CZY_DJXH,CJRQ,XGR_CZY_DJXH,XGRQ)
+		values(#ddDjxh:NUMERIC#,#hwlyDm:NUMERIC#,#ddbh:VARCHAR#,#khDjxh:NUMERIC#,#khMc:VARCHAR#,
+		#khLxr:VARCHAR#,#khLxdh:VARCHAR#,#khJsdh:VARCHAR#,#fhrMc:VARCHAR#,#fhrDz:VARCHAR#,
+		#fhrLxr:VARCHAR#,#fhrLxdh:VARCHAR#,#fhrXzqhDm:VARCHAR#,#shrMc:VARCHAR#,#shrDz:VARCHAR#,
+		#shrLxr:VARCHAR#,#shrLxdh:VARCHAR#,#shrXzqhDm:VARCHAR#,#hwmc:VARCHAR#,#hwDjxh:NUMERIC#,
+		#hwxhDjxh:NUMERIC#,#hwBzHldwDm:VARCHAR#,#hwSl:NUMERIC#,#hwSlJldwDm:VARCHAR#,#hwZl:NUMERIC#,
+		#hwZlJldwDm:VARCHAR#,#hwTj:NUMERIC#,#hwTjJldwDm:VARCHAR#,to_date(#yqFhrq:DATE#,'yyyy-MM-dd'),to_date(#yqDdrq:DATE#,'yyyy-MM-dd'),
+		#clyq:VARCHAR#,#bz:VARCHAR#,#yfcsbz:VARCHAR#,#shfsDm:NUMERIC#,#djrCzyDjxh:NUMERIC#,
+		to_date(#djrq:DATE#,'yyyy-MM-dd'),#djJgbm:NUMERIC#,#ssJgbm:NUMERIC#,#hwztDm:NUMERIC#,#yxbz:VARCHAR#,
+		#cjrCzyDjxh:NUMERIC#,to_date(#cjrq:DATE#,'yyyy-MM-dd'),#xgrCzyDjxh:NUMERIC#,to_date(#xgrq:DATE#,'yyyy-MM-dd'))
+		</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+        <update id="updateHyHwDdxxByKey" parameterClass="com.cy.common.bo.HyHwDdxx">
+		select a.DD_DJXH as ddDjxh,a.HWLY_DM as hwlyDm,a.DDBH as ddbh,a.KH_DJXH as khDjxh,a.KH_MC as khMc,
+		a.KH_LXR as khLxr,a.KH_LXDH as khLxdh,a.KH_JSDH as khJsdh,a.FHR_MC as fhrMc,a.FHR_DZ as fhrDz,
+		a.FHR_LXR as fhrLxr,a.FHR_LXDH as fhrLxdh,a.FHR_XZQH_DM as fhrXzqhDm,a.SHR_MC as shrMc,a.SHR_DZ as shrDz,
+		a.SHR_LXR as shrLxr,a.SHR_LXDH as shrLxdh,a.SHR_XZQH_DM as shrXzqhDm,a.HWMC as hwmc,a.HW_DJXH as hwDjxh,
+		a.HWXH_DJXH as hwxhDjxh,a.HW_BZ_HLDW_DM as hwBzHldwDm,a.HW_SL as hwSl,a.HW_SL_JLDW_DM as hwSlJldwDm,a.HW_ZL as hwZl,
+		a.HW_ZL_JLDW_DM as hwZlJldwDm,a.HW_TJ as hwTj,a.HW_TJ_JLDW_DM as hwTjJldwDm,a.YQ_FHRQ as yqFhrq,a.YQ_DDRQ as yqDdrq,
+		a.CLYQ as clyq,a.BZ as bz,a.YFCSBZ as yfcsbz,a.SHFS_DM as shfsDm,a.DJR_CZY_DJXH as djrCzyDjxh,
+		a.DJRQ as djrq,a.DJ_JGBM as djJgbm,a.SS_JGBM as ssJgbm,a.HWZT_DM as hwztDm,a.YXBZ as yxbz,
+		a.CJR_CZY_DJXH as cjrCzyDjxh,a.CJRQ as cjrq,a.XGR_CZY_DJXH as xgrCzyDjxh,a.XGRQ as xgrq from HY_HW_DDXX a  where a.DD_DJXH=#ddDjxh#
+		</update>
+    
+	<!--根据主键删除表数据：软删除-->
+	<delete id="deleteHyHwDdxxByKey" parameterClass="java.util.Map">
+		update HY_HW_DDXX set yxbz='N' where DD_DJXH=#ddDjxh#
+    </delete>
+</sqlMap>

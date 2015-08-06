@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="DriverCargoAssessInfo" type="com.cy.dcts.common.bo.DriverCargoAssessInfo"/><!-- 司机对货源的点评 -->
+	<typeAlias alias="DriverCargoAssessInfoDomain" type="com.cy.dcts.common.domain.DriverCargoAssessInfoDomain"/><!-- 司机对货源的点评 -->
+	
+	<resultMap id="driver_cargo_assess_info_result" class="DriverCargoAssessInfo">
+	  <result property="id" column="ID"/>
+	  <result property="driverId" column="DRIVER_ID"/>
+	  <result property="cargoId" column="CARGO_ID"/>
+	  <result property="type" column="TYPE"/>
+	  <result property="assessInfo" column="ASSESS_INFO"/>
+	  <result property="createTime" column="CREATE_TIME"/>
+	</resultMap>
+	<resultMap id="driver_cargo_assess_info_domain_result" class="DriverCargoAssessInfoDomain">
+	  <result property="id" column="ID"/>
+	  <result property="driverId" column="DRIVER_ID"/>
+	  <result property="cargoId" column="CARGO_ID"/>
+	  <result property="type" column="TYPE"/>
+	  <result property="assessInfo" column="ASSESS_INFO"/>
+	  <result property="createTime" column="CREATE_TIME"/>
+	  
+	  <result property="name" column="NAME"/>
+	  <result property="code" column="CODE"/>
+	  <result property="carNumber" column="CAR_NUMBER"/>
+	</resultMap>
+	<!-- 根据货源Id查询司机对货源的点评——  不分页-->
+	<select id="query_driver_cargo_assess_by_cargoId" parameterClass="map" resultMap="driver_cargo_assess_info_domain_result">
+	   SELECT da.id,
+		da.driver_id,
+		da.cargo_id,
+		da.type,
+		da.assess_info,
+		date_format(da.create_time,'%Y-%c-%d %T') create_time,
+		t1.name,t1.code,t1.car_number 
+		FROM t_driver_cargo_assess_info da 
+		LEFT JOIN 
+		t_driver_user_info t1 
+		ON 
+		da.driver_id = t1.id 
+		WHERE da.cargo_id = #cargoId# 
+		ORDER BY da.create_time DESC 
+	</select>
+	
+	<!-- 根据货源Id查询司机对货源的点评  ——分页-->
+	<select id="query_driver_cargo_assess_by_cargoId_page" parameterClass="map" resultMap="driver_cargo_assess_info_domain_result">
+	   SELECT da.id,
+		da.driver_id,
+		da.cargo_id,
+		da.type,
+		da.assess_info,
+		date_format(da.create_time,'%Y-%c-%d %T') create_time,
+		t1.name,t1.code,t1.car_number 
+		FROM t_driver_cargo_assess_info da 
+		LEFT JOIN 
+		t_driver_user_info t1 
+		ON 
+		da.driver_id = t1.id 
+		WHERE da.cargo_id = #cargoId# 
+		ORDER BY da.create_time DESC 
+		LIMIT #beginNum#,#endNum# 
+	</select>
+	
+	<!-- 根据货源Id查询司机对货源的总记录数-->
+	<select id="query_driver_cargo_assess_by_cargoId_count" parameterClass="map" resultClass="java.lang.Integer">
+	   SELECT COUNT(*)  
+		FROM t_driver_cargo_assess_info da 
+		LEFT JOIN 
+		t_driver_user_info t1 
+		ON 
+		da.driver_id = t1.id 
+		WHERE da.cargo_id = #cargoId# 
+	</select>
+</sqlMap>

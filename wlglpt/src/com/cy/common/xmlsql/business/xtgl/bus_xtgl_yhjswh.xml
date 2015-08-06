@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.xtgl.dao.BusXtglYhJsWhMapper">
+	 
+     <select id="getYhMcPage" parameterClass="java.util.Map" resultClass="com.cy.xtgl.domain.YhjswhDomain" >
+        select 
+  			A.MC AS mc,A.CZY_DJXH AS czyDjxh,C.JC as bmMc,D.GW_JC as gwMc
+		from QY_RYDJ A, QY_RY_GW B, QY_ZZJG C,QY_GW D
+		where A.CZY_DJXH=B.CZY_DJXH
+			and B.SS_JGBM=C.JGBM
+			and B.GW_DJXH=D.GW_DJXH
+			and A.YXBZ='Y'
+			and A.XTGLYBZ='N'
+			and B.ZJBZ='Y'
+			AND (C.JGBM = #jgbm# OR (C.SJ_JGBM = #jgbm# AND C.JGLB_DM = '4'))
+		order by A.MC ASC
+			 
+	 </select>
+	 
+	 <select id="getYhJsPageByCzyDjxh" parameterClass="java.util.Map" resultClass="com.cy.xtgl.domain.YhjswhDomain" >
+         select B.CZY_DJXH AS czyDjxh, C.JS_JC AS jsJc,C.JS_DJXH AS jsDjxh
+		 from QY_RYDJ A, QY_RY_JS B, QY_JS C
+		 where A.CZY_DJXH=B.CZY_DJXH
+		 	AND B.JS_DJXH=C.JS_DJXH
+			AND A.YXBZ='Y'
+			AND A.QY_ZCXH=#qyZcxh#
+         
+	 </select>
+	 
+	 <select id="getYhChoosedJsByCzyDjxh" parameterClass="java.util.Map" resultClass="com.cy.xtgl.domain.YhjswhDomain" >
+        Select CZY_DJXH AS czyDjxh,JS_DJXH AS jsDjxh from QY_RY_JS where czy_djxh=#czyDjxh# 
+	 </select>
+	 
+	 <select id="getYhJsRowCount" parameterClass="java.util.Map" resultClass="java.lang.Integer" >
+        select 
+  			count(A.MC)
+		from QY_RYDJ A, QY_RY_GW B, QY_ZZJG C,QY_GW D
+		where A.CZY_DJXH=B.CZY_DJXH
+			and B.SS_JGBM=C.JGBM
+			and B.GW_DJXH=D.GW_DJXH
+			and A.YXBZ='Y'
+			and A.XTGLYBZ='N'
+			and B.ZJBZ='Y'
+			AND (C.JGBM = #jgbm# OR (C.SJ_JGBM = #jgbm# AND C.JGLB_DM = '4'))
+		order by A.MC ASC
+			
+	</select>
+</sqlMap>

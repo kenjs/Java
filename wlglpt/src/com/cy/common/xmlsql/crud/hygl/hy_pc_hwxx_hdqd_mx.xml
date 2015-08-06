@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.hygl.dao.HyPcHwxxHdqdMxMapper">
+
+	<!--根据主键取DOMAIN-->
+	<select id="selectHyPcHwxxHdqdMxByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyPcHwxxHdqdDomain">
+		select a.HDQD_DJXH as hdqdDjxh,a.HD_DJXH as hdDjxh,a.dqztbz dqztbz from HY_PC_HWXX_HDQD_MX a  where a.HDQD_DJXH=#hdqdDjxh# and a.HD_DJXH=#hdDjxh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertHyPcHwxxHdqdMx"  parameterClass="com.cy.common.bo.HyPcHwxxHdqdMx">
+		insert into HY_PC_HWXX_HDQD_MX(HDQD_DJXH,HD_DJXH,DQZTBZ)
+		values(#hdqdDjxh:NUMERIC#,#hdDjxh:NUMERIC#,#dqztbz:NUMERIC#)
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateHyPcHwxxHdqdMxByKey" parameterClass="com.cy.common.bo.HyPcHwxxHdqdMx">
+        update HY_PC_HWXX_HDQD_MX set HDQD_DJXH=#hdqdDjxh#,HD_DJXH=#hdDjxh#,DQZTBZ=#dqztbz# where HDQD_DJXH=#hdqdDjxh# and HD_DJXH=#hdDjxh#
+    </update>
+    
+    <!--更新该表中当前状态标志-->
+    <update id="updateDqbzByqdDjxh" parameterClass="java.util.Map">
+        update HY_PC_HWXX_HDQD_MX set dqztbz=0 where  HD_DJXH=#hdDjxh#
+    </update>
+    <!--更新该表中当前状态标志-->
+    <update id="updateDqbzBykey" parameterClass="java.util.Map">
+        update HY_PC_HWXX_HDQD_MX set dqztbz=1 where  HD_DJXH=#hdDjxh# and HDQD_DJXH=#hdqdDjxh#
+    </update>
+	<!--表数据：删除-->
+	<delete id="deleteHyPcHwxxHdqdMx" parameterClass="java.util.Map">
+		delete from HY_PC_HWXX_HDQD_MX where HDQD_DJXH=#hdqdDjxh#
+    </delete>
+</sqlMap>

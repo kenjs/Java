@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.jcgl.dao.BusJcFcQkTjMapper">
+
+	<parameterMap class="java.util.Map" id="khShMxMap">
+		<parameter property="jgbm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="kh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="rqq" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="rqz" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="dataList" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" resultMap="khShMxResMap"/>
+	</parameterMap>
+	
+	<resultMap class="com.cy.jcgl.domain.JcKhShMxDomain" id="khShMxResMap">
+		<result property="ddbh" column="DDBH"/>
+		<result property="xdrq" column="XDRQ"/>
+		<result property="hwMc" column="HWMC"/>
+		<result property="sl" column="SL"/>
+		<result property="zl" column="ZL"/>
+		<result property="tj" column="TJ"/>
+		<result property="xj" column="XJ"/>
+		<result property="xf" column="XF"/>
+		<result property="df" column="DF"/>
+		<result property="hf" column="HF"/>
+		<result property="sfd" column="BNLJ_XF"/>
+		<result property="mdd" column="BNLJ_DF"/>
+	</resultMap>
+
+	<procedure id="queryFcQkTjxList" parameterMap="khShMxMap" resultMap="khShMxResMap">
+		{call P_JCGL_JYQK_SHMX(?,?,?,?,?)}
+	</procedure>
+	
+	<parameterMap class="java.util.Map" id="jcFcMxPareMap">
+		<parameter property="ssJgbm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="jgbm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="hwmc" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="sl" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="pcdh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="tydh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="hdh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="fhrDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="fhrMc" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="sfd" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="mdd" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="clhm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="rqq" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="rqz" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="pcfs" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		
+		<parameter property="pageNum" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+		<parameter property="pageSize" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+		<parameter property="pageCount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+		<parameter property="reccount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>		
+		<parameter property="dataList" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" resultMap="jcFcMxResMap"/>
+	</parameterMap>
+	
+	<resultMap class="com.cy.jcgl.domain.JcFcQkMxDomain" id="jcFcMxResMap">
+		<result property="pageXh" column="PAGE_XH"/>
+		<result property="pcDjxh" column="PC_DJXH"/>
+		<result property="pcdh" column="PCDH"/>
+		<result property="pcrq" column="PCRQ"/>
+		<result property="clhm" column="CYR_CLHM"/>
+		<result property="yfyf" column="YF_YFYF"/>
+		<result property="sjyf" column="YF_SJS"/>
+		<result property="hwmc" column="HWMC"/>
+		<result property="sl" column="SL"/>
+		<result property="zl" column="ZL"/>
+		<result property="shrMc" column="SHR_MC"/>
+		<result property="shrDz" column="SHR_DZ"/>
+		<result property="pcrMc" column="PCR_MC"/>
+		<result property="pcJgmc" column="PC_JGMC"/>
+		<result property="ssJgmc" column="SS_JGMC"/>
+		<result property="khmc" column="KHMC"/>
+		<result property="tydh" column="DDBH"/>
+		<result property="hdh" column="HDBH"/>
+		<result property="ddDjxh" column="DD_DJXH"/>
+		<result property="xh" column="XH"/>
+		<result property="wfhDjxh" column="WFH_DJXH"/>
+		<result property="xdrq" column="XDRQ"/>
+		<result property="spzt" column="WSSPZT_MC"/>
+		<result property="skfs" column="YJJSFS_MC"/>
+		<result property="zcHj" column="ZC_HJ"/>
+		<result property="zcXf" column="ZC_XF"/>
+	</resultMap>
+	
+	<procedure id="queryFcMxPage" parameterMap="jcFcMxPareMap" resultMap="jcFcMxResMap">
+		{call P_JCGL_JYQK_FCMXB(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}
+	</procedure>
+	
+	<select id="selectQyZzGjMcByJgbm2" parameterClass="java.util.Map" resultClass="string">
+		select jc from qy_zzjg jgMc where jgbm=#jgbm#
+	</select>
+</sqlMap>

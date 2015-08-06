@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+<typeAlias alias="OrderCargoLastInfo" type="com.cy.dcts.common.bo.OrderCargoLastInfo"/><!-- 货源历史记录表 -->
+<resultMap class="OrderCargoLastInfo" id="order_cargo_last_info_result">
+  <result property="id" column="ID"/>
+  <result property="cargoId" column="CARGO_ID"/>
+  <result property="driverId" column="DRIVER_ID"/>
+  <result property="stateType" column="STATE_TYPE"/>
+  <result property="remark" column="REMARK"/>
+  <result property="createTime" column="CREATE_TIME"/>
+  
+</resultMap>
+
+<insert id="isnert_order_cargo_last_info" parameterClass="Map">
+  INSERT INTO t_order_cargo_last_info(
+	cargo_id,
+	driver_id,
+	state_type,
+	remark,
+	create_time) 
+   VALUES(
+	#cargoId#,
+	#driverId#,
+	#stateType#,
+	#remark#,
+	sysdate())
+	
+	<selectKey resultClass="String" keyProperty="id">
+	    SELECT last_insert_id() as id
+	   </selectKey>
+</insert>
+</sqlMap>

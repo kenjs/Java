@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.zygl.dao.QyJcbmJldwMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectQyJcbmJldwByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyJcbmJldwDomain">
+		select a.SS_JGBM as ssJgbm,a.JLDW_DM as jldwDm,a.JBDWBZ as jbdwbz,a.HSBL as hsbl,a.DJ_JGBM as djJgbm,
+		a.DJR_CZY_DJXH as djrCzyDjxh,a.DJRQ as djrq,a.QYBZ as qybz,a.YXBZ as yxbz,a.CJR_CZY_DJXH as cjrCzyDjxh,
+		a.CJRQ as cjrq,a.XGR_CZY_DJXH as xgrCzyDjxh,a.XGRQ as xgrq from QY_JCBM_JLDW a  where a.SS_JGBM=#ssJgbm# and a.JLDW_DM=#jldwDm#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertQyJcbmJldw"  parameterClass="com.cy.common.bo.QyJcbmJldw">
+		<!--<selectKey keyProperty="ssJgbm" resultClass="String" type="pre"> 
+			select SEQ_JG_DJXH.nextval as ssJgbm from dual 
+		</selectKey> -->
+		insert into QY_JCBM_JLDW(SS_JGBM,JLDW_DM,JBDWBZ,HSBL,DJ_JGBM,
+		DJR_CZY_DJXH,DJRQ,QYBZ,YXBZ,CJR_CZY_DJXH,
+		CJRQ,XGR_CZY_DJXH,XGRQ)
+		values(#ssJgbm:NUMERIC#,#jldwDm:VARCHAR#,#jbdwbz:VARCHAR#,#hsbl:NUMERIC#,#djJgbm:NUMERIC#,
+		#djrCzyDjxh:NUMERIC#,to_date(#djrq:DATE#,'yyyy-MM-dd'),#qybz:VARCHAR#,#yxbz:VARCHAR#,#cjrCzyDjxh:NUMERIC#,
+		to_date(#cjrq:DATE#,'yyyy-MM-dd'),#xgrCzyDjxh:NUMERIC#,to_date(#xgrq:DATE#,'yyyy-MM-dd'))
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateQyJcbmJldwByKey" parameterClass="com.cy.common.bo.QyJcbmJldw">
+        update QY_JCBM_JLDW set SS_JGBM=#ssJgbm#,JLDW_DM=#jldwDm#,JBDWBZ=#jbdwbz#,HSBL=#hsbl#,DJ_JGBM=#djJgbm#,
+		DJR_CZY_DJXH=#djrCzyDjxh#,DJRQ=to_date(#djrq#, 'YYYY-MM-DD'),QYBZ=#qybz#,YXBZ=#yxbz#,CJR_CZY_DJXH=#cjrCzyDjxh#,
+		CJRQ=to_date(#cjrq#, 'YYYY-MM-DD'),XGR_CZY_DJXH=#xgrCzyDjxh#,XGRQ=to_date(#xgrq#, 'YYYY-MM-DD') where SS_JGBM=#ssJgbm# and JLDW_DM=#jldwDm#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteQyJcbmJldwByKey" parameterClass="java.util.Map">
+		DELETE FROM  QY_JCBM_JLDW where SS_JGBM=#ssJgbm# and JLDW_DM=#jldwDm#
+    </delete>
+</sqlMap>

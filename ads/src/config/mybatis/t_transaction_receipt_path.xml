@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.driver.dao.TransactionReceiptPathDao">
+
+	<!-- 新增 -->
+	<insert id="insertTransactionReceiptPath" parameterType="TransactionReceiptPathBo" keyProperty="id" useGeneratedKeys="true">
+		insert into t_transaction_receipt_path(TRANSACTION_ID,RECEIPT_PATH,CREATE_TIME,TYPE)
+		values (#{transactionId},#{receiptPath},sysdate(),#{type})
+	</insert>
+	
+	<!-- 删除（多个） -->
+	<delete id="deleteTransactionReceiptPath" parameterType="java.util.List">
+		delete from t_transaction_receipt_path where ID in
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+	</delete>
+	
+	<!--  -->
+	<select id="selectReceiptPathById" parameterType="java.util.List" resultType="string">
+		select RECEIPT_PATH from t_transaction_receipt_path where ID in
+        <foreach collection="list" separator="," close=")" open="(" item="item">
+            #{item}
+        </foreach>
+	</select>
+	
+	<select id="selectReceiptListByTransactionId" parameterType="map" resultType="TransactionReceiptPathDomain">
+		select t.ID as id,
+			t.TRANSACTION_ID as transactionId,
+			t.RECEIPT_PATH as receiptPath,
+			t.TYPE as type 
+		from t_transaction_receipt_path t
+        where 1 = 1
+        <if test="transactionId != null and transactionId != ''">
+            AND t.TRANSACTION_ID = #{transactionId}
+        </if>
+        <if test="type != null and type != ''">
+            AND t.TYPE = #{type}
+        </if>
+	</select>
+	
+	<!-- 根据id查询 -->
+	<select id="selectReceiptById" parameterType="string" resultType="TransactionReceiptPathDomain">
+		select t.ID as id,
+			t.TRANSACTION_ID as transactionId,
+			t.RECEIPT_PATH as receiptPath,
+			t.TYPE as type 
+		from t_transaction_receipt_path t where t.ID = #{id}
+	</select>
+
+</mapper>

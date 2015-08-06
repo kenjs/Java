@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+	<typeHandler jdbcType="CLOB" javaType="java.lang.String" callback="org.springframework.orm.ibatis.support.ClobStringTypeHandler" />
+	<typeHandler jdbcType="BLOB" javaType="[B" callback="org.springframework.orm.ibatis.support.BlobByteArrayTypeHandler" />
+	<!-- 系统管理模块start -->
+	<sqlMap resource="com/cy/common/xmlsql/business/xtgl/bus_xtglpublic.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/business/xtgl/bus_login.xml"/>
+
+    <sqlMap resource="com/cy/common/xmlsql/business/xtgl/bus_xtgl_gwwh.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/xtgl/qy_gw.xml"/>
+	
+	<sqlMap resource="com/cy/common/xmlsql/business/xtgl/bus_xtgl_swdngl.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/xtgl/bus_qy_swdh_dsh.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/xtgl/qy_swdn_dsh.xml"/>
+
+	<sqlMap resource="com/cy/common/xmlsql/business/xtgl/bus_xtgl_fgs.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/crud/xtgl/qy_zzjg.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/business/xtgl/bus_xtgl_zgswh.xml"/>
+    
+    <sqlMap resource="com/cy/common/xmlsql/business/xtgl/bus_xtgl_qyrygw.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/crud/xtgl/qy_ry_gw.xml"/>
+        
+    <sqlMap resource="com/cy/common/xmlsql/business/xtgl/bus_xtgl_qyjs.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/crud/xtgl/qy_js.xml"/>
+
+	<sqlMap resource="com/cy/common/xmlsql/business/xtgl/bus_xtgl_bmwh.xml"/>
+	
+	<sqlMap resource="com/cy/common/xmlsql/business/xtgl/bus_xtgl_xtsz.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/crud/xtgl/qy_xtsz.xml"/>
+    
+    <sqlMap resource="com/cy/common/xmlsql/crud/xtgl/qy_jsqxwh.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/xtgl/bus_xtgl_jsqxwh.xml"/>
+	
+	<sqlMap resource="com/cy/common/xmlsql/business/xtgl/bus_xtgl_yhjswh.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/crud/xtgl/qy_ry_js.xml"/>
+
+	<sqlMap resource="com/cy/common/xmlsql/business/xtgl/bus_xtgl_qyrydj.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/xtgl/qy_rydj.xml"/>
+	
+	<sqlMap resource="com/cy/common/xmlsql/business/xtgl/bus_xtgl_qyxtcs.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/xtgl/bus_xtgl_dmxzxm.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/xtgl/xt_xtcs_szxx.xml"/>
+	
+	<sqlMap resource="com/cy/common/xmlsql/business/xtgl/bus_qywsdysz.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/crud/xtgl/qy_wsdysz.xml"/>
+	<!-- 系统管理模块end --> 
+</sqlMapConfig>

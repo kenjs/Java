@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.hygl.dao.HyHwxxShfsbgZbMapper">
+
+	<!--根据主键取DOMAIN-->
+	<select id="selectHyHwxxShfsbgZbByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyHwxxShfsbgDomain">
+		select a.SHBG_DJXH as shbgDjxh,a.DD_DJXH as ddDjxh,a.XH as xh,a.SR_HJ as srHj,a.SR_YJ as srYj,
+	    a.SR_XF as srXf,a.SR_HDF as srHdf,a.SR_THF as srThf,a.SR_HF as srHf,a.SR_HK as srHk,
+	    a.SR_BJF as srBjf,a.SR_PSF as srPsf,a.SR_YSF as srYsf,
+	    a.CJR_CZY_DJXH as cjrCzyDjxh,(SELECT R.MC FROM QY_RYDJ R WHERE R.CZY_DJXH = A.CJR_CZY_DJXH) cjrMc,
+	    a.CJRQ as cjrq, 
+	    B.PC_DJXH as pcDjxh,B.WFH_DJXH as wfhDjxh,B.BZ as bz,
+		B.BSPSF as bspsf,B.SS_JGBM as ssJgbm,B.XGR_CZY_DJXH as xgrCzyDjxh,B.XGRQ as xgrq 
+	    from HY_HWXX_SHFSBG a,HY_HWXX_SHFSBG_ZB B
+	    WHERE A.SHBG_DJXH = B.SHBG_DJXH
+	      AND A.DD_DJXH = #ddDjxh#
+	      AND A.XH = #xh#
+	      AND B.PC_DJXH = #pcDjxh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertHyHwxxShfsbgZb"  parameterClass="com.cy.common.bo.HyHwxxShfsbgZb">
+		 insert into HY_HWXX_SHFSBG_ZB(SHBG_DJXH,PC_DJXH,WFH_DJXH,DD_DJXH,XH,
+			    BSPSF,ZC_HDF,ZC_THF,BZ,SS_JGBM,CJR_CZY_DJXH,
+			    CJRQ,XGR_CZY_DJXH,XGRQ)
+		  select #shbgDjxh:NUMERIC#,#pcDjxh:NUMERIC#,#wfhDjxh:NUMERIC#,#ddDjxh:NUMERIC#,#xh:NUMERIC#,
+		         #bspsf:NUMERIC#,a.zc_hdf,a.zc_thf,#bz:VARCHAR#,#ssJgbm:NUMERIC#,#cjrCzyDjxh:NUMERIC#,
+				 to_date(#cjrq:DATE#,'yyyy-MM-dd'),#xgrCzyDjxh:NUMERIC#,to_date(#xgrq:DATE#,'yyyy-MM-dd')
+		    from hy_pc_hwxx a
+		   where a.pc_djxh = #pcDjxh#
+		     and a.wfh_djxh = #wfhDjxh#
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateHyHwxxShfsbgZbByKey" parameterClass="com.cy.common.bo.HyHwxxShfsbgZb">
+        update HY_HWXX_SHFSBG_ZB set SHBG_DJXH=#shbgDjxh#,PC_DJXH=#pcDjxh#,WFH_DJXH=#wfhDjxh#,DD_DJXH=#ddDjxh#,XH=#xh#,
+		BSPSF=#bspsf#,SS_JGBM=#ssJgbm#,CJR_CZY_DJXH=#cjrCzyDjxh#,CJRQ=to_date(#cjrq#, 'YYYY-MM-DD'),XGR_CZY_DJXH=#xgrCzyDjxh#,
+		XGRQ=to_date(#xgrq#, 'YYYY-MM-DD') where SHBG_DJXH=#shbgDjxh# and PC_DJXH=#pcDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：软删除-->
+	<delete id="deleteHyHwxxShfsbgZbByKey" parameterClass="java.util.Map">
+		delete from HY_HWXX_SHFSBG_ZB where WFH_DJXH=#wfhDjxh# and PC_DJXH=#pcDjxh#
+    </delete>
+</sqlMap>

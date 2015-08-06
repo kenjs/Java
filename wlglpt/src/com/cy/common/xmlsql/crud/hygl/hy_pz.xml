@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.hygl.dao.HyPzMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectHyPzByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyPzDomain">
+		select a.PZ_DJXH as pzDjxh,a.HZ_JGBM as hzJgbm,a.CLXHWH_DJXH as clxhwhDjxh,a.CL_CZ as clCz,a.CL_TJ as clTj,
+		a.CL_CD as clCd,a.CL_KD as clKd,a.CL_GD as clGd,a.PZ_CZ as pzCz,a.PZ_TJ as pzTj,
+		a.PZ_CD as pzCd,a.PZ_KD as pzKd,a.PZ_GD as pzGd,a.PZSR as pzsr,a.PZCB as pzcb,
+		a.PZPSF as pzpsf,a.DJ_JGBM as djJgbm,a.SS_JGBM as ssJgbm,a.YXBZ as yxbz,a.CJR_CZY_DJXH as cjrCzyDjxh,
+		a.CJRQ as cjrq,a.XGR_CZY_DJXH as xgrCzyDjxh,a.XGRQ as xgrq from HY_PZ a  where a.PZ_DJXH=#pzDjxh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertHyPz"  parameterClass="com.cy.common.bo.HyPz">
+		<selectKey keyProperty="pzDjxh" resultClass="string" type="pre"> 
+			select SEQ_PZ_DJXH.nextval as pzDjxh from dual 
+		</selectKey> 
+		insert into HY_PZ(PZ_DJXH,HZ_JGBM,CLXHWH_DJXH,CL_CZ,CL_TJ,
+		CL_CD,CL_KD,CL_GD,PZ_CZ,PZ_TJ,
+		PZ_CD,PZ_KD,PZ_GD,PZSR,PZCB,
+		PZPSF,DJ_JGBM,SS_JGBM,YXBZ,CJR_CZY_DJXH,
+		CJRQ,XGR_CZY_DJXH,XGRQ)
+		values(#pzDjxh:NUMERIC#,#hzJgbm:NUMERIC#,#clxhwhDjxh:NUMERIC#,#clCz:NUMERIC#,#clTj:NUMERIC#,
+		#clCd:NUMERIC#,#clKd:NUMERIC#,#clGd:NUMERIC#,#pzCz:NUMERIC#,#pzTj:NUMERIC#,
+		#pzCd:NUMERIC#,#pzKd:NUMERIC#,#pzGd:NUMERIC#,#pzsr:NUMERIC#,#pzcb:NUMERIC#,
+		#pzpsf:NUMERIC#,#djJgbm:NUMERIC#,#ssJgbm:NUMERIC#,#yxbz:VARCHAR#,#cjrCzyDjxh:NUMERIC#,
+		#cjrq:DATE#,#xgrCzyDjxh:NUMERIC#,#xgrq:DATE#)
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateHyPzByKey" parameterClass="com.cy.common.bo.HyPz">
+        update HY_PZ set PZ_DJXH=#pzDjxh#,HZ_JGBM=#hzJgbm#,CLXHWH_DJXH=#clxhwhDjxh#,CL_CZ=#clCz#,CL_TJ=#clTj#,
+		CL_CD=#clCd#,CL_KD=#clKd#,CL_GD=#clGd#,PZ_CZ=#pzCz#,PZ_TJ=#pzTj#,
+		PZ_CD=#pzCd#,PZ_KD=#pzKd#,PZ_GD=#pzGd#,PZSR=#pzsr#,
+		XGR_CZY_DJXH=#xgrCzyDjxh#,XGRQ=#xgrq# where PZ_DJXH=#pzDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteHyPzByKey" parameterClass="java.util.Map">
+		update HY_PZ set yxbz='N' where PZ_DJXH=#pzDjxh#
+    </delete>
+</sqlMap>

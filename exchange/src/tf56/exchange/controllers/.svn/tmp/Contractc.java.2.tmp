@@ -1,0 +1,170 @@
+package tf56.exchange.controllers;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+<<<<<<< .mine
+import javax.servlet.http.HttpServletRequest;
+=======
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.HttpServletRequest;
+>>>>>>> .r10860
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.ws.Action;
+
+import net.sf.serfj.RestController;
+import net.sf.serfj.annotations.POST;
+
+import org.apache.log4j.Logger;
+
+import tf56.exchange.services.ContractService;
+import tf56.sofa.serializer.JsonResponse;
+import tf56.sofa.util.ClientUtil;
+import tf56.sofa.util.SysUtil;
+
+/**
+ * 
+ * 总包接口类
+ * @athor changmeng.liu
+ * @date 2014-4-16
+ * @version 1.0
+ * @update
+ */
+public class Contractc extends RestController{
+	
+	public static Logger logger = Logger.getLogger(Contractc.class);
+	/**
+	 * 
+	 * @athor changmeng.liu
+	 * @date 2014-4-16
+	 * @version 1.0
+	 * @function 接收外部订单XML 
+	 * @param 
+	 * @update
+	 */
+	 @POST
+	 public void receiveXml(){
+		   Map map = this.getParams();
+		   map = SysUtil.removeFilter(map);//用系统工具包内的封装的方法删除过滤器（trade包中也要删除，否则无法实例化）	
+		   ContractService contractService=(ContractService) SofaSpringContext.getBean("contractService");
+		   Map<String,String> inputMap=new HashMap<String,String>();
+		   inputMap.put("xmlDoc", transMapToString(map));
+		   String msg=contractService.sendOderXml(inputMap);
+		   HttpServletResponse response=this.getResponseHelper().getResponse();
+		   contractService.outputXml(msg, response);	
+	 }
+	
+<<<<<<< .mine
+	
+=======
+			 /** 
+			  * 方法名称:transMapToString 
+			  * 传入参数:map 
+			  * 返回值:String 形如 username'chenziwen^password'1234 
+			 */  
+			 public static String transMapToString(Map map){  
+			   java.util.Map.Entry entry;  
+			   StringBuffer sb = new StringBuffer();  
+			   for(Iterator iterator = map.entrySet().iterator(); iterator.hasNext();)  
+			   {  
+			     entry = (java.util.Map.Entry)iterator.next();  
+			       sb.append(entry.getKey().toString()).append( "=" ).append(null==entry.getValue()?"":  
+			       entry.getValue().toString()).append (iterator.hasNext() ? "^" : "");  
+			   }  
+			   return sb.toString();  
+			 }  
+>>>>>>> .r10860
+	@POST
+	public String exchangeInformationFromScm2ryp() {
+		String msgJson = "";
+		Map map = SysUtil.removeFilter(getParams());
+		HttpServletResponse response = this.getResponseHelper().getResponse();
+		HttpServletRequest request = this.getResponseHelper().getRequest();
+		
+		try {
+			StringBuffer sb = new StringBuffer();
+			
+			//要返回的报文
+			//成功
+			sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+	        sb.append("<report_data>");
+	        sb.append("<respon_sys>SCM</respon_req>");
+	        sb.append("<respon_time>2014-04-08 14:30:59</respon_time>");
+	        sb.append("<result>");
+	        sb.append("<code>200</code>");
+	        sb.append("<comment>成功</comment>");
+	        sb.append("</result>");
+	        sb.append("</report_data>");
+	        
+	        //失败
+	        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+	        sb.append("<report_data>");
+	        sb.append("<respon_sys>SCM</respon_req>");
+	        sb.append("<respon_time>2014-04-08 14:30:59</respon_time>");
+	        sb.append("<result>");
+	        sb.append("<code>500</code>");
+	        sb.append("<comment>失败</comment>");
+	        sb.append("<error_code_list>");
+	        sb.append("<error_code>100</error_code>");
+	        sb.append("<error_code>101</error_code>");
+	        sb.append("</error_code_list>");
+	        sb.append("</result>");
+	        sb.append("</report_data>");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+		return new JsonResponse().responseJson(response, msgJson);
+	}
+	
+	@POST
+	public String exchangeInformationFromRyp2scm() {
+		String msgJson = "";
+		Map map = SysUtil.removeFilter(getParams());
+		HttpServletResponse response = this.getResponseHelper().getResponse();
+		HttpServletRequest request = this.getResponseHelper().getRequest();
+		
+		try {
+			StringBuffer sb = new StringBuffer();
+			//获取收到的报文
+			String url = "";			
+			ClientUtil clientUtil = new ClientUtil(url);
+			msgJson = clientUtil.post(url, map).toString();
+			
+			//要返回的报文
+			//成功
+			sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+	        sb.append("<report_data>");
+	        sb.append("<respon_sys>RYP</respon_req>");
+	        sb.append("<respon_time>2014-04-08 14:30:59</respon_time>");
+	        sb.append("<result>");
+	        sb.append("<code>200</code>");
+	        sb.append("<comment>成功</comment>");
+	        sb.append("</result>");
+	        sb.append("</report_data>");
+	        
+	        //失败
+	        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+	        sb.append("<report_data>");
+	        sb.append("<respon_sys>RYP</respon_req>");
+	        sb.append("<respon_time>2014-04-08 14:30:59</respon_time>");
+	        sb.append("<result>");
+	        sb.append("<code>500</code>");
+	        sb.append("<comment>失败</comment>");
+	        sb.append("<error_code_list>");
+	        sb.append("<error_code>100</error_code>");
+	        sb.append("<error_code>101</error_code>");
+	        sb.append("</error_code_list>");
+	        sb.append("</result>");
+	        sb.append("</report_data>");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+		return new JsonResponse().responseJson(response, msgJson);
+	}
+}

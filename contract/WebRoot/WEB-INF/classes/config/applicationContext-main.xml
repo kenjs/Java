@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:cache="http://www.springframework.org/schema/cache" xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-3.1.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd"
+		default-lazy-init="true" default-autowire="byName">
+	<description>Spring公共配置 </description>
+	<!-- property-placeholder是一个属性遍历器，定位一个属性文件 --> 
+	<context:property-placeholder location="classpath:config/application.properties" />
+   
+	
+	<!-- 使用annotation 自动注册bean, 并保证@Required、@Autowired的属性被注入 -->
+	<!--  <context:component-scan base-package="com.tf56.zeno.controllers"/>-->
+	    
+	<!-- 数据源配置,使用应用内的DBCP数据库连接池 --> 
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">   
+	    <!-- Connection Info -->   
+	    <property name="driverClassName" value="${jdbc.driver}" />   
+	    <property name="url" value="${jdbc.url}" />   
+	    <property name="username" value="${jdbc.username}" />   
+	    <property name="password" value="${jdbc.password}" />  
+	    <!-- Connection Pooling Info 
+	    <property name="initialSize" value="${dbcp.initialSize}" />  
+	    <property name="defaultAutoCommit" value="false" />--> 
+	    <property name="maxActive" value="${dbcp.maxActive}" />   
+	    <property name="maxIdle" value="${dbcp.maxIdle}" />   
+	    <property name="maxWait" value="${dbcp.maxWait}"/> 
+	    <property name="removeAbandoned" value="true"/>
+       	<!-- 数据库连接过多长时间不用将被视为被遗弃而收回连接池中 -->   
+       	<property name="removeAbandonedTimeout" value="30"/>
+	</bean>    
+	<!-- 事务配置 --> 
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" ></property>
+	</bean> 
+	 <!--配置哪些方法,什么情况下需要回滚--> 
+   <tx:advice id="serviceAdvice" transaction-manager="txManager">  
+	    <tx:attributes>   
+	        <!--当代理的service层中的方法抛出异常的时候才回滚,必须加rollback-for参数--> 
+	        <tx:method name="transaction*" propagation="REQUIRED" rollback-for="Throwable"  />  
+	    </tx:attributes>  
+	</tx:advice>  
+	<!-- 配置哪些类的方法需要进行事务管理 -->  
+	<aop:config proxy-target-class="true">  
+		<aop:pointcut id="servicePointcut" expression="(execution(* tf56.contract.services.impl.*.transaction*(..)))"/>  
+		<aop:advisor pointcut-ref="servicePointcut" advice-ref="serviceAdvice"/>  
+	</aop:config>
+	 
+	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+  		<!-- 此处应注入ibatis配置文件，而非sqlMap文件，否则会出现“there is no statement.....异常” -->
+  		<property name="configLocation">
+     		<value>classpath:config/sqlMapConfig.xml</value>
+  		</property>
+	</bean>
+
+</beans>

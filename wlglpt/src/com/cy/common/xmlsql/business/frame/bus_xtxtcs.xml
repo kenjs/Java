@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.framework.dao.XtXtcsMapper">
+
+	<!--获取系统的参数信息-->
+	<select id="selectXtXtcsList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.XtXtcsDomain">
+		select CSXH as csxh,CSMC as csmc,SYSM as sysm,CSMRZ as csmrz,CSLB_DM as cslbDm,
+		YXBZ as yxbz from XT_XTCS
+    </select>
+</sqlMap>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cy.dctms.entity.OrderCargoInfo">
+    <!-- 添加货源 -->
+    <insert id="insertOrderCargoInfo" parameterType="com.cy.dctms.entity.OrderCargoInfo" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO t_order_cargo_info (
+   	cargo_name,
+		cargo_type,
+		cargo_weight,
+		cargo_cubage,
+		request_car_length,
+		request_car_bar_type,
+		request_car_plate_type,
+		freight,
+		request_start_time,
+		request_end_time,
+		start_province,
+		start_city,
+		start_county,
+		start_town,
+		end_province,
+		end_city,
+		end_county,
+		end_town,
+		contact_name,
+		contact_mobilephone,
+		contact_telephone,
+		remark,
+		deploy_userid,
+		modify_userid,
+		company_id,
+		cargo_flag,
+		deleted_flag,
+		cargo_flag_time,
+		create_time,
+		modify_time ) VALUES (
+		#{cargoName},#{cargoType},#{cargoWeight},#{cargoCubage},#{requestCarLength},
+		#{requestCarBarType},#{requestCarPlateType},#{freight},#{requestStartTime},#{requestEndTime},
+		#{startProvince},#{startCity},#{startCounty},#{startTown},#{endProvince},#{endCity},
+		#{endCounty},#{endTown},#{contactName},#{contactMobilephone},#{contactTelephone},
+		#{remark},#{deployUserid},#{modifyUserid},
+		#{companyId},#{cargoFlag},#{deletedFlag},sysdate(),sysdate(),sysdate()) 		
+    </insert>
+   
+    
+</mapper>

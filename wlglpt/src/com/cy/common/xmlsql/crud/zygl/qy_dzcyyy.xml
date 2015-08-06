@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.zygl.dao.QyDzcyyyMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectQyDzcyyyByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyDzcyyyDomain">
+		select A.WH_XH AS whXh,A.SS_JGBM AS ssJgbm,A.DZCYYY AS dzcyyy,A.SM AS sm,A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,A.CJRQ AS cjrq,A.XGR_CZY_DJXH AS xgrCzyDjxh,A.XGRQ AS xgrq,
+		      (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		      (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		from QY_DZCYYY A
+	    where A.WH_XH=#whXh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertQyDzcyyy"  parameterClass="com.cy.common.bo.QyDzcyyy">
+		<selectKey keyProperty="whXh" resultClass="String" type="pre"> 
+			select SEQ_ZY_DJXH.nextval as whXh from dual 
+		</selectKey> 
+		insert into QY_DZCYYY(WH_XH,SS_JGBM,DZCYYY,SM,YXBZ,CJR_CZY_DJXH,CJRQ,XGR_CZY_DJXH,XGRQ)
+		values(#whXh:NUMERIC#,#ssJgbm:NUMERIC#,#dzcyyy:VARCHAR#,#sm:VARCHAR#,
+		#yxbz:VARCHAR#,#cjrCzyDjxh:NUMERIC#,to_date(#cjrq:DATE#,'yyyy-MM-dd'),#xgrCzyDjxh:NUMERIC#,to_date(#xgrq:DATE#,'yyyy-MM-dd'))
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateQyDzcyyyByKey" parameterClass="com.cy.common.bo.QyDzcyyy">
+        update QY_DZCYYY set DZCYYY=#dzcyyy#,SM=#sm#,XGR_CZY_DJXH=#xgrCzyDjxh#,XGRQ=to_date(#xgrq#, 'YYYY-MM-DD')
+        where WH_XH=#whXh#
+    </update>
+    
+	<!--根据主键删除表数据：软删除-->
+	<delete id="deleteQyDzcyyyByKey" parameterClass="java.util.Map">
+		update QY_DZCYYY set yxbz='N' where WH_XH=#whXh#
+    </delete>
+</sqlMap>

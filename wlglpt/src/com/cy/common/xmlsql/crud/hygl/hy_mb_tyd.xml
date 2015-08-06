@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.hygl.dao.HyMbTydMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectHyMbTydByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyMbTydDomain">
+	    select a.MB_DJXH as mbDjxh,a.SS_JGBM as ssJgbm,a.MBMC as mbmc,
+	    	a.xdrq as xdrq,
+			B.FHR_DJXH as fhrDjxh,B.FHR_MC as fhrMc,B.FHR_DZ as fhrDz,
+		    B.FHR_LXR as fhrLxr,B.FHR_LXDH as fhrLxdh,B.FHR_XZQH_DM as fhrXzqhDm,
+		    (SELECT XZQH_JC FROM DM_XZQH WHERE XZQH_DM = B.FHR_XZQH_DM) AS fhrXzqhMc,
+		    B.SHR_DJXH as shrDjxh,B.SHR_MC as shrMc,B.SHR_DZ as shrDz,
+		    B.SHR_LXR as shrLxr,B.SHR_LXDH as shrLxdh,B.SHR_XZQH_DM as shrXzqhDm,
+		    (SELECT XZQH_JC FROM DM_XZQH WHERE XZQH_DM = B.SHR_XZQH_DM) AS shrXzqhMc,
+		    NVL(B.YQ_FHRQ,0) as yqFhrq,NVL(B.YQ_DDRQ,0) as yqDdrq,
+		    B.SHFS_DM as shfsDm,B.YKJSFS_DM as ykjsfsDm,B.YJJSFS_DM as yjjsfsDm,
+		    a.YXBZ as yxbz,a.DJR_CZY_DJXH as djrCzyDjxh,a.DJRQ as djrq,
+		    a.DJ_JGBM as djJgbm,
+		    (select qz.jc from qy_zzjg qz where qz.jgbm = a.dj_jgbm) djJgmc,
+		    a.SS_JGBM as ssJgbm,a.CJR_CZY_DJXH as cjrCzyDjxh,a.CJRQ as cjrq,a.XGR_CZY_DJXH as xgrCzyDjxh,
+		    a.XGRQ as xgrq,
+		    B.THFL_DM as thflDm,
+		    DECODE(A.SR_HJ,0,NULL,A.SR_HJ) AS SRHj,DECODE(A.SR_XF,0,NULL,A.SR_XF) AS SRXf, 
+		    DECODE(A.SR_HK,0,NULL,A.SR_HK) AS SRHk,DECODE(A.SR_HF, 0, NULL, A.SR_HF) as SRHf,
+		    DECODE(A.SR_YJ,0,NULL,A.SR_YJ) as SRYj,DECODE(A.SR_HDF,0,NULL,A.SR_HDF) as SRHdf,
+		    DECODE(A.SR_THF,0,NULL,A.SR_THF) as SRThf,
+		    KH.KHLX_DM khlxDm4js, KH.YKJSFS_DM ykjsfsDm4js
+		    from HY_MB_DD a, QY_KH_DJXX KH, (SELECT MB_DJXH, FHR_DJXH,FHR_MC,FHR_DZ,FHR_LXR,FHR_LXDH,
+				FHR_XZQH_DM,SHR_DJXH,SHR_MC,SHR_DZ,SHR_LXR,
+				SHR_LXDH,SHR_XZQH_DM,YQ_FHRQ,YQ_DDRQ,SHFS_DM,
+				THFL_DM,YKJSFS_DM,YJJSFS_DM, ROWNUM RN
+				FROM HY_MB_DD_HWMX 
+				WHERE MB_DJXH = #mbDjxh# ORDER BY XH DESC) B
+		    WHERE A.MB_DJXH = B.MB_DJXH(+)
+		    AND B.FHR_DJXH = KH.KH_DJXH(+)
+		    AND a.MB_DJXH=#mbDjxh#
+		    AND B.RN = 1
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertHyMbTyd"  parameterClass="com.cy.common.bo.HyMbTyd">
+		insert into HY_MB_DD(MB_DJXH,SS_JGBM,MBMC,KH_DJXH,KHMC,BZ,DDFL_DM,XDRQ,
+		YXBZ,DJR_CZY_DJXH,DJRQ,DJ_JGBM,CJR_CZY_DJXH,CJRQ,XGR_CZY_DJXH,
+		XGRQ, SR_HJ,SR_YJ,SR_XF,SR_HDF,SR_THF,SR_HF,SR_HK)
+		values(#mbDjxh:NUMERIC#,#ssJgbm:NUMERIC#,#mbmc:VARCHAR#,#khDjxh:VARCHAR#,#khmc:VARCHAR#,
+		#bz:VARCHAR#,#ddflDm:NUMERIC#,#xdrq:DATE#,
+		#yxbz:VARCHAR#,#djrCzyDjxh:NUMERIC#,#djrq:DATE#,
+		#djJgbm:NUMERIC#,#cjrCzyDjxh:NUMERIC#,#cjrq:DATE#,#xgrCzyDjxh:NUMERIC#,
+		#xgrq:DATE#,#srHj:NUMERIC#,#srYj:NUMERIC#,#srXf:NUMERIC#,#srHdf:NUMERIC#,
+		#srThf:NUMERIC#,#srHf:NUMERIC#,#srHk:NUMERIC#)
+	</insert>
+	
+	<!-- 托运单保存为模板 -->
+	<insert id="insertHyMbTydFromTyd"  parameterClass="com.cy.common.bo.HyMbTyd">
+		<selectKey keyProperty="mbDjxh" resultClass="string" type="pre"> 
+			select SEQ_MB_DJXH.nextval as mbDjxh from dual 
+		</selectKey> 
+		insert into HY_MB_DD(MB_DJXH,SS_JGBM,MBMC,KH_DJXH,KHMC,BZ,DDFL_DM,XDRQ,
+			YXBZ,DJR_CZY_DJXH,DJRQ,DJ_JGBM,CJR_CZY_DJXH,CJRQ,XGR_CZY_DJXH,
+			XGRQ,SR_HJ,SR_YJ,SR_XF,SR_HDF,SR_THF,SR_HF,SR_HK)
+		    SELECT #mbDjxh:NUMERIC#,#ssJgbm:NUMERIC#,#mbmc:VARCHAR#,DD.KH_DJXH,DD.KHMC,DD.BZ,DD.DDFL_DM,DD.XDRQ,
+		    'Y',#djrCzyDjxh:NUMERIC#,SYSDATE,#djJgbm:NUMERIC#,#cjrCzyDjxh:NUMERIC#,SYSDATE,#xgrCzyDjxh:NUMERIC#,
+		    SYSDATE,DD.SR_HJ,DD.SR_YJ,DD.SR_XF,DD.SR_HDF,DD.SR_THF,DD.SR_HF,DD.SR_HK
+		    FROM HY_DD DD WHERE DD.DD_DJXH = #ddDjxh#
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateHyMbTydByKey" parameterClass="com.cy.common.bo.HyMbTyd">
+		update HY_MB_DD set MBMC=#mbmc#,BZ=#bz#,xdrq=#xdrq#,
+			XGR_CZY_DJXH=#xgrCzyDjxh#,XGRQ=#xgrq#,
+		    SR_HJ=#srHj#,SR_YJ=#srYj#,SR_XF=#srXf#,SR_HDF=#srHdf#,
+			SR_THF=#srThf#,SR_HF=#srHf#,SR_HK=#srHk#
+		where MB_DJXH=#mbDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteHyMbTydByKey" parameterClass="java.util.Map">
+		update HY_MB_DD set yxbz='N' where MB_DJXH=#mbDjxh#
+    </delete>
+</sqlMap>

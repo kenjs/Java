@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+    PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<settings>
+		<!-- changes from the defaults -->
+		<setting name="lazyLoadingEnabled" value="false" />
+	</settings>
+    
+    <mappers>
+    	<mapper resource="/config/mapper/t_company_info.xml"/>
+    	<mapper resource="/config/mapper/t_driver_user_info.xml"/>
+    	<mapper resource="/config/mapper/t_order_cargo_info.xml"/>
+    	<mapper resource="/config/mapper/t_web_user_info.xml"/>
+    </mappers>
+</configuration>

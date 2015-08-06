@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.hygl.dao.XyjsSrdzQdMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectXyjsSrdzQdByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.XyjsSrdzQdDomain">
+		select a.QD_DJXH as qdDjxh,a.XY_DJXH as xyDjxh,
+			(SELECT JG.MC FROM QY_ZZJG JG WHERE JG.JGBM = a.XY_DJXH) xyMc,
+			a.FYLB_DM fylbDm,
+		a.QDMC as qdmc,a.DZQD_HZFS_DM as dzqdHzfsDm,a.HE_JE as heJe,
+		a.DZ_JE as dzJe,a.DZCY_JE as dzcyJe,(SELECT JG.MC FROM QY_ZZJG JG WHERE JG.JGBM = A.SS_JGBM) ssJgmc,
+		a.YF_JE as yfJe,a.WF_JE as wfJe,a.YSQ_KPJE as ysqKpje,a.WSQ_KPJE as wsqKpje,a.DJR_CZY_DJXH as djrCzyDjxh,
+		a.DJRQ as djrq,a.DJ_JGBM as djJgbm,a.SS_JGBM as ssJgbm,a.YXBZ as yxbz,a.BZ AS bz,a.ZT AS zt from XYJS_SRDZ_QD a  where a.QD_DJXH=#qdDjxh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertXyjsSrdzQd"  parameterClass="com.cy.common.bo.XyjsSrdzQd">
+		insert into XYJS_SRDZ_QD(QD_DJXH,XY_DJXH,QDMC,FYLB_DM,DZQD_HZFS_DM,HE_JE,DZ_JE,DZCY_JE,
+		YF_JE,WF_JE,YSQ_KPJE,WSQ_KPJE,DJR_CZY_DJXH,
+		DJRQ,DJ_JGBM,SS_JGBM,YXBZ,SPBZ,ZT)
+		values(#qdDjxh:NUMERIC#,#xyDjxh:NUMERIC#,#qdmc:VARCHAR#,#fylbDm#,#dzqdHzfsDm:NUMERIC#,#heJe:NUMERIC#,
+		#dzJe:NUMERIC#,#dzcyJe:NUMERIC#,
+		#yfJe:NUMERIC#,#wfJe:NUMERIC#,#ysqKpje:NUMERIC#,#wsqKpje:NUMERIC#,#djrCzyDjxh:NUMERIC#,
+		#djrq:DATE#,#djJgbm:NUMERIC#,#ssJgbm:NUMERIC#,#yxbz:VARCHAR#,#spbz:VARCHAR#,#zt:VARCHAR#)
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateXyjsSrdzQdByKey" parameterClass="com.cy.common.bo.XyjsSrdzQd">
+        update XYJS_SRDZ_QD set XY_DJXH=#xyDjxh#,QDMC=#qdmc#,HE_JE=#heJe#,DZ_JE=#dzJe#,DZCY_JE=#dzcyJe# where QD_DJXH=#qdDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteXyjsSrdzQdByKey" parameterClass="java.util.Map">
+		update XYJS_SRDZ_QD set yxbz='N' where QD_DJXH=#qdDjxh#
+    </delete>
+</sqlMap>

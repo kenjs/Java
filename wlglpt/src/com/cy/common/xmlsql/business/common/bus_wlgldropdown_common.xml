@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.common.dao.BusWlglDropDownCommonMapper">
+    <!--根据登记部门编码取客户信息-->
+	<select id="getHykhBySsbmbm" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.WlglptDropDownCommonDomain">
+		SELECT KH.KH_DJXH   AS FHRDJXH,
+		       KH.KHJC      AS KHJC,
+		       KH.KHMC      AS FHRMC,
+		       KH.PYQC      AS PYQC,
+		       KH.PYJC      AS PYJC,
+		       KH.KHLX_DM   AS KHLXDM4JS,
+		       KH.YKJSFS_DM AS YKJSFSDM4JS
+		  FROM QY_KH_DJXX KH
+		 WHERE KH.YXBZ = 'Y'
+		 AND KH.DJ_JGBM = #bmbm#
+		 
+		UNION ALL
+		SELECT KH.KH_DJXH   AS FHRDJXH,
+		       KH.KHJC      AS KHJC,
+		       KH.KHMC      AS FHRMC,
+		       KH.PYQC      AS PYQC,
+		       KH.PYJC      AS PYJC,
+		       KH.KHLX_DM   AS KHLXDM4JS,
+		       KH.YKJSFS_DM AS YKJSFSDM4JS
+		  FROM QY_KH_DJXX KH
+		 WHERE KH.YXBZ = 'Y'
+		 AND KH.DJ_JGBM &lt;&gt; #bmbm#
+		   AND KH.DJ_JGBM IN (SELECT B.JGBM
+		                        FROM QY_ZZJG A,QY_ZZJG B 
+		                       WHERE A.JGBM = #bmbm#
+		                         AND ((B.JGLB_DM = '4' AND B.SJ_JGBM = A.SJ_JGBM) OR A.SJ_JGBM = B.JGBM)
+		                         AND B.YXBZ = 'Y'
+		                         AND B.QYBZ = 'Y')
+		   AND KH.XXGXFS_DM IN ('2','3')
+		UNION ALL
+		SELECT KH.KH_DJXH   AS FHRDJXH,
+		       KH.KHJC      AS KHJC,
+		       KH.KHMC      AS FHRMC,
+		       KH.PYQC      AS PYQC,
+		       KH.PYJC      AS PYJC,
+		       KH.KHLX_DM   AS KHLXDM4JS,
+		       KH.YKJSFS_DM AS YKJSFSDM4JS
+		  FROM QY_KH_DJXX KH
+		 WHERE KH.YXBZ = 'Y'
+		   AND KH.DJ_JGBM &lt;&gt; #bmbm#
+		   AND KH.DJ_JGBM IN (SELECT B.JGBM
+		                        FROM QY_ZZJG A,QY_ZZJG B,QY_ZZJG C
+		                       WHERE C.JGBM = #bmbm#
+		                         AND C.SJ_JGBM = A.JGBM
+		                         AND ((B.JGLB_DM = '4' AND B.SJ_JGBM = A.SJ_JGBM) OR A.SJ_JGBM = B.JGBM)
+		                         AND B.YXBZ = 'Y'
+		                         AND B.QYBZ = 'Y')
+		   AND KH.XXGXFS_DM = '3'
+		 ORDER BY FHRMC
+    </select>
+    
+    <select id="getHykhBySsjgbm" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.WlglptDropDownCommonDomain">
+		SELECT KH.KH_DJXH   AS FHRDJXH,
+		           KH.KHJC      AS KHJC,
+		           KH.KHMC      AS FHRMC,
+		           KH.PYQC      AS PYQC,
+		           KH.PYJC      AS PYJC,
+		           KH.KHLX_DM   AS KHLXDM4JS,
+		           KH.YKJSFS_DM AS YKJSFSDM4JS
+		      FROM QY_KH_DJXX KH
+		     WHERE KH.SS_JGBM = #ssJgbm#
+		       AND KH.YXBZ = 'Y'
+			UNION ALL
+			SELECT KH.KH_DJXH   AS FHRDJXH,
+		           KH.KHJC      AS KHJC,
+		           KH.KHMC      AS FHRMC,
+		           KH.PYQC      AS PYQC,
+		           KH.PYJC      AS PYJC,
+		           KH.KHLX_DM   AS KHLXDM4JS,
+		           KH.YKJSFS_DM AS YKJSFSDM4JS
+		      FROM QY_KH_DJXX KH
+		     WHERE KH.SS_JGBM = (SELECT SJ_JGBM FROM QY_ZZJG WHERE JGBM = #ssJgbm#)
+		       AND KH.XXGXFS_DM = '3'
+		       AND KH.YXBZ = 'Y'
+		 ORDER BY FHRMC
+    </select>
+    
+    <select id="getQyKhHwxxByKhDJxh" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.WlglptDropDownCommonDomain">
+      SELECT *
+		FROM (
+				SELECT A.HW_DJXH hwDjxh,NULL hwxhDjxh,A.HWMC hwmc,A.HWJC hwjc,A.PYQC,A.PYJC,
+				A.Bz_Jldw_Dm as bzJldwDm,A.Sl_Jldw_Dm as slJldwDm,A.Zl_Jldw_Dm as zlJldwDm,A.Tj_Jldw_Dm as tjJldwDm,
+				A.JS_JLDW_DM JSJLDWDM
+				  FROM QY_KH_HWXX A
+				 WHERE A.KH_DJXH = #khDjxh#
+				   AND ('1' = #CS20001# OR '3' = #CS20001#)
+				UNION ALL
+				SELECT B.HW_DJXH hwDjxh,B.HWXH_DJXH hwxhDjxh,B.Xhmc hwmc,B.xhjc hwjc,B.PYQC,B.PYJC,
+				B.Bz_Jldw_Dm as bzJldwDm,B.Sl_Jldw_Dm as slJldwDm,B.Zl_Jldw_Dm as zlJldwDm,B.Tj_Jldw_Dm as tjJldwDm,
+				B.JS_JLDW_DM JSJLDWDM
+				  FROM QY_KH_HWXH B
+				 WHERE B.KH_DJXH = #khDjxh#
+			   	AND ('2' = #CS20001# OR '3' = #CS20001#)
+		   )
+		ORDER BY hwmc
+    </select>
+    
+    <select id="getHyShdzByKhDJxh" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.WlglptDropDownCommonDomain">
+    	SELECT ZHDZ_DJXH as zhdzDjxh, XXDZ as fhrDz,XZQH_DM xzqhDm, xzqhMc,
+			LXR || '(' || LXDH || ',' || XXDZ || ')' XSDZ,
+			LXR as fhrLxr, LXDH as fhrLxdh,PYQC as pyqc,PYJC as pyjc
+		FROM (
+			SELECT ZHDZ.ZHDZ_DJXH, ZHDZ.XXDZ, ZHDZ.LXR,ZHDZ.PYQC,ZHDZ.PYJC,
+				ZHDZ.XZQH_DM, (SELECT QH.XZQH_JC FROM DM_XZQH QH WHERE QH.XZQH_DM = ZHDZ.XZQH_DM) xzqhMc,
+				DECODE(ZHDZ.LXR_YDDH, null, '', '','',ZHDZ.LXR_YDDH)
+				|| DECODE(ZHDZ.LXR_GDDH, NULL, '', '', '','/' || ZHDZ.LXR_GDDH)
+				|| DECODE(ZHDZ.QTLXDH, NULL, '', '', '', '/' || ZHDZ.QTLXDH) LXDH
+		FROM QY_KH_ZHDZ ZHDZ
+		WHERE ZHDZ.KH_DJXH = #khDjxh#
+		)
+		ORDER BY  XSDZ
+    </select>
+    
+    <select id="getHyShrDzByKhDJxh" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.WlglptDropDownCommonDomain">
+    	SELECT SHDZ_DJXH as shdzDjxh, XXDZ as shrDz, 
+			XXDZ || '(' || LXR || ',' || LXDH || ')' XSDZ,
+			LXR as shrLxr, LXDH as shrLxdh,PYQC as pyqc,PYJC as pyjc
+		FROM (
+			SELECT SHDZ.SHDZ_DJXH, SHDZ.XXDZ , SHDZ.LXR ,SHDZ.PYQC,SHDZ.PYJC,
+				DECODE(SHDZ.LXR_YDDH, null, '', '','',SHDZ.LXR_YDDH)
+				|| DECODE(SHDZ.LXR_GDDH, NULL, '', '', '','/' || SHDZ.LXR_GDDH)
+				|| DECODE(SHDZ.QTLXDH, NULL, '', '', '', '/' || SHDZ.QTLXDH) LXDH
+			FROM QY_KH_SHDZ SHDZ
+		WHERE SHDZ.KH_DJXH =#khDjxh#
+		)
+    	ORDER BY  XSDZ
+    </select>
+    
+    <select id="getShdwByKhDjxh" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.WlglptDropDownCommonDomain">
+    	SELECT SHDZ_DJXH as shdzDjxh, SHDWMC as shrMc,XXDZ as shrDz, 
+    		 XZQH_DM xzqhDm, xzqhMc,
+			SHDWMC || '--' || LXR || '(' || XXDZ || ',' || LXDH || ')' XSDZ,
+			LXR as shrLxr, LXDH as shrLxdh,PYQC as pyqc,PYJC as pyjc,KH_DJXH as khDjxh
+		FROM (
+			SELECT SHDZ.SHDZ_DJXH, SHDZ.SHDWMC,SHDZ.XXDZ, SHDZ.LXR,SHDZ.PYQC,SHDZ.PYJC,SHDZ.Kh_Djxh,
+				SHDZ.XZQH_DM,(SELECT QH.XZQH_JC FROM DM_XZQH QH WHERE QH.XZQH_DM = SHDZ.XZQH_DM) xzqhMc,
+				DECODE(SHDZ.LXR_YDDH, null, '', '','',SHDZ.LXR_YDDH)
+				|| DECODE(SHDZ.LXR_GDDH, NULL, '', '', '','/' || SHDZ.LXR_GDDH)
+				|| DECODE(SHDZ.QTLXDH, NULL, '', '', '', '/' || SHDZ.QTLXDH) LXDH
+			FROM QY_KH_SHDZ SHDZ
+		WHERE SHDZ.KH_DJXH = #khDjxh#
+		)
+    	ORDER BY  XSDZ
+    </select>
+    
+    <select id="queryXzqhInputSelList" resultClass="com.cy.zygl.domain.DmXzqhDomain">
+    	SELECT QH.XZQH_DM xzqhDm, QH.XZQH_MC xzqhMc, QH.XZQHJB_DM xzqhjbDm, QH.SJ_XZQH_DM sjXzqhDm,
+			 QH.XZDQ_DM xzdqDm, (SELECT DQ.XZDQ_MC FROM DM_XZDQ DQ WHERE DQ.XZDQ_DM = QH.Xzdq_Dm) xzdqMc,
+			 QH.XZQHJB_FL_BM xzqhjbFlBm, QH.XZQH_JC xzqhJc
+			FROM DM_XZQH QH
+			WHERE QH.YXBZ = 'Y'
+			AND (QH.XZQHJB_FL_BM IS NULL OR QH.XZQHJB_FL_BM &lt;&gt; '6')
+			ORDER BY QH.JBDM 
+    </select>
+    
+    <select id="queryXzdqList" resultClass="com.cy.zygl.domain.DmXzqhDomain">
+    	SELECT XZDQ.XZDQ_DM xzdqDm, XZDQ.XZDQ_MC xzdqMc
+			FROM DM_XZDQ XZDQ
+			WHERE XZDQ.YXBZ = 'Y'
+    </select>
+    
+    <select id="queryQyClxxBySsbmbm" parameterClass="java.util.Map"
+    	resultClass="com.cy.zygl.domain.QyYlClxxDomain">
+    	SELECT CL.CL_DJXH clDjxh, CL.CZ_XM czXm, CL.CLHM,
+		       SJ.SJ_XM sjXm, SJ.SJ_ZJHM sjZjhm, SJ.SJ_SJHM sjSjhm, SJ.SJ_LXDH sjLxdh
+		      FROM QY_YL_CLXX CL, QY_YL_CLXX_SJ SJ
+		      WHERE CL.CL_DJXH = SJ.CL_DJXH(+)
+		      AND CL.YXBZ = 'Y'
+		      AND SJ.YXBZ(+) = 'Y'
+		      AND CL.GCBZ = 'N'
+		      <dynamic>
+		      	<isNotEmpty property="clsxDm" prepend="AND">
+		      		CL.CLSX_DM = #clsxDm#
+		      	</isNotEmpty>
+		      	<isEqual property="pcfsDm" compareValue="1" prepend="AND">
+		      		CL.THCLBZ = 'Y'
+		      	</isEqual>
+		      	<isEqual property="pcfsDm" compareValue="2" prepend="AND">
+		      		CL.YSCLBZ = 'Y'
+		      	</isEqual>
+		      	<isEqual property="pcfsDm" compareValue="3" prepend="AND">
+		      		CL.PSCLBZ = 'Y'
+		      	</isEqual>
+		      </dynamic>
+		      AND CL.DJ_JGBM = #bmbm#
+		    UNION ALL
+		      SELECT CL.CL_DJXH clDjxh, CL.CZ_XM czXm, CL.CLHM,
+		       SJ.SJ_XM sjXm, SJ.SJ_ZJHM sjZjhm, SJ.SJ_SJHM sjSjhm, SJ.SJ_LXDH sjLxdh
+		      FROM QY_YL_CLXX CL, QY_YL_CLXX_SJ SJ
+		      WHERE CL.CL_DJXH = SJ.CL_DJXH(+)
+		      AND CL.YXBZ = 'Y'
+		      AND SJ.YXBZ(+) = 'Y' 
+		      AND CL.GCBZ = 'N'
+		      <dynamic>
+		      	<isNotEmpty property="clsxDm" prepend="AND">
+		      		CL.CLSX_DM = #clsxDm#
+		      	</isNotEmpty>
+		      	<isEqual property="pcfsDm" compareValue="1" prepend="AND">
+		      		CL.THCLBZ = 'Y'
+		      	</isEqual>
+		      	<isEqual property="pcfsDm" compareValue="2" prepend="AND">
+		      		CL.YSCLBZ = 'Y'
+		      	</isEqual>
+		      	<isEqual property="pcfsDm" compareValue="3" prepend="AND">
+		      		CL.PSCLBZ = 'Y'
+		      	</isEqual>
+		      </dynamic>     
+		      AND CL.DJ_JGBM &lt;&gt; #bmbm#
+		      AND CL.DJ_JGBM IN (
+		          SELECT B.JGBM
+		              FROM QY_ZZJG A,QY_ZZJG B 
+		             WHERE A.JGBM = #bmbm#
+		               AND ((B.JGLB_DM = '4' AND B.SJ_JGBM = A.SJ_JGBM) OR A.SJ_JGBM = B.JGBM)
+		               AND B.YXBZ = 'Y'
+		               AND B.QYBZ = 'Y')
+		       AND CL.XXGXFS_DM IN ('2','3')
+		     UNION ALL
+		       SELECT CL.CL_DJXH clDjxh, CL.CZ_XM czXm, CL.CLHM,
+		       SJ.SJ_XM sjXm, SJ.SJ_ZJHM sjZjhm, SJ.SJ_SJHM sjSjhm, SJ.SJ_LXDH sjLxdh
+		       FROM QY_YL_CLXX CL, QY_YL_CLXX_SJ SJ
+		      WHERE CL.CL_DJXH = SJ.CL_DJXH(+)
+		      AND CL.YXBZ = 'Y'
+		      AND SJ.YXBZ(+) = 'Y' 
+		      AND CL.GCBZ = 'N'
+		      <dynamic>
+		      	<isNotEmpty property="clsxDm" prepend="AND">
+		      		CL.CLSX_DM = #clsxDm#
+		      	</isNotEmpty>
+		      	<isEqual property="pcfsDm" compareValue="1" prepend="AND">
+		      		CL.THCLBZ = 'Y'
+		      	</isEqual>
+		      	<isEqual property="pcfsDm" compareValue="2" prepend="AND">
+		      		CL.YSCLBZ = 'Y'
+		      	</isEqual>
+		      	<isEqual property="pcfsDm" compareValue="3" prepend="AND">
+		      		CL.PSCLBZ = 'Y'
+		      	</isEqual>
+		      </dynamic>     
+		       AND CL.DJ_JGBM &lt;&gt; #bmbm#
+		       AND CL.DJ_JGBM IN (
+		             SELECT B.JGBM
+		              FROM QY_ZZJG A,QY_ZZJG B,QY_ZZJG C
+		             WHERE C.JGBM = #bmbm#
+		               AND C.SJ_JGBM = A.JGBM
+		               AND ((B.JGLB_DM = '4' AND B.SJ_JGBM = A.SJ_JGBM) OR A.SJ_JGBM = B.JGBM)
+		               AND B.YXBZ = 'Y'
+		               AND B.QYBZ = 'Y')
+		        AND CL.XXGXFS_DM = '3'
+		   ORDER BY clDjxh, sjXm
+    </select>
+    
+    <select id="queryQyClxxCountBySsbmbm" parameterClass="java.util.Map"
+    	resultClass="java.lang.Integer">
+    	SELECT COUNT(*) FROM (
+    	SELECT CL.CL_DJXH clDjxh, CL.CZ_XM czXm, CL.CLHM,
+		       SJ.SJ_XM sjXm, SJ.SJ_ZJHM sjZjhm, SJ.SJ_SJHM sjSjhm, SJ.SJ_LXDH sjLxdh
+		      FROM QY_YL_CLXX CL, QY_YL_CLXX_SJ SJ
+		      WHERE CL.CL_DJXH = SJ.CL_DJXH(+)
+		      AND CL.YXBZ = 'Y'
+		      AND SJ.YXBZ(+) = 'Y'
+		      <dynamic>
+		      	<isNotEmpty property="clsxDm" prepend="AND">
+		      		CL.CLSX_DM = #clsxDm#
+		      	</isNotEmpty>
+		      </dynamic>
+		      AND CL.DJ_JGBM = #bmbm#
+		    UNION ALL
+		      SELECT CL.CL_DJXH clDjxh, CL.CZ_XM czXm, CL.CLHM,
+		       SJ.SJ_XM sjXm, SJ.SJ_ZJHM sjZjhm, SJ.SJ_SJHM sjSjhm, SJ.SJ_LXDH sjLxdh
+		      FROM QY_YL_CLXX CL, QY_YL_CLXX_SJ SJ
+		      WHERE CL.CL_DJXH = SJ.CL_DJXH(+)
+		      AND CL.YXBZ = 'Y'
+		      AND SJ.YXBZ(+) = 'Y' 
+		      <dynamic>
+		      	<isNotEmpty property="clsxDm" prepend="AND">
+		      		CL.CLSX_DM = #clsxDm#
+		      	</isNotEmpty>
+		      </dynamic>     
+		      AND CL.DJ_JGBM &lt;&gt; #bmbm#
+		      AND CL.DJ_JGBM IN (
+		          SELECT B.JGBM
+		              FROM QY_ZZJG A,QY_ZZJG B 
+		             WHERE A.JGBM = #bmbm#
+		               AND ((B.JGLB_DM = '4' AND B.SJ_JGBM = A.SJ_JGBM) OR A.SJ_JGBM = B.JGBM)
+		               AND B.YXBZ = 'Y'
+		               AND B.QYBZ = 'Y')
+		       AND CL.XXGXFS_DM IN ('2','3')
+		     UNION ALL
+		       SELECT CL.CL_DJXH clDjxh, CL.CZ_XM czXm, CL.CLHM,
+		       SJ.SJ_XM sjXm, SJ.SJ_ZJHM sjZjhm, SJ.SJ_SJHM sjSjhm, SJ.SJ_LXDH sjLxdh
+		       FROM QY_YL_CLXX CL, QY_YL_CLXX_SJ SJ
+		      WHERE CL.CL_DJXH = SJ.CL_DJXH(+)
+		      AND CL.YXBZ = 'Y'
+		      AND SJ.YXBZ(+) = 'Y' 
+		      <dynamic>
+		      	<isNotEmpty property="clsxDm" prepend="AND">
+		      		CL.CLSX_DM = #clsxDm#
+		      	</isNotEmpty>
+		      </dynamic>     
+		       AND CL.DJ_JGBM &lt;&gt; #bmbm#
+		       AND CL.DJ_JGBM IN (
+		             SELECT B.JGBM
+		              FROM QY_ZZJG A,QY_ZZJG B,QY_ZZJG C
+		             WHERE C.JGBM = #bmbm#
+		               AND C.SJ_JGBM = A.JGBM
+		               AND ((B.JGLB_DM = '4' AND B.SJ_JGBM = A.SJ_JGBM) OR A.SJ_JGBM = B.JGBM)
+		               AND B.YXBZ = 'Y'
+		               AND B.QYBZ = 'Y')
+		        AND CL.XXGXFS_DM = '3'
+		 )
+    </select>
+    
+    <select id="queryQyGcxxBySsbmbm" parameterClass="java.util.Map"
+    	resultClass="com.cy.zygl.domain.QyYlClxxDomain">
+    	SELECT CL.CLHM
+		      FROM QY_YL_CLXX CL
+		      WHERE CL.YXBZ = 'Y'
+		      AND CL.GCBZ = 'Y'
+		      <dynamic>
+		      	<isNotEmpty property="clsxDm" prepend="AND">
+		      		CL.CLSX_DM = #clsxDm#
+		      	</isNotEmpty>
+		      </dynamic>
+		      AND CL.DJ_JGBM = #bmbm#
+		    UNION ALL
+		      SELECT CL.CLHM
+		      FROM QY_YL_CLXX CL
+		      WHERE CL.YXBZ = 'Y'
+		      AND CL.GCBZ = 'Y'
+		      <dynamic>
+		      	<isNotEmpty property="clsxDm" prepend="AND">
+		      		CL.CLSX_DM = #clsxDm#
+		      	</isNotEmpty>
+		      </dynamic>     
+		      AND CL.DJ_JGBM &lt;&gt; #bmbm#
+		      AND CL.DJ_JGBM IN (
+		          SELECT B.JGBM
+		              FROM QY_ZZJG A,QY_ZZJG B 
+		             WHERE A.JGBM = #bmbm#
+		               AND ((B.JGLB_DM = '4' AND B.SJ_JGBM = A.SJ_JGBM) OR A.SJ_JGBM = B.JGBM)
+		               AND B.YXBZ = 'Y'
+		               AND B.QYBZ = 'Y')
+		       AND CL.XXGXFS_DM IN ('2','3')
+		     UNION ALL
+		       SELECT CL.CLHM
+		       FROM QY_YL_CLXX CL
+		      WHERE CL.YXBZ = 'Y'
+		      AND CL.GCBZ = 'Y'
+		      <dynamic>
+		      	<isNotEmpty property="clsxDm" prepend="AND">
+		      		CL.CLSX_DM = #clsxDm#
+		      	</isNotEmpty>
+		      </dynamic>     
+		       AND CL.DJ_JGBM &lt;&gt; #bmbm#
+		       AND CL.DJ_JGBM IN (
+		             SELECT B.JGBM
+		              FROM QY_ZZJG A,QY_ZZJG B,QY_ZZJG C
+		             WHERE C.JGBM = #bmbm#
+		               AND C.SJ_JGBM = A.JGBM
+		               AND ((B.JGLB_DM = '4' AND B.SJ_JGBM = A.SJ_JGBM) OR A.SJ_JGBM = B.JGBM)
+		               AND B.YXBZ = 'Y'
+		               AND B.QYBZ = 'Y')
+		        AND CL.XXGXFS_DM = '3'
+		   ORDER BY CLHM
+    </select>
+    
+    <select id="queryZrbmThShdz" parameterClass="java.util.Map"
+    	resultClass="com.cy.hygl.domain.QyZrbmThShdzDomain">
+    	SELECT T.DZ zrbmDz, T.DH zrbmLxdh, T.FZR zrbmLxr, T.XZQH_DM zrbmXzqhDm,
+		(SELECT DM.XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = T.XZQH_DM) zrbmXzqhMc
+		FROM $tableName$ T
+		<dynamic>
+			<isEqual property="tableName" compareValue="QY_ZZJG">
+				WHERE T.JGBM = #zrbmDjxh#
+			</isEqual>
+			<isEqual property="tableName" compareValue="QY_FBS_DJXX">
+				WHERE T.FBS_DJXH = #zrbmDjxh#
+			</isEqual>
+			<isEqual property="tableName" compareValue="QY_TH_SHDZ">
+				WHERE T.SS_JGBM = #zrbmDjxh#
+			</isEqual>
+		</dynamic>
+		
+    </select>
+    
+</sqlMap>

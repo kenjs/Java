@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="springmvc-timeline"
+  id="myeclipse.1399525026093"
+  context-root="/timeline"
+  j2ee-spec="5.0"
+  archive="springmvc-timeline.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+

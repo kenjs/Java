@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.zygl.dao.BusXtglQyrygwMapper">
+	<select id="selectQyRyGwPage" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.QyRyGwDomain">
+		select  A.MC AS mc,
+       		B.ZJBZ AS zjbz,       
+       		B.GW_DJXH AS oldGwDjxh,    
+       		(SELECT GW.GW_MC FROM QY_GW GW WHERE GW.GW_DJXH=B.GW_DJXH) AS gwMc,
+       		B.QX_JGBM AS qxJgbm,     
+       		(SELECT QY.JC FROM QY_ZZJG QY WHERE QY.JGBM=B.QX_JGBM) AS qxjgMc,
+       		B.SS_JGBM AS ssJgbm,     
+       		(SELECT QY.JC FROM QY_ZZJG QY WHERE QY.JGBM=B.SS_JGBM) AS ssjgMc,
+       		B.CZY_DJXH AS czyDjxh 
+       	from QY_RYDJ A, QY_RY_GW B
+		WHERE A.CZY_DJXH=B.CZY_DJXH
+		AND A.YXBZ='Y'
+		<dynamic>
+			<isNotEmpty prepend="and" property="sjJgbm">
+				 B.SS_JGBM in(select jgbm from qy_zzjg where sj_jgbm=#sjJgbm# and jglb_dm=4 and yxbz='Y')
+			</isNotEmpty>
+		</dynamic>
+		<dynamic>
+			<isNotEmpty prepend="and" property="jgbm">
+				B.SS_JGBM=#jgbm#
+			</isNotEmpty>
+		</dynamic>
+		<dynamic>
+			<isNotEmpty prepend="and" property="czyDjxh">
+				A.CZY_DJXH=#czyDjxh#
+			</isNotEmpty>
+		</dynamic>
+		$orderStr$
+    </select>
+    
+    <select id="selectQyRyGwAll" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.QyRyGwDomain">
+		select  A.MC AS mc,
+       		B.ZJBZ AS zjbz,       
+       		B.GW_DJXH AS oldGwDjxh,    
+       		(SELECT GW.GW_MC FROM QY_GW GW WHERE GW.GW_DJXH=B.GW_DJXH) AS gwMc,
+       		B.QX_JGBM AS qxJgbm,     
+       		(SELECT QY.JC FROM QY_ZZJG QY WHERE QY.JGBM=B.QX_JGBM) AS qxjgMc,
+       		B.SS_JGBM AS ssJgbm,     
+       		(SELECT QY.JC FROM QY_ZZJG QY WHERE QY.JGBM=B.SS_JGBM) AS ssjgMc,
+       		B.CZY_DJXH AS czyDjxh 
+       	from QY_RYDJ A, QY_RY_GW B
+		WHERE A.CZY_DJXH=B.CZY_DJXH
+			AND A.YXBZ='Y'
+		<dynamic>
+			<isNotEmpty prepend="and" property="sjJgbm">
+				 B.SS_JGBM in(select jgbm from qy_zzjg where sj_jgbm=#sjJgbm# and jglb_dm=4 and yxbz='Y')
+			</isNotEmpty>
+		</dynamic>
+		<dynamic>
+			<isNotEmpty prepend="and" property="jgbm">
+				B.SS_JGBM=#jgbm#
+			</isNotEmpty>
+		</dynamic>
+		<dynamic>
+			<isNotEmpty prepend="and" property="czyDjxh">
+				A.CZY_DJXH=#czyDjxh#
+			</isNotEmpty>
+		</dynamic>
+		ORDER BY B.GW_DJXH DESC
+    </select>
+
+	<select id="getQyRyGwRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		select count(B.CZY_DJXH) from QY_RYDJ A,Qy_Ry_Gw B where A.CZY_DJXH = B.CZY_DJXH and A.Yxbz = 'Y'
+		<dynamic>
+			<isNotEmpty prepend="and" property="sjJgbm">
+				 B.SS_JGBM in(select jgbm from qy_zzjg where sj_jgbm=#sjJgbm# and jglb_dm=4 and yxbz='Y')
+			</isNotEmpty>
+		</dynamic>
+		<dynamic>
+			<isNotEmpty prepend="and" property="jgbm">
+				B.SS_JGBM=#jgbm#
+			</isNotEmpty>
+		</dynamic>
+		<dynamic>
+			<isNotEmpty prepend="and" property="czyDjxh">
+				A.CZY_DJXH=#czyDjxh#
+			</isNotEmpty>
+		</dynamic>
+		
+    </select>
+    
+    <!-- 根据GW_DJXH查询表中记录数，以判断是否重复 -->
+    <select id="getQyRyGwYhGw" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		select count(*) 
+		from QY_RY_GW 
+		where CZY_DJXH=#czyDjxh# 
+		<dynamic>
+			<isNotEmpty prepend="and" property="oldGwDjxh">
+				<![CDATA[GW_DJXH <> #oldGwDjxh# ]]>
+			</isNotEmpty>
+		</dynamic>
+		and GW_DJXH=#gwDjxh#
+    </select>
+    
+    <select id="getGwSjMcByJgbm" parameterClass="java.util.Map"  resultClass="string">
+    	select jc from qy_zzjg where jgbm=#sjJgbm#
+    </select>
+</sqlMap>

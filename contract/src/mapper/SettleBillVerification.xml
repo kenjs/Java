@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap>
+	 <typeAlias type="tf56.contract.domain.SettleBillVerification" alias="settleBillVerification"/>
+	 <resultMap id="settleBillVerificationFieldMap" class="settleBillVerification">
+	  <result column="settleBillVerificationId" property="settlebillverificationid" jdbcType="VARCHAR" />   <!-- 编码Id -->
+	  <result column="settleBillId" property="settlebillid" jdbcType="VARCHAR" />   <!-- 结算单Id -->
+	  <result column="billCode" property="billcode" jdbcType="VARCHAR" />   <!-- 发票代码 -->
+	  <result column="billNumber" property="billnumber" jdbcType="VARCHAR" />   <!-- 发票号 -->
+	  <result column="billAmount" property="billamount" jdbcType="VARCHAR" />   <!-- 发票金额 -->
+	  <result column="billMan" property="billman" jdbcType="VARCHAR" />   <!-- 开票人 -->
+	  <result column="billDate" property="billdate" jdbcType="VARCHAR" />   <!-- 开票日期 -->
+	  <result column="planPayDate" property="planpaydate" jdbcType="VARCHAR" />   <!-- 计划付款日期 -->
+	  <result column="inputDate" property="inputdate" jdbcType="VARCHAR" />   <!-- 输入日期 -->
+	  <result column="inputMan" property="inputman" jdbcType="VARCHAR" />   <!-- 输入人 -->
+	 </resultMap>
+	  <insert id="iBatisInsertSettleBillVerification" parameterClass="settleBillVerification">
+	 	insert into SettleBillVerification(settleBillId,billNumber,billCode,billAmount,billMan,billDate,planPayDate,inputDate,inputMan) 
+		values(#settlebillid:VARCHAR#,#billnumber:VARCHAR#,#billcode:VARCHAR#,#billamount:VARCHAR#,#billman:VARCHAR#,#billdate:VARCHAR#,#planpaydate:VARCHAR#,#inputdate:VARCHAR#,#inputman:VARCHAR#)
+		<selectKey resultClass="String" keyProperty="settlebillverificationid">
+			select last_insert_id() as id
+		</selectKey>
+	 </insert>
+	 <!-- 通过settlebillid查询发票 -->
+	 <select id="iBatisSelectSettleBillVerificationById" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+	 	select settleBillVerificationId as settlebillverificationid,billCode as billcode,billNumber as billnumber,billAmount as billamount,billMan as billman,
+	 	DATE_FORMAT(billDate,'%Y-%m-%d') as billdate,DATE_FORMAT(planPayDate,'%Y-%m-%d') as planpaydate,DATE_FORMAT(inputDate,'%Y-%m-%d') as inputdate,inputMan as inputman 
+	 	from SettleBillVerification where settleBillId=#settlebillid:VARCHAR#
+	 </select>
+</sqlMap>

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.zygl.dao.BusBgqdqtMapper">
+	<select id="selectBgSbQdPage" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgQdqtDomain">
+		SELECT A.BG_DJXH AS bgDjxh,
+		       (SELECT RY.MC FROM QY_RYDJ RY WHERE RY.CZY_DJXH=A.CZY_DJXH) AS czyDjxh,
+		       A.RQ AS rq,
+		       A.QDQT_DM AS qdqtDm,
+		       A.Y_QDQT_SJ AS yqdSj,
+		       A.SJ_QDQT_SJ AS sjQdqtSj,
+		       A.CDZTBZ AS cdztbz,
+		       A.CDZTSJ AS cdztsj
+		  FROM BG_QDQT A 
+		  where A.rq between to_date(#startTime#,'yyyy-MM-dd') and to_date(#endTime#,'yyyy-MM-dd') 
+		  and A.CZY_DJXH=#djxh# and A.QDQT_DM=1 order by A.BG_DJXH desc
+    </select>
+    
+    <select id="selectSjQdByCzy" parameterClass="java.util.Map" resultClass="com.cy.bggl.domain.BgQdqtDomain">
+    	select A.SJ_QDQT_SJ as sjQdqtSj,
+       		A.CDZTBZ as cdztbz
+			from BG_QDQT A
+				WHERE A.CZY_DJXH=#czy#
+				AND A.RQ=trunc(sysdate)
+				AND A.QDQT_DM=1
+
+    </select>
+    
+     <select id="selectSjQtByCzy" parameterClass="java.util.Map" resultClass="com.cy.bggl.domain.BgQdqtDomain">
+    	select A.SJ_QDQT_SJ as sjQdqtSj,
+       		A.CDZTBZ as cdztbz
+			from BG_QDQT A
+				WHERE A.CZY_DJXH=#czy#
+				AND A.RQ=trunc(sysdate)
+				AND A.QDQT_DM=2
+
+    </select>
+    
+    <select id="selectBgXbQtPage" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgQdqtDomain">
+		SELECT A.BG_DJXH AS bgDjxh,
+		       (SELECT RY.MC FROM QY_RYDJ RY WHERE RY.CZY_DJXH=A.CZY_DJXH) AS czyDjxh,
+		       A.RQ AS rq,
+		       A.QDQT_DM AS qdqtDm,
+		       A.Y_QDQT_SJ AS yqdSj,
+		       A.SJ_QDQT_SJ AS sjQdqtSj,
+		       A.CDZTBZ AS cdztbz,
+		       A.CDZTSJ AS cdztsj
+		  FROM BG_QDQT A 
+		  where A.rq between to_date(#startTime#,'yyyy-MM-dd') and to_date(#endTime#,'yyyy-MM-dd') 
+		  and A.CZY_DJXH=#djxh# and A.QDQT_DM=2 order by A.BG_DJXH desc
+    </select>
+    
+    <select id="selectBgSbqdAll" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgQdqtDomain">
+		SELECT A.BG_DJXH AS bgDjxh,
+		       A.CZY_DJXH AS czyDjxh,
+		       A.RQ AS rq,
+		       A.QDQT_DM AS qdqtDm,
+		       A.Y_QDQT_SJ AS yqdSj,
+		       A.SJ_QDQT_SJ AS sjQdqtSj,
+		       A.CDZTBZ AS cdztbz,
+		       A.CDZTSJ AS cdztsj
+		  FROM BG_QDQT A 
+		  where A.rq between to_date(#startTime#,'yyyy-MM-dd') and to_date(#endTime#,'yyyy-MM-dd') 
+		  and A.CZY_DJXH=#czyDjxh# and A.QDQT_DM=1 order by A.BG_DJXH desc
+    </select>
+    
+    <select id="selectBgXbqtdAll" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgQdqtDomain">
+		SELECT A.BG_DJXH AS bgDjxh,
+		       A.CZY_DJXH AS czyDjxh,
+		       A.RQ AS rq,
+		       A.QDQT_DM AS qdqtDm,
+		       A.Y_QDQT_SJ AS yqdSj,
+		       A.SJ_QDQT_SJ AS sjQdqtSj,
+		       A.CDZTBZ AS cdztbz,
+		       A.CDZTSJ AS cdztsj
+		  FROM BG_QDQT A 
+		  where A.rq between to_date(#startTime#,'yyyy-MM-dd') and to_date(#endTime#,'yyyy-MM-dd') 
+		  and A.CZY_DJXH=#czyDjxh# and A.QDQT_DM=2 order by A.BG_DJXH desc
+    </select>
+
+	<select id="getBgSbQdRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.BG_DJXH) 
+		  FROM BG_QDQT A 
+		  where A.rq between to_date(#startTime#,'yyyy-MM-dd') and to_date(#endTime#,'yyyy-MM-dd') 
+		  and A.CZY_DJXH=#djxh# and A.QDQT_DM=1
+	</select>
+	
+	<select id="getBgXbQtRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.BG_DJXH) 
+		  FROM BG_QDQT A 
+		  where A.rq between to_date(#startTime#,'yyyy-MM-dd') and to_date(#endTime#,'yyyy-MM-dd') 
+		  and A.CZY_DJXH=#djxh# and A.QDQT_DM=2
+	</select>
+    
+    <select id="getBgSbQdsj" parameterClass="java.util.Map" resultClass="com.cy.bggl.domain.BgGzsjDomain">
+	<![CDATA[ select a.AM_SBSJ_S as amSbsjS,a.AM_SBSJ_F as amSbsjF
+				  from BG_GZSJ a
+				 where a.JGBM = #bm#
+				   and YXQ_Q <= sysdate
+				   and (YXQ_Z >= sysdate or YXQ_Z is null)
+				union
+				select a.AM_SBSJ_S as amSbsjS,a.AM_SBSJ_F as amSbsjF
+				  from BG_GZSJ a
+				 where a.JGBM = (select sj_jgbm from qy_zzjg where jgbm = #bm#)
+				   and YXQ_Q <= sysdate
+				   and (YXQ_Z >= sysdate or YXQ_Z is null)
+				union
+				select a.AM_SBSJ_S as amSbsjS,a.AM_SBSJ_F as amSbsjF
+				  from BG_GZSJ a
+				 where a.JGBM =
+				       (select sj_jgbm
+				          from qy_zzjg
+				         where jgbm = (select sj_jgbm from qy_zzjg where jgbm = #bm#))
+				   and YXQ_Q <= sysdate
+				   and (YXQ_Z >= sysdate or YXQ_Z is null)
+				union
+				select a.AM_SBSJ_S as amSbsjS,a.AM_SBSJ_F as amSbsjF
+				  from BG_GZSJ a
+				 where a.JGBM =
+				       (select sj_jgbm
+				          from qy_zzjg
+				         where jgbm =
+				               (select sj_jgbm
+				                  from qy_zzjg
+				                 where jgbm = (select sj_jgbm from qy_zzjg where jgbm = #bm#)))
+				   and YXQ_Q <= sysdate
+				   and (YXQ_Z >= sysdate or YXQ_Z is null) ]]>
+	</select>
+	
+	  <select id="getBgXbQtsj" parameterClass="java.util.Map" resultClass="com.cy.bggl.domain.BgGzsjDomain">
+	<![CDATA[ select a.PM_SBSJ_S as pmSbsjS,a.PM_SBSJ_F as pmSbsjF
+				  from BG_GZSJ a
+				 where a.JGBM = #bm#
+				   and YXQ_Q <= sysdate
+				   and (YXQ_Z >= sysdate or YXQ_Z is null)
+				union
+				select a.PM_SBSJ_S as pmSbsjS,a.PM_SBSJ_F as pmSbsjF
+				  from BG_GZSJ a
+				 where a.JGBM = (select sj_jgbm from qy_zzjg where jgbm = #bm#)
+				   and YXQ_Q <= sysdate
+				   and (YXQ_Z >= sysdate or YXQ_Z is null)
+				union
+				select a.PM_SBSJ_S as pmSbsjS,a.PM_SBSJ_F as pmSbsjF
+				  from BG_GZSJ a
+				 where a.JGBM =
+				       (select sj_jgbm
+				          from qy_zzjg
+				         where jgbm = (select sj_jgbm from qy_zzjg where jgbm = #bm#))
+				   and YXQ_Q <= sysdate
+				   and (YXQ_Z >= sysdate or YXQ_Z is null)
+				union
+				select a.PM_SBSJ_S as pmSbsjS,a.PM_SBSJ_F as pmSbsjF
+				  from BG_GZSJ a
+				 where a.JGBM =
+				       (select sj_jgbm
+				          from qy_zzjg
+				         where jgbm =
+				               (select sj_jgbm
+				                  from qy_zzjg
+				                 where jgbm = (select sj_jgbm from qy_zzjg where jgbm = #bm#)))
+				   and YXQ_Q <= sysdate
+				   and (YXQ_Z >= sysdate or YXQ_Z is null) ]]>
+	</select>
+</sqlMap>

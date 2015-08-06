@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<!-- 位置信息上传 -->
+	<insert id="iBatisInsertLastLocation" parameterClass="com.cy.common.bo.LocationCollectLastInfoBo">
+		INSERT INTO t_location_collect_last_info (
+			DRIVER_ID,
+			LONGITUDE,
+			LATITUDE,
+			PROVINCE,
+			CITY,
+			COUNTY,
+			TOWN,
+			LOCATION,
+			LAST_TIME,
+			CREATE_TIME,
+			MODIFY_TIME
+		)
+		VALUES
+			(
+			#driverId#,
+			#longitude#,
+			#latitude#,
+			#province#,
+			#city#,
+			#county#,
+			#town#,
+			#location#,
+			sysdate(),
+			sysdate(),
+			sysdate())
+		<selectKey keyProperty="id" resultClass="Integer">
+			select last_insert_id() as id
+		</selectKey>
+	</insert>
+	
+	<!-- 更新位置信息 -->
+	<update id="iBatisUpdateLastLocation" parameterClass="com.cy.common.bo.LocationCollectLastInfoBo">
+		update t_location_collect_last_info set LAST_TIME = sysdate(),MODIFY_TIME = sysdate()
+		<dynamic>
+			<isNotEmpty prepend="," property="longitude">
+				LONGITUDE = #longitude#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="latitude">
+				LATITUDE = #latitude#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="province">
+				PROVINCE = #province#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="city">
+				CITY = #city#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="county">
+				COUNTY = #county#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="town">
+				TOWN = #town#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="location">
+				LOCATION = #location#
+			</isNotEmpty>
+		</dynamic>
+		where DRIVER_ID = #driverId#
+	</update>
+	
+	<!-- 查找司机最新地址 -->
+	<select id="iBatisSelectDriverLastLocationByDriverId" parameterClass="String" resultClass="java.util.HashMap">
+		select PROVINCE province,CITY city from t_location_collect_last_info where DRIVER_ID = #driverId #
+	</select>
+	
+	<!-- 查看司机是否已经上传位置信息 -->
+	<select id="iBatisSelectExistByDriverId" parameterClass="String" resultClass="Integer">
+		select count(ID) from t_location_collect_last_info where DRIVER_ID = #driverId#
+	</select>
+</sqlMap>

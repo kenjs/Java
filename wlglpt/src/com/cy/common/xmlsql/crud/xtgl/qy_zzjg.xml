@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.xtgl.dao.QyZzjgMapper">
+	
+	<!--插入数据-->
+   	<insert id="insertQyZzjg"  parameterClass="com.cy.xtgl.domain.QyZzjgDomain">
+		<selectKey keyProperty="jgbm" resultClass="String" type="pre"> 
+			select SEQ_JG_DJXH.nextval as jgbm from dual 
+		</selectKey> 
+		insert into QY_ZZJG(JGBM,MC,JC,JGLB_DM,JCBM,
+		JBDM,SJ_JGBM,QY_ZCXH,DZ,DH,
+		YB,FZR,QYBZ,YXBZ,CJR_CZY_DJXH,
+		CJRQ,XGR_CZY_DJXH,XGRQ,PYJX,PYQP,XZQH_DM,BYJ)
+		values(#jgbm:NUMERIC#,#mc:VARCHAR#,#jc:VARCHAR#,#jglbDm:NUMERIC#,#jcbm:NUMERIC#,
+		#jbdm:VARCHAR#,#sjJgbm:NUMERIC#,#qyZcxh:NUMERIC#,#dz:VARCHAR#,#dh:VARCHAR#,
+		#yb:VARCHAR#,#fzr:VARCHAR#,#qybz:VARCHAR#,#yxbz:VARCHAR#,#cjrCzyDjxh:NUMERIC#,
+		to_date(#cjrq:DATE#,'yyyy-MM-dd'),#xgrCzyDjxh:NUMERIC#,to_date(#xgrq:DATE#,'yyyy-MM-dd'),
+		#pyjx:VARCHAR#,#pyqp:VARCHAR#,#fhrXzqhDm:VARCHAR#,#byj:VARCHAR#)	 
+	</insert>
+	
+	<!--删除数据-->
+	<update id="deleteQyZzjgByKey" parameterClass="com.cy.xtgl.domain.QyZzjgDomain">
+        update QY_ZZJG set yxbz='N' where JGBM=#jgbm#
+	</update>
+	
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateQyZzjgByKey" parameterClass="com.cy.xtgl.domain.QyZzjgDomain">
+        update QY_ZZJG set JGBM=#jgbm#,MC=#mc#,JC=#jc#,JGLB_DM=#jglbDm#,JCBM=#jcbm#,
+		JBDM=#jbdm#,SJ_JGBM=#sjJgbm#,QY_ZCXH=#qyZcxh#,DZ=#dz#,DH=#dh#,
+		YB=#yb#,FZR=#fzr#,QYBZ=#qybz#,YXBZ=#yxbz#,CJR_CZY_DJXH=#cjrCzyDjxh#,
+		CJRQ=to_date(#cjrq#, 'YYYY-MM-DD'),XGR_CZY_DJXH=#xgrCzyDjxh#,XGRQ=to_date(#xgrq#, 'YYYY-MM-DD'),
+		PYJX=#pyjx#,PYQP=#pyqp#,XZQH_DM=#fhrXzqhDm#,BYJ=#byj#
+		where JGBM=#jgbm#
+	</update>
+	
+	<!--根据主键获取公司对象-->
+    <select id="selectQyZzjgByKey" parameterClass="com.cy.xtgl.domain.QyZzjgDomain"
+		resultClass="com.cy.xtgl.domain.QyZzjgDomain">
+		select a.JGBM as jgbm,a.MC as mc,a.JC as jc,a.JGLB_DM as jglbDm,a.JCBM as jcbm,a.XZQH_DM as fhrXzqhDm,
+		(SELECT B.JGLB_MC FROM dm_jglb B WHERE B.JGLB_DM=a.JGLB_DM) AS lbMc,
+		(SELECT B.MC FROM QY_ZZJG B WHERE B.JGBM=a.SJ_JGBM) AS sjMc,
+		(SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = a.XZQH_DM) as fhrXzqhMc,
+		(SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=a.CJR_CZY_DJXH) cjrMc,
+		(SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=a.XGR_CZY_DJXH) xgrMc,
+		a.JBDM as jbdm,a.SJ_JGBM as sjJgbm,a.QY_ZCXH as qyZcxh,a.DZ as dz,a.DH as dh,
+		a.YB as yb,a.FZR as fzr,a.QYBZ as qybz,a.YXBZ as yxbz,a.CJR_CZY_DJXH as cjrCzyDjxh,
+		a.CJRQ as cjrq,a.XGR_CZY_DJXH as xgrCzyDjxh,a.XGRQ as xgrq,
+		a.PYJX as pyjx,a.PYQP as pyqp,a.BYJ byj
+		from QY_ZZJG a
+		where a.JGBM=#jgbm#
+    </select>
+    
+     
+</sqlMap>

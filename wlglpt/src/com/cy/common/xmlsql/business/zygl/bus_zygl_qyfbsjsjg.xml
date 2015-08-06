@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.zygl.dao.BusZyglQyfbsjsjgMapper">
+	<select id="selectQyFbsJsjgPage" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyFbsJsjgDomain">
+		SELECT JSJG.JSJG_DJXH AS jsjgDjxh,
+		       JSJG.FBS_DJXH AS fbsDjxh,
+		       JSJG.SFD_XZQH_DM AS sfdXzqhDm,
+		       JSJG.MDD_XZQH_DM AS mddXzqhDm,
+		       (SELECT DMQH.XZQH_MC FROM DM_XZQH DMQH WHERE DMQH.XZQH_DM=JSJG.SFD_XZQH_DM) AS sfdXzqhMc,
+		       (SELECT DMQH.XZQH_MC FROM DM_XZQH DMQH WHERE DMQH.XZQH_DM=JSJG.MDD_XZQH_DM) AS mddXzqhMc,
+		       JSJG.LCS AS lcs,
+		       JSJG.DDTS AS ddts,
+		       JSJG.SYFW AS syfw,
+		       JSJG.HW_DJXH AS hwDjxh,
+		       JSJG.HWXH_DJXH AS hwxhDjxh,
+		       JSJG.JLDW_FL_DM AS jldwFlDm,
+		       (SELECT FLDW.JLDW_FL_MC FROM DM_JLDW_FL FLDW WHERE FLDW.JLDW_FL_DM=JSJG.JLDW_FL_DM) AS jldwFlMc,
+		       JSJG.JLDW_DM AS jldwDm,
+		       (SELECT DW.JLDW_MC FROM DM_JLDW DW WHERE DW.JLDW_DM=JSJG.JLDW_DM) AS jsJldwMc,
+		       JSJG.JGJSGS AS jgjsgs,
+		       JSJG.XTGS AS xtgs,
+		       JSJG.JGSM AS jgsm,
+		       JSJG.YXQ_Q AS yxqQ,
+		       JSJG.YXQ_Z AS yxqZ,
+		       JSJG.YXBZ AS yxbz,
+		       JSJG.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       (SELECT RY.MC FROM QY_RYDJ RY WHERE RY.CZY_DJXH=JSJG.CJR_CZY_DJXH) AS cjrMc,
+		       JSJG.CJRQ AS cjrq,
+		       JSJG.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       (SELECT RY.MC FROM QY_RYDJ RY WHERE RY.CZY_DJXH=JSJG.XGR_CZY_DJXH) AS xgrMc,
+		       JSJG.XGRQ AS xgrq
+		  FROM QY_FBS_JSJG JSJG
+		  WHERE JSJG.YXBZ='Y' 
+		  <dynamic> 
+			<isNotEmpty property="fbsDjxh" prepend="and">
+				JSJG.FBS_DJXH =#fbsDjxh#
+			</isNotEmpty>			
+			<isNotEmpty property="xsls" prepend="and">
+				JSJG.YXQ_Z  &gt;= sysdate
+			</isNotEmpty>
+		  </dynamic>
+		  $orderStr$
+    </select>
+    
+    <select id="selectQyFbsJsjgAll" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyFbsJsjgDomain">
+		SELECT JSJG.JSJG_DJXH AS jsjgDjxh,
+		       JSJG.FBS_DJXH AS fbsDjxh,
+		       JSJG.SFD_XZQH_DM AS sfdXzqhDm,
+		       JSJG.MDD_XZQH_DM AS mddXzqhDm,
+		       (SELECT DMQH.XZQH_MC FROM DM_XZQH DMQH WHERE DMQH.XZQH_DM=JSJG.SFD_XZQH_DM) AS sfdXzqhMc,
+		       (SELECT DMQH.XZQH_MC FROM DM_XZQH DMQH WHERE DMQH.XZQH_DM=JSJG.MDD_XZQH_DM) AS mddXzqhMc,
+		       JSJG.LCS AS lcs,
+		       JSJG.DDTS AS ddts,
+		       JSJG.SYFW AS syfw,
+		       JSJG.HW_DJXH AS hwDjxh,
+		       JSJG.HWXH_DJXH AS hwxhDjxh,
+		       JSJG.JLDW_FL_DM AS jldwFlDm,
+		       (SELECT FLDW.JLDW_FL_MC FROM DM_JLDW_FL FLDW WHERE FLDW.JLDW_FL_DM=JSJG.JLDW_FL_DM) AS jldwFlMc,
+		       JSJG.JLDW_DM AS jldwDm,
+		       (SELECT DW.JLDW_MC FROM DM_JLDW DW WHERE DW.JLDW_DM=JSJG.JLDW_DM) AS jsJldwMc,
+		       JSJG.JGJSGS AS jgjsgs,
+		       JSJG.XTGS AS xtgs,
+		       JSJG.JGSM AS jgsm,
+		       JSJG.YXQ_Q AS yxqQ,
+		       JSJG.YXQ_Z AS yxqZ,
+		       JSJG.YXBZ AS yxbz,
+		       JSJG.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       (SELECT RY.MC FROM QY_RYDJ RY WHERE RY.CZY_DJXH=JSJG.CJR_CZY_DJXH) AS cjrMc,
+		       JSJG.CJRQ AS cjrq,
+		       JSJG.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       (SELECT RY.MC FROM QY_RYDJ RY WHERE RY.CZY_DJXH=JSJG.XGR_CZY_DJXH) AS xgrMc,
+		       JSJG.XGRQ AS xgrq
+		  FROM QY_FBS_JSJG JSJG
+		  WHERE JSJG.YXBZ='Y' 
+		  <dynamic> 
+			<isNotEmpty property="fbsDjxh" prepend="and">
+				JSJG.FBS_DJXH =#fbsDjxh#
+			</isNotEmpty>		
+			<isNotEmpty property="xsls" prepend="and">
+				JSJG.YXQ_Z  &gt;= sysdate
+			</isNotEmpty>
+		  </dynamic>
+		  ORDER by JSJG.JSJG_DJXH ASC
+    </select>
+
+	<select id="getQyFbsJsjgRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.JSJG_DJXH) 
+		  FROM QY_FBS_JSJG A 
+		  WHERE A.YXBZ='Y' 
+		  <dynamic> 
+			<isNotEmpty property="fbsDjxh" prepend="and">
+				A.FBS_DJXH =#fbsDjxh#
+			</isNotEmpty>			
+			<isNotEmpty property="xsls" prepend="and">
+				A.YXQ_Z  &gt;= sysdate
+			</isNotEmpty>
+		  </dynamic>
+    </select>
+    
+	<select id="getQyFbsJsjgLsCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		select count(*)
+		from QY_FBS_JSJG A
+		WHERE A.YXBZ='Y'
+		AND ((A.YXQ_Q &lt;=to_date(#yxqQ#,'yyyy-mm-dd') AND A.YXQ_Z &gt;=to_date(#yxqQ#,'yyyy-mm-dd'))
+		 OR (A.YXQ_Q &lt;=to_date(#yxqZ#,'yyyy-mm-dd') AND A.YXQ_Z &gt;=to_date(#yxqZ#,'yyyy-mm-dd'))
+		 OR (A.YXQ_Q &gt;=to_date(#yxqQ#,'yyyy-mm-dd') AND A.YXQ_Z &lt;=to_date(#yxqZ#,'yyyy-mm-dd')))
+    </select>
+</sqlMap>

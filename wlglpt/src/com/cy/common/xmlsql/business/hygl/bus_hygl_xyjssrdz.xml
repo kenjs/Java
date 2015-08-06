@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.hygl.dao.BusHyglXyjssrdzMapper">
+	<select id="selectXyjsSrdzPage" parameterClass="java.util.Map" remapResults="true"
+		resultClass="com.cy.hygl.domain.XyjsSrdzDomain">
+		SELECT  DZ.DZ_DJXH dzDjxh,QDMX.QD_DJXH qdDjxh, QDMX.YW_DJXH ywDjxh, QDMX.YW_MX_XH ywMxXh,
+			(SELECT JG.JC FROM QY_ZZJG JG WHERE JG.JGBM = JSHW.ZRBM_DJXH ) xyMc,
+			DZ.DZJE,DZ.DZCYJE,DZ.BZ,
+			(SELECT JG.JC FROM QY_ZZJG JG WHERE JG.JGBM = DZ.SS_JGBM ) ssJgmc,
+			<dynamic>
+	    		<isEqual property="fylbDm" compareValue="1">
+	    			JSHW.ZC_PSF zcPsf,
+	    		</isEqual>
+	    		<isEqual property="fylbDm" compareValue="2">
+	    			JSHW.ZC_DF zcDf,
+	    		</isEqual>
+	    		<isEqual property="fylbDm" compareValue="3">
+	    			JSHW.ZC_DSHK zcDshk,
+	    		</isEqual>
+	    	</dynamic>
+	          DD.DDBH, DD.XDRQ,
+	           (SELECT QH.XZQH_JC FROM DM_XZQH QH WHERE QH.XZQH_DM = JSHW.SFD_XZQH_DM) sfdXzqhMc,
+	           (SELECT QH.XZQH_JC FROM DM_XZQH QH WHERE QH.XZQH_DM = JSHW.MDD_XZQH_DM) mddXzqhMc,
+	           JSHW.HWMC,JSHW.HW_SL hwSl,JSHW.HW_ZL hwZl, JSHW.HW_TJ hwTj,DDHW.FHR_LXR fhrLxr,
+	           DDHW.SHR_MC shrMc,DDHW.SHR_LXR shrLxr,DDHW.SHR_DZ shrDz,PC.PCRQ,PC.PCDH
+	    FROM XYJS_PC_HWXX JSHW,XYJS_SRDZ_QD QD,XYJS_SRDZ_QD_MX QDMX,XYJS_SRDZ DZ, HY_PC PC, HY_DD DD, HY_DD_HWMX DDHW
+	    WHERE JSHW.JS_DJXH = QDMX.YW_DJXH
+	      AND QD.QD_DJXH = QDMX.QD_DJXH
+	      AND DZ.YW_DJXH(+) = QDMX.YW_DJXH
+		  AND DZ.YW_MX_XH(+) = QDMX.YW_MX_XH
+	      AND JSHW.PC_DJXH = PC.PC_DJXH
+	      AND JSHW.DD_DJXH = DD.DD_DJXH
+	      AND JSHW.DD_DJXH = DDHW.DD_DJXH
+	      AND JSHW.XH = DDHW.XH
+	      AND JSHW.YXBZ = 'Y'
+	      AND PC.YXBZ = 'Y'
+	      AND DD.YXBZ = 'Y'
+	      AND DDHW.YXBZ = 'Y'
+	      AND QD.YXBZ = 'Y'
+	      AND DZ.YXBZ(+) = 'Y'
+	      AND QDMX.YW_MX_XH = #fylbDm#
+	      AND PC.SS_JGBM = #ssJgbm#
+		 
+		  <dynamic>
+		  	<isNotEmpty property="pcrqQ" prepend="AND">
+		  		<![CDATA[ PC.PCRQ >= #pcrqQ# ]]>
+		  	</isNotEmpty>
+		  	<isNotEmpty property="pcrqZ" prepend="AND">
+		  		<![CDATA[ PC.PCRQ < #pcrqZ#+1 ]]>
+		  	</isNotEmpty>
+		  	<isNotEmpty property="xdrqQ" prepend="AND">
+		  		<![CDATA[ DD.XDRQ >= #xdrqQ# ]]>
+		  	</isNotEmpty>
+		  	<isNotEmpty property="xdrqZ" prepend="AND">
+		  		<![CDATA[ DD.XDRQ < #xdrqZ#+1 ]]>
+		  	</isNotEmpty>
+			<isNotEmpty property="pcdh" prepend="AND">
+				PC.PCDH LIKE '%' || #pcdh# || '%'
+			</isNotEmpty>
+			<isNotEmpty property="ddbh" prepend="AND">
+				DD.DDBH LIKE '%' || #ddbh# || '%'
+			</isNotEmpty>
+			<isNotEmpty property="hwSl" prepend="AND">
+				JSHW.HW_SL = #hwSl#
+			</isNotEmpty>
+			<isNotEmpty property="hdbh" prepend="AND">
+				JSHW.HDBH LIKE '%' || #hdbh# || '%'
+			</isNotEmpty> 
+			
+			<isEqual property="dzztDm" compareValue="1">
+				AND NOT EXISTS (
+			          SELECT 1 FROM XYJS_SRDZ DZ
+			          WHERE DZ.YW_DJXH = QDMX.YW_DJXH
+			          AND DZ.YW_MX_XH = QDMX.YW_MX_XH
+			          AND DZ.YXBZ = 'Y'
+			      )
+			</isEqual>
+			<isEqual property="dzztDm" compareValue="2">
+				AND EXISTS (
+			          SELECT 1 FROM XYJS_SRDZ DZ
+			          WHERE DZ.YW_DJXH = QDMX.YW_DJXH
+			          AND DZ.YW_MX_XH = QDMX.YW_MX_XH
+			          AND DZ.YXBZ = 'Y'
+			      )
+			</isEqual>
+			<isNotEmpty property="xyDjxh">
+				AND JSHW.ZRBM_DJXH = #xyDjxh#
+			</isNotEmpty>
+			<isNotEmpty property="fylbDm" prepend="AND">
+				QDMX.YW_MX_XH = #fylbDm#
+			</isNotEmpty>
+			<isNotEmpty property="qdDjxh" prepend="AND">
+				QDMX.QD_DJXH = #qdDjxh#
+			</isNotEmpty>
+		  </dynamic>
+		  
+		  $orderStr$
+    </select>
+    
+    <select id="selectXyjsSrdzAll" parameterClass="java.util.Map" remapResults="true"
+		resultClass="com.cy.hygl.domain.XyjsSrdzDomain">
+		SELECT  DZ.DZ_DJXH dzDjxh,QDMX.QD_DJXH qdDjxh, QDMX.YW_DJXH ywDjxh, QDMX.YW_MX_XH ywMxXh,
+			(SELECT JG.JC FROM QY_ZZJG JG WHERE JG.JGBM = JSHW.ZRBM_DJXH ) xyMc,
+			DZ.DZJE,DZ.DZCYJE,DZ.BZ,
+			(SELECT JG.JC FROM QY_ZZJG JG WHERE JG.JGBM = DZ.SS_JGBM ) ssJgmc,
+			<dynamic>
+	    		<isEqual property="fylbDm" compareValue="1">
+	    			JSHW.ZC_PSF jsJe,
+	    		</isEqual>
+	    		<isEqual property="fylbDm" compareValue="2">
+	    			JSHW.ZC_DF jsJe,
+	    		</isEqual>
+	    		<isEqual property="fylbDm" compareValue="3">
+	    			JSHW.ZC_DSHK jsJe,
+	    		</isEqual>
+	    	</dynamic>
+	          DD.DDBH, DD.XDRQ,
+	           (SELECT QH.XZQH_JC FROM DM_XZQH QH WHERE QH.XZQH_DM = JSHW.SFD_XZQH_DM) sfdXzqhMc,
+	           (SELECT QH.XZQH_JC FROM DM_XZQH QH WHERE QH.XZQH_DM = JSHW.MDD_XZQH_DM) mddXzqhMc,
+	           JSHW.HWMC,JSHW.HW_SL hwSl,JSHW.HW_ZL hwZl, JSHW.HW_TJ hwTj,DDHW.FHR_LXR fhrLxr,
+	           DDHW.SHR_MC shrMc,DDHW.SHR_LXR shrLxr,DDHW.SHR_DZ shrDz,PC.PCRQ,PC.PCDH
+	    FROM XYJS_PC_HWXX JSHW,XYJS_SRDZ_QD QD,XYJS_SRDZ_QD_MX QDMX,XYJS_SRDZ DZ, HY_PC PC, HY_DD DD, HY_DD_HWMX DDHW
+	    WHERE JSHW.JS_DJXH = QDMX.YW_DJXH
+	      AND QD.QD_DJXH = QDMX.QD_DJXH
+	      AND DZ.YW_DJXH(+) = QDMX.YW_DJXH
+		  AND DZ.YW_MX_XH(+) = QDMX.YW_MX_XH
+	      AND JSHW.PC_DJXH = PC.PC_DJXH
+	      AND JSHW.DD_DJXH = DD.DD_DJXH
+	      AND JSHW.DD_DJXH = DDHW.DD_DJXH
+	      AND JSHW.XH = DDHW.XH
+	      AND JSHW.YXBZ = 'Y'
+	      AND PC.YXBZ = 'Y'
+	      AND DD.YXBZ = 'Y'
+	      AND DDHW.YXBZ = 'Y'
+	      AND QD.YXBZ = 'Y'
+	      AND DZ.YXBZ(+) = 'Y'
+	      AND QDMX.YW_MX_XH = #fylbDm#
+	      AND PC.SS_JGBM = #ssJgbm#
+		 
+		  <dynamic>
+		  	<isNotEmpty property="pcrqQ" prepend="AND">
+		  		<![CDATA[ PC.PCRQ >= #pcrqQ# ]]>
+		  	</isNotEmpty>
+		  	<isNotEmpty property="pcrqZ" prepend="AND">
+		  		<![CDATA[ PC.PCRQ < #pcrqZ#+1 ]]>
+		  	</isNotEmpty>
+		  	<isNotEmpty property="xdrqQ" prepend="AND">
+		  		<![CDATA[ DD.XDRQ >= #xdrqQ# ]]>
+		  	</isNotEmpty>
+		  	<isNotEmpty property="xdrqZ" prepend="AND">
+		  		<![CDATA[ DD.XDRQ < #xdrqZ#+1 ]]>
+		  	</isNotEmpty>
+			<isNotEmpty property="pcdh" prepend="AND">
+				PC.PCDH LIKE '%' || #pcdh# || '%'
+			</isNotEmpty>
+			<isNotEmpty property="ddbh" prepend="AND">
+				DD.DDBH LIKE '%' || #ddbh# || '%'
+			</isNotEmpty>
+			<isNotEmpty property="hwSl" prepend="AND">
+				JSHW.HW_SL = #hwSl#
+			</isNotEmpty>
+			<isNotEmpty property="hdbh" prepend="AND">
+				JSHW.HDBH LIKE '%' || #hdbh# || '%'
+			</isNotEmpty> 
+			
+			<isEqual property="dzztDm" compareValue="1">
+				AND NOT EXISTS (
+			          SELECT 1 FROM XYJS_SRDZ DZ
+			          WHERE DZ.YW_DJXH = QDMX.YW_DJXH
+			          AND DZ.YW_MX_XH = QDMX.YW_MX_XH
+			          AND DZ.YXBZ = 'Y'
+			      )
+			</isEqual>
+			<isEqual property="dzztDm" compareValue="2">
+				AND EXISTS (
+			          SELECT 1 FROM XYJS_SRDZ DZ
+			          WHERE DZ.YW_DJXH = QDMX.YW_DJXH
+			          AND DZ.YW_MX_XH = QDMX.YW_MX_XH
+			          AND DZ.YXBZ = 'Y'
+			      )
+			</isEqual>
+			<isNotEmpty property="xyDjxh">
+				AND JSHW.ZRBM_DJXH = #xyDjxh#
+			</isNotEmpty>
+			<isNotEmpty property="fylbDm" prepend="AND">
+				QDMX.YW_MX_XH = #fylbDm#
+			</isNotEmpty>
+			<isNotEmpty property="qdDjxh" prepend="AND">
+				QDMX.QD_DJXH = #qdDjxh#
+			</isNotEmpty>
+		  </dynamic>
+
+		  ORDER by XDRQ ASC,DDBH ASC
+    </select>
+
+	<select id="getXyjsSrdzRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(QDMX.QD_DJXH) 
+		  FROM XYJS_PC_HWXX JSHW,XYJS_SRDZ_QD QD,XYJS_SRDZ_QD_MX QDMX, HY_PC PC, HY_DD DD, HY_DD_HWMX DDHW
+	    WHERE JSHW.JS_DJXH = QDMX.YW_DJXH
+	      AND QD.QD_DJXH = QDMX.QD_DJXH
+	      AND JSHW.PC_DJXH = PC.PC_DJXH
+	      AND JSHW.DD_DJXH = DD.DD_DJXH
+	      AND JSHW.DD_DJXH = DDHW.DD_DJXH
+	      AND JSHW.XH = DDHW.XH
+	      AND JSHW.YXBZ = 'Y'
+	      AND PC.YXBZ = 'Y'
+	      AND DD.YXBZ = 'Y'
+	      AND DDHW.YXBZ = 'Y'
+	      AND QD.YXBZ = 'Y'
+	      AND QDMX.YW_MX_XH = #fylbDm#
+	      AND PC.SS_JGBM = #ssJgbm#
+		 
+		  <dynamic>
+		  	<isNotEmpty property="pcrqQ" prepend="AND">
+		  		<![CDATA[ PC.PCRQ >= #pcrqQ# ]]>
+		  	</isNotEmpty>
+		  	<isNotEmpty property="pcrqZ" prepend="AND">
+		  		<![CDATA[ PC.PCRQ < #pcrqZ#+1 ]]>
+		  	</isNotEmpty>
+		  	<isNotEmpty property="xdrqQ" prepend="AND">
+		  		<![CDATA[ DD.XDRQ >= #xdrqQ# ]]>
+		  	</isNotEmpty>
+		  	<isNotEmpty property="xdrqZ" prepend="AND">
+		  		<![CDATA[ DD.XDRQ < #xdrqZ#+1 ]]>
+		  	</isNotEmpty>
+			<isNotEmpty property="pcdh" prepend="AND">
+				PC.PCDH LIKE '%' || #pcdh# || '%'
+			</isNotEmpty>
+			<isNotEmpty property="ddbh" prepend="AND">
+				DD.DDBH LIKE '%' || #ddbh# || '%'
+			</isNotEmpty>
+			<isNotEmpty property="hwSl" prepend="AND">
+				JSHW.HW_SL = #hwSl#
+			</isNotEmpty>
+			<isNotEmpty property="hdbh" prepend="AND">
+				JSHW.HDBH LIKE '%' || #hdbh# || '%'
+			</isNotEmpty> 
+			
+			<isEqual property="dzztDm" compareValue="1">
+				AND NOT EXISTS (
+			          SELECT 1 FROM XYJS_SRDZ DZ
+			          WHERE DZ.YW_DJXH = QDMX.YW_DJXH
+			          AND DZ.YW_MX_XH = QDMX.YW_MX_XH
+			          AND DZ.YXBZ = 'Y'
+			      )
+			</isEqual>
+			<isEqual property="dzztDm" compareValue="2">
+				AND EXISTS (
+			          SELECT 1 FROM XYJS_SRDZ DZ
+			          WHERE DZ.YW_DJXH = QDMX.YW_DJXH
+			          AND DZ.YW_MX_XH = QDMX.YW_MX_XH
+			          AND DZ.YXBZ = 'Y'
+			      )
+			</isEqual>
+			<isNotEmpty property="xyDjxh">
+				AND JSHW.ZRBM_DJXH = #xyDjxh#
+			</isNotEmpty>
+			<isNotEmpty property="fylbDm" prepend="AND">
+				QDMX.YW_MX_XH = #fylbDm#
+			</isNotEmpty>
+			<isNotEmpty property="qdDjxh" prepend="AND">
+				QDMX.QD_DJXH = #qdDjxh#
+			</isNotEmpty>
+		  </dynamic>
+    </select>
+    
+    <select id="queryDzqdList" parameterClass="java.util.Map"
+    	resultClass="com.cy.hygl.domain.XyjsSrdzQdDomain">
+    	SELECT QD.QD_DJXH qdDjxh, QD.QDMC FROM XYJS_SRDZ_QD QD 
+		WHERE QD.YXBZ = 'Y'
+		AND QD.SS_JGBM = #ssJgbm#
+		
+		<dynamic>
+			<isNotEmpty property="fylbDm" prepend="AND">
+				QD.FYLB_DM = #fylbDm#
+			</isNotEmpty>
+		</dynamic>
+		
+		ORDER BY QD.QD_DJXH DESC 
+    </select>
+    
+</sqlMap>

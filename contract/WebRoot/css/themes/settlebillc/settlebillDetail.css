@@ -1,0 +1,63 @@
+@CHARSET "UTF-8";
+#main{
+	font-size:12px;
+	width:1000px;
+	height:auto;
+	margin:0px auto;
+	border:0px;
+}
+#main a:hover{
+	color:#ec6110;
+}
+#topdiv{
+	border-top:1px solid #e7e7e7;
+	background-color:#f4fcfc;
+}
+#topdiv table{
+	width:95%;
+	margin:auto;
+}
+#topdiv td{
+	border-bottom:0px;
+	font-size:14px;
+	text-align:left;
+}
+.btn{
+	height:35px;
+	width:90px;
+ 	text-align: center;
+   	text-decoration: none;
+    font: bold 16px/25px Arial, sans-serif;
+    text-shadow: 1px 1px 1px rgba(255,255,255, .22);
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    border:0px;
+    background-color:#ec6110;
+    color:white;
+    cursor:pointer;
+}
+#verificationbilldetail{
+	padding: 0;
+	margin: 0;
+	table-layout: fixed; 
+	border-collapse:collapse;
+}
+#verificationbilldetail tr{
+	height:30px;
+}
+#verificationbilldetail th{
+	font-weight:normal;
+}
+#waybilldetail{
+	padding: 0;
+	margin: 0;
+	table-layout: fixed; 
+	border-collapse:collapse;
+}
+#waybilldetail tr{
+	height:30px;
+}
+#waybilldetail th{
+	font-weight:normal;
+}

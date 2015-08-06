@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="managerInfoDomain" type="com.cy.dctms.common.domain.ManagerInfoDomain"/>
+	
+	
+	<resultMap class="managerInfoDomain" id="manager_info_domain_result">
+		<result property="id" column="id"/>
+		<result property="code" column="code"/>
+		<result property="password" column="password"/>
+		<result property="name" column="name"/>
+		<result property="validateMacFlag" column="validate_mac_flag"/>
+		<result property="macTime" column="mac_time"/>
+		<result property="macAddress" column="mac_address"/>
+		<result property="parentId" column="parent_id"/>
+		<result property="createTime" column="create_time" />
+		<result property="modifyTime" column="modify_time" />
+		<result property="deleteFlag" column="delete_flag" />
+	</resultMap>
+		
+	<select id="query_manager_info_by_code" parameterClass="String" resultMap="manager_info_domain_result">
+		select t.id,
+		       t.code,
+		       t.password,
+		       t.name,
+		       t.validate_mac_flag,
+		       t.mac_time,
+		       t.mac_address,
+		       t.parent_id,
+		       t.create_time,
+		       t.modify_time,
+		       t.delete_flag
+		  from t_manager_user_info t
+		  where code = #code# and delete_flag = 0
+	</select>
+	
+	<select id="query_manager_info_by_id" parameterClass="String" resultMap="manager_info_domain_result">
+		select t.id,
+		       t.code,
+		       t.password,
+		       t.name,
+		       t.validate_mac_flag,
+		       t.mac_time,
+		       t.mac_address,
+		       t.parent_id,
+		       t.create_time,
+		       t.modify_time,
+		       t.delete_flag
+		  from t_manager_user_info t
+		  where id = #id# and DELETE_FLAG = 0
+	</select>
+	
+	<select id="query_manager_info_by_page" parameterClass="java.util.Map" resultMap="manager_info_domain_result">
+		select t.id,
+		       t.code,
+		       t.password,
+		       t.name,
+		       t.mac_time,
+		       t.validate_mac_flag,
+		       t.mac_address,
+		       t.parent_id,
+		       t.create_time,
+		       t.modify_time,
+		       t.delete_flag
+		  from t_manager_user_info t
+		  where  delete_flag = 0
+		  <isNotEmpty prepend="and" property="code">
+	    		 	t.code = #code#
+	    	</isNotEmpty>	
+	    	<isNotEmpty prepend="and" property="name">
+	    			t.name like concat('%',#name#,'%')
+	    	</isNotEmpty>
+	     order	by t.id desc
+		  limit  #start#,#pageSize#
+	</select>
+	
+	<select id="export_manager_info" parameterClass="java.util.Map" resultMap="manager_info_domain_result">
+		select t.id,
+		       t.code,
+		       t.password,
+		       t.name,
+		       t.mac_time,
+		       t.validate_mac_flag,
+		       t.mac_address,
+		       t.parent_id,
+		       t.create_time,
+		       t.modify_time,
+		       t.delete_flag
+		  from t_manager_user_info t
+		  where  delete_flag = 0
+		  <isNotEmpty prepend="and" property="code">
+	    		 	t.code = #code#
+	    	</isNotEmpty>	
+	    	<isNotEmpty prepend="and" property="name">
+	    			t.name like concat('%',#name#,'%')
+	    	</isNotEmpty>
+	     order	by t.id desc
+	</select>
+	
+	<select id="query_manager_info_count"  resultClass="Integer">
+		select count(t.id)
+		  from t_manager_user_info t
+		  where  delete_flag = 0
+		  <isNotEmpty prepend="and" property="code">
+	    		 	t.code= #code#
+	    	</isNotEmpty>	
+	    	<isNotEmpty prepend="and" property="name">
+	    			t.name like #name#
+	    	</isNotEmpty>	
+	</select>
+	
+	<insert id="add_manager_info" parameterClass="com.cy.dctms.common.bo.ManagerInfo">
+		insert into t_manager_user_info (
+			code,
+			name,
+			password,
+			parent_id,
+			validate_mac_flag,
+			create_time,
+			delete_flag
+		) values(
+			#code#,
+			#name#,
+			#password#,
+			#parentId#,
+			#validateMacFlag#,
+			now(),
+			0
+		)
+		<selectKey resultClass="Long" keyProperty="id"> 
+			select last_insert_id() as id from t_manager_user_info limit 1 
+		</selectKey> 
+	
+	</insert>
+	
+	<update id="modify_manager_info" parameterClass="com.cy.dctms.common.bo.ManagerInfo">
+		update t_manager_user_info t
+		   set 
+		   	t.code = #code#,
+		   	t.name = #name#,
+		   	t.validate_mac_flag = #validateMacFlag#,
+			t.modify_time = now()
+		 where t.id = #id#
+	</update>
+	
+	<update id="modify_manager_mac_info" parameterClass="com.cy.dctms.common.bo.ManagerInfo">
+		update t_manager_user_info t
+		   set 
+		   	t.mac_address = #macAddress#,
+		   	t.mac_time = #macTime#,
+			t.modify_time = now()
+		 where t.id = #id#
+	</update>		
+	
+	<update id="delete_manager_info_by_id" parameterClass="String">
+		update t_manager_user_info t
+		   set 
+		   	t.delete_flag = 1,
+			t.modify_time = now()
+		 where t.id = #id#
+	</update>
+	
+	<update id="delete_manager_mac_info_by_id" parameterClass="String">
+		update t_manager_user_info t
+		   set 
+		   	t.mac_time = = null,
+			t.modify_time = now()
+		 where t.id = #id#
+	</update>
+	
+	<update id="modify_manager_password" parameterClass="com.cy.dctms.common.bo.ManagerInfo">
+		update t_manager_user_info t
+		   set 
+		   	t.password  = #password#,
+			t.modify_time = now()
+		 where t.id = #id#
+	</update>
+	
+	
+</sqlMap>

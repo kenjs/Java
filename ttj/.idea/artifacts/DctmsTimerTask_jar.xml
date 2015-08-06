@@ -1,0 +1,33 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="DctmsTimerTask:jar">
+    <output-path>$PROJECT_DIR$/DctmsTimerTask/WEB-INF/classes/artifacts/DctmsTimerTask_jar</output-path>
+    <root id="archive" name="DctmsTimerTask.jar">
+      <element id="module-output" name="DctmsTimerTask" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/DctmsTimerTask/WEB-INF/lib/asm-3.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/DctmsTimerTask/WEB-INF/lib/cglib-2.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/DctmsTimerTask/WEB-INF/lib/log4j-1.2.16.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/DctmsTimerTask/WEB-INF/lib/quartz-1.8.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/DctmsTimerTask/WEB-INF/lib/mybatis-3.0.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/DctmsTimerTask/WEB-INF/lib/aopalliance-1.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/DctmsTimerTask/WEB-INF/lib/slf4j-api-1.7.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/DctmsTimerTask/WEB-INF/lib/slf4j-nop-1.7.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/DctmsTimerTask/WEB-INF/lib/aspectjrt-1.6.10.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/DctmsTimerTask/WEB-INF/lib/slf4j-log4j12-1.7.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/DctmsTimerTask/WEB-INF/lib/aspectjweaver-1.6.10.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/DctmsTimerTask/WEB-INF/lib/mybatis-spring-1.0.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/DctmsTimerTask/WEB-INF/lib/commons-logging-1.1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/DctmsTimerTask/WEB-INF/lib/spring-tx-3.0.5.RELEASE.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/DctmsTimerTask/WEB-INF/lib/spring-aop-3.0.5.RELEASE.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/DctmsTimerTask/WEB-INF/lib/spring-asm-3.0.5.RELEASE.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/DctmsTimerTask/WEB-INF/lib/spring-web-3.0.5.RELEASE.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/DctmsTimerTask/WEB-INF/lib/spring-core-3.0.5.RELEASE.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/DctmsTimerTask/WEB-INF/lib/spring-jdbc-3.0.5.RELEASE.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/DctmsTimerTask/WEB-INF/lib/spring-test-3.0.5.RELEASE.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/DctmsTimerTask/WEB-INF/lib/mysql-connector-java-5.1.9.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/DctmsTimerTask/WEB-INF/lib/spring-beans-3.0.5.RELEASE.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/DctmsTimerTask/WEB-INF/lib/spring-context-3.0.5.RELEASE.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/DctmsTimerTask/WEB-INF/lib/spring-expression-3.0.5.RELEASE.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/DctmsTimerTask/WEB-INF/lib/spring-context-support-3.0.5.RELEASE.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

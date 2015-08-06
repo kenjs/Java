@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.cygl.dao.BusCwfybxsqshMapper">
+	<parameterMap class="java.util.Map" id="parFyBxMap">
+		<parameter property="djxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="shbz" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="rqq" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="rqz" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="dataList" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" resultMap="resFyBxMap"/>
+	</parameterMap>
+	
+	<resultMap class="com.cy.cwgl.domain.CwFybxsqShDomain" id="resFyBxMap">
+			 <result property="xh" column="XH"/>
+			<result property="wsSpxh" column="WS_SPXH"/>
+			<result property="spxh" column="SPXH"/>
+			<result property="jdxh" column="JDXH"/>
+			<result property="fsthbz" column="FSTHBZ"/>
+			<result property="fsrmc" column="FSR_MC"/>
+			<result property="fsrq" column="FSRQ"/>
+			<result property="fybxje" column="FYBXJE"/>
+			<result property="sqrq" column="SQRQ"/>
+			<result property="jzdw" column="FYJZ_DW_MC"/>
+			<result property="jfdw" column="FYZF_DW_MC"/>
+			<result property="sqr" column="SQR_MC"/>
+			<result property="sqbm" column="SQ_BM_MC"/>
+			<result property="sqdw" column="SQ_DW_MC"/>
+			<result property="bz" column="BZ"/>
+			<result property="cwDjxh" column="CW_DJXH"/>
+	</resultMap>
+	
+	<procedure id="queryListFyBxSqSh" parameterMap="parFyBxMap" resultMap="resFyBxMap">
+		{call P_CWGL_FYBXSQSH_CX(?,?,?,?,?)}
+	</procedure>
+    
+
+
+</sqlMap>

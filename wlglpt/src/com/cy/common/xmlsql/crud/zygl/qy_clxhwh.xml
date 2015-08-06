@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.zygl.dao.QyClxhwhMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectQyClxhwhByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyClxhwhDomain">
+		select a.CLXHWH_DJXH as clxhwhDjxh,a.SS_JGBM as ssJgbm,a.CLXH as clxh,a.BZSM as bzsm,a.YXBZ as yxbz,
+		a.CJR_CZY_DJXH as cjrCzyDjxh,a.CJRQ as cjrq,a.XGR_CZY_DJXH as xgrCzyDjxh,a.XGRQ as xgrq,
+		(SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		(SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc,
+		a.cz as cz,a.tj as tj,a.cd as cd,a.kd as kd,a.gd as gd
+		from QY_CLXHWH a  where a.CLXHWH_DJXH=#clxhwhDjxh# and a.SS_JGBM=#ssJgbm#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertQyClxhwh"  parameterClass="com.cy.common.bo.QyClxhwh">
+		<selectKey keyProperty="clxhwhDjxh" resultClass="String" type="pre"> 
+			select SEQ_ZY_DJXH.nextval as clxhwhDjxh from dual 
+		</selectKey> 
+		insert into QY_CLXHWH(CLXHWH_DJXH,SS_JGBM,CLXH,BZSM,YXBZ,
+		CJR_CZY_DJXH,CJRQ,XGR_CZY_DJXH,XGRQ,CZ,TJ,CD,KD,GD)
+		values(#clxhwhDjxh:NUMERIC#,#ssJgbm:NUMERIC#,#clxh:VARCHAR#,#bzsm:VARCHAR#,#yxbz:VARCHAR#,
+		#cjrCzyDjxh:NUMERIC#,to_date(#cjrq:DATE#,'yyyy-MM-dd'),#xgrCzyDjxh:NUMERIC#,to_date(#xgrq:DATE#,'yyyy-MM-dd'),#cz:NUMERIC#,
+		#tj:NUMERIC#,#cd:NUMERIC#,#kd:NUMERIC#,#gd:NUMERIC#)
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateQyClxhwhByKey" parameterClass="com.cy.common.bo.QyClxhwh">
+        update QY_CLXHWH set CLXHWH_DJXH=#clxhwhDjxh#,SS_JGBM=#ssJgbm#,CLXH=#clxh#,BZSM=#bzsm#,YXBZ=#yxbz#,
+		CJR_CZY_DJXH=#cjrCzyDjxh#,CJRQ=to_date(#cjrq#, 'YYYY-MM-DD'),XGR_CZY_DJXH=#xgrCzyDjxh#,XGRQ=to_date(#xgrq#, 'YYYY-MM-DD'),CZ=#cz#,TJ=#tj#,CD=#cd#,KD=#kd#,GD=#gd# where CLXHWH_DJXH=#clxhwhDjxh# and SS_JGBM=#ssJgbm#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteQyClxhwhByKey" parameterClass="java.util.Map">
+		update QY_CLXHWH set yxbz='N' where CLXHWH_DJXH=#clxhwhDjxh# and SS_JGBM=#ssJgbm#
+    </delete>
+</sqlMap>

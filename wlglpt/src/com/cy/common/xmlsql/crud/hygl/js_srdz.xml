@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.hygl.dao.JsSrdzMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectJsSrdzByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.JsSrdzDomain">
+		select a.DZ_DJXH as dzDjxh,a.DZFS_DM as dzfsDm,a.JS_DJXH as jsDjxh,a.SS_JGBM as ssJgbm,a.JS_SR as jsSr,
+		a.JS_YJ as jsYj,a.JS_WJ as jsWj,A.DZJE,a.DZR_CZY_DJXH as dzrCzyDjxh,a.DZRQ as dzrq,a.DZ_JGBM as dzJgbm,
+		a.YXBZ as yxbz,a.DZ_CYBZ as dzCybz,a.DZCYJE as dzcyje,a.SPBZ as spbz,a.WSSPZT_DM as wsspztDm,
+		a.WS_SPXH as wsSpxh,a.QD_DJXH as qdDjxh from JS_SRDZ a  where a.DZ_DJXH=#dzDjxh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertJsSrdz"  parameterClass="com.cy.common.bo.JsSrdz">
+		<selectKey keyProperty="dzDjxh" resultClass="string" type="pre">
+			SELECT SEQ_DZ_DJXH.NEXTVAL AS dzDjxh FROM DUAL
+		</selectKey>
+		insert into JS_SRDZ(DZ_DJXH,DZFS_DM,JS_DJXH,SS_JGBM,JS_SR,
+		JS_YJ,JS_WJ,DZJE,DZR_CZY_DJXH,DZRQ,DZ_JGBM,
+		YXBZ,DZ_CYBZ,DZCYJE,SPBZ,WSSPZT_DM,
+		WS_SPXH,QD_DJXH)
+		values(#dzDjxh:NUMERIC#,#dzfsDm:NUMERIC#,#jsDjxh:NUMERIC#,#ssJgbm:NUMERIC#,#jsSr:NUMERIC#,
+		#jsYj:NUMERIC#,#jsWj:NUMERIC#,#dzje:NUMERIC#,#dzrCzyDjxh:NUMERIC#,to_date(#dzrq:DATE#,'yyyy-MM-dd'),#dzJgbm:NUMERIC#,
+		#yxbz:VARCHAR#,#dzCybz:VARCHAR#,#dzcyje:NUMERIC#,#spbz:VARCHAR#,#wsspztDm:NUMERIC#,
+		#wsSpxh:NUMERIC#,#qdDjxh:NUMERIC#)
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateJsSrdzByKey" parameterClass="com.cy.common.bo.JsSrdz">
+        update JS_SRDZ set DZ_DJXH=#dzDjxh#,DZFS_DM=#dzfsDm#,JS_DJXH=#jsDjxh#,SS_JGBM=#ssJgbm#,JS_SR=#jsSr#,
+		JS_YJ=#jsYj#,JS_WJ=#jsWj#,DZJE=#dzje#,DZ_CYBZ=#dzCybz#,DZCYJE=#dzcyje#
+		where DZ_DJXH=#dzDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteJsSrdzByKey" parameterClass="java.util.Map">
+		update JS_SRDZ set yxbz='N' where DZ_DJXH=#dzDjxh#
+    </delete>
+    
+    <!--操作表JS_SRDZ_DZCY 结算-收入对帐-对帐差异 -->
+    <!--根据主键取DOMAIN-->
+	<select id="selectJsSrdzDzcyByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.JsSrdzDzcyDomain">
+		select a.DZ_DJXH as dzDjxh,a.XH as xh,a.DZCYJE as dzcyje,a.DZCYYY_DM as dzcyyyDm,a.DZCY_CLFS_DM as dzcyClfsDm,
+		a.BZ as bz,a.XC_JS_DJXH as xcJsDjxh,a.WLSS_DJXH as wlssDjxh from JS_SRDZ_DZCY a where a.DZ_DJXH=#dzDjxh# and a.XH=#xh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertJsSrdzDzcy"  parameterClass="com.cy.common.bo.JsSrdzDzcy">
+		insert into JS_SRDZ_DZCY(DZ_DJXH,XH,DZCYJE,DZCYYY_DM,DZCY_CLFS_DM,
+		BZ,XC_JS_DJXH,WLSS_DJXH)
+		values(#dzDjxh:NUMERIC#,#xh:NUMERIC#,#dzcyje:NUMERIC#,#dzcyyyDm:NUMERIC#,#dzcyClfsDm:NUMERIC#,
+		#bz:VARCHAR#,#xcJsDjxh:NUMERIC#,#wlssDjxh:NUMERIC#)
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateJsSrdzDzcyByKey" parameterClass="com.cy.common.bo.JsSrdzDzcy">
+        update JS_SRDZ_DZCY set DZCYJE=#dzcyje#,DZCYYY_DM=#dzcyyyDm#,DZCY_CLFS_DM=#dzcyClfsDm#,
+		BZ=#bz#,XC_JS_DJXH=#xcJsDjxh#,WLSS_DJXH=#wlssDjxh# where DZ_DJXH=#dzDjxh# and XH=#xh#
+    </update>
+    
+	<!--根据主键删除表数据：软删除-->
+	<delete id="deleteJsSrdzDzcyByKey" parameterClass="java.util.Map">
+		delete from JS_SRDZ_DZCY where DZ_DJXH=#dzDjxh# and XH=#xh#
+    </delete>
+    
+    <delete id="deleteDzcyByDzDjxh" parameterClass="java.util.Map">
+    	delete from JS_SRDZ_DZCY where DZ_DJXH=#dzDjxh#
+    </delete>
+    
+    <!--操作表JS_SRDZ_DZCY_TEMP 结算-收入对帐-对帐差异-temp -->
+    <!--根据主键取DOMAIN-->
+	<select id="selectJsSrdzDzcyTempByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.JsSrdzDzcyTempDomain">
+		select a.DZ_DJXH as dzDjxh,a.XH as xh,a.DZCYJE as dzcyje,a.DZCYYY_DM as dzcyyyDm,a.DZCY_CLFS_DM as dzcyClfsDm,
+		a.BZ as bz,a.XC_JS_DJXH as xcJsDjxh,a.WLSS_DJXH as wlssDjxh,a.RQ as rq from JS_SRDZ_DZCY_TEMP a  where a.DZ_DJXH=#dzDjxh# and a.XH=#xh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertJsSrdzDzcyTemp"  parameterClass="com.cy.common.bo.JsSrdzDzcyTemp">
+		insert into JS_SRDZ_DZCY_TEMP(DZ_DJXH,XH,DZCYJE,DZCYYY_DM,DZCY_CLFS_DM,
+		BZ,XC_JS_DJXH,WLSS_DJXH,RQ)
+		values(#dzDjxh:NUMERIC#,#xh:NUMERIC#,#dzcyje:NUMERIC#,#dzcyyyDm:NUMERIC#,#dzcyClfsDm:NUMERIC#,
+		#bz:VARCHAR#,#xcJsDjxh:NUMERIC#,#wlssDjxh:NUMERIC#,to_date(#rq:DATE#,'yyyy-MM-dd'))
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateJsSrdzDzcyTempByKey" parameterClass="com.cy.common.bo.JsSrdzDzcyTemp">
+        update JS_SRDZ_DZCY_TEMP set DZ_DJXH=#dzDjxh#,XH=#xh#,DZCYJE=#dzcyje#,DZCYYY_DM=#dzcyyyDm#,DZCY_CLFS_DM=#dzcyClfsDm#,
+		BZ=#bz#,XC_JS_DJXH=#xcJsDjxh#,WLSS_DJXH=#wlssDjxh#,RQ=to_date(#rq#, 'YYYY-MM-DD') where DZ_DJXH=#dzDjxh# and XH=#xh#
+    </update>
+    
+	<!--根据主键删除表数据：软删除-->
+	<delete id="deleteJsSrdzDzcyTempByKey" parameterClass="java.util.Map">
+		delete from JS_SRDZ_DZCY_TEMP where DZ_DJXH=#dzDjxh# and XH=#xh#
+    </delete>
+    
+    <delete id="deleteJsSrdzDzcyTempByDzDjxh" parameterClass="java.util.Map">
+		delete from JS_SRDZ_DZCY_TEMP where DZ_DJXH=#dzDjxh#
+    </delete>
+    
+</sqlMap>

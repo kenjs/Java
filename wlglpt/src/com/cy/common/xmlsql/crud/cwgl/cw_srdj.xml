@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.cwgl.dao.CwSrdjMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectCwSrdjByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.cwgl.domain.CwYsyfSrdjDomain">
+		SELECT SR_DJXH AS srDjxh,
+		YSYF_DJXH AS ysyfDjxh,
+		YFJSF_DM AS yfjsfDm,
+		YFJSF_DJXH AS yfjsfDjxh,
+		FKFMC AS fkfmc,
+		JE AS je,
+		TO_CHAR(RQ,'yyyy-mm-dd') AS rq,
+		ZFFS_DM AS zffsDm,
+		ZCFL_DM AS zcflDm,
+		YH_CSH_DJXH AS yhCshDjxh,
+		YHHDH AS yhhdh,
+		JBR_CZY_DJXH AS jbrCzyDjxh,
+		BZ AS bz,
+		YXBZ AS yxbz,
+		DJR_CZY_DJXH AS djrCzyDjxh,
+		DJRQ AS djrq,
+		DJ_JGBM AS djJgbm,
+		SS_JGBM AS ssJgbm
+		FROM CW_SRDJ
+		WHERE SR_DJXH = #srDjxh#
+    </select>
+	<!--插入数据-->
+	<insert id="insertCwSrdj"  parameterClass="com.cy.common.bo.CwSrdj">
+		<selectKey keyProperty="srDjxh" resultClass="String" type="pre"> 
+			select SEQ_SR_DJXH.nextval as srDjxh from dual 
+		</selectKey> 
+		insert into CW_SRDj(SR_DJXH,YSYF_DJXH,YFJSF_DM,YFJSF_DJXH,FKFMC,JE,
+		RQ,ZFFS_DM,ZCFL_DM,YH_CSH_DJXH,YHHDH,
+		JBR_CZY_DJXH,BZ,YXBZ,DJR_CZY_DJXH,DJRQ,
+		DJ_JGBM,SS_JGBM)
+		values(#srDjxh:NUMERIC#,#ysyfDjxh:NUMERIC#,#yfjsfDm:NUMERIC#,#yfjsfDjxh:NUMERIC#,#fkfmc:VARCHAR#,#je:NUMERIC#,
+		to_date(#rq:DATE#,'yyyy-MM-dd'),#zffsDm:NUMERIC#,#zcflDm:NUMERIC#,#yhCshDjxh:NUMERIC#,#yhhdh:VARCHAR#,
+		#jbrCzyDjxh:NUMERIC#,#bz:VARCHAR#,#yxbz:VARCHAR#,#djrCzyDjxh:NUMERIC#,to_date(#djrq:DATE#,'yyyy-MM-dd'),
+		#djJgbm:NUMERIC#,#ssJgbm:NUMERIC#)
+	</insert>
+
+
+	<!--根据主键删除表数据：软删除-->
+	<delete id="deleteCwSrdjByKey" parameterClass="java.util.Map">
+		update CW_SRDj set YXBZ ='N' where SR_DJXH=#srDjxh#
+    </delete>
+    
+    <!--根据主键删除表数据：软删除-->
+	<delete id="deleteCwSrdjByYsyfDjxh" parameterClass="com.cy.cwgl.domain.CwYsyfSrdjDomain">
+		update CW_SRDj set yxbz='N' where YSYF_DJXH=#ysyfDjxh#
+    </delete>
+</sqlMap>

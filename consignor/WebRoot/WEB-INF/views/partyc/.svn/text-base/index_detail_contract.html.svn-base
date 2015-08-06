@@ -1,0 +1,699 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="pragma" content="no-cache"/>
+    <meta http-equiv="Cache-Control" content="no-cache,must-revalidate"/>
+    <title>传化物流-会员中心</title>
+	<link href="../js/sys/ymPrompt/skin/ch/ymPrompt.css" rel="stylesheet" />
+	<script src="../js/jquery/jquery-1.8.3.min.js" type=text/javascript>		</script>
+	<script src="../js/themes/trade/html5.js" type=text/javascript></script>
+	<script src="../js/themes/trade/jquery.validate.js" type=text/javascript></script>
+	<script src="../js/themes/trade/jquery.validate.ext.js" type=text/javascript></script>
+	<script src="../js/themes/trade/messages_cn.js" type=text/javascript></script>
+	<script src="../js/sys/ymPrompt/ymPrompt.js" type=text/javascript></script>
+	<script src="../js/sys/city.js"></script>
+	<script src="../js/kendo/kendo.web.min.js"></script>
+	<script src="../js/kendo/console.js"></script>
+	<script src="../js/sys/sys.js"></script>  
+    
+     <link href="../css/webui/main.css" rel="stylesheet" />	
+    <script src="../js/jquery/jquery-1.8.3.min.js" type=text/javascript></script>
+    <script src="../js/sys/webui/header.js"></script>    	
+    <script src="../js/sys/webui/logo.js"></script>   	 
+    <script src="../js/sys/webui/left.js"></script>
+	<link href="../css/webui/hgrid.css" rel="stylesheet" />
+    <script type="text/javascript" src="../js/sys/DatePicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="../js/sys/webui/hgrid.js"></script>
+	<style>
+	#right {
+		font-family:inherit;
+	    font-family:"宋体",Arial,sans-serif;
+	    font-size: 12px;
+	}
+	</style>
+    <style>
+		#main{width:998px;border:0px solid black;padding:0px;margin:0 auto;}
+	</style>
+    
+    <script type="text/javascript">
+    var params;
+    $(document).ready(function(){
+    
+    });
+    </script>
+</head>
+ 
+<body>
+	<!-- 顶部 --开始  此处须由js动态加入-->
+	<div id="header" class="c-header" >
+	
+	</div>
+	<!-- 顶部 --结束-->
+	
+	<!-- LOGON --开始   此处须由js动态加入-->
+	<div id="logo" class="c-logo" >
+		
+	</div>
+	<!-- LOGON --结束-->
+	
+	<!-- 工作区 --开始-->
+	<div id="main">
+		<!-- 左侧菜单 --开始  此处须由js动态加入-->
+  		<div id="left" class="c-left"> 
+		</div>
+		<!-- 左侧菜单 --结束-->
+			
+		<!-- 右侧工作区 --开始-->
+		<div id="right" class="c-right" >
+		<div style="width: 900px;" >
+	  		<div class="hgrid">
+	  			<div id="example1" >
+			<form name="form" id="form" >
+				<div id="tickets">
+				  <h3 style="border:0px solid red;height: 30px;padding-top: 0px;border-bottom: 1px solid #dddddd;">
+				  
+				  <span style="font-size: 14px;font-weight: bold;border:0px solid blue;">
+				                  会员基本信息
+				      </span>
+				  
+				  </h3>
+				  
+				  <ul class="c-ul-party">
+				        
+						<li style="width: 800px;border-bottom: 1px solid #dddddd;border-bottom-style: dashed;">
+					
+							<div for="partyname" style="font-weight: normal;margin-left: 60px;border: 0px solid red;width: 550px;padding-left: 0px;">
+								会员名：
+								<label  id=partyname name="partyname" style="border: 0px solid blue;width: 150px;text-align: left;"></label>
+								<span style="margin-left:1px;border: 0px solid red;">父会员为：</span><span id="pername" style="width:180px; border: 0px solid blue;text-align: right;"></span>
+							</div>
+							
+							<!--<label style="width: 134px;border: 1px solid blue;">
+							<span  id=partyname name="partyname" style="float: left;"></span>
+							</label>
+							<label style="margin-left: 20px;width: 250px; border: 0px solid red;padding-top: 5px;" id="organizationname">
+							<span style="float: left;border: 0px solid red;">父会员为：</span><span id="pername" style="width:180px; border: 0px solid blue;float: left;text-align: left;">xxx</span>
+							</label>-->
+							
+							
+							
+						</li>
+						<li style="width: 800px;border-bottom: 1px solid #dddddd;border-bottom-style: dashed;">
+							<label  style="font-weight: normal;border: 0px solid red;">
+								邮箱：
+								
+							</label>
+							<span  id=email  name="email" style="border: 0px solid red;"></span>
+							<!--<label style="width: 150px;">
+							<span  id=email  name="email" style="float: left;" ></span>
+							</label>
+							<a id="updateemail" href="#" style="margin-right:480px;color: blue;text-decoration:underline;float: right">修改邮箱</a>-->
+
+						</li>						
+						<li style="width: 800px;border-bottom: 1px solid #dddddd;border-bottom-style: dashed;">
+							<label for="mobilenumber" class="required" style="font-weight: normal;border: 0px solid red;">
+								手机号码：
+							</label>
+							<span  id="mobilenumber" name="mobilenumber"></span>
+							<!--<label style="width:150px;">
+							<span  id="mobilenumber" name="mobilenumber" style="float: left"></span>
+							</label>
+							<a  id="updatemobilenumber" href="#" style="margin-right:455px; color: blue;text-decoration:underline;float: right;">修改手机号码</a>-->
+						</li>
+						<li style="width: 800px;border-bottom: 1px solid #dddddd;border-bottom-style: dashed;">
+							<label for="password" style="border: 0px solid red;width: 148px;">
+								密码：   ********
+							</label>
+							
+							<!--<label style="width: 150px;">
+							<span  id="password" name="password" style="float: left">********</span>
+							</label>
+							<!--<a  href="../operatorcs/edit" style="margin-left: 10px;">修改密码</a>
+							<a  href="#" style="margin-left: 120px;color: blue;text-decoration:underline;" id="updatepassword">修改密码</a>-->
+						</li>
+						
+				</ul>
+				<ul id="personmsg" class="c-ul-personmsg">		
+				
+						<h3 style="border:0px solid red;height: 30px;padding-top: 10px;border-bottom: 1px solid #dddddd;">
+						
+						
+						
+						<span style="font-size: 14px;font-weight: bold;border:0px solid blue;">
+				               个人会员信息
+				      </span>
+						
+						</h3>	
+						<li style="margin-top: 0px;height: 50px;margin: 0px auto;border: 0px solid red;">
+							<label style="float: left;font-weight: normal;border: 0px solid blue;margin-top: 20px;width: 95px;">
+								姓名：
+							</label>
+							<label style="width: 160px;border: 0px solid blue;margin-top: 20px;float: left;">
+							<span  id=realname name="realname" style="margin-top: 0px;float: left"></span>
+							</label>
+							<!--<label style="background:url('../imgs/login/btn/big4_buttom.jpg') no-repeat;border: 0px solid blue;height: 36px;width: 96px;float: left;margin-top: 7px;padding-top:7px;">
+							 <a src="#" style="color:#ffffff;font-size:14px;font-weight:bold;cursor:pointer;margin-right: 20px;margin-top:10px; text-decoration:none;" id="perprifectmsg" name="perprifectmsg">完善信息</a>
+							</label>
+
+						--></li>
+						
+						<li>
+							<label for="certificatetype" class="required" style="font-weight: normal;">
+								证件名称：
+							</label>
+							<span  id=certificatetype name="certificatetype"></span>
+
+						</li>
+						<li>
+							<label for="certificatenumber" class="required" style="font-weight: normal;">
+								证件号：
+							</label>
+							<span  id=certificatenumber name="certificatenumber"></span>
+
+						</li>
+						<li>
+							<label  class="required" style="font-weight: normal;">
+								省市区：
+							</label>
+							<span  id=province1 name="province1"></span>
+							<span  id=city1 name="city1"></span>
+							<span  id=region1 name="region1"></span>
+
+						</li>
+						<li>
+							<label for="certificateaddress" class="required" style="font-weight: normal;">
+								所在地区：
+							</label>
+							<span  id=certificateaddress name="certificateaddress"></span>
+
+						</li>
+						<li>
+							<label for="sex" class="required" style="font-weight: normal;">
+								性别：
+							</label>
+							<span  id=sex name="sex"></span>
+
+						</li>
+						<li>
+							<label for="birthday" class="required" style="font-weight: normal;">
+								生日：
+							</label>
+							<span  id=birthday name="birthday"></span>
+
+						</li>
+						<li>
+							<label for="telephonenumber1" class="required" style="font-weight: normal;">
+								联系电话：
+							</label>
+							<span  id=telephonenumber1 name="telephonenumber1"></span>
+
+						</li>
+						<li style="display: none;">
+							<label for="mobilenumber1" class="required" style="font-weight: normal;">
+								手机号：
+							</label>
+							<span  id=mobilenumber1 name="mobilenumber1"></span>
+
+						</li>
+						<li>
+							<label for="postcode" class="required" style="font-weight: normal;">
+								邮编：
+							</label>
+							<span  id=postcode name="postcode"></span>
+
+						</li>
+						<li>
+							<label for="liveaddress" class="required" style="font-weight: normal;">
+								居住地址：
+							</label>
+							<span  id=liveaddress name="liveaddress"></span>
+
+						</li>
+						<li style="display: none">
+							<label for="alloweddrivecartype" class="required" style="font-weight: normal;">
+								准驾车型：
+							</label>
+							<span  id=alloweddrivecartype name="alloweddrivecartype"></span>
+
+						</li>
+						<li style="display: none;">
+							<label for="description" class="required" style="font-weight: normal;">
+								描述：
+							</label>
+							<span  id=description name="description"></span>
+
+						</li>
+				  </ul>
+				  <ul id="organizationmsg" class="c-ul-organizationmsg">
+						
+						<h3 style="border:0px solid red;height: 30px;padding-top: 10px;border-bottom: 1px solid #dddddd;">
+						
+						<span style="font-size: 14px;font-weight: bold;border:0px solid blue;">
+				               企业会员信息
+				      </span>
+						
+						
+						</h3>	
+						
+						<li style="margin-top: 0px;height: 50px;margin: 0px auto;">
+					
+							<label for="organization" class="required" style="float: left;font-weight: normal;border: 0px solid blue;margin-top: 20px;width: 95px;">
+								企业名称：
+							</label>
+							<label style="width: 300px;border: 0px solid blue;margin-top: 20px;float: left;">
+							<span  id=organization name="organization" style="margin-top: 0px;float: left;"></span>
+							</label>
+							<!--<label style="background:url('../imgs/login/btn/big4_buttom.jpg') no-repeat;border: 0px solid blue;height: 36px;width: 96px;float: left;margin-top: 7px;padding-top:7px;">
+							    <a src="#" style="color:#ffffff;font-size:14px;font-weight:bold;cursor:pointer;margin-right: 20px;margin-top:10px; text-decoration:none;" id="orgprifectmsg" name="orgprifectmsg">完善信息</a>
+							</label>
+						
+						--></li>
+						<li>
+							<label for="officeaddress" class="required" style="font-weight: normal;">
+								办公地址：
+							</label>
+							<span  id=officeaddress name="officeaddress"></span>
+
+						</li>
+						<li>
+							<label for="industrytype" class="required" style="font-weight: normal;">
+								行业类型：
+							</label>
+							<span  id=industrytype name="industrytype"></span>
+
+						</li>
+						<li>
+							<label for="taxnumber" class="required" style="font-weight: normal;">
+								纳税人识别号：
+							</label>
+							<span  id=taxnumber name="taxnumber"></span>
+
+						</li>
+						<li>
+							<label for="employeescount" class="required" style="font-weight: normal;">
+								员工数量：
+							</label>
+							<span  id=employeescount name="employeescount"></span>
+
+						</li>
+						<li>
+							<label for="legalperson" class="required" style="font-weight: normal;">
+								法人：
+							</label>
+							<span  id=legalperson name="legalperson"></span>
+
+						</li>
+						<li>
+							<label for="telephonenumber2" class="required" style="font-weight: normal;">
+								联系电话：
+							</label>
+							<span  id=telephonenumber2 name="telephonenumber2"></span>
+
+						</li>
+						<li style="display: none;">
+							<label for="mobilenumber2" class="required" style="font-weight: normal;">
+								手机号码：
+							</label>
+							<span  id=mobilenumber2 name="mobilenumber2"></span>
+
+						</li>
+						<li>
+							<label for="fax" class="required" style="font-weight: normal;">
+								传真：
+							</label>
+							<span  id=fax name="fax"></span>
+
+						</li>
+						<li>
+							<label for="postcode1" class="required" style="font-weight: normal;">
+								邮编：
+							</label>
+							<span  id=postcode1 name="postcode1"></span>
+
+						</li>
+						<li>
+							<label  class="required" style="font-weight: normal;">
+								省市区：
+							</label>
+							<span  id=province name="province"></span>
+							<span  id=city name="city"></span>
+							<span  id=region name="region"></span>
+
+						</li>
+						<li>
+							<label for="website" class="required" style="font-weight: normal;">
+								主页：
+							</label>
+							<span  id=website name="website"></span>
+
+						</li>
+						<li>
+							<label for="registeredcapital" class="required" style="font-weight: normal;">
+								注册资金：
+							</label>
+							<span  id=registeredcapital name="registeredcapital"></span>
+							元
+						</li>
+						<li>
+							<label for="description1" class="required" style="font-weight: normal;">
+								描述：
+							</label>
+							<span  id=description1 name="description1"></span>
+
+						</li>
+						
+					</ul>
+				</div>
+
+
+			</form>
+
+<style scoped>
+.long-textbox {
+	width: 500px;
+}
+
+.k-textbox {
+	width: 12.2em;
+}
+
+#tickets {
+	width: 830px;
+	height: 490px;
+	margin: 0px;
+	border: 1px;
+	padding: 0px 0px 0px 0px;
+	background: url('../../content/web/validator/ticketsOnline.png')
+		transparent no-repeat 0 0;
+}
+
+#tickets h3 {
+	font-weight: bold;
+	width:800px;
+	font-size: 14px;
+	border-bottom: 1px solid #dddddd;
+}
+
+/*#tickets ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	border: 1px solid red;
+	width: 600px;
+	
+}*/
+
+#tickets li {
+	margin: 10px 0 0 0;
+	width: 800px;
+	height: 30px;
+	border-bottom: 1px solid #eaeaea ;
+	border-bottom-style: dashed;
+}
+
+label {
+	display: inline-block;
+	width: 110px;
+	text-align: right;
+}
+
+.required {
+	font-weight: bold;
+	font-size: 12px;
+	
+	
+	
+}
+
+.accept,.status {
+	padding-left: 90px;
+}
+
+.valid {
+	color: green;
+}
+
+.invalid {
+	color: red;
+}
+
+
+</style>
+
+		</div>
+	  			
+	  		</div>
+		</div>
+		<!-- 右侧工作区 --结束-->
+		
+	</div>
+	</div>
+	<!-- 工作区 --结束-->
+	
+	<!-- 底部 --开始  此处须由js动态加入-->
+	<div id="footer" class="c-footer">
+		
+	</div>
+	<!-- 底部 --结束-->
+   <script>
+   	
+  </script>
+		<script>
+			javascript:window.history.forward(1);
+	var validator;
+	var oldmobile="";
+	var oldem="";
+	var oldtype="";
+
+	$(document).ready(function() {
+	    $("#personmsg").hide();
+	    $("#organizationmsg").hide();
+	    $("#organizationname").hide();
+			//添加修改邮箱窗口
+		
+			 $("#updateemail").bind("click", function() {
+			    $("#oldemail").text(oldem);
+			  
+		        ymPrompt.win({message:'../partycs/editemail',width:360,height:220,fixPosition:true,dragOut:false,title:'修改邮箱',iframe:true});		
+			});
+		    
+			
+			//添加修改手机号码窗口
+		
+			$("#updatemobilenumber").bind("click", function() {
+			    $("#oldmobilnumber").text(oldmobile);
+		       
+		        ymPrompt.win({message:'../partycs/editmobilenumber',width:360,height:220,fixPosition:true,dragOut:false,title:'修改手机号码',iframe:true});				
+			});
+		   //添加修改密码窗口
+		   $("#updatepassword").bind("click", function() {
+			    //$("#oldmobilnumber").text(oldmobile);
+		      // window.top.document.getElementById("right-iframe").src="../operatorcs/edit";
+		        ymPrompt.win({message:'../partycs/editpassword',width:360,height:220,fixPosition:true,dragOut:false,title:'修改密码',iframe:true});	
+		      //  ymPrompt.win({message:'../operatorcs/edit',width:360,height:220,fixPosition:true,dragOut:false,winPos:[810,300],title:'修改密码',iframe:true});	
+			});
+			    //初始化获取父会员的公司名
+			    $.ajax( {
+							type : "post",
+							url : "selectFromOrganization.json",
+							dataType : "json",
+							error : function() {
+								alert("加载错误")
+							},
+							success : function(data) {
+								//alert("name-->"+data.msg);
+								
+								if(data.msg!=''){
+								//alert("aaa");
+								 $("#organizationname").show();
+								 $("#pername").html(data.msg);
+								}
+							}
+						   });
+					
+				//初始化开始获取基本信息
+				$.ajax( {
+							type : "get",
+							url : "query_detail.json?random="+Math.random(),
+							dataType : "json",
+							error : function() {
+								alert("加载错误")
+							},
+							success : function(data) {
+								if (data != "" && data.length != 0) {
+								//alert(data.partyname+","+data.mobilenumber+","+data.email);
+									$("#partyname").text(data.partyname);
+									$("#mobilenumber").text(data.mobilenumber);
+									$("#email").text(data.email);
+								oldmobile=data.mobilenumber;
+								oldem=data.email;
+								oldtype=data.partytype;						
+                      if(data.partytype=='个人'){	
+						
+						$("#personmsg").show();
+						$("#organizationmsg").hide();					 
+						$.ajax( {
+							type : "get",
+							url : "querypersondetail.json?random="+Math.random(),
+							dataType : "json",
+							error : function() {
+								alert("加载错误")
+							},
+							success : function(data) {
+								if (data != "" && data.length != 0) {
+								
+									$("#realname").text(data.realname);
+									$("#certificatetype").text(data.certificatetype);
+									$("#certificatenumber").text(data.certificatenumber);
+									$("#certificateaddress").text(data.certificateaddress);
+									if(data.sex==0){
+									  $("#sex").text("女");
+									}
+									if(data.sex==1){
+									  $("#sex").text("男");
+									}
+									
+									$("#birthday").text(data.birthday);
+									$("#telephonenumber1").text( data.telephonenumber);
+									$("#mobilenumber1").text( data.mobilenumber);
+									$("#postcode").text(data.postcode);
+									$("#liveaddress").text(data.liveaddress);
+									$("#alloweddrivecartype").text(data.alloweddrivecartype);
+									$("#description").text(data.description);
+									$("#province1").text(data.province);
+									$("#city1").text(data.city);
+									$("#region1").text(data.region);
+									
+								}
+							}
+						   });
+						} 
+						if(data.partytype=='企业'){
+						
+						$("#personmsg").hide();
+	                    $("#organizationmsg").show();
+						$.ajax( {
+							type : "get",
+							url : "queryorganizationdetail.json?random="+Math.random(),
+							dataType : "json",
+							error : function() {
+								alert("加载错误")
+							},
+							success : function(data) {
+								if (data != "" && data.length != 0) {
+								
+									$("#organization").text(data.organization);
+									$("#officeaddress").text(data.officeaddress);
+									$("#industrytype").text(data.industrytype);
+									$("#taxnumber").text(data.taxnumber);
+									$("#employeescount").text(data.employeescount);
+									$("#legalperson").text(data.legalperson);
+									$("#telephonenumber2").text(data.telephonenumber);
+									$("#mobilenumber2").text(data.mobilenumber);
+									$("#fax").text(data.fax);
+									$("#postcode1").text(data.postcode);
+									$("#province").text(data.province);
+									$("#city").text(data.city);
+									$("#region").text(data.region);
+									$("#website").text(data.website);
+									$("#registeredcapital").text(data.registeredcapital);
+									$("#description1").text(data.description);
+									
+								}
+							}
+						   });
+						}  
+						   
+						}
+			     	}
+				 });	
+				
+	
+
+	//个人完善信息按钮
+	$("#perprifectmsg").click(function(){
+	  window.location="../personcs/index_edit";
+	});
+	//企业完善信息按钮
+	$("#orgprifectmsg").click(function(){
+	  window.location="../organizationcs/index_edit";
+	
+	});
+
+});
+</script>
+
+
+
+  <script type="text/javascript"> 
+  javascript:window.history.forward(1);	
+    (function($) {
+    	
+    	var arr=new Array('00','01');
+    	$.ajax({
+    		url:"../logincs/getInit?random="+Math.random(),
+    		dataType:"json",
+    		contentType: "application/json",
+	      	type:'get',
+	      	//timeout:1000,  
+	      	//data:params, //后台不能接收 
+	      	success:function(data){
+	      		var partytype=data.partytype;
+	      		if(partytype==null||partytype==''){
+	      			$("td[id='1']").attr('url','../personcs/edit?partytype=');
+	      		}else if(partytype=='个人'){
+	      			$("td[id='1']").attr('url','../personcs/edit?partytype=per');
+	      		}else{
+	      			$("td[id='1']").attr('url','../organizationcs/edit?partytype=org');
+	      		} 
+	      		$("#username").html("<a title="+data.username_all+" style='cursor:pointer;color:#6A6AFF;' size=2>"+data.username_part+"&nbsp;</a>,");
+				$("#logout").html("<a href=\"javascript:logout()\">[退出]</a>");
+	      	}, 
+	      	error:function(XMLHttpRequest, textStatus, errorThrown) {
+               //alert(XMLHttpRequest.status);
+              // alert(XMLHttpRequest.readyState);
+               //alert(textStatus); 
+	   		}
+    	});
+    })(jQuery);
+
+             //判断跳转3pl,货源管理,配送管理权限
+    function checkpremission(preimission)
+	{
+    	//alert(preimission);
+	  //window.open("../goodssourcemodelcs/modeldetail?id="+goodsSourceModelId);
+	  $.ajax({
+			   type : "post",
+			   url : "../partycs/checkPermission?random="+Math.random()+"&premission="+encodeURIComponent(encodeURIComponent(preimission)),
+			   dataType: "json",
+			   error : function(){alert("操作失败")},
+			   success : function(data) {
+			   		if(data.msg=='ok'){
+			   			//刷新页面
+			   			if(preimission=='3pl'){
+			   				window.location="../logincs/main_3pl";
+			   			}
+			   			if(preimission=='配送'){
+			   				window.location="../todispermissioncs/ordermanage";
+			   			}
+			   			if(preimission=='发布货源'){
+			   				window.location="../goodssourcecs/fastpub";
+			   			}
+			   			
+			   		
+			       	}else{
+			       	alert("你还没有使用这个功能的权限，请申请！！");
+			       	}
+			   }
+	  		});
+	}
+        
+    
+    
+	</script>
+</body>
+</html>
+ 
+ 
+

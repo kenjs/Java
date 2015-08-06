@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.common.dao.BusWsspCommonMapper">
+
+	<parameterMap class="java.util.Map" id="wsJudgeParMap">
+    	<parameter property="wsspxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="spxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="rtnCode" javaType="java.lang.Integer" jdbcType="BIGINT" mode="OUT"/>
+    	<parameter property="rtnMess" javaType="java.lang.String" jdbcType="VARCHAR" mode="OUT"/>
+    </parameterMap>
+    
+    <procedure id="queryWszsJudge" parameterMap="wsJudgeParMap" >
+    	{call P_WS_ZSTJPD(?,?,?,?)}
+    </procedure>
+    
+    <parameterMap class="java.util.Map" id="wszsParMap">
+    	<parameter property="wsspxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="spxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="rtnCode" javaType="java.lang.Integer" jdbcType="BIGINT" mode="OUT"/>
+    	<parameter property="rtnMess" javaType="java.lang.String" jdbcType="VARCHAR" mode="OUT"/>
+    </parameterMap>
+    
+    <procedure id="saveJudge" parameterMap="wszsParMap" >
+    	{call P_WS_ZS(?,?,?,?)}
+    </procedure>
+    
+    <parameterMap class="java.util.Map" id="wsbackParMap">
+    	<parameter property="wsspxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="spxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="czyDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="rtnCode" javaType="java.lang.Integer" jdbcType="BIGINT" mode="OUT"/>
+    	<parameter property="rtnMess" javaType="java.lang.String" jdbcType="VARCHAR" mode="OUT"/>
+    </parameterMap>
+    
+    <procedure id="saveBack" parameterMap="wsbackParMap" >
+    	{call P_WS_TH(?,?,?,?,?)}
+    </procedure>
+    
+    <parameterMap class="java.util.Map" id="wssplzParMap">
+    	<parameter property="wsspxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="dataList" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" resultMap="getWssplzRes"/>
+    </parameterMap>
+    
+    <resultMap class="com.cy.common.domain.WssplzDomain" id="getWssplzRes">
+    	<result property="wsspxh" column="WS_SPXH"/>
+    	<result property="spxh" column="SPXH"/>
+    	<result property="fsthbz" column="FSTHBZ"/>
+    	<result property="fsrmc" column="FSR_MC"/>
+    	<result property="fsrq" column="FSRQ"/>
+    	<result property="spjgmc" column="SPJG_MC"/>
+    	<result property="spgwmc" column="SPGW_MC"/>
+    	<result property="jdxh" column="JDXH"/>
+    	<result property="qzxs" column="QZXS"/>
+    	<result property="sprmc" column="SPR_MC"/>
+    	<result property="sprq" column="SPRQ"/>
+    	<result property="spjg" column="SPJG"/>
+    	<result property="spyj" column="SPYJ"/>
+    	<result property="cqbz" column="CQBZ"/>
+    </resultMap>
+    
+    <procedure id="querySplzcx" parameterMap="wssplzParMap" resultMap="getWssplzRes">
+    	{call P_WS_SPLZCX(?,?)}
+    </procedure>
+    
+    <parameterMap class="java.util.Map" id="fsselectParMap">
+    	<parameter property="wsspxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="spxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="rtnCode" javaType="java.lang.Integer" jdbcType="BIGINT" mode="OUT"/>
+    	<parameter property="rtnMess" javaType="java.lang.String" jdbcType="VARCHAR" mode="OUT"/>
+    	<parameter property="dataList" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" resultMap="getFsSelectRes"/>
+    </parameterMap>
+    
+    <resultMap class="com.cy.common.domain.WsspCommonDomain" id="getFsSelectRes">
+    	<result property="spjdsm" column="SPJDSM"/>
+    	<result property="spjgjgDm" column="SPJGJB_DM"/>
+    	<result property="spjgjgmc" column="SPJGJB_MC"/>
+    	<result property="spJgbm" column="SP_JGBM"/>
+    	<result property="spjgmc" column="SP_JGMC"/>
+    	<result property="gwDjxh" column="GW_DJXH"/>
+    	<result property="gwmc" column="GW_MC"/>
+    	<result property="sprJdxh" column="JDXH"/>
+    	<result property="wsspms" column="WSSPMS"/>
+    	<result property="wsspmsmc" column="WSSPMS_MC"/>
+    </resultMap>
+    
+    <procedure id="queryFsSelect" parameterMap="fsselectParMap" resultMap="getFsSelectRes">
+    	{call P_WS_FS_SELECT(?,?,?,?,?)}
+    </procedure>
+    
+    <parameterMap class="java.util.Map" id="sendParMap">
+    	<parameter property="wsspxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="spxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="sprJdxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="sprCzyDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="rtnCode" javaType="java.lang.Integer" jdbcType="BIGINT" mode="OUT"/>
+    	<parameter property="rtnMess" javaType="java.lang.String" jdbcType="VARCHAR" mode="OUT"/>
+    </parameterMap>
+    
+    <procedure id="saveSend" parameterMap="sendParMap" >
+    	{call P_WS_FS(?,?,?,?,?,?)}
+    </procedure>
+    
+    <select id="queryWssprList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT DISTINCT AA.CZY_DJXH dm,AA.CZY_DJXH || ' ' || BB.MC mc FROM QY_RY_GW AA,QY_RYDJ BB
+		WHERE AA.CZY_DJXH = BB.CZY_DJXH 
+		<dynamic>
+			<isNotEmpty prepend="and" property="ssJgbm">
+				AA.SS_JGBM =#ssJgbm#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="gwDjxh">
+				AA.GW_DJXH =#gwDjxh#
+			</isNotEmpty>
+		</dynamic>
+		ORDER BY AA.CZY_DJXH
+    </select>
+    
+    <select id="queryWssprByBdwList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT DISTINCT AA.CZY_DJXH dm,AA.CZY_DJXH || ' ' || BB.MC mc 
+		FROM QY_RY_GW AA,QY_RYDJ BB,QY_ZZJG JG
+		WHERE AA.CZY_DJXH = BB.CZY_DJXH 
+		AND AA.SS_JGBM=JG.JGBM
+		AND BB.YXBZ ='Y'
+		AND JG.YXBZ ='Y'
+		AND JG.JGLB_DM ='4'
+		<dynamic>
+			<isNotEmpty prepend="and" property="ssJgbm">
+				JG.SJ_JGBM =#ssJgbm#
+			</isNotEmpty>
+		</dynamic>
+		ORDER BY AA.CZY_DJXH
+    </select>
+    
+    <select id="queryWssprByZgsList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.DmbGgDomain">
+		SELECT DISTINCT AA.CZY_DJXH dm,AA.CZY_DJXH || ' ' || BB.MC mc 
+	    FROM QY_RY_GW AA,QY_RYDJ BB,QY_ZZJG JG
+	    WHERE AA.CZY_DJXH = BB.CZY_DJXH 
+	    AND AA.SS_JGBM=JG.JGBM
+	    AND BB.YXBZ ='Y'
+	    AND JG.YXBZ ='Y'
+	    AND JG.JGLB_DM ='4'
+		AND JG.JBDM LIKE (SELECT JBDM FROM QY_ZZJG WHERE JGBM=#ssJgbm#) || '%'
+		ORDER BY AA.CZY_DJXH
+    </select>
+    
+    <select id="queryWsspjUrl" parameterClass="java.util.Map"
+		resultClass="java.lang.String">
+		SELECT AA.WS_URL FROM QY_WS_SP AA
+		WHERE AA.YXBZ ='Y'
+		AND AA.WS_SPXH =#wsspxh#
+    </select>
+    
+    <parameterMap class="java.util.Map" id="scfsselectParMap">
+    	<parameter property="wsDm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="wsXmflDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="jgbm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="rtnCode" javaType="java.lang.Integer" jdbcType="BIGINT" mode="OUT"/>
+    	<parameter property="rtnMess" javaType="java.lang.String" jdbcType="VARCHAR" mode="OUT"/>
+    	<parameter property="dataList" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" resultMap="getScFsSelectRes"/>
+    </parameterMap>
+    
+    <resultMap class="com.cy.common.domain.WsspCommonDomain" id="getScFsSelectRes">
+    	<result property="spjdsm" column="SPJDSM"/>
+    	<result property="spjgjgDm" column="SPJGJB_DM"/>
+    	<result property="spjgjgmc" column="SPJGJB_MC"/>
+    	<result property="spJgbm" column="SP_JGBM"/>
+    	<result property="spjgmc" column="SP_JGMC"/>
+    	<result property="gwDjxh" column="GW_DJXH"/>
+    	<result property="gwmc" column="GW_MC"/>
+    	<result property="sprJdxh" column="JDXH"/>
+    	<result property="wsspms" column="WSSPMS"/>
+    	<result property="wsspmsmc" column="WSSPMS_MC"/>
+    </resultMap>
+    
+    <procedure id="queryScFsSelect" parameterMap="scfsselectParMap" resultMap="getScFsSelectRes">
+    	{call P_WS_SCFS_SELECT(?,?,?,?,?,?)}
+    </procedure>
+    
+    <parameterMap class="java.util.Map" id="scSendParMap">
+    	<parameter property="wsDm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="wsXmflDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="ywDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="fsCzyDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="wssplzszxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="sprCzyDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="oldWsspxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="rtnCode" javaType="java.lang.Integer" jdbcType="BIGINT" mode="OUT"/>
+    	<parameter property="rtnMess" javaType="java.lang.String" jdbcType="VARCHAR" mode="OUT"/>
+    </parameterMap>
+    
+    <procedure id="saveScSend" parameterMap="scSendParMap" >
+    	{call P_WS_SCFS(?,?,?,?,?,?,?,?,?)}
+    </procedure>
+    
+    <parameterMap class="java.util.Map" id="queryWssplzszxhParMap">
+    	<parameter property="wssplzszxh" javaType="java.lang.Long" jdbcType="INTEGER" mode="OUT"/>
+    	<parameter property="jgbm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="wsDm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="wsXmflDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    </parameterMap>
+    
+    <procedure id="queryWssplcszxh" parameterMap="queryWssplzszxhParMap" >
+    	{?=call F_WSSP_GET_SPLC_SZXH(?,?,?)}
+    </procedure>
+</sqlMap>

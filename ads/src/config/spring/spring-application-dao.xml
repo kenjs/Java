@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+
+
+    <!-- tomcat5: <bean id="wlfpDs" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">-->
+    <bean id="dataSource" class="org.apache.tomcat.dbcp.dbcp.BasicDataSource" destroy-method="close" >
+        <property name="driverClassName" value="${driver}"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+        <property name="maxActive" value="50" />
+        <property name="maxIdle" value="20"></property>
+        <property name="minIdle" value="5"></property>
+        <property name="maxWait" value="60000"></property>
+        <property name="validationQuery" value="select 1 from dual"/>
+    </bean>
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="configLocation" value="classpath:config/mybatis/sql-map-config.xml" />
+        <property name="mapperLocations" value="classpath:config/mybatis/t_*.xml" />
+        <property name="typeAliasesPackage" value="com.cy.driver.domain,com.cy.driver.bo" />
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager" />
+
+    <bean id="sqlSessionTemplateSimple" class="org.mybatis.spring.SqlSessionTemplate" scope="prototype">
+        <constructor-arg index="0" ref="sqlSessionFactory"/>
+        <!--更新采用单个模式 -->
+        <constructor-arg index="1" value="SIMPLE"/>
+    </bean>
+
+    <bean id="sqlSessionTemplateBatch" class="org.mybatis.spring.SqlSessionTemplate" scope="prototype">
+        <constructor-arg index="0" ref="sqlSessionFactory"/>
+        <!--更新采用批量模式 -->
+        <constructor-arg index="1" value="BATCH"/>
+    </bean>
+
+    <!-- 采用自动扫描方式创建Dao -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.cy.driver.dao"/>
+        <property name="annotationClass" value="org.springframework.stereotype.Repository"/>
+        <property name="sqlSessionTemplateBeanName" value="sqlSessionTemplateSimple"/>
+    </bean>
+
+   <!-- DAO start
+
+	<bean name="baseDao" class="com.cy.driver.common.dao.BaseDao">
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+	</bean>-->
+
+   <!-- DAO end -->
+
+   <!-- 用户DAO
+   <bean name="webUserInfoDao" class="com.cy.webUser.dao.imp.WebUserInfoDaoImp" parent="baseDao">
+   </bean>-->
+   <!-- App登录dao
+   <bean name="loginUserInfoDao" class="com.cy.driver.user.dao.impl.LoginUserInfoDaoImpl" parent="baseDao">
+   </bean> -->
+   <!-- 预约dao
+   <bean name="driverBusinessLineInfoDao" class="com.cy.driver.order.dao.impl.DriverBusinessLineInfoDaoImpl" parent="baseDao">
+   </bean> -->
+   <!-- 货源信息dao
+  <bean name="driverUserCargoInfoDao" class="com.cy.driver.user.dao.impl.DriverUserCargoInfoDaoImpl" parent="baseDao">
+  </bean> -->
+  <!-- 货源信息列表dao
+  <bean name="orderCargoInfoDao" class="com.cy.driver.cargo.dao.impl.OrderCargoInfoDaoImpl" parent="baseDao"></bean> -->
+  <!-- WEB司机线路dao
+  <bean name="driverLineInfoDao" class="com.cy.driver.line.dao.impl.DriverLineInfoDaoImpl" parent="baseDao"></bean> -->
+  <!-- 订单dao
+  <bean name="transactionInfoDao" class="com.cy.driver.transaction.dao.impl.TransactionInfoDaoImpl" parent="baseDao"></bean> -->
+  <!-- 所有报过价的订单dao
+  <bean name="quoteInfoDao" class="com.cy.driver.record.dao.impl.QuoteInfoDaoImpl" parent="baseDao"></bean> -->
+  <!-- 位置信息dao
+  <bean name="locationLastInfoDao" class="com.cy.driver.location.dao.impl.LocationLastInfoDaoImpl" parent="baseDao"></bean> -->
+  <!-- 货源评价
+  <bean name="driverUserAssessInfoDao" class="com.cy.driver.assess.dao.impl.DriverUserAssessInfoDaoImpl" parent="baseDao"></bean>
+ -->
+  <!-- 操作日志记录
+  <bean name="operationLogDao" class="com.cy.driver.operationLog.dao.impl.OperationLogDaoImpl" parent="baseDao" /> -->
+
+  <!-- web 用户
+  <bean name="webUserInfoDao" class="com.cy.driver.webUser.dao.impl.WebUserInfoDaoImpl" parent="baseDao" /> -->
+
+  <!-- 回单操作
+  <bean name="transactionReceiptPathDao" class="com.cy.driver.receipt.dao.impl.TransactionReceiptPathDaoImpl" parent="baseDao"/> -->
+
+  <!-- 合同车源
+  <bean name="pactDriverInfoDao" class="com.cy.driver.pactDriver.dao.impl.PactDriverInfoDaoImpl" parent="baseDao" /> -->
+
+  <!-- 司机手机信息
+  <bean name="driverTelephoneInfoDao" class="com.cy.driver.user.dao.impl.DriverTelephoneInfoDaoImpl" parent="baseDao" /> -->
+
+  <!-- 司机总业务数
+  <bean name="countDriverUserBusiDao" class="com.cy.driver.count.dao.impl.CountDriverUserBusiDaoImpl" parent="baseDao" />
+
+  <bean name="countSystemBusiDao" class="com.cy.driver.count.dao.impl.CountSystemBusiDaoImpl" parent="baseDao" /> -->
+</beans>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="IdentityVerifyLog" type="com.cy.dcts.common.bo.IdentityVerifyLog"/>
+	
+	<!-- 增 -->
+	<insert id="iBatisInsertIdentityVerifyLog" parameterClass="IdentityVerifyLog">
+		insert into t_identity_verify (operator_id,id_number,name,id_number_verify_result,name_verify_result,remark,create_time)
+		values (#operatorId#,#IDNumber#,#name#,#IDNumberVerifyResult#,#nameVerifyResult#,#remark#,sysdate())
+		<selectKey keyProperty="id" resultClass="Integer">
+			select last_insert_id() as id
+		</selectKey>
+	</insert>
+	
+	<!-- 查 -->
+	<select id="iBatisSelectIdentityVerifyLog" parameterClass="map" resultClass="com.cy.dcts.common.domain.IdentityVerifyLogDomain">
+		select id_number as IDNumber,
+				name as name,
+				id_number_verify_result as IDNumberVerifyResult,
+				name_verify_result as nameVerifyResult,
+				remark as remark,
+				create_time as createTime
+		from t_identity_verify
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="operatorId">
+				operator_id = #operatorId#
+			</isNotEmpty>
+		</dynamic>
+		order by id asc limit $curPage$,$pageSize$
+	</select>
+</sqlMap>

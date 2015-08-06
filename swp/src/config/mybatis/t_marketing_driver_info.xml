@@ -1,0 +1,728 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cy.swp.dao.MarketingDriverInfoDao">
+
+    <resultMap type="MarketingDriverInfo" id="marketing_driver_info_result" >
+        <result property="id" column="id"/>
+        <!-- 司机姓名 -->
+        <result property="name" column="name"/>
+        <!-- 手机号码 -->
+        <result property="mobilePhone" column="mobile_phone"/>
+        <!-- 手机号码2 -->
+        <result property="mobilePhone2" column="mobile_phone2"/>
+        <!-- 手机号码3 -->
+        <result property="mobilePhone3" column="mobile_phone3"/>
+        <!-- 主手机号码标注无效的次数 -->
+        <result property="markInvalidNums" column="mark_invalid_nums"/>
+        <!-- 注册司机id(当司机注册成功后，此id关联起来) -->
+        <result property="driverId" column="driver_id"/>
+        <!-- 车牌号(默认值"") -->
+        <result property="carNumber" column="car_number"/>
+        <!-- 车长(默认值"") -->
+        <result property="carLength" column="car_length"/>
+        <!-- 板-平板、高低板(默认值"") -->
+        <result property="carPlateType" column="car_plate_type"/>
+        <!-- 栏-高栏、低栏(默认值"") -->
+        <result property="carBarType" column="car_bar_type"/>
+        <!-- 运力-吨位(默认值"") -->
+        <result property="carWeight" column="car_weight"/>
+        <!-- 运力-体积(默认值"") -->
+        <result property="carCubage" column="car_cubage"/>
+        <!-- 车型（车长、车宽、板、栏、运力等合起来） -->
+        <result property="carTypes" column="car_types"/>
+        <!-- 实时客户等级(ABCD，默认值D) -->
+        <result property="realLevel" column="real_level"/>
+        <!-- 客户类别(1 2 3 4 5) -->
+        <result property="category" column="category"/>
+        <!-- 最近联系时间 -->
+        <result property="lastContactDate" column="last_contact_date"/>
+        <!-- 下次联系时间 -->
+        <result property="nextContactDate" column="next_contact_date"/>
+        <!-- 分配状态 0 待分配 1 分配中 2 已分配(默认值0) -->
+        <result property="allocateStatus" column="allocate_status"/>
+        <!-- 营销专员id(当分配状态为1或2时，此字段不能为空) -->
+        <result property="assisterId" column="assister_id"/>
+        <!-- 分配者id(指有权限进行客户分配的营销人员id) -->
+        <result property="distributerId" column="distribut_id"/>
+        <!-- 分配时间 -->
+        <result property="distributTime" column="distribut_time"/>
+        <!-- 常跑城市一 -->
+        <result property="oftenCity1" column="often_city1"/>
+        <!-- 常跑城市二 -->
+        <result property="oftenCity2" column="often_city2"/>
+        <!-- 常跑城市三 -->
+        <result property="oftenCity3" column="often_city3"/>
+        <!-- 常跑城市四 -->
+        <result property="oftenCity4" column="often_city4"/>
+        <!-- 常跑城市五 -->
+        <result property="oftenCity5" column="often_city5"/>
+        <!-- 常跑城市刘 -->
+        <result property="oftenCity6" column="often_city6"/>
+        <!-- 创建时间 -->
+        <result property="createTime" column="create_time"/>
+        <!-- 最后修改时间 -->
+        <result property="lastModifyTime" column="last_modify_time"/>
+        <!-- 0 未删除 1 已删除 -->
+        <result property="deleteFlag" column="delete_flag"/>
+        <!-- qq号码 -->
+        <result property="qqNumber" column="qq_number"/>
+        <!-- 号码是否有效：0 无效 1 有效 -->
+        <result property="phoneValid" column="phone_valid"/>
+        <!-- 是否有意向 0 无意向 1 有意向 -->
+        <result property="hasPurpose" column="has_purpose"/>
+        <!-- 是否营销人员发展的注册用户：0 否 1 是 -->
+        <result property="regThroughAssist" column="reg_through_assist"/>
+        <!-- 是否营销人员发展的注册用户：0 否 1 是 -->
+        <result property="authThroughAssist" column="auth_through_assist"/>
+    </resultMap>
+
+
+    <resultMap id="marketing_driver_info_domain" type="MarketingDriverInfoDomain">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="mobilePhone" column="mobile_phone"/>
+        <result property="mobilePhone2" column="mobile_phone2"/>
+        <result property="mobilePhone3" column="mobile_phone3"/>
+        <!--主手机号码标注无效的次数-->
+        <result property="markInvalidNums" column="mark_invalid_nums"/>
+        <result property="driverId" column="driver_id"/>
+        <result property="carNumber" column="car_number"/>
+        <result property="carLength" column="car_length"/>
+        <result property="carPlateType" column="car_plate_type"/>
+        <result property="carBarType" column="car_bar_type"/>
+        <result property="carWeight" column="car_weight"/>
+        <result property="carCubage" column="car_cubage"/>
+        <result property="carTypes" column="car_types"/>
+        <result property="realLevel" column="real_level"/>
+        <result property="category" column="category"/>
+        <result property="lastContactDate" column="last_contact_date"/>
+        <result property="nextContactDate" column="next_contact_date"/>
+        <result property="allocateStatus" column="allocate_status"/>
+        <result property="assisterId" column="assister_id"/>
+        <result property="distributerId" column="distributer_id"/>
+        <result property="distributTime" column="distribut_time"/>
+        <result property="oftenCity1" column="often_city1"/>
+        <result property="oftenCity2" column="often_city2"/>
+        <result property="oftenCity3" column="often_city3"/>
+        <result property="oftenCity4" column="often_city4"/>
+        <result property="oftenCity5" column="often_city5"/>
+        <result property="oftenCity6" column="often_city6"/>
+        <result property="createTime" column="create_time"/>
+        <result property="lastModifyTime" column="last_modify_time"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <!--营销专员名称-->
+        <result property="assisterName" column="assisterName"/>
+        <!--营销专员所属组： 0 未分组1 营销一组 2 营销二组 3 营销三组-->
+        <result property="joinGroup" column="joinGroup"/>
+        <!--分配者名称-->
+        <result property="distributerName" column="distributerName"/>
+        <!--最近使用时间-->
+        <result property="lastUserTime" column="lastUserTime"/>
+        <!--近15天使用次数-->
+        <result property="user15DayNum" column="user15DayNum"/>
+        <!--最近定位地点-->
+        <result property="lastLocation" column="lastLocation"/>
+        <!--最近定位时间-->
+        <result property="lastLocationTime" column="lastLocationTime"/>
+        <!--客户状态-->
+        <result property="customerType" column="customerType"/>
+        <!--客户分配申请表id-->
+        <result property="assisterApplyIds" column="assisterApplyIds"/>
+        <!--交易笔数-->
+        <result property="transactionCount" column="transactionCount"/>
+        <!--身份证-->
+        <result property="identityLicenseNum" column="IDENTITY_LICENSE_NUM"/>
+        <!--驾驶证路径-->
+        <result property="driversLicense" column="DRIVERS_LICENSE"/>
+        <!--行驶证路径-->
+        <result property="drivingLicense" column="DRIVING_LICENSE"/>
+        <!-- 注册时间 -->
+        <result property="reghtTime" column="reghtTime"/>
+        <!-- qq号码 -->
+        <result property="qqNumber" column="qq_number"/>
+        <!-- 号码是否有效：0 无效 1 有效 -->
+        <result property="phoneValid" column="phone_valid"/>
+        <!-- 是否有意向 0 无意向 1 有意向 -->
+        <result property="hasPurpose" column="has_purpose"/>
+        <!-- 是否营销人员发展的注册用户：0 否 1 是 -->
+        <result property="regThroughAssist" column="reg_through_assist"/>
+        <!-- 是否营销人员发展的注册用户：0 否 1 是 -->
+        <result property="authThroughAssist" column="auth_through_assist"/>
+    </resultMap>
+
+
+
+
+    <!--根据手机号码查询 queryByPhone-->
+    <select id="queryByPhone" parameterType="java.util.Map" resultMap="marketing_driver_info_domain">
+        select a.id ,a.name ,a.mobile_phone ,a.driver_id
+        ,a.car_number ,a.real_level ,a.category ,a.mark_invalid_nums
+        ,date_format(a.last_contact_date,'%Y-%m-%d %T') last_contact_date
+        ,date_format(a.next_contact_date,'%Y-%m-%d %T') next_contact_date
+        ,a.allocate_status ,a.assister_id
+        ,(select ifnull(sum(d.initiative_links),0)
+        from t_dayrecord_driver_active d
+        where d.driver_id = a.driver_id
+        and d.record_day between date_add(curdate(), INTERVAL -15 DAY) and curdate()) as user15DayNum
+        ,e.location as lastLocation
+        ,date_format(e.last_time,'%Y-%m-%d %T') as lastLocationTime
+        ,f.submit_type as customerType
+        ,date_format(f.used_recent_time,'%Y-%m-%d %T') lastUserTime
+        ,b.name as assisterName ,b.join_group as joinGroup
+        from t_marketing_driver_info a
+        left join t_marketing_user_info b
+        on a.assister_id = b.id
+        left join t_location_collect_last_info e
+        on e.driver_id = a.driver_id
+        left join t_driver_user_info f
+        on f.id = a.driver_id
+        where a.mobile_phone = #{mobilePhone}
+        and a.delete_flag = 0
+    </select>
+
+    <!--批量新增 addBach-->
+    <insert id="addBach" parameterType="java.util.List">
+        insert into t_marketing_driver_info
+        (name,mobile_phone,driver_id,car_number,real_level,allocate_status,assister_id,create_time,distribut_time)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.name},#{item.mobilePhone},#{item.driverId},#{item.carNumber},#{item.realLevel},#{item.allocateStatus},#{item.assisterId},sysdate()
+            <if test=" item.allocateStatus == 2 ">,sysdate()</if>
+            <if test=" item.allocateStatus != 2 ">,null</if>
+            )
+        </foreach>
+    </insert>
+
+
+    <!-- 修改客户司机信息（常跑城市） updateMarketingDriverInfoSetOftenCity -->
+    <update id="updateMarketingDriverInfoSetOftenCity" parameterType="MarketingDriverInfo">
+        UPDATE t_marketing_driver_info SET
+            often_city1 = #{oftenCity1} ,
+            often_city2 = #{oftenCity2} ,
+            often_city3 = #{oftenCity3} ,
+            often_city4 = #{oftenCity4} ,
+            often_city5 = #{oftenCity5} ,
+            often_city6 = #{oftenCity6} ,
+        last_modify_time = sysdate()
+        WHERE ID = #{id}
+    </update>
+
+    <!-- 修改客户司机信息（司机姓名、qq号码、车牌号、车型、运力（重量、体积）姓名、删除状态） updateMarketingDriverInfoSetDriverInfo -->
+    <update id="updateMarketingDriverInfoSetDriverInfo" parameterType="MarketingDriverInfo">
+        UPDATE t_marketing_driver_info SET
+        <if test="null != name and '' != name">
+            name = #{name} ,
+        </if>
+        <if test="null != qqNumber and '' != qqNumber">
+            qq_number = #{qqNumber} ,
+        </if>
+        <if test="null != carNumber and '' != carNumber">
+            car_number = #{carNumber} ,
+        </if>
+        <if test="null != carLength and '' != carLength">
+            car_length = #{carLength} ,
+        </if>
+        <if test="null != carPlateType and '' != carPlateType">
+            car_plate_type = #{carPlateType} ,
+        </if>
+        <if test="null != carBarType and '' != carBarType">
+            car_bar_type = #{carBarType} ,
+        </if>
+        <if test="null != carWeight and '' != carWeight">
+            car_weight = #{carWeight} ,
+        </if>
+        <if test="null != carCubage and '' != carCubage">
+            car_cubage = #{carCubage} ,
+        </if>
+        <if test="null != carTypes and '' != carTypes">
+            car_types = #{carTypes} ,
+        </if>
+        <if test="null != deleteFlag">
+            delete_flag = #{deleteFlag} ,
+        </if>
+        last_modify_time = sysdate()
+        WHERE ID = #{id}
+    </update>
+
+    <!-- 修改客户司机信息（最近联系时间、下次联系时间） updateMarketingDriverInfoSetContactDate -->
+    <update id="updateMarketingDriverInfoSetContactDate" parameterType="MarketingDriverInfo">
+        UPDATE t_marketing_driver_info SET
+        last_contact_date = sysdate(),
+        next_contact_date = #{nextContactDate},
+        has_purpose = #{hasPurpose}
+        WHERE ID = #{id}
+    </update>
+
+    <!-- 修改客户司机信息（客户类别(1 2 3 4 5)） updateMarketingDriverInfoSetCategory -->
+    <update id="updateMarketingDriverInfoSetCategory" parameterType="MarketingDriverInfo">
+        UPDATE t_marketing_driver_info SET
+        category = #{category}
+        WHERE ID = #{id}
+    </update>
+
+    <!-- 修改客户司机信息（手机号码2、手机号码3） updateMarketingDriverInfoSetMobilePhone -->
+    <update id="updateMarketingDriverInfoSetMobilePhone" parameterType="MarketingDriverInfo">
+        UPDATE t_marketing_driver_info SET
+            mobile_phone2 = #{mobilePhone2},
+            mobile_phone3 = #{mobilePhone3},
+            last_modify_time = sysdate()
+        WHERE ID = #{id}
+    </update>
+
+    <!-- 修改客户司机信息,手机号码无效（主手机号码标注无效的次数+1、营销人员Id清空、分配状态修改为待分配0、分配者id清空） updateMarketingDriverInfoSetMarkInvalidNums -->
+    <update id="updateMarketingDriverInfoSetMarkInvalidNums" parameterType="MarketingDriverInfo">
+        UPDATE t_marketing_driver_info SET
+        mark_invalid_nums = mark_invalid_nums + 1,
+        phone_valid = 0,
+        valid_change_time = sysdate(),
+        allocate_status = #{allocateStatus},
+        assister_id = #{assisterId},
+        distributer_id = #{distributerId}
+        WHERE ID = #{id}
+    </update>
+
+    <!--单条新增-->
+    <insert id="add" parameterType="MarketingDriverInfoDomain" useGeneratedKeys="true" keyProperty="id">
+        insert into t_marketing_driver_info
+        (name,mobile_phone,driver_id,car_number,real_level,allocate_status,assister_id,create_time,car_length,car_Plate_Type,car_bar_type,distribut_time)
+        values
+        (#{name},#{mobilePhone},#{driverId},#{carNumber},#{realLevel},#{allocateStatus},#{assisterId},sysdate(),#{carLength},#{carPlateType},#{carBarType}
+        <if test=" allocateStatus == 2 ">,sysdate()</if>
+        <if test=" allocateStatus != 2 ">,null</if>
+        )
+    </insert>
+
+    <!--根据id、分配状态allocate_status单条修改-->
+    <update id="updateById" parameterType="java.util.Map">
+        update t_marketing_driver_info a set
+        a.allocate_status = #{allocateStatus}
+        <if test="assisterId != null">
+            ,a.assister_id = #{assisterId}
+        </if>
+        <if test="distributerId != null">
+            ,a.distributer_id = #{distributerId}
+            ,a.distribut_time = sysdate()
+        </if>
+        where a.allocate_status = #{allocateStatusOld} and a.id = #{id}
+    </update>
+
+    <!--根据id、分配状态allocate_status批量修改 同意或直接分配的修改-->
+    <update id="updateBachById" parameterType="java.util.Map">
+        update t_marketing_driver_info a set
+        a.allocate_status = #{allocateStatus}
+        <if test="assisterId != null">
+          ,a.assister_id = #{assisterId}
+        </if>
+        ,a.distributer_id = #{distributerId}
+        ,a.distribut_time = sysdate()
+        <if test="regThroughAssist != null">
+            ,a.reg_through_assist = #{regThroughAssist}
+        </if>
+        <if test="authThroughAssist != null">
+            ,a.auth_through_assist = #{authThroughAssist}
+        </if>
+        <if test="phoneValid != null">
+            ,a.phone_valid = #{phoneValid}
+            ,a.valid_change_time = sysdate()
+        </if>
+        where a.allocate_status = #{allocateStatusOld}
+        and a.id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <!--根据id、分配状态allocate_status批量修改 审核环节直接分配的修改-->
+    <update id="updateBachByIdDirect" parameterType="java.util.Map">
+        update t_marketing_driver_info a set
+        a.allocate_status = #{allocateStatus}
+        ,a.distributer_id = #{distributerId}
+        ,a.distribut_time = sysdate()
+        ,a.reg_through_assist = if(a.assister_id = #{assisterId},a.reg_through_assist,0)
+        ,a.auth_through_assist = if(a.assister_id = #{assisterId},a.auth_through_assist,0)
+        ,a.phone_valid = #{phoneValid}
+        ,a.valid_change_time = sysdate()
+        ,a.assister_id = #{assisterId}
+        where a.allocate_status = #{allocateStatusOld}
+        and a.id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <!--根据id、分配状态allocate_status批量修改 不同意的修改-->
+    <update id="updateBachByIdDisagree" parameterType="java.util.Map">
+        update t_marketing_driver_info a set
+        a.allocate_status = #{allocateStatus}
+        ,a.assister_id = #{assisterId}
+        <if test="distributerId != null">
+            ,a.distributer_id = #{distributerId}
+            ,a.distribut_time = sysdate()
+        </if>
+        <if test="regThroughAssist != null">
+            ,a.reg_through_assist = #{regThroughAssist}
+        </if>
+        <if test="authThroughAssist != null">
+            ,a.auth_through_assist = #{authThroughAssist}
+        </if>
+        where a.allocate_status = #{allocateStatusOld}
+        and a.id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <!--客户分配的列表查询-->
+    <select id="queryListPage" parameterType="java.util.Map" resultMap="marketing_driver_info_domain">
+        select a.id ,a.name ,a.mobile_phone ,a.mark_invalid_nums
+        ,a.driver_id ,a.car_number ,a.real_level ,a.category
+        ,date_format(a.last_contact_date,'%Y-%m-%d %T') last_contact_date
+        ,date_format(a.next_contact_date,'%Y-%m-%d %T') next_contact_date
+        ,a.assister_id ,a.distributer_id
+        ,b.name as assisterName ,b.join_group as joinGroup
+        ,(select ifnull(sum(d.initiative_links),0)
+        from t_dayrecord_driver_active d
+        where d.driver_id = a.driver_id
+        and d.record_day between date_add(curdate(), INTERVAL -15 DAY) and curdate()) as user15DayNum
+        ,e.location as lastLocation
+        ,date_format(e.last_time,'%Y-%m-%d %T') as lastLocationTime
+        ,f.submit_type as customerType
+        ,date_format(f.used_recent_time,'%Y-%m-%d %T') lastUserTime
+        <if test="orderType == 1">
+            ,c.id as assisterApplyIds
+        </if>
+        from t_marketing_driver_info a
+        left join t_marketing_user_info b
+        on a.assister_id = b.id
+        left join t_location_collect_last_info e
+        on e.driver_id = a.driver_id
+        left join t_driver_user_info f
+        on f.id = a.driver_id
+        <if test="orderType == 1">
+            left join t_marketing_assister_apply c
+            on c.customer_id = a.id and c.assister_id = a.assister_id
+            and c.audit_status = 0 and c.customer_kind = 2
+        </if>
+        where 1=1
+        <if test="deleteFlag != null">
+            and a.delete_flag = #{deleteFlag}
+        </if>
+        <if test="allocateStatus != null">
+            and a.allocate_status = #{allocateStatus}
+        </if>
+        <if test="phoneValid != null">
+            and a.phone_valid = #{phoneValid}
+        </if>
+        <if test="realLevel != null and realLevel != ''">
+            and a.real_level = #{realLevel}
+        </if>
+        <if test="category != null and category != ''">
+            and a.category = #{category}
+        </if>
+        <if test="assisterId != null">
+            and a.assister_id = #{assisterId}
+        </if>
+        <if test="mobilePhone != null and mobilePhone != ''">
+            and a.mobile_phone like CONCAT('%',#{mobilePhone},'%')
+        </if>
+        <if test="carNumber != null and carNumber != ''">
+            and a.car_number like CONCAT('%',#{carNumber},'%')
+        </if>
+        <if test="name != null and name != ''">
+            and a.name like CONCAT('%',#{name},'%')
+        </if>
+        <if test="carLength != null and carLength != ''">
+            and a.car_length = #{carLength}
+        </if>
+        <if test="carPlateType != null and carPlateType != ''">
+            and a.car_plate_type = #{carPlateType}
+        </if>
+        <if test="carBarType != null and carBarType != ''">
+            and a.car_bar_type = #{carBarType}
+        </if>
+        <if test="carWeight != null and carWeight != ''">
+            and a.car_weight = #{carWeight}
+        </if>
+        <if test="carCubage != null and carCubage != ''">
+            and a.car_cubage = #{carCubage}
+        </if>
+        <if test="optRegister != null">
+            <if test="optRegister == 0">
+                and a.driver_id is null
+            </if>
+            <if test="optRegister == 1">
+                and a.driver_id > 0
+            </if>
+        </if>
+        <if test="orderType == 0"> order by a.create_time desc </if>
+        <if test="orderType == 2"> order by a.distribut_time desc </if>
+        <if test="orderType == 1"> order by c.apply_date desc </if>
+        <if test="orderType == 3"> order by a.distribut_time desc </if>
+        limit #{curPage},#{pageSize}
+    </select>
+
+    <!--客户分配条数查询-->
+    <select id="queryListCount" parameterType="java.util.Map" resultType="int">
+        select
+        count(a.id)
+        from t_marketing_driver_info a
+        where 1=1
+        <if test="deleteFlag != null">
+            and a.delete_flag = #{deleteFlag}
+        </if>
+        <if test="allocateStatus != null">
+            and a.allocate_status = #{allocateStatus}
+        </if>
+        <if test="phoneValid != null">
+            and a.phone_valid = #{phoneValid}
+        </if>
+        <if test="realLevel != null and realLevel != ''">
+            and a.real_level = #{realLevel}
+        </if>
+        <if test="category != null and category != ''">
+            and a.category = #{category}
+        </if>
+        <if test="assisterId != null">
+            and a.assister_id = #{assisterId}
+        </if>
+        <if test="mobilePhone != null and mobilePhone != ''">
+            and a.mobile_phone like CONCAT('%',#{mobilePhone},'%')
+        </if>
+        <if test="carNumber != null and carNumber != ''">
+            and a.car_number like CONCAT('%',#{carNumber},'%')
+        </if>
+        <if test="name != null and name != ''">
+            and a.name like CONCAT('%',#{name},'%')
+        </if>
+        <if test="carLength != null and carLength != ''">
+            and a.car_length = #{carLength}
+        </if>
+        <if test="carPlateType != null and carPlateType != ''">
+            and a.car_plate_type = #{carPlateType}
+        </if>
+        <if test="carBarType != null and carBarType != ''">
+            and a.car_bar_type = #{carBarType}
+        </if>
+        <if test="carWeight != null and carWeight != ''">
+            and a.car_weight = #{carWeight}
+        </if>
+        <if test="carCubage != null and carCubage != ''">
+            and a.car_cubage = #{carCubage}
+        </if>
+        <if test="optRegister != null">
+            <if test="optRegister == 0">
+                and a.driver_id is null
+            </if>
+            <if test="optRegister == 1">
+                and a.driver_id > 0
+            </if>
+        </if>
+    </select>
+
+    <!--未联系客户中所有客户的列表查询-->
+    <select id="queryNoContAllListPage" parameterType="java.util.Map" resultMap="marketing_driver_info_domain">
+        select a.id ,a.name ,a.mobile_phone
+        ,a.driver_id ,a.car_number ,a.real_level ,a.category
+        ,date_format(a.last_contact_date,'%Y-%m-%d %T') last_contact_date
+        ,date_format(a.next_contact_date,'%Y-%m-%d %T') next_contact_date
+        ,a.assister_id ,a.distributer_id
+        ,(select ifnull(sum(d.initiative_links),0)
+        from t_dayrecord_driver_active d
+        where d.driver_id = a.driver_id
+        and d.record_day between date_add(curdate(), INTERVAL -15 DAY) and curdate()) as user15DayNum
+        ,f.submit_type as customerType
+        ,date_format(f.used_recent_time,'%Y-%m-%d %T') lastUserTime
+        from t_marketing_driver_info a
+        left join t_driver_user_info f
+        on f.id = a.driver_id
+        where a.assister_id = #{assisterId}
+        and a.delete_flag = #{deleteFlag}
+        and
+        (a.last_contact_date <![CDATA[ < ]]> date_add(curdate(), INTERVAL #{monNum} MONTH)
+        or a.last_contact_date is null)
+        <if test="mobilePhone != null and mobilePhone != ''">
+            and a.mobile_phone like CONCAT('%',#{mobilePhone},'%')
+        </if>
+        <if test="carNumber != null and carNumber != ''">
+            and a.car_number like CONCAT('%',#{carNumber},'%')
+        </if>
+        <if test="name != null and name != ''">
+            and a.name like CONCAT('%',#{name},'%')
+        </if>
+        order by a.last_contact_date desc
+        limit #{curPage},#{pageSize}
+    </select>
+
+    <!--未联系客户中所有客户条数查询-->
+    <select id="queryNoContAllListCount" parameterType="java.util.Map" resultType="int">
+        select
+        count(a.id)
+        from t_marketing_driver_info a
+        where a.assister_id = #{assisterId}
+        and a.delete_flag = #{deleteFlag}
+        and
+        (a.last_contact_date <![CDATA[ < ]]> date_add(curdate(), INTERVAL #{monNum} MONTH)
+        or a.last_contact_date is null)
+        <if test="mobilePhone != null and mobilePhone != ''">
+            and a.mobile_phone like CONCAT('%',#{mobilePhone},'%')
+        </if>
+        <if test="carNumber != null and carNumber != ''">
+            and a.car_number like CONCAT('%',#{carNumber},'%')
+        </if>
+        <if test="name != null and name != ''">
+            and a.name like CONCAT('%',#{name},'%')
+        </if>
+    </select>
+
+    <!--未联系客户中预约客户的列表查询-->
+    <select id="queryNoContMakListPage" parameterType="java.util.Map" resultMap="marketing_driver_info_domain">
+        select a.id ,a.name ,a.mobile_phone
+        ,a.driver_id ,a.car_number ,a.real_level ,a.category
+        ,date_format(a.last_contact_date,'%Y-%m-%d %T') last_contact_date
+        ,date_format(a.next_contact_date,'%Y-%m-%d %T') next_contact_date
+        ,a.assister_id ,a.distributer_id
+        ,(select ifnull(sum(d.initiative_links),0)
+        from t_dayrecord_driver_active d
+        where d.driver_id = a.driver_id
+        and d.record_day between date_add(curdate(), INTERVAL -15 DAY) and curdate()) as user15DayNum
+        ,f.submit_type as customerType
+        ,date_format(f.used_recent_time,'%Y-%m-%d %T') lastUserTime
+        from t_marketing_driver_info a
+        left join t_driver_user_info f
+        on f.id = a.driver_id
+        where a.assister_id = #{assisterId}
+        and a.delete_flag = #{deleteFlag}
+        and a.next_contact_date between #{startTime} and #{endTime}
+        and a.last_contact_date <![CDATA[ <= ]]> a.next_contact_date
+        <if test="mobilePhone != null and mobilePhone != ''">
+            and a.mobile_phone like CONCAT('%',#{mobilePhone},'%')
+        </if>
+        <if test="carNumber != null and carNumber != ''">
+            and a.car_number like CONCAT('%',#{carNumber},'%')
+        </if>
+        <if test="name != null and name != ''">
+            and a.name like CONCAT('%',#{name},'%')
+        </if>
+        order by a.next_contact_date desc
+        limit #{curPage},#{pageSize}
+    </select>
+
+    <!--未联系客户中预约客户条数查询-->
+    <select id="queryNoContMakListCount" parameterType="java.util.Map" resultType="int">
+        select
+        count(a.id)
+        from t_marketing_driver_info a
+        where a.assister_id = #{assisterId}
+        and a.delete_flag = #{deleteFlag}
+        and a.next_contact_date between #{startTime} and #{endTime}
+        and a.last_contact_date <![CDATA[ < ]]> a.next_contact_date
+        <if test="mobilePhone != null and mobilePhone != ''">
+            and a.mobile_phone like CONCAT('%',#{mobilePhone},'%')
+        </if>
+        <if test="carNumber != null and carNumber != ''">
+            and a.car_number like CONCAT('%',#{carNumber},'%')
+        </if>
+        <if test="name != null and name != ''">
+            and a.name like CONCAT('%',#{name},'%')
+        </if>
+    </select>
+
+    <!-- 根据id获取司机客户信息(已注册) -->
+    <select id="queryMarketingDriverInfoDomainById" parameterType="Integer" resultMap="marketing_driver_info_domain">
+        select
+        a.id,a.driver_id,t.name,t.code as mobile_phone,a.mobile_phone2,a.mobile_phone3,a.mark_invalid_nums,t.car_number,
+        t.car_length,t.car_plate_type,t.car_bar_type,t.car_weight,t.car_cubage,t.car_types,a.real_level,
+        a.category,date_format(a.last_contact_date,'%Y-%m-%d %T') last_contact_date,
+        date_format(a.next_contact_date,'%Y-%m-%d %H:%i') next_contact_date,
+        a.assister_id,a.often_city1,a.often_city2,a.often_city3,a.often_city4,a.often_city5,a.often_city6,
+        date_format(t.create_time,'%Y-%m-%d') create_time,
+        date_format(t.used_recent_time,'%Y-%m-%d') lastUserTime,
+        (select COUNT(*) from t_transaction_info f where f.driver_id = a.driver_id ) transactionCount,
+        t.IDENTITY_LICENSE_NUM,t.DRIVERS_LICENSE,t.DRIVING_LICENSE,t.SUBMIT_TYPE as customerType,
+        a.qq_number,a.phone_valid,a.has_purpose
+        from
+        t_marketing_driver_info a,t_driver_user_info t
+        where  t.id = a.driver_id
+        AND a.id = #{id}
+    </select>
+
+
+    <!-- 根据driverId获取司机活跃信息(已注册) -->
+    <select id="queryDriverInfoDomainByDriverId" parameterType="Integer" resultMap="marketing_driver_info_domain">
+        select
+        date_format(t.create_time,'%Y-%m-%d')as reghtTime,
+        (select ifnull(sum(d.initiative_links),0)
+        from t_dayrecord_driver_active d
+        where d.driver_id = t.id
+        and d.record_day between date_add(curdate(), INTERVAL -15 DAY) and curdate()) as user15DayNum,
+        date_format(t.used_recent_time,'%Y-%m-%d') as lastUserTime,
+        (select t1.location from t_location_collect_last_info t1 where t1.driver_id = t.id) as lastLocation,
+        (select date_format(t1.last_time,'%Y-%m-%d %T') from t_location_collect_last_info t1 where t1.driver_id = t.id) as lastLocationTime
+        from t_driver_user_info t
+        where t.id = #{driverId}
+    </select>
+
+    <!-- 根据id获取司机客户信息(未注册) -->
+    <select id="queryMarketingDriverInfoDomainNoById" parameterType="Integer" resultMap="marketing_driver_info_domain">
+        select a.id,a.name,a.mobile_phone,a.mobile_phone2,a.mobile_phone3,a.mark_invalid_nums,a.car_number,
+        a.car_length,a.car_plate_type,a.car_bar_type,a.car_weight,a.car_cubage,a.car_types,a.real_level,
+        a.category,date_format(a.last_contact_date,'%Y-%m-%d %T') last_contact_date,
+        date_format(a.next_contact_date,'%Y-%m-%d %H:%i') next_contact_date,
+        a.assister_id,a.often_city1,a.often_city2,a.often_city3,a.often_city4,a.often_city5,a.often_city6,a.qq_number,a.phone_valid,a.has_purpose
+        from t_marketing_driver_info a
+        where a.id = #{id}
+    </select>
+
+    <!--营销人员分配申请的修改-->
+    <update id="updateBachApplyById" parameterType="java.util.Map">
+        update t_marketing_driver_info set
+        allocate_status = #{allocateStatus}
+        ,assister_id = #{assisterId}
+        where allocate_status = 0
+        and id in
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <!--根据id查询-->
+    <select id="queryById" resultMap="marketing_driver_info_domain">
+        select
+        a.id ,a.allocate_status ,a.delete_flag
+        from t_marketing_driver_info a
+        where a.id = #{id}
+    </select>
+
+    <!--根据id的in查询-->
+    <select id="queryByIdIn" parameterType="java.util.Map" resultMap="marketing_driver_info_domain">
+        select a.id ,a.name ,a.mobile_phone ,a.driver_id
+        ,a.car_number ,a.real_level ,a.category ,a.mark_invalid_nums
+        ,date_format(a.last_contact_date,'%Y-%m-%d %T') last_contact_date
+        ,date_format(a.next_contact_date,'%Y-%m-%d %T') next_contact_date
+        ,a.allocate_status ,a.assister_id
+        ,(select ifnull(sum(d.initiative_links),0)
+        from t_dayrecord_driver_active d
+        where d.driver_id = a.driver_id
+        and d.record_day between date_add(curdate(), INTERVAL -15 DAY) and curdate()) as user15DayNum
+        ,e.location as lastLocation
+        ,date_format(e.last_time,'%Y-%m-%d %T') as lastLocationTime
+        ,f.submit_type as customerType
+        ,date_format(f.used_recent_time,'%Y-%m-%d %T') lastUserTime
+        from t_marketing_driver_info a
+        left join t_location_collect_last_info e
+        on e.driver_id = a.driver_id
+        left join t_driver_user_info f
+        on f.id = a.driver_id
+        where a.delete_flag = 0
+        <if test="allocateStatus != null">
+            and a.allocate_status = #{allocateStatus}
+        </if>
+        and a.id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        order by a.create_time desc
+    </select>
+</mapper>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.dzgl.dao.QySpwsXmflMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectQySpwsXmflByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.dzgl.domain.QySpwsXmflDomain">
+		     select a.XMFL_DJXH    as xmflDjxh,
+                 a.JGBM         as jgbm,
+                 a.WS_DM        as wsDm,
+                 a.XMFLMC       as xmflmc,
+                 a.YXBZ         as yxbz,
+                 a.CJR_CZY_DJXH as cjrCzyDjxh,
+                 (select b.mc from Qy_Rydj b where b.czy_djxh=a.cjr_czy_djxh) as cjrMc,
+                 a.CJRQ         as cjrq,
+                 a.XGR_CZY_DJXH as xgrCzyDjxh,
+                 (select b.mc from Qy_Rydj b where b.czy_djxh=a.xgr_czy_djxh) as xgrMc,
+                 a.XGRQ         as xgrq
+             from QY_SPWS_XMFL a 
+             	where a.XMFL_DJXH=#XmflDjxh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertQySpwsXmfl"  parameterClass="com.cy.common.bo.QySpwsXmfl">
+		<selectKey keyProperty="xmflDjxh" resultClass="string" type="pre"> 
+			select SEQ_XMFL_DJXH.nextval as xmflDjxh from dual 
+		</selectKey> 
+		insert into QY_SPWS_XMFL(XMFL_DJXH,JGBM,WS_DM,XMFLMC,YXBZ,
+		CJR_CZY_DJXH,CJRQ,XGR_CZY_DJXH,XGRQ)
+		values(#xmflDjxh:NUMERIC#,#jgbm:NUMERIC#,#wsDm:VARCHAR#,#xmflmc:VARCHAR#,#yxbz:VARCHAR#,
+		#cjrCzyDjxh:NUMERIC#,to_date(#cjrq:DATE#,'yyyy-MM-dd'),#xgrCzyDjxh:NUMERIC#,to_date(#xgrq:DATE#,'yyyy-MM-dd'))
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateQySpwsXmflByKey" parameterClass="com.cy.common.bo.QySpwsXmfl">
+        update QY_SPWS_XMFL set XMFL_DJXH=#xmflDjxh#,JGBM=#jgbm#,WS_DM=#wsDm#,XMFLMC=#xmflmc#,YXBZ=#yxbz#,
+		CJR_CZY_DJXH=#cjrCzyDjxh#,CJRQ=to_date(#cjrq#, 'YYYY-MM-DD'),XGR_CZY_DJXH=#xgrCzyDjxh#,XGRQ=to_date(#xgrq#, 'YYYY-MM-DD') where XMFL_DJXH=#xmflDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteQySpwsXmflByKey" parameterClass="java.util.Map">
+		update QY_SPWS_XMFL set yxbz='N' where XMFL_DJXH=#xmflDjxh#
+    </delete>
+</sqlMap>

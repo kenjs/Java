@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<!-- 新增交易状态历史 -->
+	<insert id="iBatisInsertTransactionLastInfo" parameterClass="com.cy.common.bo.TransactionLastInfoBo">
+		insert into t_transaction_last_info (CARGO_ID,DRIVER_ID,TRANSACTION_ID,START,REMARK,CREATE_TIME)
+		select t.CARGO_ID,t.DRIVER_ID,t.ID,t.TRADE_START,t.REMARK,sysdate() from t_transaction_info t where t.ID = #id#		
+		<selectKey keyProperty="id" resultClass="Integer">
+			select last_insert_id() as id
+		</selectKey> 
+	</insert>
+</sqlMap>

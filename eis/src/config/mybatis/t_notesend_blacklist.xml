@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.interfaceService.dao.NotesendBlacklistDao">
+
+    <resultMap id="notesend_blacklist" type="NotesendBlacklist">
+        <result  property="id" column="id" />
+        <result  property="mobilephone" column="mobilephone" />
+        <result  property="currentIsreg" column="current_isreg" />
+        <result  property="intoCause" column="into_cause" />
+        <result  property="blackKind" column="black_kind" />
+        <result  property="deletedFlag" column="deleted_flag" />
+        <result  property="createTime" column="create_time" />
+    </resultMap>
+
+    <!-- 根据司机ID查找司机信息 -->
+    <select id="queryNotesendBlacklistMap" parameterType="map" resultMap="notesend_blacklist">
+        select
+        t.id,t.current_isreg,
+        t.mobilephone,t.into_cause,
+        t.black_kind,t.deleted_flag,
+        t.create_time
+        from t_notesend_blacklist t
+        where t.mobilephone = #{mobilephone}
+        and t.disable_note_type = #{disableNoteType}
+        and t.deleted_flag = #{deletedFlag}
+    </select>
+
+    <!-- 根据司机ID查找司机信息 -->
+    <select id="queryNotesendBlacklist" parameterType="String" resultMap="notesend_blacklist">
+        select
+        t.id,t.current_isreg,
+        t.mobilephone,t.into_cause,
+        t.black_kind,t.deleted_flag,
+        t.create_time
+        from t_notesend_blacklist t
+        where t.mobilephone = #{mobilephone}
+    </select>
+    
+
+</mapper>

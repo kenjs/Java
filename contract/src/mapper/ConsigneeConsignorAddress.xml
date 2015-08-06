@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<!--  -->
+<sqlMap >
+ <typeAlias type="tf56.contract.domain.ConsigneeConsignorAddress" alias="consigneeConsignorAddress"/>
+ <resultMap id="consigneeConsignorAddressFieldMap" class="consigneeConsignorAddress">
+  <result column="consigneeConsignorAddressId" property="consigneeconsignoraddressid" jdbcType="VARCHAR" />   <!--  -->
+  <result column="fromPartyId" property="frompartyid" jdbcType="VARCHAR" />   <!-- 会员ID -->
+  <result column="toPartyId" property="topartyid" jdbcType="VARCHAR" />   <!-- 子会员ID -->
+  <result column="consigneeOrConsignor" property="consigneeorconsignor" jdbcType="VARCHAR" />   <!--  -->
+  <result column="checked" property="checked" jdbcType="VARCHAR" />   <!--  -->
+  <result column="consignee" property="consignee" jdbcType="VARCHAR" />   <!--  -->
+  <result column="linkMan" property="linkman" jdbcType="VARCHAR" />   <!--  -->
+  <result column="mobileNumber" property="mobilenumber" jdbcType="VARCHAR" />   <!-- 手机号 -->
+  <result column="telephoneNumber" property="telephonenumber" jdbcType="VARCHAR" />   <!--  -->
+  <result column="province" property="province" jdbcType="VARCHAR" />   <!--  -->
+  <result column="city" property="city" jdbcType="VARCHAR" />   <!-- 市 -->
+  <result column="region" property="region" jdbcType="VARCHAR" />   <!-- 区县 -->
+  <result column="town" property="town" jdbcType="VARCHAR" />   <!--  -->
+  <result column="inputDate" property="inputdate" jdbcType="VARCHAR" />   <!-- 输入日期 -->
+  <result column="inputMan" property="inputman" jdbcType="VARCHAR" />   <!-- 输入人 -->
+ </resultMap>
+
+ <!-- 新增记录 -->
+ <insert id="iBatisInsertConsigneeConsignorAddress" parameterClass="consigneeConsignorAddress">
+		insert into ConsigneeConsignorAddress (fromPartyId,toPartyId,consigneeOrConsignor,checked,consignee,linkMan,mobileNumber,telephoneNumber,helpCode,province,city,region,town,inputDate,inputMan)
+		 values (#frompartyid:VARCHAR#,#topartyid:VARCHAR#,#consigneeorconsignor:VARCHAR#,#checked:VARCHAR#,#consignee:VARCHAR#,#linkman:VARCHAR#,#mobilenumber:VARCHAR#,#telephonenumber:VARCHAR#,
+		 #helpcode:VARCHAR#,#province:VARCHAR#,#city:VARCHAR#,#region:VARCHAR#,#town:VARCHAR#,#inputdate:VARCHAR#,#inputman:VARCHAR#)
+		<selectKey resultClass="String" keyProperty="consigneeconsignoraddressid">
+			select last_insert_id() as id
+		</selectKey>
+</insert>
+
+ <!-- 删除用户对象 -->
+ <delete id="iBatisDeleteConsigneeConsignorAddress" parameterClass="java.util.HashMap">
+  delete from ConsigneeConsignorAddress where consigneeConsignorAddressId=#consigneeconsignoraddressid#
+ </delete>
+
+ <!-- 更新用户对象  author:wei.huang-->
+ <update id="iBatisUpdateConsigneeConsignorAddress" parameterClass="consigneeConsignorAddress">
+  update ConsigneeConsignorAddress set checked=#checked:VARCHAR#,linkMan=#linkman:VARCHAR#,mobileNumber=#mobilenumber:VARCHAR#,telephoneNumber=#telephonenumber:VARCHAR#,
+  helpCode=#helpcode:VARCHAR#,province=#province:VARCHAR#,city=#city:VARCHAR#,region=#region:VARCHAR#,town=#town:VARCHAR# 
+	<dynamic>
+	    <isNotEmpty prepend="," property="consignee">  
+	        consignee=#consignee:VARCHAR#
+	    </isNotEmpty>
+    </dynamic>
+   where consigneeConsignorAddressId=#consigneeconsignoraddressid:VARCHAR# 
+ </update>
+ 
+<!-- 修改指定记录的checked值 author:wei.huang -->
+<update id="iBatisUpdateAddressChecked" parameterClass="java.util.HashMap">
+	update ConsigneeConsignorAddress set checked=#checked:VARCHAR# where consigneeOrConsignor=#consigneeorconsignor:VARCHAR#
+	<dynamic>  
+            <isNotEmpty prepend="AND" property="consigneeconsignoraddressid">  
+                ( consigneeConsignorAddressId=#consigneeconsignoraddressid:VARCHAR#)
+            </isNotEmpty>  
+            <isNotEmpty prepend="AND" property="frompartyid">  
+                ( fromPartyId=#frompartyid:VARCHAR#)
+            </isNotEmpty>
+            <isNotEmpty prepend="AND" property="topartyid">  
+                ( toPartyId=#topartyid:VARCHAR#)
+            </isNotEmpty>
+    </dynamic> 
+</update>
+
+ <!-- 获取多条记录查询列表 返回List -->
+ <select id="iBatisSelectConsigneeConsignorAddressList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	  select * from ConsigneeConsignorAddress where consigneeOrConsignor=#consigneeorconsignor:VARCHAR# and fromPartyId=#frompartyid:VARCHAR# and toPartyId=#topartyid:VARCHAR#
+	  <dynamic>
+	  	<isNotEmpty prepend="AND" property="checked">  
+	       checked=#checked:VARCHAR#
+	  	</isNotEmpty>
+	  	<isNotEmpty prepend="AND" property="linkman">  
+	       (linkMan LIKE '%$linkman$%' or helpCode LIKE '%$linkman$%')
+	  	</isNotEmpty>
+	  	<isNotEmpty prepend="AND" property="consignee">  
+	       (consignee LIKE '%$consignee$%' or helpCode LIKE '%$consignee$%')
+	  	</isNotEmpty>
+	  	<isNotEmpty prepend="AND" property="topartyname">  
+	       consignee LIKE '%$topartyname$%'
+	  	</isNotEmpty>
+	  	<isNotEmpty prepend="AND" property="town">  
+	       town LIKE '%$town$%'
+	  	</isNotEmpty>
+	  </dynamic>
+ 	  order by consigneeConsignorAddressId desc limit $skipCount$,$pageSize$
+ </select>
+ 
+ <!-- 获取记录查询的条数 返回String -->
+ <select id="iBatisSelectConsigneeConsignorAddressCount" parameterClass="java.util.HashMap" resultClass="java.lang.String">
+  	select count(*) from ConsigneeConsignorAddress where consigneeOrConsignor=#consigneeorconsignor:VARCHAR# and fromPartyId=#frompartyid:VARCHAR# and toPartyId=#topartyid:VARCHAR#
+  	<dynamic>
+	  	<isNotEmpty prepend="AND" property="checked">
+	       checked=#checked:VARCHAR#
+	  	</isNotEmpty>
+	  	<isNotEmpty prepend="AND" property="linkman">  
+	       (linkMan LIKE '%$linkman$%' or helpCode LIKE '%$linkman$%')
+	  	</isNotEmpty>
+	  	<isNotEmpty prepend="AND" property="consignee">  
+	       (consignee LIKE '%$consignee$%' or helpCode LIKE '%$consignee$%')
+	  	</isNotEmpty>
+	  	<isNotEmpty prepend="AND" property="topartyname">  
+	       consignee LIKE '%$topartyname$%'
+	  	</isNotEmpty>
+	  	<isNotEmpty prepend="AND" property="town">  
+	       town LIKE '%$town$%'
+	  	</isNotEmpty>
+	</dynamic>
+ </select>
+
+ <!-- 根据id获得用户对象, 返回bean -->
+ <select id="iBatisSelectConsigneeConsignorAddressById" parameterClass="java.util.HashMap" resultMap="consigneeConsignorAddressFieldMap">
+  select * from ConsigneeConsignorAddress where consigneeConsignorAddressId=#consigneeconsignoraddressid#
+ </select> 
+ <!--为保存订单查bean -->
+ <select id="iBatisSelectConsigneeConsignorAddressForOutWaybill" parameterClass="java.util.HashMap" resultMap="consigneeConsignorAddressFieldMap">
+ SELECT * FROM ConsigneeConsignorAddress 
+  WHERE toPartyId = #topartyid# AND fromPartyId = #frompartyid#
+    AND checked =1 AND consigneeOrConsignor = 0
+    LIMIT 1
+ </select> 
+
+</sqlMap>

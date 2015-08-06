@@ -1,0 +1,64 @@
+@CHARSET "UTF-8";
+.formTable tr td{
+	height: 25px;
+}
+.formTable tr td.titleTd{
+	height: 30px;
+	background-color: #E7E7E7;
+}
+.formSpan{
+	float: left;
+}
+
+.formTable tr td{
+	height: 25px;
+}
+.formTable tr td.titleTd{
+	height: 30px;
+	background-color: #E7E7E7;
+}
+.formTable tr.titleTr td{
+	height: 30px;
+	background-color: #E7E7E7;
+}
+.formTable tr.yellowTr td{
+	background-color: #fffddd;
+}
+.formTable tr td.jgTd{
+	height: 15px;
+}
+
+.formTable2 tr td{
+	height: 25px;
+	border: 1px #E7E7E7 solid;
+	
+}
+.formTable2 tr td.td1{
+	width:15%;
+	text-align: right;
+	padding-right:10px;
+}
+.formTable2 tr td.td2{
+	width:35%;
+	text-align: left;
+	padding-left: 10px;
+}
+
+.com_input{
+	width: 60px;
+}
+.btn_sel{
+	width: 90px;
+	padding: 0 0 0 0;
+}
+.hgrid{
+	border-bottom: 1px #E7E7E7 solid;
+	border-left: 1px #E7E7E7 solid;
+	border-right: 1px #E7E7E7 solid;
+}
+.log_c{
+text-align: left;
+}
+.detail_color{
+	color: #86C420;
+}

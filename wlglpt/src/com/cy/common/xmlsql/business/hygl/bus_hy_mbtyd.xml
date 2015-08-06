@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.hygl.dao.Bus_hyglHymbtydMapper">
+    <select id="selectHyMbTydPage" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyMbTydDomain">
+		SELECT AA.MB_DJXH AS mbDjxh, AA.FHR_DJXH AS fhrDjxh, AA.FHR_MC AS fhrMc,
+	           AA.MBMC AS mbmc, AA.FHR_XZQH_DM AS fhrXzqhDm,
+	           (SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = AA.FHR_XZQH_DM) fhrXzqhMc,
+	           AA.SHR_XZQH_DM AS shrXzqhDm,
+	           (SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = AA.SHR_XZQH_DM) shrXzqhMc,
+			   AA.FHR_DZ fhrDz,AA.SHR_DJXH AS shrDjxh,AA.SHR_MC AS shrMc,AA.SHR_DZ AS shrDz,
+	           AA.DJ_JGBM AS djJgbm,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = AA.DJ_JGBM) djJgmc,
+	           AA.SS_JGBM AS ssJgbm,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = AA.SS_JGBM) ssJgmc,
+	           AA.CJR_CZY_DJXH AS cjrCzyDjxh,(SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=AA.CJR_CZY_DJXH) cjrMc,
+	           AA.CJRQ AS cjrq,AA.XGR_CZY_DJXH AS xgrCzyDjxh,
+	           (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=AA.XGR_CZY_DJXH) xgrMc,
+	           AA.XGRQ AS xgrq  	           
+           FROM (SELECT A.MB_DJXH,B.FHR_DJXH,B.FHR_MC,A.MBMC,B.FHR_XZQH_DM,
+	           B.SHR_XZQH_DM,B.FHR_DZ,B.SHR_DJXH,B.SHR_MC,B.SHR_DZ,A.DJ_JGBM,
+	           A.SS_JGBM,A.CJR_CZY_DJXH,A.CJRQ,A.XGR_CZY_DJXH,A.XGRQ,
+	           ROW_NUMBER() OVER (PARTITION BY B.MB_DJXH ORDER BY B.XH DESC) RN         
+		      FROM HY_MB_DD A,HY_MB_DD_HWMX B 
+		      WHERE A.MB_DJXH = B.MB_DJXH(+)
+		      AND A.YXBZ='Y' 
+		   )AA 
+	      WHERE AA.SS_JGBM = #gsbm# 
+	      <dynamic>
+	    	<isNotEmpty property="fhrDjxh" prepend="AND">
+	    		AA.FHR_DJXH = #fhrDjxh#
+	    	</isNotEmpty>
+	    	<isNotEmpty property="fhrMc" prepend="AND">
+	    		AA.FHR_MC LIKE '%' || #fhrMc# || '%'
+	    	</isNotEmpty>
+	      </dynamic>
+	      AND AA.RN = 1
+		  $orderStr$
+    </select>
+    
+    <select id="queryMb4TydglPage" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyMbTydDomain">
+		SELECT AA.MB_DJXH AS mbDjxh, AA.FHR_DJXH AS fhrDjxh, AA.FHR_MC AS fhrMc,
+	           AA.MBMC AS mbmc, AA.FHR_XZQH_DM AS fhrXzqhDm,
+	           (SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = AA.FHR_XZQH_DM) fhrXzqhMc,
+	           AA.SHR_XZQH_DM AS shrXzqhDm,
+	           (SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = AA.SHR_XZQH_DM) shrXzqhMc,
+			   AA.FHR_DZ fhrDz,AA.SHR_DJXH AS shrDjxh,AA.SHR_MC AS shrMc,AA.SHR_DZ AS shrDz,
+	           AA.DJ_JGBM AS djJgbm,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = AA.DJ_JGBM) djJgmc,
+	           AA.SS_JGBM AS ssJgbm,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = AA.SS_JGBM) ssJgmc,
+	           AA.CJR_CZY_DJXH AS cjrCzyDjxh,(SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=AA.CJR_CZY_DJXH) cjrMc,
+	           AA.CJRQ AS cjrq,AA.XGR_CZY_DJXH AS xgrCzyDjxh,
+	           (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=AA.XGR_CZY_DJXH) xgrMc,
+	           AA.XGRQ AS xgrq  	           
+           FROM (SELECT A.MB_DJXH,B.FHR_DJXH,B.FHR_MC,A.MBMC,B.FHR_XZQH_DM,
+	           B.SHR_XZQH_DM,B.FHR_DZ,B.SHR_DJXH,B.SHR_MC,B.SHR_DZ,A.DJ_JGBM,
+	           A.SS_JGBM,A.CJR_CZY_DJXH,A.CJRQ,A.XGR_CZY_DJXH,A.XGRQ,
+	           ROW_NUMBER() OVER (PARTITION BY B.MB_DJXH ORDER BY B.XH DESC) RN         
+		      FROM HY_MB_DD A,HY_MB_DD_HWMX B 
+		      WHERE A.MB_DJXH = B.MB_DJXH(+)
+		      AND A.YXBZ='Y' 
+		   )AA
+	      WHERE AA.SS_JGBM = #gsbm# 
+	      <dynamic>
+	    	<isNotEmpty property="fhrDjxh" prepend="AND">
+	    		AA.FHR_DJXH = #fhrDjxh#
+	    	</isNotEmpty>
+	    	<isNotEmpty property="fhrMc" prepend="AND">
+	    		AA.FHR_MC LIKE '%' || #fhrMc# || '%'
+	    	</isNotEmpty>
+	    	<isNotEmpty property="shrMc" prepend="AND">
+	    		AA.SHR_MC LIKE '%' || #shrMc# || '%'
+	    	</isNotEmpty>
+	      </dynamic>
+	      AND AA.RN = 1
+	      
+		  $orderStr$
+    </select>
+    
+    <select id="queryMb4TydglCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT COUNT(*)            
+		      FROM (B.FHR_DJXH,B.FHR_MC,B.SHR_MC
+	           ROW_NUMBER() OVER (PARTITION BY B.MB_DJXH ORDER BY B.XH DESC) RN         
+		      FROM HY_MB_DD A,HY_MB_DD_HWMX B 
+		      WHERE A.MB_DJXH = B.MB_DJXH(+)
+		      AND A.YXBZ='Y' 
+		   )AA
+		      WHERE AA.SS_JGBM = #gsbm#
+		    <dynamic>
+		    	<isNotEmpty property="fhrDjxh" prepend="AND">
+		    		AA.FHR_DJXH = #fhrDjxh#
+		    	</isNotEmpty>
+		    	<isNotEmpty property="fhrMc" prepend="AND">
+		    		AA.FHR_MC LIKE '%' || #fhrMc# || '%'
+		    	</isNotEmpty>
+		    	<isNotEmpty property="shrMc" prepend="AND">
+		    		AA.SHR_MC LIKE '%' || #shrMc# || '%'
+		    	</isNotEmpty>
+		    </dynamic>
+		    AND AA.RN = 1
+    </select>
+    
+    <select id="selectHyMbTydAll" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyMbTydDomain">
+		SELECT AA.MB_DJXH AS mbDjxh, AA.FHR_DJXH AS fhrDjxh, AA.FHR_MC AS fhrMc,
+	           AA.MBMC AS mbmc, AA.FHR_XZQH_DM AS fhrXzqhDm,
+	           (SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = AA.FHR_XZQH_DM) fhrXzqhMc,
+	           AA.SHR_XZQH_DM AS shrXzqhDm,
+	           (SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = AA.SHR_XZQH_DM) shrXzqhMc,
+			   AA.FHR_DZ fhrDz,AA.SHR_DJXH AS shrDjxh,AA.SHR_MC AS shrMc,AA.SHR_DZ AS shrDz,
+	           AA.DJ_JGBM AS djJgbm,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = AA.DJ_JGBM) djJgmc,
+	           AA.SS_JGBM AS ssJgbm,(SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = AA.SS_JGBM) ssJgmc,
+	           AA.CJR_CZY_DJXH AS cjrCzyDjxh,(SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=AA.CJR_CZY_DJXH) cjrMc,
+	           AA.CJRQ AS cjrq,AA.XGR_CZY_DJXH AS xgrCzyDjxh,
+	           (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=AA.XGR_CZY_DJXH) xgrMc,
+	           AA.XGRQ AS xgrq  	           
+           FROM (SELECT A.MB_DJXH,B.FHR_DJXH,B.FHR_MC,A.MBMC,B.FHR_XZQH_DM,
+	           B.SHR_XZQH_DM,B.FHR_DZ,B.SHR_DJXH,B.SHR_MC,B.SHR_DZ,A.DJ_JGBM,
+	           A.SS_JGBM,A.CJR_CZY_DJXH,A.CJRQ,A.XGR_CZY_DJXH,A.XGRQ,
+	           ROW_NUMBER() OVER (PARTITION BY B.MB_DJXH ORDER BY B.XH DESC) RN         
+		      FROM HY_MB_DD A,HY_MB_DD_HWMX B 
+		      WHERE A.MB_DJXH = B.MB_DJXH
+		      AND A.YXBZ='Y' 
+		   )AA
+	      WHERE AA.SS_JGBM = #gsbm# 
+	      <dynamic>
+	    	<isNotEmpty property="fhrDjxh" prepend="AND">
+	    		AA.FHR_DJXH = #fhrDjxh#
+	    	</isNotEmpty>
+	    	<isNotEmpty property="fhrMc" prepend="AND">
+	    		AA.FHR_MC LIKE '%' || #fhrMc# || '%'
+	    	</isNotEmpty>
+	      </dynamic> 
+		  AND AA.RN = 1
+		  ORDER by AA.MB_DJXH ASC
+    </select>
+
+	<select id="getHyMbTydRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT COUNT(*)            
+		      FROM (SELECT B.FHR_DJXH,B.FHR_MC,B.SHR_MC,A.SS_JGBM,
+	           ROW_NUMBER() OVER (PARTITION BY B.MB_DJXH ORDER BY B.XH DESC) RN         
+		      FROM HY_MB_DD A,HY_MB_DD_HWMX B 
+		      WHERE A.MB_DJXH = B.MB_DJXH
+		      AND A.YXBZ='Y' 
+		   )AA
+		WHERE AA.SS_JGBM = #gsbm# 
+	      <dynamic>
+	    	<isNotEmpty property="fhrDjxh" prepend="AND">
+	    		AA.FHR_DJXH = #fhrDjxh#
+	    	</isNotEmpty>
+	    	<isNotEmpty property="fhrMc" prepend="AND">
+	    		AA.FHR_MC LIKE '%' || #fhrMc# || '%'
+	    	</isNotEmpty>
+	      </dynamic>
+	      AND AA.RN = 1
+
+    </select>
+    
+    <select id="checkTemplateName" parameterClass="java.util.Map"
+    	resultClass="java.lang.Long">
+    	SELECT COUNT(*) FROM Hy_Mb_DD MBDD WHERE MBDD.YXBZ = 'Y'
+    		AND MBDD.MBMC = #mbmc#
+    		<dynamic>
+    			<isNotEmpty property="mbDjxh" prepend="AND">
+    				MBDD.MB_DJXH &lt;&gt; #mbDjxh#
+    			</isNotEmpty>
+    		</dynamic>
+    </select>
+    
+    <parameterMap class="java.util.Map" id="getSxhParMapMb">
+    	<parameter property="retCode" javaType="java.lang.Long" jdbcType="BIGINT" mode="OUT"/>
+    	<parameter property="sxhflbm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="jgbm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="sxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="OUT"/>
+    	<parameter property="errMess" javaType="java.lang.String" jdbcType="VARCHAR" mode="OUT"/>
+    </parameterMap>
+    
+    <procedure id="getFunXtSxhMb" parameterMap="getSxhParMapMb">
+    	{? = call F_XT_GET_SXH(?,?,?,?)} 
+    </procedure>
+    
+      <select id="queryHwmxByTydMbXh" parameterClass="java.util.Map"
+    	resultClass="com.cy.hygl.domain.HyMbTydHwmxDomain">
+		SELECT 
+		<dynamic>
+			<isEqual property="tableName" compareValue="HY_DD_HWMX_TEMP">
+				HW.DD_DJXH mbDjxh,
+			</isEqual>
+			<isEqual property="tableName" compareValue="HY_MB_DD_HWMX">
+				HW.MB_DJXH mbDjxh,
+			</isEqual>
+		</dynamic>
+			HW.XH,HW.HWMC, HW.HW_BZ_HLDW_DM hwbzHldwDm,
+		       (SELECT JL.JLDW_JC FROM DM_JLDW JL WHERE JL.JLDW_DM =  HW.HW_BZ_HLDW_DM) hwbzHldwMc,
+		       CASE WHEN HW.HW_SL = 0 THEN NULL ELSE HW.HW_SL END hwSl, HW.HW_SL_JLDW_DM hwSlJldwDm,
+		       (SELECT JL.JLDW_JC FROM DM_JLDW JL WHERE JL.JLDW_DM =  HW.HW_SL_JLDW_DM) hwSlJldwMc,
+		       CASE WHEN HW.HW_ZL = 0 THEN NULL ELSE HW.HW_ZL END hwZl, HW.HW_ZL_JLDW_DM hwZlJldwDm,
+		       (SELECT JL.JLDW_JC FROM DM_JLDW JL WHERE JL.JLDW_DM =  HW.HW_ZL_JLDW_DM) hwZlJldwMc,
+		       CASE WHEN HW.HW_TJ = 0 THEN NULL ELSE HW.HW_TJ END hwTj, HW.HW_TJ_JLDW_DM hwTjJldwDm,
+		       (SELECT JL.JLDW_JC FROM DM_JLDW JL WHERE JL.JLDW_DM =  HW.HW_TJ_JLDW_DM) hwTjJldwMc,
+		       HW.HWFL_DM hwflDm,
+		       HW.JS_JLDW_DM jsJldwDm,HW.JS_JLDW_FL_DM jsJldwFlDm,HW.hdbh as hdbh,
+               HW.SR_HJ as srHj,HW.SR_YJ as srYj,HW.SR_XF as srXf,HW.SR_HDF as srHdf,HW.SR_THF as srThf,HW.SR_HF as srHf,HW.SR_HK as srHk,
+               HW.FHR_DJXH as fhrDjxh,HW.FHR_MC as fhrMc,HW.FHR_DZ as fhrDz,HW.FHR_LXR as fhrLxr,HW.FHR_LXDH as fhrLxdh,HW.FHR_XZQH_DM as fhrXzqhDm,
+               (SELECT XZQH_JC FROM DM_XZQH WHERE XZQH_DM = HW.FHR_XZQH_DM) AS fhrXzqhMc,
+               HW.SHR_DJXH as shrDjxh,HW.SHR_MC as shrMc,HW.SHR_DZ as shrDz,HW.SHR_LXR as shrLxr,HW.SHR_LXDH as shrLxdh,HW.SHR_XZQH_DM as shrXzqhDm,
+               (SELECT XZQH_JC FROM DM_XZQH WHERE XZQH_DM = HW.SHR_XZQH_DM) AS shrXzqhMc,
+               <dynamic>
+					<isEqual property="tableName" compareValue="HY_DD_HWMX_TEMP">
+						HW.YQ_FHRQ-trunc(sysdate) AS yqFhrq,HW.YQ_DDRQ-trunc(sysdate) AS yqDdrq,
+					</isEqual>
+					<isEqual property="tableName" compareValue="HY_MB_DD_HWMX">
+						 HW.YQ_FHRQ AS yqFhrq,HW.YQ_DDRQ AS yqDdrq,
+					</isEqual>
+				</dynamic>
+              	HW.SHFS_DM as shfsDm,
+               (SELECT SHFS_JC FROM dm_shfs WHERE SHFS_DM = HW.SHFS_DM) AS shfsMc,
+               HW.THFL_DM as thflDm,HW.YKJSFS_DM as ykjsfsDm,HW.YJJSFS_DM as yjjsfsDm,HW.PSBZ as psbz,
+		       DECODE(HW.JS_SL,0,NULL,HW.JS_SL) JSSL,
+		       HW.JS_JLDW_DM jsJldwDm,(SELECT JL.JLDW_JC FROM DM_JLDW JL WHERE JL.JLDW_DM =  HW.JS_JLDW_DM) jsJldwMc
+		FROM $tableName$ HW
+		WHERE HW.YXBZ = 'Y'
+		<dynamic>
+			<isEqual property="tableName" compareValue="HY_DD_HWMX_TEMP">
+				and HW.DD_DJXH = #mbDjxh#
+			</isEqual>
+			<isEqual property="tableName" compareValue="HY_MB_DD_HWMX">
+				and HW.MB_DJXH = #mbDjxh#
+			</isEqual>
+		</dynamic>
+		 
+		ORDER BY HW.XH
+    </select>
+    
+    
+</sqlMap>

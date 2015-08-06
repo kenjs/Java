@@ -1,0 +1,25 @@
+@CHARSET "UTF-8";
+#right {
+    font-family:"宋体",Arial,sans-serif;
+    font-size: 12px;
+}
+.sub_title{font-size: 14px;margin-left: 15px;font-weight: bold; border-bottom: 1px solid #d3d7d4;width:600px;padding-bottom: 5px;}
+.basic_info{margin-left: 25px;width: 600px;margin-top: 20px;}
+.info span{margin-right:5px; }
+.info td{padding: 1px 2px 1px 3px;height:20px; color: #444444;
+    font-size: 12px;}
+.line{
+	border-bottom: 1px solid #d3d7d4;width: 435px;margin-left: 67px;margin-top: -10px;
+}
+#myfiles{width: 435px;}
+#myfiles .tdleft{height: 24px;padding: inherit;padding: 1px;}
+#myfiles .tdleft a{text-decoration: inherit;text-decoration: none;}
+#myfiles .tdleft a:hover{text-decoration: underline;}
+.info{height: 400px;}
+#btnimport{cursor: pointer;margin-left: 10px; }
+.t_left{text-align: right; width: 90px;}
+#import{ margin-left: 10px;}
+#description{width: 300px;height: 50px;}
+.t_right{width: 150px;}
+.t_rright{width: 200px;}
+#description{color: #444444;font-size: 12px;}

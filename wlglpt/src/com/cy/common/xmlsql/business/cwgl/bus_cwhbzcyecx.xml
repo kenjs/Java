@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.hygl.dao.BusCwhbzcyeCxMapper">
+	<select id="selectCwHbzcyeCxPage" parameterClass="java.util.Map"
+		resultClass="com.cy.cwgl.domain.CwHbzcyeCxDomain">
+		SELECT A.CW_DJXH AS cwDjxh,
+		A.ZCFL_DM AS zcflDm,
+		ZCFL_MC AS zcflMc,
+		A.JE AS je,
+		A.SS_JGBM AS ssJgbm,
+		E.MC AS bmmc,
+		A.YH_CSH_DJXH AS yhCshDjxh,
+		YHMC AS yhmc,
+		B.ZH AS zh,
+		B.HM AS hm
+		FROM CW_HBZCYE A, CW_HBZC_CSH B, DM_ZCFL D,QY_ZZJG E
+		WHERE A.YH_CSH_DJXH = B.CSH_DJXH(+)
+		AND A.ZCFL_DM = D.ZCFL_DM
+	 	AND A.YXBZ = 'Y'
+   		AND B.YXBZ = 'Y'
+   		AND B.QYBZ = 'Y'
+		AND A.SS_JGBM = E.JGBM
+		<dynamic>
+			<isNotEmpty property="ssJgbm" prepend="and">
+				A.SS_JGBM =#ssJgbm#
+			</isNotEmpty>
+			<isNotEmpty property="zcflDm" prepend="and">
+				A.ZCFL_DM =#zcflDm#
+			</isNotEmpty>
+			<isNotEmpty property="jbrCzyDjxh" prepend="and">
+				JBR_CZY_DJXH=#jbrCzyDjxh#
+			</isNotEmpty>
+			<isNotEmpty property="djJgbm" prepend="and">
+				DJ_JGBM =#djJgbm#
+			</isNotEmpty>
+		</dynamic>
+		$orderStr$
+	</select>
+	
+	<select id="selectCwHbzcyeCxAll" parameterClass="java.util.Map"
+		resultClass="com.cy.cwgl.domain.CwHbzcyeCxDomain">
+		SELECT A.CW_DJXH AS cwDjxh,
+		A.ZCFL_DM AS zcflDm,
+		ZCFL_MC AS zcflMc,
+		A.JE AS je,
+		A.SS_JGBM AS ssJgbm,
+		E.MC AS bmmc,
+		A.YH_CSH_DJXH AS yhCshDjxh,
+		YHMC AS yhmc,
+		B.ZH AS zh,
+		B.HM AS hm
+		FROM CW_HBZCYE A, CW_HBZC_CSH B, DM_ZCFL D,QY_ZZJG E
+		WHERE A.YH_CSH_DJXH = B.CSH_DJXH(+)
+		AND A.ZCFL_DM = D.ZCFL_DM
+		AND A.SS_JGBM = E.JGBM
+	 	AND A.YXBZ = 'Y'
+   		AND B.YXBZ = 'Y'
+   		AND B.QYBZ = 'Y'
+		<dynamic>
+			<isNotEmpty property="ssJgbm" prepend="and">
+				A.SS_JGBM =#ssJgbm#
+			</isNotEmpty>
+			<isNotEmpty property="zcflDm" prepend="and">
+				A.ZCFL_DM =#zcflDm#
+			</isNotEmpty>
+			<isNotEmpty property="jbrCzyDjxh" prepend="and">
+				JBR_CZY_DJXH =#jbrCzyDjxh#
+			</isNotEmpty>
+			<isNotEmpty property="djJgbm" prepend="and">
+				DJ_JGBM =#djJgbm#
+			</isNotEmpty>
+		</dynamic>
+		ORDER BY A.CW_DJXH
+	</select>
+	
+	<select id="getCwHbzcyeCxRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT COUNT(A.CW_DJXH)  
+		FROM CW_HBZCYE A, CW_HBZC_CSH B, DM_ZCFL D,QY_ZZJG E
+		WHERE A.YH_CSH_DJXH = B.CSH_DJXH(+)
+		AND A.ZCFL_DM = D.ZCFL_DM
+		AND A.SS_JGBM = E.JGBM
+	 	AND A.YXBZ = 'Y'
+   		AND B.YXBZ = 'Y'
+   		AND B.QYBZ = 'Y'
+		<dynamic>
+			<isNotEmpty property="ssJgbm" prepend="and">
+				A.SS_JGBM =#ssJgbm#
+			</isNotEmpty>
+			<isNotEmpty property="zcflDm" prepend="and">
+				A.ZCFL_DM =#zcflDm#
+			</isNotEmpty>
+			<isNotEmpty property="jbrCzyDjxh" prepend="and">
+				JBR_CZY_DJXH =#jbrCzyDjxh#
+			</isNotEmpty>
+			<isNotEmpty property="djJgbm" prepend="and">
+				DJ_JGBM =#djJgbm#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="selectCwHbzcyeCxByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.cwgl.domain.CwHbzcyeCxDomain">
+		SELECT A.CW_DJXH AS cwDjxh,
+		A.ZCFL_DM AS zcflDm,
+		ZCFL_MC AS zcflMc,
+		A.JE AS je,
+		A.SS_JGBM AS ssJgbm,
+		E.MC AS bmmc,
+		A.YH_CSH_DJXH AS yhCshDjxh,
+		YHMC AS yhmc,
+		B.ZH AS zh,
+		B.HM AS hm
+		FROM CW_HBZCYE A, CW_HBZC_CSH B, DM_ZCFL D,QY_ZZJG E
+		WHERE A.YH_CSH_DJXH = B.CSH_DJXH(+)
+		AND A.ZCFL_DM = D.ZCFL_DM
+		AND A.SS_JGBM = E.JGBM
+		AND A.YXBZ = 'Y'
+   		AND B.YXBZ = 'Y'
+   		AND B.QYBZ = 'Y'
+		AND A.CW_DJXH = #cwDjxh#
+	</select>
+</sqlMap>

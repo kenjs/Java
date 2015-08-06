@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.hygl.dao.HyPcDhajMapper">
+
+	<!--根据主键取DOMAIN-->
+	<select id="selectHyPcDhajByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyPcDhajDomain">
+		select a.AJ_DJXH as ajDjxh,a.PC_DJXH as pcDjxh,a.AJ_DHHM as ajDhhm,a.AJ_QKMS as ajQkms,a.AJJG_DM as ajjgDm,
+		a.BZ as bz,a.PCR_CZY_DJXH as pcrCzyDjxh,a.PCRQ as pcrq,a.PC_JGBM as pcJgbm,a.SS_JGBM as ssJgbm,
+		a.YXBZ as yxbz,a.CJR_CZY_DJXH as cjrCzyDjxh,a.CJRQ as cjrq,a.XGR_CZY_DJXH as xgrCzyDjxh,a.XGRQ as xgrq from HY_PC_DHAJ a  where a.AJ_DJXH=#ajDjxh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertHyPcDhaj"  parameterClass="com.cy.common.bo.HyPcDhaj">
+		<selectKey keyProperty="ajDjxh" resultClass="String" type="pre"> 
+			select SEQ_AJ_DJXH.nextval as ajDjxh from dual 
+		</selectKey> 
+		insert into HY_PC_DHAJ(AJ_DJXH,PC_DJXH,AJ_DHHM,AJ_QKMS,AJJG_DM,
+		BZ,PCR_CZY_DJXH,PCRQ,PC_JGBM,SS_JGBM,
+		YXBZ,CJR_CZY_DJXH,CJRQ,XGR_CZY_DJXH,XGRQ)
+		values(#ajDjxh:NUMERIC#,#pcDjxh:NUMERIC#,#ajDhhm:VARCHAR#,#ajQkms:VARCHAR#,#ajjgDm:NUMERIC#,
+		#bz:VARCHAR#,#pcrCzyDjxh:NUMERIC#,to_date(#pcrq:DATE#,'yyyy-MM-dd'),#pcJgbm:NUMERIC#,#ssJgbm:NUMERIC#,
+		#yxbz:VARCHAR#,#cjrCzyDjxh:NUMERIC#,to_date(#cjrq:DATE#,'yyyy-MM-dd'),#xgrCzyDjxh:NUMERIC#,to_date(#xgrq:DATE#,'yyyy-MM-dd'))
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateHyPcDhajByKey" parameterClass="com.cy.common.bo.HyPcDhaj">
+        update HY_PC_DHAJ set AJ_DJXH=#ajDjxh#,PC_DJXH=#pcDjxh#,AJ_DHHM=#ajDhhm#,AJ_QKMS=#ajQkms#,AJJG_DM=#ajjgDm#,
+		BZ=#bz#,PCR_CZY_DJXH=#pcrCzyDjxh#,PCRQ=to_date(#pcrq#, 'YYYY-MM-DD'),PC_JGBM=#pcJgbm#,SS_JGBM=#ssJgbm#,
+		YXBZ=#yxbz#,CJR_CZY_DJXH=#cjrCzyDjxh#,CJRQ=to_date(#cjrq#, 'YYYY-MM-DD'),XGR_CZY_DJXH=#xgrCzyDjxh#,XGRQ=to_date(#xgrq#, 'YYYY-MM-DD') where AJ_DJXH=#ajDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：软删除-->
+	<delete id="deleteHyPcDhajByKey" parameterClass="java.util.Map">
+		update HY_PC_DHAJ set yxbz='N' where AJ_DJXH=#ajDjxh#
+    </delete>
+</sqlMap>

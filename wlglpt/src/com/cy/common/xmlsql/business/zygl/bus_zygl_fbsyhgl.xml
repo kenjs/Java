@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.zygl.dao.BusZyglFbsyhglMapper">
+	<select id="selectQyFbsYhPage" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyFbsYhDomain">
+		SELECT A.YH_DJXH as yhDjxh,
+		       A.QYBZ as qybz,
+			   A.MC AS mc,
+		       A.ZH AS zh,
+		       A.DLYZFS_DM AS dlyzfsDm,
+		       A.CJRQ AS cjrq,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc,
+		       (SELECT YZ.DLYZFS_MC FROM DM_DLYZFS YZ WHERE YZ.DLYZFS_DM=A.DLYZFS_DM) dlyzfsMc
+		  FROM QY_FBS_YH A 
+		  WHERE A.YXBZ='Y' 
+		  <dynamic> 
+			<isNotEmpty property="ssJgbm" prepend="and">
+				A.SS_JGBM =#ssJgbm#
+			</isNotEmpty>
+			<isNotEmpty property="fbsDjxh" prepend="and">
+				A.FBS_DJXH = #fbsDjxh#
+			</isNotEmpty>
+		  </dynamic>
+		  $orderStr$
+    </select>
+    
+    <select id="selectQyFbsYhAll" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyFbsYhDomain">
+		SELECT A.YH_DJXH as yhDjxh,
+		       A.QYBZ as qybz,
+			   A.MC AS mc,
+		       A.ZH AS zh,
+		       A.DLYZFS_DM AS dlyzfsDm,
+		       A.CJRQ AS cjrq,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc,
+		       (SELECT YZ.DLYZFS_MC FROM DM_DLYZFS YZ WHERE YZ.DLYZFS_DM=A.DLYZFS_DM) dlyzfsMc
+		  FROM QY_FBS_YH A 
+		  WHERE A.YXBZ='Y' 
+		  <dynamic> 
+			<isNotEmpty property="ssJgbm" prepend="and">
+				A.SS_JGBM =#ssJgbm#
+			</isNotEmpty>
+			<isNotEmpty property="fbsDjxh" prepend="and">
+				A.FBS_DJXH = #fbsDjxh#
+			</isNotEmpty>
+		  </dynamic>
+		  ORDER by A.YH_DJXH ASC
+    </select>
+
+	<select id="getQyFbsYhRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.YH_DJXH) 
+		  FROM QY_FBS_YH A 
+		  WHERE A.YXBZ='Y' 
+		  <dynamic> 
+			<isNotEmpty property="ssJgbm" prepend="and">
+				A.SS_JGBM =#ssJgbm#
+			</isNotEmpty>
+			<isNotEmpty property="fbsDjxh" prepend="and">
+				A.FBS_DJXH = #fbsDjxh#
+			</isNotEmpty>
+		  </dynamic>
+    </select>
+    
+    <!-- 检测分包商用户帐号是否重复 -->
+    <select id="checkQyFbsYhmcRepeat" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT COUNT(*) FROM QY_FBS_YH WHERE YXBZ='Y' AND QYBM=#qybm# AND ZH=#zh#
+		  <dynamic> 
+		   <isNotEmpty property="yhDjxh" prepend="and">
+		   		<![CDATA[
+					YH_DJXH <>#yhDjxh#
+				]]>
+			</isNotEmpty>
+		  </dynamic>
+    </select>
+</sqlMap>

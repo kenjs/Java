@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/Project/!svn/ver/8817/consignor/trunk/consignor/src/tf56/consignor/services
+END
+PartyService.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/Project/!svn/ver/7387/consignor/trunk/consignor/src/tf56/consignor/services/PartyService.java
+END
+LbsDeviceService.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/Project/!svn/ver/8025/consignor/trunk/consignor/src/tf56/consignor/services/LbsDeviceService.java
+END
+WaybillService.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/Project/!svn/ver/8304/consignor/trunk/consignor/src/tf56/consignor/services/WaybillService.java
+END
+OrganizationService.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/Project/!svn/ver/7387/consignor/trunk/consignor/src/tf56/consignor/services/OrganizationService.java
+END
+OperatorService.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/Project/!svn/ver/7387/consignor/trunk/consignor/src/tf56/consignor/services/OperatorService.java
+END

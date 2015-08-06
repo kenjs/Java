@@ -1,0 +1,939 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+<typeAlias alias="TransactionInfo" type="com.cy.dcts.common.bo.TransactionInfo"/><!-- 交易表 -->
+<typeAlias alias="TransactionInfoDomain" type="com.cy.dcts.common.domain.TransactionInfoDomain"/>
+<resultMap class="TransactionInfo" id="transaction_info_result">
+ <result property="id" column="ID"/>
+ <result property="orderNumber" column="ORDER_NUMBER"/>
+ <result property="cargoId" column="CARGO_ID"/>
+ <result property="driverId" column="DRIVER_ID"/>
+ <result property="deployUserid" column="DEPLOY_USERID"/>
+ <result property="companyId" column="COMPANY_ID"/>
+ <result property="tradeFair" column="TRADE_FAIR"/>
+ <result property="tradeStart" column="TRADE_START"/>
+ <result property="tradeStartTime" column="TRADE_START_TIME"/>
+ <result property="orderStart" column="ORDER_START"/>
+ <result property="remark" column="REMARK"/>
+ <result property="tradeCancelOrigin" column="TRADE_CANCEL_ORIGIN"/><!-- 20140705 -->
+ <result property="createTime" column="CREATE_TIME"/>
+ <result property="modifyTime" column="MODIFY_TIME"/>
+ 
+ <!--20140808(货主版新增字段11个) -->
+  <result property="shipperCode" column="SHIPPER_CODE"/>
+ <result property="shipperOrderNo" column="SHIPPER_ORDER_NO"/>
+ <result property="receiverCode" column="RECEIVER_CODE"/>
+ <result property="receiverOrderNo" column="RECEIVER_ORDER_NO"/>
+ <result property="deliveryTime" column="DELIVERY_TIME"/>
+ <result property="arrivalTime" column="ARRIVAL_TIME"/>
+ <result property="receiveTime" column="RECEIVE_TIME"/>
+ <result property="shipperCompanyCode" column="SHIPPER_COMPANY_CODE"/>
+  <result property="shipperCompanyId" column="SHIPPER_COMPANY_ID"/><!--物流公司Id  -->
+ <result property="shipperCodeId" column="SHIPPER_CODE_ID"/><!--发货方Id  -->
+ <result property="receiverCodeId" column="RECEIVER_CODE_ID"/><!--收货方Id  -->
+</resultMap>
+
+<resultMap class="TransactionInfoDomain" id="transaction_info_domain_result">
+ <result property="id" column="ID"/>
+ <result property="orderNumber" column="ORDER_NUMBER"/>
+ <result property="cargoId" column="CARGO_ID"/>
+ <result property="driverId" column="DRIVER_ID"/>
+ <result property="deployUserid" column="DEPLOY_USERID"/>
+ <result property="companyId" column="COMPANY_ID"/>
+ <result property="tradeFair" column="TRADE_FAIR"/>
+ <result property="tradeStart" column="TRADE_START"/>
+ <result property="tradeStartTime" column="TRADE_START_TIME"/>
+ <result property="orderStart" column="ORDER_START"/>
+ <result property="tradeCancelOrigin" column="TRADE_CANCEL_ORIGIN"/><!-- 20140705 -->
+ <result property="remark" column="REMARK"/>
+ <result property="createTime" column="CREATE_TIME"/>
+ <result property="modifyTime" column="MODIFY_TIME"/>
+ <result property="cargoName" column="CARGO_NAME"/>
+ <result property="requestStartTime" column="REQUEST_START_TIME"/>
+ <result property="startProCityCounty" column="STARTPROCITYCOUNTY"/>
+ <result property="endProCityCounty" column="ENDPROCITYCOUNTY"/>
+ <result property="name" column="NAME"/>
+ <result property="code" column="code"/>
+ <result property="telephone" column="TELEPHONE"/>
+ <result property="carNumber" column="CAR_NUMBER"/>
+ <result property="userDriverAssessCount" column="USER_DRIVER_ASSESS_COUNT"/>
+  <!-- 201407013 pM添加的两字段,百度云推送使用  例子：提醒司机确认拉货 -->
+  <result property="baiduChannelId" column="BAIDU_CHANNEL_ID"/>
+  <result property="baiduUserId" column="BAIDU_USER_ID"/>
+  
+   <!--20140808(货主版新增字段8个) -->
+  <result property="shipperCode" column="SHIPPER_CODE"/><!-- 发货方编码代码  -->
+ <result property="shipperOrderNo" column="SHIPPER_ORDER_NO"/><!--发货单号  -->
+ <result property="receiverCode" column="RECEIVER_CODE"/><!--收货方编码代码  -->
+ <result property="receiverOrderNo" column="RECEIVER_ORDER_NO"/><!-- 收货方订单编号 -->
+ <result property="deliveryTime" column="DELIVERY_TIME"/><!-- 发货时间 -->
+ <result property="arrivalTime" column="ARRIVAL_TIME"/><!-- 到达时间 -->
+ <result property="receiveTime" column="RECEIVE_TIME"/><!-- 收货时间 -->
+ <result property="shipperCompanyCode" column="SHIPPER_COMPANY_CODE"/><!-- 物流公司编码代码 -->
+  <result property="shipperCompanyId" column="SHIPPER_COMPANY_ID"/><!--物流公司Id  -->
+ <result property="shipperCodeId" column="SHIPPER_CODE_ID"/><!--发货方Id  -->
+ <result property="receiverCodeId" column="RECEIVER_CODE_ID"/><!--收货方Id  -->
+ <!-- 20140815 -->
+ <result property="shipperComName" column="SHIPPERCOMNAME"/><!--物流公司Id  -->
+ <result property="receiverComName" column="RECEIVERCOMNAME"/><!--发货方Id  -->
+ <result property="logisticsComName" column="LOGISTICSCOMNAME"/><!--收货方Id  -->
+   
+</resultMap>
+
+<!-- 司机详细页面查看交易记录 -->
+<resultMap class="TransactionInfoDomain" id="transaction_info_domain_car_list_result">
+ <result property="id" column="ID"/>
+ <result property="orderNumber" column="ORDER_NUMBER"/>
+ <result property="createTime" column="CREATE_TIME"/>
+ <result property="companyName" column="COMPANY_NAME"/>
+ <result property="startProCityCounty" column="STARTPROCITYCOUNTY"/>
+ <result property="endProCityCounty" column="ENDPROCITYCOUNTY"/>
+</resultMap>
+
+<!-- 查询导入订单的信息 返回domain (货主版)  -->
+<resultMap class="TransactionInfoDomain" id="import_transaction_info_domain_result">
+ <result property="id" column="ID"/>
+ <result property="orderNumber" column="ORDER_NUMBER"/>
+ <result property="cargoId" column="CARGO_ID"/>
+ <result property="driverId" column="DRIVER_ID"/>
+ <result property="shipperCode" column="SHIPPER_CODE"/><!-- 发货方编码代码  -->
+ <result property="shipperOrderNo" column="SHIPPER_ORDER_NO"/><!--发货单号  -->
+ <result property="receiverCode" column="RECEIVER_CODE"/><!--收货方编码代码  -->
+ <result property="receiverOrderNo" column="RECEIVER_ORDER_NO"/><!-- 收货方订单编号 -->
+ <result property="shipperCompanyCode" column="SHIPPER_COMPANY_CODE"/><!-- 物流公司编码代码 -->
+ <result property="cargoName" column="CARGO_NAME"/>
+ <result property="serarchStartProCityCounty" column="SERARCHSTARTPROCITYCOUNTY"/>
+ <result property="serarchEndProCityCounty" column="SERARCHENDPROCITYCOUNTY"/>
+  <result property="code" column="code"/>
+</resultMap>
+  
+  <!-- 根据Id查询导入订单的信息 返回domain (货主版) -->
+  <select id="query_import_transaction_info_byId" parameterClass="String" resultMap="import_transaction_info_domain_result">
+    SELECT 
+    t.id,
+	t.order_number,
+	t.cargo_id,
+	t.driver_id,
+	t.shipper_code,
+	t.shipper_order_no,
+	t.receiver_code,
+	t.receiver_order_no,
+	t.shipper_company_code,
+  (SELECT d.code FROM t_driver_user_info d WHERE d.id = t.driver_id) code,
+   (SELECT c.cargo_name FROM t_order_cargo_info c WHERE c.id=t.cargo_id) cargo_name,
+  (SELECT (CASE WHEN c.start_county is NOT  NULL AND c.start_county != '' THEN CONCAT(c.start_province,'-',c.start_city,'-',c.start_county) 
+		WHEN c.start_city IS NOT  NULL AND c.start_city != '' THEN CONCAT(c.start_province,'-',c.start_city)
+		 ELSE c.start_province END) serarchStartProCityCounty FROM t_order_cargo_info c WHERE c.id=t.cargo_id) serarchStartProCityCounty,
+  (SELECT (CASE WHEN c.end_county is NOT  NULL AND c.end_county != '' THEN CONCAT(c.end_province,'-',c.end_city,'-',c.end_county) 
+		WHEN c.end_city IS NOT  NULL AND c.end_city != '' THEN CONCAT(c.end_province,'-',c.end_city)
+		 ELSE c.end_province END) serarchEndProCityCounty FROM t_order_cargo_info c WHERE c.id=t.cargo_id) serarchEndProCityCounty 
+	FROM t_transaction_info  t WHERE t.id = #id# 
+  </select>
+	<!-- 根据司机ID查询司机成功交易记录分页 -->
+	<select id="query_transaction_car_bydriverid_list_page" parameterClass="java.util.HashMap" resultMap="transaction_info_domain_car_list_result">
+		select 
+		t.id,
+		t.ORDER_NUMBER,
+		(SELECT c.company_name from t_company_info c WHERE  c.id = t.COMPANY_ID) as company_name,
+		date_format(t.CREATE_TIME,'%Y-%m-%d') as CREATE_TIME,
+		CONCAT(t1.START_PROVINCE,t1.START_CITY,t1.START_COUNTY) STARTPROCITYCOUNTY,
+		CONCAT(t1.END_PROVINCE,t1.END_CITY,t1.END_COUNTY) ENDPROCITYCOUNTY
+		from 
+		t_transaction_info t 
+		LEFT JOIN 
+		t_order_cargo_info t1 
+		on 
+		t.CARGO_ID = t1.ID
+		<dynamic prepend="WHERE ">
+		 	<isNotEmpty property="driverId" prepend="and ">t.DRIVER_ID = #driverId#</isNotEmpty>
+		 	<isNotEmpty property="tradeStart" prepend="and ">t.TRADE_START = #tradeStart#</isNotEmpty>
+		</dynamic>
+		order by t.create_time desc 
+		LIMIT $curPage$,$pageSize$
+	</select>
+	
+	<!-- 根据司机ID查询司机成功交易记录分页总数量 -->
+	<select id="query_transaction_car_bydriverid_list_page_count" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+		select count(t.id) from t_transaction_info t 
+		<dynamic prepend="WHERE ">
+		 	<isNotEmpty property="driverId" prepend="and ">t.DRIVER_ID = #driverId#</isNotEmpty>
+		 	<isNotEmpty property="tradeStart" prepend="and ">t.TRADE_START= #tradeStart#</isNotEmpty>
+		</dynamic> 
+	</select>  
+
+	<!-- 每日新增交易或交易新增总量 -->
+	<select id="query_transaction_by_time_count" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+		select count(t.id) from t_transaction_info t 
+		<dynamic prepend="WHERE ">
+		 	<isNotEmpty property="createTime" prepend="and ">date_format(t.CREATE_TIME,'%Y-%m-%d') = date_format(#createTime#,'%Y-%m-%d')</isNotEmpty>
+		</dynamic>
+	</select>
+	
+<!-- 根据CREATE_TIME=当前的日期（年月日）查询倒序 取第一条的Id  -->
+<select id="query_transaction_id_byCreateTime"  resultClass="String">
+   SELECT 
+	t.id 
+	FROM t_transaction_info t 
+	WHERE UNIX_TIMESTAMP(date_format(t.create_time,'%Y-%c-%d')) =  UNIX_TIMESTAMP(date_format(sysdate(),'%Y-%c-%d')) 
+	ORDER BY t.create_time DESC 
+	limit 0,1 
+</select>	
+
+<!-- 根据Id查询交易记录  -->
+<select id="query_transaction_info_byId" parameterClass="String" resultMap="transaction_info_result">
+   SELECT 
+	t.id,
+	t.order_number,
+	t.cargo_id,
+	t.driver_id,
+	t.deploy_userid,
+	t.company_id,
+	t.trade_fair,
+	t.trade_start,
+	t.trade_start_time,
+	t.order_start,
+	t.create_time,
+	t.modify_time,
+	t.trade_cancel_origin,
+	t.shipper_code,
+	t.shipper_order_no,
+	t.receiver_code,
+	t.receiver_order_no,
+	t.delivery_time,
+	t.arrival_time,
+	t.receive_time,
+	t.shipper_company_code,
+	t.shipper_company_id,
+	t.shipper_code_id,
+	t.receiver_code_id,
+	t.remark 
+	FROM t_transaction_info t 
+	WHERE t.id = #id# 
+</select>
+<!-- 查询我的订单记录 - 不分页 -->
+<select id="query_transaction_info_domain" parameterClass="java.util.HashMap" resultMap="transaction_info_domain_result">
+  SELECT * FROM (
+SELECT 
+	t.id,
+	t.order_number,
+	t.cargo_id,
+	t.driver_id,
+	t.deploy_userid,
+	t.company_id,
+	t.trade_fair,
+	t.trade_start,
+	t.trade_start_time,
+	t.order_start,
+	t.trade_cancel_origin,
+	t.shipper_code,
+	t.shipper_order_no,
+	t.receiver_code,
+	t.receiver_order_no,
+	date_format(t.delivery_time,'%Y-%c-%d') delivery_time,
+	date_format(t.arrival_time,'%Y-%c-%d') arrival_time,
+	date_format(t.receive_time,'%Y-%c-%d') receive_time,
+	t.shipper_company_code,
+	t.shipper_company_id,
+	t.shipper_code_id,
+	t.receiver_code_id,
+	t.remark,
+	date_format(t.create_time,'%Y-%c-%d %T') create_time,
+	t.modify_time,
+	o.cargo_name,
+	o.cargo_type,
+	date_format(o.request_start_time,'%Y-%c-%d') request_start_time,
+	CONCAT(o.start_province,o.start_city,o.start_county) startProCityCounty,
+	CONCAT(o.end_province,o.end_city,o.end_county) endProCityCounty,
+  (SELECT d.name FROM t_driver_user_info d WHERE t.driver_id = d.id) name,
+	(SELECT d.code FROM t_driver_user_info d WHERE t.driver_id = d.id) code,
+  (SELECT d.telephone FROM t_driver_user_info d WHERE t.driver_id = d.id) telephone,
+  (SELECT d.car_number FROM t_driver_user_info d WHERE t.driver_id = d.id) car_number,
+  (SELECT d.baidu_channel_id FROM t_driver_user_info d WHERE t.driver_id = d.id) baidu_channel_id,
+  (SELECT d.baidu_user_id FROM t_driver_user_info  d WHERE t.driver_id = d.id) baidu_user_id,
+  (SELECT COUNT(*) FROM t_user_driver_assess_info a WHERE a.TRANSACTION_ID = t.id) user_driver_assess_count,
+  (SELECT c.COMPANY_NAME from t_web_user_info w,t_company_info c WHERE w.COMPANY_ID=c.ID AND w.id=t.shipper_code_id)as shipperComName,
+  (SELECT c.COMPANY_NAME from t_web_user_info w,t_company_info c WHERE w.COMPANY_ID=c.ID AND w.id=t.receiver_code_id)as receiverComName,
+  (SELECT c.COMPANY_NAME from t_web_user_info w,t_company_info c WHERE w.COMPANY_ID=c.ID AND w.id=t.shipper_company_id)as logisticsComName 
+  FROM t_transaction_info t,t_order_cargo_info o 
+WHERE
+	t.cargo_id = o.id 
+)a WHERE a.order_start = #orderStart# AND a.deploy_userid = #deployUserid# 
+<dynamic prepend="AND"> 
+     <isNotEmpty prepend="AND" property="cargoId"> a.cargo_id = #cargoId# </isNotEmpty>
+     <isNotEmpty prepend="AND" property="cargoType"> a.cargo_type = #cargoType# </isNotEmpty>
+     <isNotEmpty prepend="AND" property="cargoName"> a.cargo_name = #cargoName#  </isNotEmpty>
+     <isNotEmpty prepend="AND" property="requestStartTime"> a.request_start_time = #requestStartTime# </isNotEmpty> 
+     <isNotEmpty prepend="AND" property="startProCityCounty"> a.startProCityCounty like CONCAT(#startProCityCounty#,'%') </isNotEmpty>
+     <isNotEmpty prepend="AND" property="endProCityCounty"> a.endProCityCounty like CONCAT(#endProCityCounty#,'%') </isNotEmpty>
+    
+     <!-- 20140702加条件 -->
+     <isNotEmpty prepend="AND" property="name"> a. name = #name# </isNotEmpty>
+     <isNotEmpty prepend="AND" property="code"> a.code = #code# </isNotEmpty>
+     <isNotEmpty prepend="AND" property="carNumber"> a.car_number = #carNumber#  </isNotEmpty>
+     <isNotEmpty prepend="AND" property="orderNumber"> a.order_number = #orderNumber# </isNotEmpty> 
+     
+     <isNotEmpty property="tradeStart">
+     <!-- 201407022 pm 快到网首页和个人中心首页的 “待评价订单”-->
+        <isEqual property="tradeStart" compareValue="8" prepend="AND">
+            a.trade_start = 5  
+          AND NOT EXISTS (SELECT 1 from t_user_driver_assess_info c where c.transaction_id=a.id) 
+        </isEqual>
+        <!-- 201407022 pm 根据状态查询-->
+        <isNotEqual property="tradeStart" compareValue="8" prepend="AND">
+           a.trade_start = #tradeStart#  
+        </isNotEqual>
+     </isNotEmpty> 
+  </dynamic>
+  order by a.create_time desc  
+</select>
+
+<!-- 查询我的订单记录 - 分页 -->
+<select id="query_transaction_info_domain_byPage" parameterClass="java.util.HashMap" resultMap="transaction_info_domain_result">
+ SELECT * FROM (
+SELECT 
+	t.id,
+	t.order_number,
+	t.cargo_id,
+	t.driver_id,
+	t.deploy_userid,
+	t.company_id,
+	t.trade_fair,
+	t.trade_start,
+	t.trade_start_time,
+	t.order_start,
+	t.trade_cancel_origin,
+	t.shipper_code,
+	t.shipper_order_no,
+	t.receiver_code,
+	t.receiver_order_no,
+	date_format(t.delivery_time,'%Y-%c-%d') delivery_time,
+	date_format(t.arrival_time,'%Y-%c-%d') arrival_time,
+	date_format(t.receive_time,'%Y-%c-%d') receive_time,
+	t.shipper_company_code,
+	t.shipper_company_id,
+	t.shipper_code_id,
+	t.receiver_code_id,
+	t.remark,
+	date_format(t.create_time,'%Y-%c-%d %T') create_time,
+	t.modify_time,
+	o.cargo_name,
+	o.cargo_type,
+	date_format(o.request_start_time,'%Y-%c-%d') request_start_time,
+	CONCAT(o.start_province,o.start_city,o.start_county) startProCityCounty,
+	CONCAT(o.end_province,o.end_city,o.end_county) endProCityCounty,
+  (SELECT d.name FROM t_driver_user_info d WHERE t.driver_id = d.id) name,
+	(SELECT d.code FROM t_driver_user_info d WHERE t.driver_id = d.id) code,
+  (SELECT d.telephone FROM t_driver_user_info d WHERE t.driver_id = d.id) telephone,
+  (SELECT d.car_number FROM t_driver_user_info d WHERE t.driver_id = d.id) car_number,
+  (SELECT d.baidu_channel_id FROM t_driver_user_info d WHERE t.driver_id = d.id) baidu_channel_id,
+  (SELECT d.baidu_user_id FROM t_driver_user_info  d WHERE t.driver_id = d.id) baidu_user_id,
+  (SELECT COUNT(*) FROM t_user_driver_assess_info a WHERE a.TRANSACTION_ID = t.id) user_driver_assess_count,
+  (SELECT c.COMPANY_NAME from t_web_user_info w,t_company_info c WHERE w.COMPANY_ID=c.ID AND w.id=t.shipper_code_id)as shipperComName,
+  (SELECT c.COMPANY_NAME from t_web_user_info w,t_company_info c WHERE w.COMPANY_ID=c.ID AND w.id=t.receiver_code_id)as receiverComName,
+  (SELECT c.COMPANY_NAME from t_web_user_info w,t_company_info c WHERE w.COMPANY_ID=c.ID AND w.id=t.shipper_company_id)as logisticsComName 
+  FROM t_transaction_info t,t_order_cargo_info o 
+WHERE
+	t.cargo_id = o.id 
+)a WHERE a.order_start = #orderStart# AND a.deploy_userid = #deployUserid# 
+<dynamic prepend="AND"> 
+     <isNotEmpty prepend="AND" property="cargoId"> a.cargo_id = #cargoId# </isNotEmpty>
+     <isNotEmpty prepend="AND" property="cargoType"> a.cargo_type = #cargoType# </isNotEmpty>
+     <isNotEmpty prepend="AND" property="cargoName"> a.cargo_name = #cargoName#  </isNotEmpty>
+     <isNotEmpty prepend="AND" property="requestStartTime"> a.request_start_time = #requestStartTime# </isNotEmpty> 
+     <isNotEmpty prepend="AND" property="startProCityCounty"> a.startProCityCounty like CONCAT(#startProCityCounty#,'%') </isNotEmpty>
+     <isNotEmpty prepend="AND" property="endProCityCounty"> a.endProCityCounty like CONCAT(#endProCityCounty#,'%') </isNotEmpty>
+    
+     <!-- 20140702加条件 -->
+     <isNotEmpty prepend="AND" property="name"> a. name = #name# </isNotEmpty>
+     <isNotEmpty prepend="AND" property="code"> a.code = #code# </isNotEmpty>
+     <isNotEmpty prepend="AND" property="carNumber"> a.car_number = #carNumber#  </isNotEmpty>
+     <isNotEmpty prepend="AND" property="orderNumber"> a.order_number = #orderNumber# </isNotEmpty> 
+     
+     <isNotEmpty property="tradeStart">
+     <!-- 201407022 pm 快到网首页和个人中心首页的 “待评价订单”-->
+        <isEqual property="tradeStart" compareValue="8" prepend="AND">
+            a.trade_start = 5  
+          AND NOT EXISTS (SELECT 1 from t_user_driver_assess_info c where c.transaction_id=a.id) 
+        </isEqual>
+        <!-- 201407022 pm 根据状态查询-->
+        <isNotEqual property="tradeStart" compareValue="8" prepend="AND">
+           a.trade_start = #tradeStart#  
+        </isNotEqual>
+     </isNotEmpty> 
+  </dynamic>
+  order by a.create_time desc 
+  LIMIT #beginNum#,#endNum# 
+</select>
+
+<!-- 查询我的订单记录的总记录数-->
+<select id="query_transaction_info_domain_count" parameterClass="java.util.HashMap" resultClass="Integer">
+  SELECT COUNT(*) FROM (
+SELECT 
+	t.id,
+	t.order_number,
+	t.cargo_id,
+	t.driver_id,
+	t.deploy_userid,
+	t.company_id,
+	t.trade_fair,
+	t.trade_start,
+	t.trade_start_time,
+	t.order_start,
+	t.trade_cancel_origin,
+	t.shipper_code,
+	t.shipper_order_no,
+	t.receiver_code,
+	t.receiver_order_no,
+	date_format(t.delivery_time,'%Y-%c-%d') delivery_time,
+	date_format(t.arrival_time,'%Y-%c-%d') arrival_time,
+	date_format(t.receive_time,'%Y-%c-%d') receive_time,
+	t.shipper_company_code,
+	t.remark,
+	date_format(t.create_time,'%Y-%c-%d %T') create_time,
+	t.modify_time,
+	o.cargo_name,
+	o.cargo_type,
+	date_format(o.request_start_time,'%Y-%c-%d') request_start_time,
+	CONCAT(o.start_province,o.start_city,o.start_county) startProCityCounty,
+	CONCAT(o.end_province,o.end_city,o.end_county) endProCityCounty,
+  (SELECT d.name FROM t_driver_user_info d WHERE t.driver_id = d.id) name,
+	(SELECT d.code FROM t_driver_user_info d WHERE t.driver_id = d.id) code,
+  (SELECT d.telephone FROM t_driver_user_info d WHERE t.driver_id = d.id) telephone,
+  (SELECT d.car_number FROM t_driver_user_info d WHERE t.driver_id = d.id) car_number 
+  FROM t_transaction_info t,t_order_cargo_info o 
+WHERE
+	t.cargo_id = o.id 
+)a WHERE a.order_start = #orderStart# AND a.deploy_userid = #deployUserid# 
+<dynamic prepend="AND"> 
+     <isNotEmpty prepend="AND" property="cargoId"> a.cargo_id = #cargoId# </isNotEmpty>
+     <isNotEmpty prepend="AND" property="cargoType"> a.cargo_type = #cargoType# </isNotEmpty>
+     <isNotEmpty prepend="AND" property="cargoName"> a.cargo_name = #cargoName#  </isNotEmpty>
+     <isNotEmpty prepend="AND" property="requestStartTime"> a.request_start_time = #requestStartTime# </isNotEmpty> 
+     <isNotEmpty prepend="AND" property="startProCityCounty"> a.startProCityCounty like CONCAT(#startProCityCounty#,'%') </isNotEmpty>
+     <isNotEmpty prepend="AND" property="endProCityCounty"> a.endProCityCounty like CONCAT(#endProCityCounty#,'%') </isNotEmpty>
+    
+     <!-- 20140702加条件 -->
+     <isNotEmpty prepend="AND" property="name"> a. name = #name# </isNotEmpty>
+     <isNotEmpty prepend="AND" property="code"> a.code = #code# </isNotEmpty>
+     <isNotEmpty prepend="AND" property="carNumber"> a.car_number = #carNumber#  </isNotEmpty>
+     <isNotEmpty prepend="AND" property="orderNumber"> a.order_number = #orderNumber# </isNotEmpty> 
+     
+     <isNotEmpty property="tradeStart">
+     <!-- 201407022 pm 快到网首页和个人中心首页的 “待评价订单”-->
+        <isEqual property="tradeStart" compareValue="8" prepend="AND">
+            a.trade_start = 5  
+          AND NOT EXISTS (SELECT 1 from t_user_driver_assess_info c where c.transaction_id=a.id) 
+        </isEqual>
+        <!-- 201407022 pm 根据状态查询-->
+        <isNotEqual property="tradeStart" compareValue="8" prepend="AND">
+           a.trade_start = #tradeStart#  
+        </isNotEqual>
+     </isNotEmpty> 
+  </dynamic>
+</select>
+
+
+<!-- 查询交易记录in(成功或失败的),个人中心的首页not in(待处理订单)订单记录 - 不分页 -->
+<select id="query_inOrNotInSuccessClose_transaction_domain" parameterClass="java.util.HashMap" resultMap="transaction_info_domain_result">
+  SELECT * FROM (
+SELECT 
+	t.id,
+	t.order_number,
+	t.cargo_id,
+	t.driver_id,
+	t.deploy_userid,
+	t.company_id,
+	t.trade_fair,
+	t.trade_start,
+	t.trade_start_time,
+	t.order_start,
+	t.trade_cancel_origin,
+	t.shipper_code,
+	t.shipper_order_no,
+	t.receiver_code,
+	t.receiver_order_no,
+	date_format(t.delivery_time,'%Y-%c-%d') delivery_time,
+	date_format(t.arrival_time,'%Y-%c-%d') arrival_time,
+	date_format(t.receive_time,'%Y-%c-%d') receive_time,
+	t.shipper_company_code,
+	t.shipper_company_id,
+	t.shipper_code_id,
+	t.receiver_code_id,
+	t.remark,
+	date_format(t.create_time,'%Y-%c-%d %T') create_time,
+	t.modify_time,
+	o.cargo_name,
+	date_format(o.request_start_time,'%Y-%c-%d') request_start_time,
+	CONCAT(o.start_province,o.start_city,o.start_county) startProCityCounty,
+	CONCAT(o.end_province,o.end_city,o.end_county) endProCityCounty,
+  (SELECT d.name FROM t_driver_user_info d WHERE t.driver_id = d.id) name,
+	(SELECT d.code FROM t_driver_user_info d WHERE t.driver_id = d.id) code,
+  (SELECT d.telephone FROM t_driver_user_info d WHERE t.driver_id = d.id) telephone,
+  (SELECT d.car_number FROM t_driver_user_info d WHERE t.driver_id = d.id) car_number,
+  (SELECT d.baidu_channel_id FROM t_driver_user_info d WHERE t.driver_id = d.id) baidu_channel_id,
+  (SELECT d.baidu_user_id FROM t_driver_user_info  d WHERE t.driver_id = d.id) baidu_user_id,
+  (SELECT COUNT(*) FROM t_user_driver_assess_info a WHERE a.TRANSACTION_ID = t.id) user_driver_assess_count,
+  (SELECT c.COMPANY_NAME from t_web_user_info w,t_company_info c WHERE w.COMPANY_ID=c.ID AND w.id=t.shipper_code_id)as shipperComName,
+  (SELECT c.COMPANY_NAME from t_web_user_info w,t_company_info c WHERE w.COMPANY_ID=c.ID AND w.id=t.receiver_code_id)as receiverComName,
+  (SELECT c.COMPANY_NAME from t_web_user_info w,t_company_info c WHERE w.COMPANY_ID=c.ID AND w.id=t.shipper_company_id)as logisticsComName     
+  FROM t_transaction_info t,t_order_cargo_info o 
+  WHERE t.cargo_id = o.id  
+)a WHERE  a.order_start = #orderStart# AND a.deploy_userid = #deployUserid# 
+ <dynamic prepend="AND">
+     <isEqual  property="menuAId" compareValue="a_id_6" prepend="AND">
+        a.trade_start in (#successTradeStart#,#closeTradeStart#) 
+        <isNotEmpty prepend="AND" property="tradeStart">
+        a.trade_start = #tradeStart# 
+         </isNotEmpty>
+     </isEqual>
+     <isNotEqual property="menuAId" compareValue="a_id_6" prepend="AND">
+        a.trade_start not in (#successTradeStart#,#closeTradeStart#)
+        
+        <!-- 20140709 pm 快到网首页和个人中心首页 交易提醒的 “预约订单”，“待确认收货”-->
+        <isNotEmpty prepend="AND" property="tradeStart">
+        (a.trade_start = #tradeStart# 
+       <isEqual property="tradeStart" compareValue="3" prepend="OR">
+           a.trade_start = 7
+        </isEqual>)
+      </isNotEmpty>
+     </isNotEqual>
+     <isNotEmpty property="startTime" prepend="AND"> UNIX_TIMESTAMP(a.request_start_time) <![CDATA[>=]]>  UNIX_TIMESTAMP(#startTime#)</isNotEmpty>
+	 <isNotEmpty property="endTime" prepend="AND"> UNIX_TIMESTAMP(a.request_start_time) <![CDATA[<=]]>  UNIX_TIMESTAMP(#endTime#)</isNotEmpty>
+  </dynamic> 
+  order by a.create_time desc 
+</select>
+
+<!--交易记录 查询in(成功或失败的),个人中心首页 not in(待处理订单)订单记录 - 分页 -->
+<select id="query_inOrNotInSuccessClose_transaction_domain_byPage" parameterClass="java.util.HashMap" resultMap="transaction_info_domain_result">
+  SELECT * FROM (
+SELECT 
+	t.id,
+	t.order_number,
+	t.cargo_id,
+	t.driver_id,
+	t.deploy_userid,
+	t.company_id,
+	t.trade_fair,
+	t.trade_start,
+	t.trade_start_time,
+	t.order_start,
+	t.trade_cancel_origin,
+	t.shipper_code,
+	t.shipper_order_no,
+	t.receiver_code,
+	t.receiver_order_no,
+	date_format(t.delivery_time,'%Y-%c-%d') delivery_time,
+	date_format(t.arrival_time,'%Y-%c-%d') arrival_time,
+	date_format(t.receive_time,'%Y-%c-%d') receive_time,
+	t.shipper_company_code,
+	t.shipper_company_id,
+	t.shipper_code_id,
+	t.receiver_code_id,
+	t.remark,
+	date_format(t.create_time,'%Y-%c-%d %T') create_time,
+	t.modify_time,
+	o.cargo_name,
+	date_format(o.request_start_time,'%Y-%c-%d') request_start_time,
+	CONCAT(o.start_province,o.start_city,o.start_county) startProCityCounty,
+	CONCAT(o.end_province,o.end_city,o.end_county) endProCityCounty,
+  (SELECT d.name FROM t_driver_user_info d WHERE t.driver_id = d.id) name,
+	(SELECT d.code FROM t_driver_user_info d WHERE t.driver_id = d.id) code,
+  (SELECT d.telephone FROM t_driver_user_info d WHERE t.driver_id = d.id) telephone,
+  (SELECT d.car_number FROM t_driver_user_info d WHERE t.driver_id = d.id) car_number,
+  (SELECT d.baidu_channel_id FROM t_driver_user_info d WHERE t.driver_id = d.id) baidu_channel_id,
+  (SELECT d.baidu_user_id FROM t_driver_user_info  d WHERE t.driver_id = d.id) baidu_user_id,
+  (SELECT COUNT(*) FROM t_user_driver_assess_info a WHERE a.TRANSACTION_ID = t.id) user_driver_assess_count,
+  (SELECT c.COMPANY_NAME from t_web_user_info w,t_company_info c WHERE w.COMPANY_ID=c.ID AND w.id=t.shipper_code_id)as shipperComName,
+  (SELECT c.COMPANY_NAME from t_web_user_info w,t_company_info c WHERE w.COMPANY_ID=c.ID AND w.id=t.receiver_code_id)as receiverComName,
+  (SELECT c.COMPANY_NAME from t_web_user_info w,t_company_info c WHERE w.COMPANY_ID=c.ID AND w.id=t.shipper_company_id)as logisticsComName  
+  FROM t_transaction_info t,t_order_cargo_info o 
+  WHERE t.cargo_id = o.id  
+)a WHERE  a.order_start = #orderStart# AND a.deploy_userid = #deployUserid# 
+ <dynamic prepend="AND">
+     <isEqual  property="menuAId" compareValue="a_id_6" prepend="AND">
+        a.trade_start in (#successTradeStart#,#closeTradeStart#) 
+        <isNotEmpty prepend="AND" property="tradeStart">
+        a.trade_start = #tradeStart# 
+         </isNotEmpty>
+     </isEqual>
+     <isNotEqual property="menuAId" compareValue="a_id_6" prepend="AND">
+        a.trade_start not in (#successTradeStart#,#closeTradeStart#)
+        
+        <!-- 20140709 pm 快到网首页和个人中心首页 交易提醒的 “预约订单”，“待确认收货”-->
+        <isNotEmpty prepend="AND" property="tradeStart">
+        (a.trade_start = #tradeStart# 
+       <isEqual property="tradeStart" compareValue="3" prepend="OR">
+           a.trade_start = 7
+        </isEqual>)
+      </isNotEmpty>
+     </isNotEqual>
+     <isNotEmpty property="startTime" prepend="AND"> UNIX_TIMESTAMP(a.request_start_time) <![CDATA[>=]]>  UNIX_TIMESTAMP(#startTime#)</isNotEmpty>
+	 <isNotEmpty property="endTime" prepend="AND"> UNIX_TIMESTAMP(a.request_start_time) <![CDATA[<=]]>  UNIX_TIMESTAMP(#endTime#)</isNotEmpty>
+  </dynamic> 
+  order by a.create_time desc 
+  LIMIT #beginNum#,#endNum# 
+</select>
+
+<!-- 交易记录 查询in(成功或失败的),个人中心首页 not in(待处理订单)订单总记录数-->
+<select id="query_inOrNotInSuccessClose_transaction_domain_count" parameterClass="java.util.HashMap" resultClass="Integer">
+  SELECT COUNT(*) FROM (
+   SELECT 
+	t.id,
+	t.order_number,
+	t.cargo_id,
+	t.driver_id,
+	t.deploy_userid,
+	t.company_id,
+	t.trade_fair,
+	t.trade_start,
+	t.trade_start_time,
+	t.order_start,
+	t.trade_cancel_origin,
+	t.shipper_code,
+	t.shipper_order_no,
+	t.receiver_code,
+	t.receiver_order_no,
+	date_format(t.delivery_time,'%Y-%c-%d') delivery_time,
+	date_format(t.arrival_time,'%Y-%c-%d') arrival_time,
+	date_format(t.receive_time,'%Y-%c-%d') receive_time,
+	t.shipper_company_code,
+	t.remark,
+	date_format(t.create_time,'%Y-%c-%d %T') create_time,
+	t.modify_time,
+	o.cargo_name,
+	date_format(o.request_start_time,'%Y-%c-%d') request_start_time,
+	CONCAT(o.start_province,o.start_city,o.start_county) startProCityCounty,
+	CONCAT(o.end_province,o.end_city,o.end_county) endProCityCounty,
+  (SELECT d.name FROM t_driver_user_info d WHERE t.driver_id = d.id) name,
+	(SELECT d.code FROM t_driver_user_info d WHERE t.driver_id = d.id) code,
+  (SELECT d.telephone FROM t_driver_user_info d WHERE t.driver_id = d.id) telephone,
+  (SELECT d.car_number FROM t_driver_user_info d WHERE t.driver_id = d.id) car_number,
+  (SELECT d.baidu_channel_id FROM t_driver_user_info d WHERE t.driver_id = d.id) baidu_channel_id,
+  (SELECT d.baidu_user_id FROM t_driver_user_info  d WHERE t.driver_id = d.id) baidu_user_id,
+	(SELECT COUNT(*) FROM t_user_driver_assess_info a WHERE a.TRANSACTION_ID = t.id) user_driver_assess_count    
+  FROM t_transaction_info t,t_order_cargo_info o 
+  WHERE t.cargo_id = o.id  
+)a WHERE  a.order_start = #orderStart# AND a.deploy_userid = #deployUserid# 
+ <dynamic prepend="AND">
+     <isEqual  property="menuAId" compareValue="a_id_6" prepend="AND">
+        a.trade_start in (#successTradeStart#,#closeTradeStart#) 
+        <isNotEmpty prepend="AND" property="tradeStart">
+        a.trade_start = #tradeStart# 
+         </isNotEmpty>
+     </isEqual>
+     <isNotEqual property="menuAId" compareValue="a_id_6" prepend="AND">
+        a.trade_start not in (#successTradeStart#,#closeTradeStart#)
+        
+        <!-- 20140709 pm 快到网首页和个人中心首页 交易提醒的 “预约订单”，“待确认收货”-->
+        <isNotEmpty prepend="AND" property="tradeStart">
+        (a.trade_start = #tradeStart# 
+       <isEqual property="tradeStart" compareValue="3" prepend="OR">
+           a.trade_start = 7
+        </isEqual>)
+      </isNotEmpty>
+     </isNotEqual>
+     <isNotEmpty property="startTime" prepend="AND"> UNIX_TIMESTAMP(a.request_start_time) <![CDATA[>=]]>  UNIX_TIMESTAMP(#startTime#)</isNotEmpty>
+	 <isNotEmpty property="endTime" prepend="AND"> UNIX_TIMESTAMP(a.request_start_time) <![CDATA[<=]]>  UNIX_TIMESTAMP(#endTime#)</isNotEmpty>
+  </dynamic>  
+</select>
+
+
+<!-- 修改订单删除状态（订单是否有效） -->
+    <update id="update_transaction_info_order_start" parameterClass="TransactionInfoDomain">
+		UPDATE t_transaction_info SET 
+		order_start = #orderStart#,
+		modify_time = sysdate() 
+		 where id=#id#
+	</update>
+<!-- 修改交易状态 -->
+    <update id="update_transaction_info_trade_start" parameterClass="TransactionInfoDomain">
+		UPDATE t_transaction_info SET 
+		trade_start = #tradeStart#,
+		<isNotEmpty property="tradeCancelOrigin">
+					trade_cancel_origin=#tradeCancelOrigin#,
+		</isNotEmpty>
+		<isNotEmpty property="receiveTime">
+		receive_time = #receiveTime#,
+		</isNotEmpty>
+		remark = #remark#,
+		TRADE_START_TIME = sysdate(),
+		modify_time = sysdate() 
+		 where id=#id#
+	</update>
+
+<!-- 添加生成订单记录 -->
+<insert id="isnert_transaction_info" parameterClass="java.util.HashMap">
+ INSERT INTO t_transaction_info(
+	order_number,
+	cargo_id,
+	driver_id,
+	deploy_userid,
+	company_id,
+	trade_fair,
+	trade_start,
+	trade_start_time,
+	order_start,
+	create_time,
+	modify_time,
+	trade_cancel_origin,
+	remark 
+)VALUES (
+  #orderNumber#,#cargoId#,#driverId#,
+  #deployUserid#,#companyId#,#tradeFair#,
+  #tradeStart#,sysdate(),#orderStart#,
+  sysdate(),sysdate(),#tradeCancelOrigin#,#remark#)
+  
+	<selectKey resultClass="String" keyProperty="id">
+	    SELECT last_insert_id() as id
+    </selectKey>
+</insert>
+
+<!-- 添加订单记录(包含了所有字段   货主版新增字段) -->
+<insert id="insert_transaction_infos" parameterClass="com.cy.dcts.common.bo.TransactionInfo">
+ INSERT INTO t_transaction_info(
+	order_number,
+	cargo_id,
+	driver_id,
+	deploy_userid,
+	company_id,
+	trade_fair,
+	trade_start,
+	trade_start_time,
+	order_start,
+	create_time,
+	modify_time,
+	trade_cancel_origin,
+	remark,
+	shipper_code,
+	shipper_order_no,
+	receiver_code,
+	receiver_order_no,
+	shipper_company_code,
+	shipper_company_id,
+	shipper_code_id,
+	receiver_code_id,
+	delivery_time,
+	arrival_time,
+	receive_time 
+)VALUES (
+  #orderNumber#,#cargoId#,#driverId#,
+  #deployUserid#,#companyId#,#tradeFair#,
+  #tradeStart#,sysdate(),#orderStart#,
+  sysdate(),sysdate(),#tradeCancelOrigin#,#remark#,
+  #shipperCode#,#shipperOrderNo#,#receiverCode#,#receiverOrderNo#,
+  #shipperCompanyCode#,#shipperCompanyId#,#shipperCodeId#,
+  #receiverCodeId#,#deliveryTime#,#arrivalTime#,#receiveTime#)
+  
+	<selectKey resultClass="String" keyProperty="id">
+	    SELECT last_insert_id() as id
+    </selectKey>
+</insert>
+
+<!-- 自己交易不同状态下的订单数 -->
+ <select id="query_allStart_count" resultClass="com.cy.dcts.common.domain.TransactionInfoDomain" parameterClass="String">
+   SELECT sum(CASE  WHEN TRADE_START=1 THEN 1  ELSE 0 END ) waitingDriverTrade,
+	sum(CASE  WHEN TRADE_START=3 THEN 1  ELSE 0 END ) inTransitTrade,
+	sum(CASE  WHEN TRADE_START=5 THEN 1  ELSE 0 END ) successTrade,
+	sum(CASE  WHEN TRADE_START=6 THEN 1  ELSE 0 END ) closeTrade,
+	sum(CASE  WHEN TRADE_START=7 THEN 1  ELSE 0 END ) driverDisburdenTrade  
+	from t_transaction_info where deploy_userid=#userId# 
+ </select>
+ 
+ <!-- 自己货源对应状态下的且未评价的订单数 -->
+ <select id="query_allStart_noAssess_count" resultClass="String" parameterClass="java.util.HashMap">
+ SELECT count(*) 
+ from t_transaction_info t 
+ where  t.order_start = 0 and t.TRADE_START=#tradeStart# AND t.deploy_userid=#userId# 
+ and NOT EXISTS (SELECT 1 from t_user_driver_assess_info a where a.transaction_id=t.id) 
+ </select>
+ 
+ <!-- 今日动态（当天达成的交易即司机确认拉货后的订单：运输中的，司机已卸货的，订单完成的） -->
+ <select id="query_today_dynamic_timeAndStart" resultClass="com.cy.dcts.common.domain.TransactionInfoDomain" parameterClass="java.util.HashMap">
+    SELECT 
+	(SELECT c.company_name from t_company_info c WHERE c.id = t.company_id) as companyName,
+	(SELECT d.car_number FROM t_driver_user_info d WHERE d.id = t.DRIVER_ID) as carNumber 
+	FROM t_transaction_info t 
+	WHERE t.order_start = #orderStart#  AND DATE_FORMAT(t.create_time,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d') 
+	AND t.trade_start IN(#inTransitTrade#,#driverDisburdenTrade#,#successTrade#);
+ </select>
+ 
+ <!-- 修改发货时间 or到货时间 -->
+    <update id="update_transaction_deliveryOrArrival_time" parameterClass="TransactionInfoDomain">
+		UPDATE t_transaction_info SET 
+		<isNotEmpty property="deliveryTime">
+		   delivery_time = #deliveryTime#,
+		</isNotEmpty>
+		<isNotEmpty property="arrivalTime">
+		   arrival_time = #arrivalTime#,
+		</isNotEmpty>
+		modify_time = sysdate() 
+		 where id=#id# 
+	</update>
+   <!-- 修改导入的订单（货主版）-->
+    <update id="update_import_transaction_info" parameterClass="TransactionInfoDomain">
+		UPDATE t_transaction_info SET 
+		shipper_code = #shipperCode#,
+		shipper_order_no = #shipperOrderNo#,
+		receiver_code = #receiverCode#,
+		receiver_order_no = #receiverOrderNo#,
+		shipper_company_code = #shipperCompanyCode#,
+		shipper_company_id = #shipperCompanyId#,
+		shipper_code_id = #shipperCodeId#,
+		receiver_code_id = #receiverCodeId#,
+		trade_start = #tradeStart#,
+		driver_id = #driverId#,
+		modify_time = sysdate() 
+		where id = #id# 
+	</update>
+	
+	<!-- 收货方 or 发货方订单查询 -->
+	<select id="query_transaction_info_domain_byPage2" parameterClass="java.util.HashMap" resultMap="transaction_info_domain_result">
+		SELECT 
+			t.id,
+	t.order_number,
+	t.cargo_id,
+	t.driver_id,
+	t.deploy_userid,
+	t.company_id,
+	t.trade_fair,
+	t.trade_start,
+	t.trade_start_time,
+	t.order_start,
+	t.trade_cancel_origin,
+	t.shipper_code,
+	t.shipper_order_no,
+	t.receiver_code,
+	t.receiver_order_no,
+	date_format(t.delivery_time,'%Y-%c-%d') delivery_time,
+	date_format(t.arrival_time,'%Y-%c-%d') arrival_time,
+	date_format(t.receive_time,'%Y-%c-%d') receive_time,
+	t.shipper_company_code,
+	t.shipper_company_id,
+	t.shipper_code_id,
+	t.receiver_code_id,
+	t.remark,
+	date_format(t.create_time,'%Y-%c-%d %T') create_time,
+	t.modify_time,
+	o.cargo_name,
+	o.cargo_type,
+	date_format(o.request_start_time,'%Y-%c-%d') request_start_time,
+	CONCAT(o.start_province,o.start_city,o.start_county) startProCityCounty,
+	CONCAT(o.end_province,o.end_city,o.end_county) endProCityCounty,
+  (SELECT d.name FROM t_driver_user_info d WHERE t.driver_id = d.id) name,
+	(SELECT d.code FROM t_driver_user_info d WHERE t.driver_id = d.id) code,
+  (SELECT d.telephone FROM t_driver_user_info d WHERE t.driver_id = d.id) telephone,
+  (SELECT d.car_number FROM t_driver_user_info d WHERE t.driver_id = d.id) car_number,
+  (SELECT d.baidu_channel_id FROM t_driver_user_info d WHERE t.driver_id = d.id) baidu_channel_id,
+  (SELECT d.baidu_user_id FROM t_driver_user_info  d WHERE t.driver_id = d.id) baidu_user_id,
+  (SELECT COUNT(*) FROM t_user_driver_assess_info a WHERE a.TRANSACTION_ID = t.id) user_driver_assess_count,
+  (SELECT c.COMPANY_NAME from t_web_user_info w,t_company_info c WHERE w.COMPANY_ID=c.ID AND w.id=t.shipper_code_id)as shipperComName,
+  (SELECT c.COMPANY_NAME from t_web_user_info w,t_company_info c WHERE w.COMPANY_ID=c.ID AND w.id=t.receiver_code_id)as receiverComName,
+  (SELECT c.COMPANY_NAME from t_web_user_info w,t_company_info c WHERE w.COMPANY_ID=c.ID AND w.id=t.shipper_company_id)as logisticsComName  
+		  FROM t_transaction_info t,t_order_cargo_info o,t_driver_user_info d 
+		  WHERE t.cargo_id = o.id AND t.driver_id = d.id AND t.order_start = #orderStart# AND t.deploy_userid = #deployUserid# 
+		   <dynamic prepend="AND">
+		     <isNotEmpty prepend="AND" property="cargoId"> t.cargo_id = #cargoId# </isNotEmpty>
+		     <isNotEmpty prepend="AND" property="cargoType"> o.cargo_type = #cargoType# </isNotEmpty>
+		     <isNotEmpty prepend="AND" property="cargoName"> o.cargo_name = #cargoName# </isNotEmpty>
+		     <isNotEmpty prepend="AND" property="requestStartTime"> o.request_start_time = #requestStartTime# </isNotEmpty> 
+		     <isNotEmpty prepend="AND" property="startProCityCounty"> CONCAT(o.start_province,o.start_city,o.start_county) like CONCAT(#startProCityCounty#,'%') </isNotEmpty>
+		     <isNotEmpty prepend="AND" property="endProCityCounty"> CONCAT(o.end_province,o.end_city,o.end_county) like CONCAT(#endProCityCounty#,'%') </isNotEmpty>
+		     
+		      <!-- 20140702加条件 -->
+		     <isNotEmpty prepend="AND" property="name"> d. name = #name# </isNotEmpty>
+		     <isNotEmpty prepend="AND" property="code"> d.code = #code# </isNotEmpty>
+		     <isNotEmpty prepend="AND" property="carNumber"> d.car_number = #carNumber#  </isNotEmpty>
+		     <isNotEmpty prepend="AND" property="orderNumber"> t.order_number = #orderNumber# </isNotEmpty> 
+		     <isNotEmpty property="tradeStart">
+		     <!-- 201407022 pm 快到网首页和个人中心首页的 “待评价订单”-->
+		        <isEqual property="tradeStart" compareValue="8" prepend="AND">
+		            t.trade_start = 5  
+		          AND NOT EXISTS (SELECT 1 from t_user_driver_assess_info a where a.transaction_id=t.id) 
+		        </isEqual>
+		        <!-- 201407022 pm 根据状态查询-->
+		        <isNotEqual property="tradeStart" compareValue="8" prepend="AND">
+		           t.trade_start = #tradeStart#  
+		        </isNotEqual>
+		     </isNotEmpty>
+		     <isNotEmpty property="userType">
+		     	<isEqual property="userType" compareValue="2">
+		     		<isNotEmpty property="receiverCode" prepend="and">
+		     			t.RECEIVER_CODE = #receiverCode#
+		     		</isNotEmpty>
+		     		<isNotEmpty prepend="and" property="shipperCompanyCode">
+		     			t.SHIPPER_COMPANY_CODE = #shipperCompanyCode#
+		     		</isNotEmpty>		     		
+		     	</isEqual>
+		     	<isEqual property="userType" compareValue="1">
+		     		<isNotEmpty property="shipperCode" prepend="and">
+		     			t.SHIPPER_CODE = #shipperCode#
+		     		</isNotEmpty>
+		     		<isNotEmpty prepend="and" property="shipperCompanyCode">
+		     			t.SHIPPER_COMPANY_CODE = #shipperCompanyCode#
+		     		</isNotEmpty>				     		
+		     	</isEqual>
+		     </isNotEmpty> 
+		  </dynamic> 
+		  order by t.create_time desc 
+		  LIMIT #beginNum#,#endNum# 
+	</select>
+	
+	<select id="query_transaction_info_domain_count2" parameterClass="java.util.HashMap" resultClass="Integer">
+	  SELECT count(*) 
+	  FROM t_transaction_info t,t_order_cargo_info o,t_driver_user_info d 
+	  WHERE t.cargo_id = o.id AND t.driver_id = d.id AND t.order_start = #orderStart# AND t.deploy_userid = #deployUserid# 
+	   <dynamic prepend="AND"> 
+	     <isNotEmpty prepend="AND" property="cargoId"> t.cargo_id = #cargoId# </isNotEmpty>
+	     <isNotEmpty prepend="AND" property="cargoType"> o.cargo_type = #cargoType#</isNotEmpty> 
+	     <isNotEmpty prepend="AND" property="cargoName"> o.cargo_name = #cargoName# </isNotEmpty> 
+	     <isNotEmpty prepend="AND" property="requestStartTime"> o.request_start_time = #requestStartTime# </isNotEmpty> 
+	     <isNotEmpty prepend="AND" property="startProCityCounty"> CONCAT(o.start_province,o.start_city,o.start_county) like CONCAT(#startProCityCounty#,'%') </isNotEmpty>
+	     <isNotEmpty prepend="AND" property="endProCityCounty"> CONCAT(o.end_province,o.end_city,o.end_county) like CONCAT(#endProCityCounty#,'%') </isNotEmpty>
+	     
+	      <!-- 20140702加条件 -->
+	     <isNotEmpty prepend="AND" property="name"> d. name = #name# </isNotEmpty>
+	     <isNotEmpty prepend="AND" property="code"> d.code = #code# </isNotEmpty>
+	     <isNotEmpty prepend="AND" property="carNumber"> d.car_number = #carNumber#  </isNotEmpty>
+	     <isNotEmpty prepend="AND" property="orderNumber"> t.order_number = #orderNumber# </isNotEmpty> 
+	      <isNotEmpty property="tradeStart">
+	     <!-- 201407022 pm 快到网首页和个人中心首页的 “待评价订单”-->
+	        <isEqual property="tradeStart" compareValue="8" prepend="AND">
+	            t.trade_start = 5  
+	          AND NOT EXISTS (SELECT 1 from t_user_driver_assess_info a where a.transaction_id=t.id) 
+	        </isEqual>
+	        <!-- 201407022 pm 根据状态查询-->
+	        <isNotEqual property="tradeStart" compareValue="8" prepend="AND">
+	           t.trade_start = #tradeStart#  
+	        </isNotEqual>
+	     </isNotEmpty>
+	     <isNotEmpty property="userType">
+	     	<isEqual property="userType" compareValue="2">
+	     		<isNotEmpty property="receiverCode" prepend="and">
+	     			t.RECEIVER_CODE = #receiverCode#
+	     		</isNotEmpty>
+	     		<isNotEmpty prepend="and" property="shipperCompanyCode">
+	     			t.SHIPPER_COMPANY_CODE = #shipperCompanyCode#
+	     		</isNotEmpty>		     		
+	     	</isEqual>
+	     	<isEqual property="userType" compareValue="1">
+	     		<isNotEmpty property="shipperCode" prepend="and">
+	     			t.SHIPPER_CODE = #shipperCode#
+	     		</isNotEmpty>
+	     		<isNotEmpty prepend="and" property="shipperCompanyCode">
+	     			t.SHIPPER_COMPANY_CODE = #shipperCompanyCode#
+	     		</isNotEmpty>				     		
+	     	</isEqual>
+		 </isNotEmpty> 
+	  </dynamic> 
+	</select>
+	<!-- 修改导入的订单的司机手机号同时也修改交易状态（货主版） -->
+	<update id="update_trande_driverAndOrderStart" parameterClass="TransactionInfoDomain">
+	  UPDATE t_transaction_info SET 
+	    driver_id = #driverId#,
+	    trade_start = #tradeStart#,
+		modify_time = sysdate() 
+		 where id=#id#
+	</update>
+</sqlMap>  

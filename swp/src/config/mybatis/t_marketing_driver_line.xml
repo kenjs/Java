@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.swp.dao.MarketingDriverLineDao">
+
+    <!-- 客户司机运营线路 -->
+    <resultMap type="MarketingDriverLine" id="marketing_driver_line_result">
+        <!-- 主键 -->
+        <result property="id" column="id"/>
+        <!-- 客户司机ID(pk-t_marketing_driver_info.id) -->
+        <result property="customerDriverId" column="customer_driver_id"/>
+        <!-- 预约路线起-省 -->
+        <result property="startProvince" column="start_province"/>
+        <!-- 预约路线起-市 -->
+        <result property="startCity" column="start_city"/>
+        <!-- 预约路线起-县区 -->
+        <result property="startCounty" column="start_county"/>
+        <!-- 预约路线目-省 -->
+        <result property="endProvince" column="end_province"/>
+        <!-- 预约路线目-市 -->
+        <result property="endCity" column="end_city"/>
+        <!-- 预约路线目-县区 -->
+        <result property="endCounty" column="end_county"/>
+       <!-- 类型（1单线2双线） -->
+        <result property="lineType" column="line_type"/>
+        <!-- 状态(0有效1无效) -->
+        <result property="deleteFlag" column="delete_flag"/>
+        <!-- 创建时间 -->
+        <result property="createTime" column="create_time"/>
+        <!-- 修改时间 -->
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+
+    <!-- 司机运营线路 -->
+    <resultMap type="DriverLineInfo" id="driver_line_info_result">
+        <!-- 主键 -->
+        <result property="id" column="id"/>
+        <!-- 客户司机ID(pk-t_marketing_driver_info.id) -->
+        <result property="driverId" column="driver_id"/>
+        <!-- 预约路线起-省 -->
+        <result property="startProvince" column="start_province"/>
+        <!-- 预约路线起-市 -->
+        <result property="startCity" column="start_city"/>
+        <!-- 预约路线起-县区 -->
+        <result property="startCounty" column="start_county"/>
+        <!-- 预约路线目-省 -->
+        <result property="endProvince" column="end_province"/>
+        <!-- 预约路线目-市 -->
+        <result property="endCity" column="end_city"/>
+        <!-- 预约路线目-县区 -->
+        <result property="endCounty" column="end_county"/>
+        <!-- 类型（1单线2双线） -->
+        <result property="lineType" column="line_type"/>
+        <!-- 状态(0有效1无效) -->
+        <result property="start" column="start"/>
+        <!-- 创建时间 -->
+        <result property="createTime" column="create_time"/>
+        <!-- 修改时间 -->
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+
+
+    <!-- 查询客户司机运营线路，返回List对象 -->
+    <select id="queryMarketingDriverLineByCustomerDriverId" parameterType="map" resultMap="marketing_driver_line_result">
+        SELECT id,
+        customer_driver_id,
+        start_province,start_city,start_county,
+        end_province,end_city,end_county,
+        line_type,delete_flag,
+        create_time,modify_time
+        FROM t_marketing_driver_line
+        WHERE customer_driver_id = #{customerDriverId} and delete_flag = #{deleteFlag}  order by create_time ASC
+    </select>
+
+
+    <!-- 查询司机运营线路，返回List对象 -->
+    <select id="queryDriverLineInfoByDriverId" parameterType="map" resultMap="driver_line_info_result">
+        SELECT id,
+        driver_id,
+        start_province,start_city,start_county,
+        end_province,end_city,end_county,
+        line_type,start,
+        create_time,modify_time
+        FROM t_driver_line_info
+        WHERE driver_id = #{driverId} and start = #{start} order by create_time ASC
+    </select>
+
+    <!-- 根据id获取客户司机运营线路，返回对象 -->
+    <select id="queryMarketingDriverLineById" parameterType="Integer" resultMap="marketing_driver_line_result">
+        SELECT id,
+        customer_driver_id,
+        start_province,start_city,start_county,
+        end_province,end_city,end_county,
+        line_type,delete_flag,
+        create_time,modify_time
+        FROM t_marketing_driver_line
+        WHERE id = #{id}
+    </select>
+
+    <!-- 根据id获取司机运营线路，返回对象 -->
+    <select id="queryDriverLineInfoById" parameterType="Integer" resultMap="driver_line_info_result">
+        SELECT id,
+        driver_id,
+        start_province,start_city,start_county,
+        end_province,end_city,end_county,
+        line_type,start,
+        create_time,modify_time
+        FROM t_driver_line_info
+        WHERE id = #{id}
+    </select>
+
+    <!-- 修改客户司机运营线路 -->
+    <update id="updateMarketingDriverLine" parameterType="MarketingDriverLine">
+        UPDATE t_marketing_driver_line SET
+        customer_driver_id = #{customerDriverId},
+        start_province = #{startProvince},
+        start_city = #{startCity},
+        start_county = #{startCounty},
+        end_province = #{endProvince},
+        end_city = #{endCity},
+        end_county = #{endCounty},
+        modify_time = sysdate()
+        WHERE ID = #{id}
+    </update>
+
+
+    <!-- 修改司机运营线路 -->
+    <update id="updateDriverLineInfo" parameterType="DriverLineInfo">
+        UPDATE t_driver_line_info SET
+        driver_id = #{driverId},
+        start_province = #{startProvince},
+        start_city = #{startCity},
+        start_county = #{startCounty},
+        end_province = #{endProvince},
+        end_city = #{endCity},
+        end_county = #{endCounty},
+        modify_time = sysdate()
+        WHERE ID = #{id}
+    </update>
+
+    <!-- 保存客户司机运营线路 -->
+    <insert id="addMarketingDriverLine" parameterType="MarketingDriverLine" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_marketing_driver_line (
+        customer_driver_id,
+        start_province,start_city,start_county,
+        end_province,end_city,end_county,
+        line_type,delete_flag,
+        create_time,modify_time)
+        VALUES (
+        #{customerDriverId},
+        #{startProvince},#{startCity},#{startCounty},
+        #{endProvince},#{endCity},#{endCounty},
+        #{lineType},#{deleteFlag},
+        sysdate(),sysdate())
+    </insert>
+
+
+    <!-- 保存司机运营线路 -->
+    <insert id="addDriverLineInfo" parameterType="DriverLineInfo" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_driver_line_info (
+        driver_id,
+        start_province,start_city,start_county,
+        end_province,end_city,end_county,
+        line_type,start,
+        create_time,modify_time)
+        VALUES (
+        #{driverId},
+        #{startProvince},#{startCity},#{startCounty},
+        #{endProvince},#{endCity},#{endCounty},
+        #{lineType},#{start},
+        sysdate(),sysdate())
+    </insert>
+
+</mapper>

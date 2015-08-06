@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cy.dctms.dao.LocationCollectLastInfoDao">
+
+    <!-- 移动历史位置信息 -->
+    <insert id="addLastLocation">
+        INSERT INTO t_history_location_collect(ID,DRIVER_ID,LONGITUDE,LATITUDE,PROVINCE,CITY,COUNTY,
+                                                                TOWN,LOCATION,LAST_TIME,CREATE_TIME,MODIFY_TIME)
+        SELECT * from t_location_collect_last_info WHERE CREATE_TIME &lt; DATE_ADD(SYSDATE(),INTERVAL -3 MONTH)
+    </insert>
+
+    <!-- 删除历史位置信息 -->
+    <delete id="deleteHistoryLocation">
+        DELETE FROM t_location_collect_last_info WHERE CREATE_TIME &lt; DATE_ADD(SYSDATE(),INTERVAL -3 MONTH)
+    </delete>
+</mapper>

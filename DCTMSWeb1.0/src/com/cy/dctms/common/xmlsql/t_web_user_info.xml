@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="webUserInfoDomain" type="com.cy.dctms.common.domain.WebUserInfoDomain"/>
+	
+	
+	<resultMap class="webUserInfoDomain" id="webUser_info_domain_result">
+		<result property="id" column="ID"/>
+		<result property="code" column="code"/>
+		<result property="name" column="name"/>
+		<result property="mobilephone" column="mobilephone"/>
+		<result property="email" column="email"/>
+		<result property="modifyTime" column="modify_time" />
+		<result property="companyId" column="company_id"/>
+		<result property="companyName" column="company_name"/>
+		<result property="contactName" column="contact_name"/>
+		<result property="submitType" column="submit_type"/>
+		<result property="deleteReason" column="delete_reason"/>
+		<result property="businessLicence" column="business_licence"/>
+		<result property="organizationCode" column="organization_code"/>
+	</resultMap>
+	
+	<!--  管理查询和审核认证明细	-->
+	<resultMap class="webUserInfoDomain" id="webUser_mx_info_domain_result">
+		<result property="id" column="ID"/>
+		<result property="code" column="code"/>
+		<result property="name" column="name"/>
+		<result property="mobilephone" column="mobilephone"/>
+		<result property="email" column="email"/>
+		<result property="modifyTime" column="modify_time" />
+		<result property="companyId" column="company_id"/>
+		<result property="companyName" column="company_name"/>
+		<result property="contactName" column="contact_name"/>
+		<result property="submitType" column="submit_type"/>
+		<result property="deleteReason" column="delete_reason"/>
+		<result property="businessLicence" column="business_licence"/>
+		<result property="organizationCode" column="organization_code"/>
+		<result property="organizationImages" column="organization_images"/>
+		<result property="businessImages" column="business_images"/>
+	</resultMap>
+	
+	<resultMap class="webUserInfoDomain" id="audit_webUser_info_domain_result">
+		<result property="id" column="ID"/>
+		<result property="code" column="code"/>
+		<result property="name" column="name"/>
+		<result property="mobilephone" column="mobilephone"/>
+		<result property="email" column="email"/>
+		<result property="modifyTime" column="modify_time" />
+		<result property="companyName" column="company_name"/>
+		<result property="contactName" column="contact_name"/>
+		<result property="submitType" column="submit_type"/>
+	</resultMap>
+	
+	<resultMap class="webUserInfoDomain" id="webUser_info_domain_transaction_result">
+		<result property="code" column="code"/>
+		<result property="companyName" column="company_name"/>
+		<result property="mobilephone" column="mobilephone"/>
+		<result property="createTime" column="create_time"/>
+		<result property="accumulateCargoCount" column="accumulate_cargo_count"/>
+		<result property="accumulateTransactionCount" column="accumulate_transaction_count"/>
+		<result property="orderCargoCount" column="order_cargo_count"/>
+		<result property="orderCargoSuccessCount" column="order_cargo_success_count"/>
+		
+	</resultMap>
+	
+	<select id="query_webUser_info_count"  resultClass="Integer">
+		select count(t.id)
+		  from t_web_user_info t ,t_company_info t2
+		  where  t.deleted_flag = 0 and t2.deleted_flag = 0
+		  and t.company_id = t2.id
+		  and t.user_origin = 0
+		  and t.parent_id = 0
+		   <isNotEmpty prepend="and" property="code">   
+                t.code like concat('%', #code# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="name">   
+                t.name like concat('%', #name# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="mobilephone">   
+                t.mobilephone like concat('%', #mobilephone# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="idCardNumber">   
+                t.id_card_number like concat('%', #idCardNumber# ,'%')   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="companyName">   
+                t2.company_name like concat('%', #companyName# ,'%')   
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="freezeFlag">   
+                t.freeze_flag = #freezeFlag#  
+         </isNotEmpty>
+         <isNotEmpty prepend="and" property="registerTimeQ">   
+                <![CDATA[t.create_time >= #registerTimeQ#  ]]>   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="registerTimeZ">   
+                  <![CDATA[t.create_time <= date_sub(#registerTimeZ#,interval -1 day) ]]> 
+         </isNotEmpty>	
+	</select>
+	
+	<select id="query_webUser_info_by_page" parameterClass="java.util.Map" resultMap="webUser_info_domain_result">
+		select t.id,
+			   t.submit_type,
+		       t.code,
+		       t.name,
+		       t.mobilephone,	
+		       t.email,    
+		       t.modify_time,
+		       t.company_id,
+		       t2.company_name,
+		       t2.contact_name,
+		       t2.business_licence,
+		       t2.organization_code,
+				(select reason from t_manager_reason_info where type = 2 and driver_user_id = t.id order by id desc limit 1) as delete_reason
+		  from t_web_user_info t ,t_company_info t2
+		  where  t.deleted_flag = 0 and t2.deleted_flag = 0
+		  and t.company_id = t2.id 
+		   and t.user_origin = 0
+		   and t.parent_id = 0
+		    <isNotEmpty prepend="and" property="code">   
+                t.code like concat('%', #code# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="name">   
+                t.name like concat('%', #name# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="mobilephone">   
+                t.mobilephone like concat('%', #mobilephone# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="idCardNumber">   
+                t.id_card_number like concat('%', #idCardNumber# ,'%')   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="companyName">   
+                t2.company_name like concat('%', #companyName# ,'%')   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="freezeFlag">   
+                t.freeze_flag = #freezeFlag#
+         </isNotEmpty>
+         <isNotEmpty prepend="and" property="registerTimeQ">   
+                <![CDATA[t.create_time >= #registerTimeQ#  ]]>   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="registerTimeZ">   
+                  <![CDATA[t.create_time <= date_sub(#registerTimeZ#,interval -1 day) ]]> 
+         </isNotEmpty>	
+         order by t.id desc
+		  limit  #start#,#pageSize#
+	</select>
+	
+	<select id="audit_webUser_info_count"  resultClass="Integer">
+		select count(t.id)
+		  from t_web_user_info t ,t_company_info t2
+		  where  t.deleted_flag = 0 and t2.deleted_flag = 0
+		  and t.company_id = t2.id
+		  and t.user_origin = 0 and t.freeze_flag = 0
+		  and t.parent_id = 0
+		  <isNotEmpty prepend="and" property="submitType">   
+                t.submit_type = #submitType#    
+         </isNotEmpty>
+		   <isNotEmpty prepend="and" property="code">   
+                t.code like concat('%', #code# ,'%')   
+         </isNotEmpty>		
+		   <isNotEmpty prepend="and" property="name">   
+                t.name like concat('%', #name# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="mobilephone">   
+                t.mobilephone like concat('%', #mobilephone# ,'%')   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="companyName">   
+                t2.company_name like concat('%', #companyName# ,'%')   
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="enterpriseTimeQ">   
+                <![CDATA[t.modify_time >= #enterpriseTimeQ#  ]]>   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="enterpriseTimeZ">   
+                  <![CDATA[t.modify_time <= date_sub(#enterpriseTimeZ#,interval -1 day) ]]> 
+         </isNotEmpty>
+	</select>
+	
+	<select id="audit_webUser_info_by_page" parameterClass="java.util.Map" resultMap="audit_webUser_info_domain_result">
+		select t.id,
+			   t.submit_type,
+		       t.code,
+		       t.name,
+		       t.mobilephone,
+		       t.email,
+		       t.modify_time,
+		       t2.company_name,
+		       t2.contact_name
+		  from t_web_user_info t ,t_company_info t2
+		  where  t.deleted_flag = 0 and t2.deleted_flag = 0
+		  and t.company_id = t2.id
+		   and t.user_origin = 0 and t.freeze_flag = 0
+		   and t.parent_id = 0
+         <isNotEmpty prepend="and" property="submitType">   
+                t.submit_type = #submitType#    
+         </isNotEmpty>
+		   <isNotEmpty prepend="and" property="code">   
+                t.code like concat('%', #code# ,'%')   
+         </isNotEmpty>		
+		   <isNotEmpty prepend="and" property="name">   
+                t.name like concat('%', #name# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="mobilephone">   
+                t.mobilephone like concat('%', #mobilephone# ,'%')   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="companyName">   
+                t2.company_name like concat('%', #companyName# ,'%')   
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="enterpriseTimeQ">   
+                <![CDATA[t.modify_time >= #enterpriseTimeQ#  ]]>   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="enterpriseTimeZ">   
+                  <![CDATA[t.modify_time <= date_sub(#enterpriseTimeZ#,interval -1 day) ]]> 
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="isPushAll">   
+                   t.id in (
+	                  <iterate property="idList" conjunction=",">
+	                  		#idList[]#
+	         			</iterate>
+                   )
+         </isNotEmpty>
+         order by t.id desc
+		  <isNotEmpty  property="pageSize">   
+                  limit  #start#,#pageSize#
+         </isNotEmpty>	
+	</select>
+	
+	<select id="query_webUser_transaction_info_count"  resultClass="Integer">
+		select count(t.id)
+		  from t_web_user_info t ,t_company_info t2
+		  where  t.deleted_flag = 0 and t2.deleted_flag = 0
+		  and t.company_id = t2.id and t.freeze_flag = 0
+		  and t.user_origin = 0 and t.freeze_flag = 0
+		   <isNotEmpty prepend="and" property="name">   
+                t.name like concat('%', #name# ,'%')   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="companyName">   
+                t2.company_name like concat('%', #companyName# ,'%')   
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="registerTimeQ">   
+                <![CDATA[t.create_time >= #registerTimeQ#  ]]>   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="registerTimeZ">   
+                  <![CDATA[t.create_time <= date_sub(#registerTimeQ#,interval -1 day) ]]> 
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="lastLoginTimeQ">   
+                <![CDATA[(select create_time from t_operation_log_info where type = 0 and user_driver_id = t.id and operation_type = 28 order by create_time desc limit 0,1)  >= #lastLoginTime#  ]]>   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="lastLoginTimeZ">   
+                  <![CDATA[(select create_time from t_operation_log_info where type = 0 and user_driver_id = t.id and operation_type = 28 order by create_time desc limit 0,1)  <= date_sub(#lastLoginTime#,interval -1 day) ]]> 
+         </isNotEmpty>
+	</select>
+	
+	<select id="query_webUser_transaction_info_by_page" parameterClass="java.util.Map" resultMap="webUser_info_domain_transaction_result">
+				select code  , company_name , mobilephone ,
+				  create_time , accumulate_cargo_count , order_cargo_count , order_cargo_success_count ,accumulate_transaction_count from 
+				(select w.code  , w.mobilephone ,  w.create_time , c.company_name , w.id from t_web_user_info w , t_company_info  c 
+				WHERE  w.company_id = c.id and w.USER_ORIGIN = 0 and w.deleted_flag  =0  and w.freeze_flag = 0
+				 <isNotEmpty prepend="and" property="registerTimeQ">   
+                <![CDATA[w.create_time >= #registerTimeQ#  ]]>   
+		         </isNotEmpty>	
+		          <isNotEmpty prepend="and" property="registerTimeZ">   
+		                  <![CDATA[w.create_time <= date_sub(#registerTimeZ#,interval -1 day) ]]> 
+		         </isNotEmpty>	
+		         <isNotEmpty prepend="and" property="companyName">   
+               		 c.company_name like concat('%', #companyName# ,'%')   
+         		</isNotEmpty>	
+				) t0
+					left outer join
+			(select  count(*)as accumulate_cargo_count  ,w.id   from t_order_cargo_info t ,t_web_user_info w 
+				WHERE t.DEPLOY_USERID = w.id  and w.USER_ORIGIN = 0 and w.deleted_flag  =0 and w.freeze_flag = 0
+				 GROUP BY w.id  ) t1
+				on t0.id = t1.id
+				left outer join
+				(select  count(*) as order_cargo_count , w.id  from t_transaction_info t ,t_web_user_info w WHERE t.DEPLOY_USERID = w.id and w.USER_ORIGIN = 0  GROUP BY w.id)t2
+				on t1.id = t2.id 
+				left outer join
+				(select  count(DISTINCT cargo_id) as order_cargo_success_count, w.id  from t_transaction_info t ,t_web_user_info w WHERE t.DEPLOY_USERID = w.id and w.USER_ORIGIN = 0 GROUP BY w.id) t3
+				on 
+				 t1.id = t3.id
+				left outer join
+				(select  count(*) as accumulate_transaction_count, w.id  from t_transaction_info t ,t_web_user_info w WHERE t.DEPLOY_USERID = w.id and w.USER_ORIGIN = 0 and TRADE_START =5 GROUP BY w.id)t4
+				on 
+				 t1.id = t4.id
+        order by create_time desc
+        
+	</select>
+	
+	<select id="query_webUser_info_by_id" parameterClass="String" resultMap="webUser_mx_info_domain_result">
+		select t.id,
+			   t.submit_type,
+		       t.code,
+		       t.name,
+		       t.mobilephone,	
+		       t.email,    
+		       t.company_id,
+		       t.modify_time,
+		       t2.company_name,
+		       t2.contact_name,
+		       t2.business_licence,
+		       t2.organization_code,
+		       t2.organization_images,
+		       t2.business_images,
+				(select reason from t_manager_reason_info where type = 2 and driver_user_id = t.id order by id desc limit 1) as delete_reason
+		  from t_web_user_info t ,t_company_info t2
+		  where  t.deleted_flag = 0 and t2.deleted_flag = 0
+		  and t.company_id = t2.id 
+		   and t.user_origin = 0 and t.freeze_flag = 0
+		  and t.id = #id#
+	</select>
+	
+	<!-- 保存司机评论信息 -->
+	<update id="modify_webUser_info" parameterClass="com.cy.dctms.common.bo.CompanyInfo">
+		update t_company_info t
+		   set 
+		   	t.company_name = #companyName#,
+			t.business_licence = #businessLicence#,
+			t.organization_code = #organizationCode#,
+			t.modify_time = now()
+		 where t.id = #id#
+	</update>	
+	
+	<update id="delete_webUser_info_by_id" parameterClass="String">
+		update t_web_user_info t
+		   set
+		   	t.freeze_flag = 1,
+			t.modify_time = now()
+		 where t.id = #id# 
+	</update>
+	
+	<update id="unfreeze_webUser_info_by_id" parameterClass="String">
+		update t_web_user_info t
+		   set
+		   	t.freeze_flag = 0,
+			t.modify_time = now()
+		 where t.id = #id# 
+	</update>
+	
+	<update id="audit_webUser_info" parameterClass="com.cy.dctms.common.bo.WebUserInfo">
+		update t_web_user_info t
+		   set
+		   t.submit_type = #submitType#,
+		   	t.enterprise_flag = #enterpriseFlag#
+		 where t.id = #id#
+	</update>
+	
+<!--  修改身份认证功能权限	-->
+	<update id="modify_web_user_apply__info" parameterClass="com.cy.dctms.common.bo.WebUserInfo">
+		update t_web_user_info t
+		   set
+		   	<isNotEmpty property="pactCarDriverFlag">
+		   		t.pact_car_driver_flag = #pactCarDriverFlag#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="pactCardFlag">
+		   		t.pact_card_flag = #pactCardFlag#
+		   	</isNotEmpty>
+		   	<isNotEmpty property="pactCargoFlag">
+		   		t.pact_cargo_flag = #pactCargoFlag#
+		   	</isNotEmpty>
+		 where t.id = #id#
+	</update>
+</sqlMap>

@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/consignorc
+END
+consignor_list.html
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/consignorc/consignor_list.html
+END
+consignor_detail.html
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/consignorc/consignor_detail.html
+END
+consignor_edit.html
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/consignorc/consignor_edit.html
+END
+consignor_link_subcontractor.html
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/consignorc/consignor_link_subcontractor.html
+END
+consignor_add.html
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/consignorc/consignor_add.html
+END
+consignor_import.html
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/consignorc/consignor_import.html
+END

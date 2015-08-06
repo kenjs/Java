@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.hygl.dao.JsKpsqMapper">
+
+     <!--根据主键取DOMAIN-->
+	<select id="selectJsKpsqMx1ByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.JsKpDzqdDomain">
+		select a.KPSQMX_DJXH as kpsqmxDjxh,a.KPSQ_DJXH as kpsqDjxh,a.KPSQ_MXFL_DM as kpsqMxflDm,
+		a.YW_DJXH as ywDjxh,a.SQ_KPJE as sqKpje,a.BZSM as bzsm,a.yxbz as yxbz		
+		from JS_KPSQ_MX a
+		where a.KPSQ_DJXH=#kpsqDjxh# 
+		and a.YW_DJXH=#qdDjxh#
+		and a.yxbz='Y'
+    </select>
+
+
+	<!--插入数据-->
+	<insert id="insertJsKpsqMx1"  parameterClass="com.cy.common.bo.JsKpsqMx">
+	    <selectKey keyProperty="kpsqmxDjxh" resultClass="string" type="pre">
+			select SEQ_KPSQMX_DJXH.nextval as kpsqmxDjxh from dual 
+		</selectKey>
+		insert into JS_KPSQ_MX(KPSQMX_DJXH,KPSQ_DJXH,KPSQ_MXFL_DM,YW_DJXH,SQ_KPJE,
+		BZSM,YXBZ)
+		values(#kpsqmxDjxh:NUMERIC#,#kpsqDjxh:NUMERIC#,#kpsqMxflDm:NUMERIC#,#ywDjxh:NUMERIC#,#sqKpje:NUMERIC#,
+		#bzsm:VARCHAR#,#yxbz:VARCHAR#)
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateJsKpsqMx1ByKey" parameterClass="com.cy.common.bo.JsKpsqMx">
+        update JS_KPSQ_MX set KPSQMX_DJXH=#kpsqmxDjxh#,KPSQ_DJXH=#kpsqDjxh#,KPSQ_MXFL_DM=#kpsqMxflDm#,YW_DJXH=#ywDjxh#,SQ_KPJE=#sqKpje#,
+		BZSM=#bzsm#,YXBZ=#yxbz# where KPSQMX_DJXH=#kpsqmxDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：软删除-->
+	<delete id="deleteJsKpsqMx1ByKey" parameterClass="java.util.Map">
+		update JS_KPSQ_MX set yxbz='N' where KPSQMX_DJXH=#kpsqmxDjxh#
+    </delete>
+    
+	<parameterMap class="java.util.Map" id="ykpHxMap">
+		<parameter property="kpsqmxDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>	
+		<parameter property="rtnCode" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+		<parameter property="rtnMess" javaType="java.lang.String" jdbcType="VARCHAR" mode="OUT"/>	
+	</parameterMap>
+	
+	<procedure id="callPHyglJsglYkphx" parameterMap="ykpHxMap">
+		{call P_HYGL_JSGL_YKPHX(?,?,?)}
+	</procedure>
+	
+</sqlMap>

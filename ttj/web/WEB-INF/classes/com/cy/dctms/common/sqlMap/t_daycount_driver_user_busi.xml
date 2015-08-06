@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cy.dctms.dao.DaycountDriverUserBusiDao">
+
+    <insert id="insertDaycountDriverUserBusi">
+        insert into t_daycount_driver_user_busi
+        (record_day,driver_id,no_confirm_orders,no_assessment_orders,supply_finds,price_quotes,for_orders,transactions,call_cargo_num,call_transaction_num)
+        values
+        <foreach collection="list" item="i" index="index" separator=",">
+            (date_add(curdate(), interval -1 day),#{i.driverId},#{i.noConfirmOrders},#{i.noAssessmentOrders},#{i.supplyFinds},#{i.priceQuotes},#{i.forOrders},#{i.transactions},#{i.callCargoNum},#{i.callTransactionNum})
+        </foreach>
+    </insert>
+
+    <!-- 截至当天待确认订单数  -->
+    <select id="queryNoConfirmOrders" resultType="int" parameterType="int">
+        select count(ID) from t_transaction_info
+        where DRIVER_ID = #{driverId} and ORDER_START = 1
+        and CREATE_TIME &lt; curdate()
+    </select>
+    <!-- 截至当天待评价订单 -->
+    <select id="queryNoAssessmentOrders" resultType="int" parameterType="int">
+        select count(t.id)
+        from t_transaction_info t
+        where t.ORDER_START = 1 and t.ORDER_START = 5
+        and t.MODIFY_TIME &lt; curdate()
+        and t.id not in
+        (
+            select uai.TRANSACTION_ID from t_driver_user_assess_info uai
+            where uai.DRIVER_ID = t.DRIVER_ID
+        )
+    </select>
+    <!-- 当天找货数 -->
+    <select id="querySupplyFinds" resultType="int" parameterType="int">
+        <![CDATA[
+        select count(ID) from t_operation_log_info
+        where TYPE = 1 and OPERATION_TYPE = 26 and USER_DRIVER_ID = #{driverId}
+        and CREATE_TIME >= date_add(curdate(), interval -1 day) and CREATE_TIME < curdate()
+        ]]>
+    </select>
+    <!-- 当天报价数 -->
+    <select id="queryPriceQuotes" resultType="int" parameterType="int">
+        <![CDATA[
+        select count(ID) from t_quote_info
+        where DRIVER_ID = #{driverId}
+        and CREATE_TIME >= date_add(curdate(), interval -1 day) and CREATE_TIME < curdate()
+        ]]>
+    </select>
+    <!-- 报价成功数 -->
+    <select id="queryPriceQuotesSucceed" resultType="int" parameterType="int">
+        <![CDATA[
+        select COUNT(t.ID) from t_quote_info t, t_transaction_info t1
+        where t.DRIVER_ID = t1.DRIVER_ID and t.CARGO_ID = t1.CARGO_ID and t.DRIVER_ID = #{driverId}
+        and t1.CREATE_TIME >= date_add(curdate(), interval -1 day) and t1.CREATE_TIME < curdate()
+        ]]>
+    </select>
+    <!-- 被订车数 -->
+    <select id="queryForOrders" resultType="int" parameterType="int">
+        <![CDATA[
+        select count(ID) from t_transaction_info
+        where DRIVER_ID = #{driverId}
+        and CREATE_TIME >= date_add(curdate(), interval -1 day) and CREATE_TIME < curdate()
+        ]]>
+    </select>
+    <!-- 当天订单完成数 -->
+    <select id="queryTransactions" resultType="int" parameterType="int">
+        <![CDATA[
+        select count(ID) from t_transaction_info
+        where TRADE_START = 5 and DRIVER_ID = #{driverId}
+        and MODIFY_TIME >= date_add(curdate(), interval -1 day) and MODIFY_TIME < curdate()
+        ]]>
+    </select>
+    <!-- 查询存活数和活跃数记录的司机 -->
+    <select id="queryDriverListForActive" resultType="int">
+        <![CDATA[
+            SELECT
+            toli.USER_DRIVER_ID AS driver_id
+            FROM t_operation_log_info toli
+            WHERE toli.type = 1 AND toli.CREATE_TIME >= date_add(curdate(),interval -1 day) AND toli.CREATE_TIME < curdate()
+            UNION
+            SELECT
+            tlcli.driver_id
+            FROM t_location_collect_last_info tlcli
+            WHERE tlcli.LAST_TIME >= date_add(curdate(),interval -1 day) AND tlcli.LAST_TIME < curdate()
+
+        ]]>
+    </select>
+    <!-- 查询有业务统计数据的司机 -->
+    <select id="queryDriverListForDataCount" resultType="int">
+        <![CDATA[
+        -- 截止到当天有待确认订单记录的司机用户
+        select t.DRIVER_ID from t_transaction_info t
+        where t.ORDER_START = 1
+        and t.CREATE_TIME < CURDATE()
+        UNION
+        -- 截止到当天有待评价订单记录的司机用户
+        select t2.DRIVER_ID from t_transaction_info t2
+        where t2.ORDER_START = 1 and t2.TRADE_START = 5
+        and t2.MODIFY_TIME < CURDATE()
+        and t2.id not in
+        (
+            select uai.TRANSACTION_ID from t_driver_user_assess_info uai
+            where uai.DRIVER_ID = t2.DRIVER_ID
+        )
+        UNION
+        -- 当天有找货记录、货源拨打电话记录、订单拨打电话的司机
+        select t3.USER_DRIVER_ID as DRIVER_ID from t_operation_log_info t3
+        where t3.TYPE = 1 and (t3.OPERATION_TYPE = 26 or t3.OPERATION_TYPE = 78 or t3.OPERATION_TYPE = 81)
+        and t3.CREATE_TIME >= date_add(curdate(), interval -1 day) and t3.CREATE_TIME < curdate()
+        UNION
+        -- 当天有报价记录的司机
+        select t4.DRIVER_ID from t_quote_info t4
+        where t4.CREATE_TIME >= date_add(curdate(), interval -1 day) and t4.CREATE_TIME < curdate()
+        UNION
+        -- 当天有报价成功数的司机
+        select t5.DRIVER_ID from t_quote_info t5,t_transaction_info t6
+        where t5.DRIVER_ID = t6.DRIVER_ID and t5.CARGO_ID = t6.CARGO_ID
+        and t6.CREATE_TIME >= date_add(curdate(), interval -1 day) and t6.CREATE_TIME < curdate()
+        UNION
+        select t7.DRIVER_ID from t_transaction_info t7
+        where t7.CREATE_TIME >= date_add(curdate(), interval -1 day) and t7.CREATE_TIME < curdate()
+        AND t7.DRIVER_ID IS NOT NULL
+        UNION
+        -- 当天的订单完成记录数的司机
+        select t8.DRIVER_ID from t_transaction_info t8
+        where t8.ORDER_START = 5
+        and t8.MODIFY_TIME >= date_add(curdate(), interval -1 day) and t8.MODIFY_TIME < curdate()
+        AND t8.DRIVER_ID IS NOT NULL
+        ]]>
+    </select>
+
+    <!-- 货源拨打电话次数 -->
+    <select id="queryCallCargoNum" parameterType="int" resultType="int">
+        <![CDATA[
+        select count(ID) from t_operation_log_info
+        where TYPE = 1 and OPERATION_TYPE = 78 and USER_DRIVER_ID = #{driverId}
+        and CREATE_TIME >= date_add(curdate(), interval -1 day) and CREATE_TIME < curdate()
+        ]]>
+    </select>
+
+    <!-- 订单拨打电话次数 -->
+    <select id="queryCallTransactionNum" parameterType="int" resultType="int">
+        <![CDATA[
+        select count(ID) from t_operation_log_info
+        where TYPE = 1 and OPERATION_TYPE = 81 and USER_DRIVER_ID = #{driverId}
+        and CREATE_TIME >= date_add(curdate(), interval -1 day) and CREATE_TIME < curdate()
+        ]]>
+    </select>
+</mapper>

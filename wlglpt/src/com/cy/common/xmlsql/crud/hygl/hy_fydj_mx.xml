@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.zygl.dao.HyFydjMxMapper">
+	<!--插入数据-->
+		<!--根据主键取DOMAIN-->
+	<select id="selectHyFydjCyByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyZyglFydjDomain">
+		select a.FY_DJXH as fyDjxh,a.FYDJXM_WH_XH as fydjxmWhXh,a.KH_DJXH as khDjxh,a.PC_DJXH as pcDjxh,a.WFH_DJXH as wfhDjxh,
+		a.DD_DJXH as ddDjxh,a.HWMXXH as hwmxxh,a.BZ as bz,a.YXBZ as yxbz,a.FKF_CZY_DJXH as fkfCzyDjxh,
+		a.SRJE as srje,a.SKF_CZY_DJXH as skfCzyDjxh,a.ZFJE as zfje,a.SS_JGBM as ssJgbm,a.SPBZ as spbz,
+		a.WSSPZT_DM as wsspztDm,a.WS_SPXH as wsSpxh,a.DJ_JGBM as djJgbm,a.CJR_CZY_DJXH as cjrCzyDjxh,a.CJRQ as cjrq,
+		a.XGR_CZY_DJXH as xgrCzyDjxh,a.XGRQ as xgrq,a.WLSS_DJXH as wlssDjxh from HY_FYDJ a  where a.FY_DJXH=#fyDjxh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertHyFydjCy"  parameterClass="com.cy.common.bo.HyFydjMx">
+		<selectKey keyProperty="fyDjxh" resultClass="string" type="pre">
+			select SEQ_FY_DJXH.nextval as fyDjxh from dual 
+		</selectKey>
+		insert into HY_FYDJ(FY_DJXH,FYDJXM_WH_XH,KH_DJXH,PC_DJXH,WFH_DJXH,
+		DD_DJXH,HWMXXH,BZ,YXBZ,FKF_CZY_DJXH,
+		SRJE,SKF_CZY_DJXH,ZFJE,SS_JGBM,SPBZ,
+		WSSPZT_DM,WS_SPXH,DJ_JGBM,CJR_CZY_DJXH,CJRQ,
+		XGR_CZY_DJXH,XGRQ,WLSS_DJXH)
+		values(#fyDjxh:NUMERIC#,#fydjxmWhXh:NUMERIC#,#khDjxh:NUMERIC#,#pcDjxh:NUMERIC#,#wfhDjxh:NUMERIC#,
+		#ddDjxh:NUMERIC#,#hwmxxh:NUMERIC#,#bz:VARCHAR#,#yxbz:VARCHAR#,#fkfCzyDjxh:NUMERIC#,
+		#srje:NUMERIC#,#skfCzyDjxh:NUMERIC#,#zfje:NUMERIC#,#ssJgbm:NUMERIC#,#spbz:VARCHAR#,
+		#wsspztDm:NUMERIC#,#wsSpxh:NUMERIC#,#djJgbm:NUMERIC#,#cjrCzyDjxh:NUMERIC#,to_date(#cjrq:DATE#,'yyyy-MM-dd'),
+		#xgrCzyDjxh:NUMERIC#,to_date(#xgrq:DATE#,'yyyy-MM-dd'),#wlssDjxh:VARCHAR#)
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateHyFydjCyByKey" parameterClass="com.cy.common.bo.HyFydjMx">
+        update HY_FYDJ set FY_DJXH=#fyDjxh#,FYDJXM_WH_XH=#fydjxmWhXh#,KH_DJXH=#khDjxh#,PC_DJXH=#pcDjxh#,WFH_DJXH=#wfhDjxh#,
+		DD_DJXH=#ddDjxh#,HWMXXH=#hwmxxh#,BZ=#bz#,YXBZ=#yxbz#,FKF_CZY_DJXH=#fkfCzyDjxh#,
+		SRJE=#srje#,SKF_CZY_DJXH=#skfCzyDjxh#,ZFJE=#zfje#,SS_JGBM=#ssJgbm#,SPBZ=#spbz#,
+		WSSPZT_DM=#wsspztDm#,WS_SPXH=#wsSpxh#,DJ_JGBM=#djJgbm#,CJR_CZY_DJXH=#cjrCzyDjxh#,CJRQ=to_date(#cjrq#, 'YYYY-MM-DD'),
+		XGR_CZY_DJXH=#xgrCzyDjxh#,XGRQ=to_date(#xgrq#, 'YYYY-MM-DD'),WLSS_DJXH=#wlssDjxh# where FY_DJXH=#fyDjxh#
+    </update>
+    
+    <update id="updateHyFydjMxByKey2" parameterClass="com.cy.common.bo.HyFydjMx">
+    	update HY_FYDJ set FYDJXM_WH_XH=#fydjxmWhXh#,SRJE=#srje#,SKF_CZY_DJXH=#skfCzyDjxh#,ZFJE=#zfje#
+		where FY_DJXH=#fyDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：软删除-->
+	<delete id="deleteHyFydjMxByKey" parameterClass="java.util.Map">
+		update HY_FYDJ set yxbz='N' where FY_DJXH=#fyDjxh#
+    </delete>
+    
+    <select id="checkFydjMcByFydj" parameterClass="java.util.Map" resultClass="Integer">
+    	select count(*) from HY_FYDJ where yxbz='Y' and fy_djxh=#djxh#
+    </select>
+</sqlMap>

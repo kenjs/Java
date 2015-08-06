@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cy.dctms.dao.OrderCarogoInfoDao">
+
+    <!-- 把 t_order_cargo_info中的过期货物存到指定表中 -->
+    <insert id="insertExpiredCargoToHistoryTable" parameterType="map">
+    	insert into ${tableName}
+    	(ID,CARGO_NAME,CARGO_TYPE,CARGO_WEIGHT,CARGO_CUBAGE,REQUEST_CAR_LENGTH,REQUEST_CAR_PLATE_TYPE,REQUEST_CAR_BAR_TYPE,
+    	 FREIGHT,REQUEST_START_TIME,REQUEST_END_TIME,START_PROVINCE,START_CITY,START_COUNTY,START_TOWN,END_PROVINCE,END_CITY,
+    	 END_COUNTY,END_TOWN,CONTACT_NAME,CONTACT_MOBILEPHONE,CONTACT_TELEPHONE,REMARK,DELETED_FLAG,DEPLOY_USERID,MODIFY_USERID,
+    	 COMPANY_ID,CARGO_FLAG,CARGO_FLAG_TIME,CREATE_TIME,MODIFY_TIME,CARGO_ORIGIN)
+    	select t.ID,t.CARGO_NAME,t.CARGO_TYPE,t.CARGO_WEIGHT,t.CARGO_CUBAGE,t.REQUEST_CAR_LENGTH,t.REQUEST_CAR_PLATE_TYPE,
+    		t.REQUEST_CAR_BAR_TYPE,t.FREIGHT,t.REQUEST_START_TIME,t.REQUEST_END_TIME,t.START_PROVINCE,t.START_CITY,t.START_COUNTY,
+    		t.START_TOWN,t.END_PROVINCE,t.END_CITY,t.END_COUNTY,t.END_TOWN,t.CONTACT_NAME,t.CONTACT_MOBILEPHONE,t.CONTACT_TELEPHONE,
+    		t.REMARK,t.DELETED_FLAG,t.DEPLOY_USERID,t.MODIFY_USERID,t.COMPANY_ID,t.CARGO_FLAG,t.CARGO_FLAG_TIME,t.CREATE_TIME,
+    		t.MODIFY_TIME,t.CARGO_ORIGIN
+    	from t_order_cargo_info t where t.DELETED_FLAG=0
+    		and date_format(t.REQUEST_START_TIME,'%Y-%m-%d %H:%i:%s') &gt;=
+    			date_format(#{startTime},'%Y-%m-%d %H:%i:%s')
+      		and date_format(t.REQUEST_START_TIME,'%Y-%m-%d %H:%i:%s') &lt;= date_format(#{endTime},'%Y-%m-%d %H:%i:%s')
+    </insert>
+
+    <!-- 删除过期货源 -->
+    <delete id="deleteCargoOutOfDate" parameterType="map">
+    	delete from t_order_cargo_info where
+    	date_format(REQUEST_START_TIME,'%Y-%m-%d %H:%i:%s') &gt;=
+    		date_format(#{startTime},'%Y-%m-%d %H:%i:%s')
+      	and date_format(REQUEST_START_TIME,'%Y-%m-%d %H:%i:%s') &lt;= date_format(#{endTime},'%Y-%m-%d %H:%i:%s')
+    </delete>
+
+    <!-- 创建保存过期货物的table -->
+    <update id="createTableByMonth" parameterType="string">
+    	${_parameter}
+    </update>
+
+    <!-- table是否存在 -->
+    <select id="chkTableIsExists" parameterType="string" resultType="string">
+		select 1 from ${_parameter} limit 1
+    </select>
+</mapper>

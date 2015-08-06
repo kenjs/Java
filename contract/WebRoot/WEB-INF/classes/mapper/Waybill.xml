@@ -1,0 +1,1242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap>
+ <typeAlias type="tf56.contract.domain.Waybill" alias="waybill"/>
+ <typeAlias type="tf56.contract.domain.CityDistance" alias="cityDistance"/>
+ 
+  <!--新增记录--> 
+ <insert id="iBatisInsertWaybill" parameterClass="waybill">
+  insert into Waybill (partyId,waybillNumber,clientNumber,status,consignDate,fromPartyId,consignorLinkMan,consignorTelephoneNumber,consignorMobileNumber,consignorProvince,consignorCity,consignorRegion,consignorTown,consignee,consigneeLinkMan,consigneeTelephoneNumber,consigneeMobileNumber,consigneeProvince,
+  consigneeCity,consigneeRegion,consigneeTown,distance,settleType,receiveType,arriveType,backBillType,backBillNum,urgencyDegree,shipType,toPartyId,inputMan,inputDate,sureMan,sureDate,carBeginDate,carEndDate,billStatus,inSettleBillId,outSettleBillId,waybillStowageId,memo,operatorId,sourcesystem)
+   values (#partyid:VARCHAR#,#waybillnumber:VARCHAR#,#clientnumber:VARCHAR#,#status:VARCHAR#,#consigndate:VARCHAR#,#frompartyid:VARCHAR#,#consignorlinkman:VARCHAR#,#consignortelephonenumber:VARCHAR#,
+	#consignormobilenumber:VARCHAR#,#consignorprovince:VARCHAR#,#consignorcity:VARCHAR#,#consignorregion:VARCHAR#,#consignortown:VARCHAR#,#consignee:VARCHAR#,
+	#consigneelinkman:VARCHAR#,#consigneetelephonenumber:VARCHAR#,#consigneemobilenumber:VARCHAR#,#consigneeprovince:VARCHAR#,#consigneecity:VARCHAR#,
+	#consigneeregion:VARCHAR#,#consigneetown:VARCHAR#,#distance:NUMBER#,#settletype:VARCHAR#,#receivetype:VARCHAR#,#arrivetype:VARCHAR#,#backbilltype:VARCHAR#,
+	#backbillnum:VARCHAR#,#urgencydegree:VARCHAR#,#shiptype:VARCHAR#,#topartyid:NUMBER#,#inputman:VARCHAR#,#inputdate:VARCHAR#,#sureman:VARCHAR#,#suredate:varchar#,
+	#carbegindate:varchar#,#carenddate:varchar#,#billstatus:varchar#,#insettlebillid:NUMBER#,#outsettlebillid:VARCHAR#,#waybillstowageid:NUMBER#,#memo:VARCHAR#,#operatorid:VARCHAR#,#sourcesystem:VARCHAR#
+	)
+  <selectKey resultClass="String" keyProperty="waybillid">
+   select last_insert_id() as id
+  </selectKey>
+ </insert>
+
+  <!-- 作废运单 -->
+ <update id="iBatisDeleteWaybill" parameterClass="java.util.HashMap">
+  update Waybill set status=#status:VARCHAR# where waybillId=#waybillid#
+ </update>
+	<!-- 运单分派 -->
+	<update id="waybilldistribution" parameterClass="java.util.HashMap">
+		update Waybill set status=#status:VARCHAR#,toPartyId=#topartyid:NUMBER# where waybillId in
+			<iterate property="waybillidList" open="(" close=")" conjunction=",">
+					#waybillidList[]#
+			</iterate>
+	</update>
+ 
+  <!-- 根据id获得用户对象, 返回bean -->
+ <select id="iBatisSelectWaybillById" parameterClass="java.util.HashMap" resultClass="waybill">
+  select * from Waybill where waybillId=#waybillid#
+ </select>
+ 
+ <!-- 根据调度单查寻运单 -->
+ <select id="iBatisSelectWaybillByStowageId" parameterClass="java.util.HashMap" resultClass="waybill">
+ 	select * from Waybill where waybillStowageId=#waybillstowageid#
+ </select>
+ 
+ <select id="iBatisSelectFrompartyid" parameterClass="java.util.HashMap" resultClass="java.lang.String">
+ 	SELECT fromPartyId FROM Waybill WHERE partyId=#partyid# AND status ='待分派' GROUP BY fromPartyId ORDER BY COUNT(waybillId) DESC LIMIT 1
+ </select>
+ 
+ <select id="iBatisSelectSubContractor" parameterClass="java.util.HashMap" resultClass="cityDistance">
+ 	SELECT t.fromaddress,t.frompartyid,t.toaddress,t.topartyid from (
+ 	SELECT a.fromPartyId as frompartyid,NULL as fromaddress,NULL as toaddress,a.toPartyId as topartyid from ShipperRelaSubContractor a
+	where a.partyId = #partyid#
+	and a.fromPartyId = #frompartyid#
+	and a.toPartyId is not null
+	and not EXISTS(SELECT 1 
+										 from CityDistance b 
+										where a.partyId = b.partyId 
+											and a.fromPartyId = b.fromPartyId
+											and a.toPartyId =b.toPartyId)
+	<dynamic prepend="and">
+		<isNotEmpty property="fromaddress" prepend="and">
+			a.fromPartyId is null
+		</isNotEmpty>
+		<isNotEmpty property="toaddress" prepend="and">
+			a.fromPartyId is null
+		</isNotEmpty>					
+	</dynamic>
+	UNION
+	SELECT b.fromPartyId as frompartyid,b.fromAddress as fromaddress,b.toAddress as toaddress,b.toPartyId as topartyid from CityDistance b
+	where b.partyId = #partyid#
+	and b.fromPartyId = #frompartyid#
+	and b.toPartyId is not null
+	<dynamic prepend="and">
+		<isNotEmpty property="fromaddress" prepend="and">
+			b.fromAddress like '%$fromaddress$%'
+		</isNotEmpty>
+		<isNotEmpty property="toaddress" prepend="and">
+			b.toAddress like '%$toaddress$%'
+		</isNotEmpty>					
+	</dynamic>
+	) t
+	ORDER BY t.topartyid DESC
+ </select>
+ 
+  <!-- 获取多条记录查询列表 返回List -->
+ <select id="iBatisSelectWaybillList" parameterClass="java.util.HashMap" resultClass="waybill">
+  	SELECT A.*,B.goodsName,B.goodsType,B.factnum,B.factweight,B.factvolume,C.receivablesum,D.payablesum,
+  			ws.driverName,ws.driverMobile,ws.carPlateNumber,ws.systemDispatchNumber FROM Waybill A
+	LEFT JOIN (SELECT g.waybillId,g.goodsName,g.goodsType,sum(g.factNum) factnum,sum(g.factWeight) factweight,sum(g.factVolume) factvolume 
+             FROM Goods g GROUP BY g.waybillId) B ON A.waybillId = B.waybillId
+    LEFT JOIN (SELECT W.waybillId,sum(W.amount) receivablesum
+             FROM WaybillAmount W WHERE W.inOrOut = 1 GROUP BY W.waybillId) C ON A.waybillId = C.waybillId
+    LEFT JOIN (SELECT W.waybillId,sum(W.amount) payablesum
+             FROM WaybillAmount W WHERE W.inOrOut = 0 GROUP BY W.waybillId) D ON A.waybillId = D.waybillId
+    LEFT JOIN WaybillStowage ws ON A.waybillStowageId = ws.waybillStowageId
+	<dynamic prepend="where">
+		<isNotEmpty property="partyid" prepend="and">
+			 A.partyId = #partyid#
+		</isNotEmpty>
+		<isNotEmpty property="operatorid" prepend="and">
+			A.operatorId = #operatorid#
+		</isNotEmpty>
+		<isNotEmpty property="waybillnumber" prepend="and">
+			A.waybillNumber LIKE '%$waybillnumber$%'
+		</isNotEmpty>
+		<isNotEmpty property="clientnumber" prepend="and">
+			A.clientNumber LIKE '%$clientnumber$%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="fromdate">
+			A.consignDate <![CDATA[>=]]> str_to_date(#fromdate#, '%Y-%m-%d %H:%i:%s')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="todate">
+			A.consignDate <![CDATA[<=]]> str_to_date(#todate#, '%Y-%m-%d %H:%i:%s')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="urgencydegree">
+			A.urgencyDegree = #urgencydegree#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="consigneelinkman">
+			A.consigneeLinkMan LIKE '%$consigneelinkman$%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="consigneemobilenumber">
+			A.consigneeMobileNumber LIKE '%$consigneemobilenumber$%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="billstatus">
+			<isEqual property="billstatus" compareValue="all">
+				(A.billStatus = '未计费' or A.billStatus = '已计费' or A.billStatus = '已确认')
+			</isEqual>
+			<isEqual property="billstatus" compareValue="billConfirm">
+				(A.billStatus = '已计费' or A.billStatus = '已确认')
+			</isEqual>
+			<isEqual property="billstatus" compareValue="未计费">
+				A.billStatus = '未计费'
+			</isEqual>
+			<isEqual property="billstatus" compareValue="已计费">
+				A.billStatus = '已计费'
+			</isEqual>
+			<isEqual property="billstatus" compareValue="已确认">
+				(A.billStatus = '已确认' and A.inSettleBillId is NULL and A.outSettleBillId is NULL)
+			</isEqual>
+			<isEqual property="billstatus" compareValue="已结算">
+			  	(A.inSettleBillId is not NULL or A.outSettleBillId is not NULL)
+			</isEqual>
+		</isNotEmpty>
+		<isNotEmpty property="fromQuery">
+			<isEqual property="fromQuery" compareValue="waybillList">
+				<isNotEmpty prepend="and" property="status">
+					A.status = #status#
+				</isNotEmpty>
+			</isEqual>
+			<isEqual property="fromQuery" compareValue="waybillListFhf">
+				<isNotEmpty prepend="and" property="status">
+					A.status = #status#
+				</isNotEmpty>
+				<isEmpty prepend="and" property="status">
+					(A.status != '待分派' and A.status != '已作废' and A.status is not null)
+				</isEmpty>
+			</isEqual>
+			<isEqual property="fromQuery" compareValue="waybillmanager">
+				<isNotEmpty prepend="and" property="status">
+					A.status = #status#
+				</isNotEmpty>
+				<isEmpty prepend="and" property="status">
+					(A.status != '待分派' and A.status != '已作废' and A.status is not null)
+				</isEmpty>
+			</isEqual>
+			<isEqual property="fromQuery" compareValue="waybillupdate">
+				<isNotEmpty prepend="and" property="status">
+					A.status = #status#
+				</isNotEmpty>
+			</isEqual>
+			<isEqual property="fromQuery" compareValue="waybillamount">
+				<isNotEmpty prepend="and" property="status">
+					A.status = #status#
+				</isNotEmpty>
+				<isEmpty prepend="and" property="status">
+					(A.status = '已装车' or A.status = '已发车' or A.status = '已到车' or A.status = '已签收')
+				</isEmpty>
+			</isEqual>
+			<isEqual property="fromQuery" compareValue="waybillassign">
+				<isNotEmpty prepend="and" property="status">
+					A.status = #status#
+				</isNotEmpty>
+			</isEqual>
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="topartyid">
+			A.toPartyId = #topartyid#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="frompartyid">
+			A.fromPartyId = #frompartyid#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="consignortown">
+			(A.consignorProvince like '%$consignortown$%'
+			or
+			A.consignorCity like '%$consignortown$%'
+			or
+			A.consignorRegion like '%$consignortown$%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="consigneetown">
+			CONCAT(A.consigneeProvince,A.consigneeCity,IFNULL(A.consigneeRegion,'')) like '%$consigneetown$%'
+		</isNotEmpty>
+		<isNotEmpty  property="menuindex">
+			<isEqual prepend="and" property="menuindex" compareValue="1">
+			</isEqual>
+			<isEqual prepend="and" property="menuindex" compareValue="2">
+				A.status not in ('待分派','待配载','已作废')
+			</isEqual>
+		</isNotEmpty>
+		<isNotEmpty property="fromIdList">
+			<iterate prepend="and" property="fromIdList" conjunction="or" open="(" close=")">
+				A.fromPartyId = #fromIdList[]# 
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty  property="toIdList">
+			<iterate prepend="and" property="toIdList" conjunction="or" open="(" close=")">
+				A.toPartyId = #toIdList[]# 
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty  property="waybillIdList">
+			<iterate prepend="and" property="waybillIdList" conjunction="or" open="(" close=")">
+				A.waybillId = #waybillIdList[]# 
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty property="systemdispatchnumber" prepend="and">
+			ws.systemDispatchNumber like '%$systemdispatchnumber$%'
+		</isNotEmpty>
+	</dynamic>
+	order by 
+	<dynamic>
+		<isNull property="sort">
+			A.waybillId desc 
+		</isNull>
+		<isNotNull property="sort">
+			<isNotEmpty property="cnSort">
+				A.clientNumber $cnSort$
+			</isNotEmpty>
+			<isNotEmpty property="dateSort">
+				A.consignDate $dateSort$
+			</isNotEmpty>
+		</isNotNull>
+	</dynamic>
+	LIMIT $skipCount$,$pageSize$
+ </select>
+ 
+ <select id="iBatisSelectExportWaybillList" parameterClass="java.util.HashMap" resultClass="waybill">
+  	SELECT A.*,B.goodsName,B.goodsType,B.factnum,B.factweight,B.factvolume,C.receivablesum,D.payablesum,
+  			ws.driverName,ws.driverMobile,ws.carPlateNumber,ws.systemDispatchNumber FROM Waybill A
+	LEFT JOIN (SELECT g.waybillId,g.goodsName,g.goodsType,sum(g.factNum) factnum,sum(g.factWeight) factweight,sum(g.factVolume) factvolume 
+             FROM Goods g GROUP BY g.waybillId) B ON A.waybillId = B.waybillId
+    LEFT JOIN (SELECT W.waybillId,sum(W.amount) receivablesum
+             FROM WaybillAmount W WHERE W.inOrOut = 1 GROUP BY W.waybillId) C ON A.waybillId = C.waybillId
+    LEFT JOIN (SELECT W.waybillId,sum(W.amount) payablesum
+             FROM WaybillAmount W WHERE W.inOrOut = 0 GROUP BY W.waybillId) D ON A.waybillId = D.waybillId
+    LEFT JOIN WaybillStowage ws ON A.waybillStowageId = ws.waybillStowageId
+	<dynamic prepend="where">
+		<isNotEmpty property="partyid" prepend="and">
+			 A.partyId = #partyid#
+		</isNotEmpty>
+		<isNotEmpty property="operatorid" prepend="and">
+			A.operatorId = #operatorid#
+		</isNotEmpty>
+		<isNotEmpty property="waybillnumber" prepend="and">
+			A.waybillNumber LIKE '%$waybillnumber$%'
+		</isNotEmpty>
+		<isNotEmpty property="clientnumber" prepend="and">
+			A.clientNumber LIKE '%$clientnumber$%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="fromdate">
+			A.consignDate <![CDATA[>=]]> str_to_date(#fromdate#, '%Y-%m-%d %H:%i:%s')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="todate">
+			A.consignDate <![CDATA[<=]]> str_to_date(#todate#, '%Y-%m-%d %H:%i:%s')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="urgencydegree">
+			A.urgencyDegree = #urgencydegree#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="consigneelinkman">
+			A.consigneeLinkMan LIKE '%$consigneelinkman$%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="consigneemobilenumber">
+			A.consigneeMobileNumber LIKE '%$consigneemobilenumber$%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="billstatus">
+			<isEqual property="billstatus" compareValue="all">
+				(A.billStatus = '未计费' or A.billStatus = '已计费' or A.billStatus = '已确认')
+			</isEqual>
+			<isEqual property="billstatus" compareValue="billConfirm">
+				(A.billStatus = '已计费' or A.billStatus = '已确认')
+			</isEqual>
+			<isEqual property="billstatus" compareValue="未计费">
+				A.billStatus = '未计费'
+			</isEqual>
+			<isEqual property="billstatus" compareValue="已计费">
+				A.billStatus = '已计费'
+			</isEqual>
+			<isEqual property="billstatus" compareValue="已确认">
+				(A.billStatus = '已确认' and A.inSettleBillId is NULL and A.outSettleBillId is NULL)
+			</isEqual>
+			<isEqual property="billstatus" compareValue="已结算">
+			  	(A.inSettleBillId is not NULL or A.outSettleBillId is not NULL)
+			</isEqual>
+		</isNotEmpty>
+		<isNotEmpty property="fromQuery">
+			<isEqual property="fromQuery" compareValue="waybillList">
+				<isNotEmpty prepend="and" property="status">
+					A.status = #status#
+				</isNotEmpty>
+			</isEqual>
+			<isEqual property="fromQuery" compareValue="waybillListFhf">
+				<isNotEmpty prepend="and" property="status">
+					A.status = #status#
+				</isNotEmpty>
+				<isEmpty prepend="and" property="status">
+					(A.status != '待分派' and A.status != '已作废' and A.status is not null)
+				</isEmpty>
+			</isEqual>
+			<isEqual property="fromQuery" compareValue="waybillmanager">
+				<isNotEmpty prepend="and" property="status">
+					A.status = #status#
+				</isNotEmpty>
+				<isEmpty prepend="and" property="status">
+					(A.status != '待分派' and A.status != '已作废' and A.status is not null)
+				</isEmpty>
+			</isEqual>
+			<isEqual property="fromQuery" compareValue="waybillupdate">
+				<isNotEmpty prepend="and" property="status">
+					A.status = #status#
+				</isNotEmpty>
+			</isEqual>
+			<isEqual property="fromQuery" compareValue="waybillamount">
+				<isNotEmpty prepend="and" property="status">
+					A.status = #status#
+				</isNotEmpty>
+				<isEmpty prepend="and" property="status">
+					(A.status = '已装车' or A.status = '已发车' or A.status = '已到车' or A.status = '已签收')
+				</isEmpty>
+			</isEqual>
+			<isEqual property="fromQuery" compareValue="waybillassign">
+				<isNotEmpty prepend="and" property="status">
+					A.status = #status#
+				</isNotEmpty>
+			</isEqual>
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="topartyid">
+			A.toPartyId = #topartyid#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="frompartyid">
+			A.fromPartyId = #frompartyid#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="consignortown">
+			(A.consignorProvince like '%$consignortown$%'
+			or
+			A.consignorCity like '%$consignortown$%'
+			or
+			A.consignorRegion like '%$consignortown$%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="consigneetown">
+			CONCAT(A.consigneeProvince,A.consigneeCity,A.consigneeRegion) like '%$consigneetown$%'
+		</isNotEmpty>
+		<isNotEmpty  property="menuindex">
+			<isEqual prepend="and" property="menuindex" compareValue="1">
+			</isEqual>
+			<isEqual prepend="and" property="menuindex" compareValue="2">
+				A.status not in ('待分派','待配载','已作废')
+			</isEqual>
+		</isNotEmpty>
+		<isNotEmpty property="fromIdList">
+			<iterate prepend="and" property="fromIdList" conjunction="or" open="(" close=")">
+				A.fromPartyId = #fromIdList[]# 
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty  property="toIdList">
+			<iterate prepend="and" property="toIdList" conjunction="or" open="(" close=")">
+				A.toPartyId = #toIdList[]# 
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty  property="waybillIdList">
+			<iterate prepend="and" property="waybillIdList" conjunction="or" open="(" close=")">
+				A.waybillId = #waybillIdList[]# 
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty property="systemdispatchnumber" prepend="and">
+			ws.systemDispatchNumber like '%$systemdispatchnumber$%'
+		</isNotEmpty>
+	</dynamic>
+	order by 
+	<dynamic>
+		<isNull property="sort">
+			A.waybillId desc 
+		</isNull>
+		<isNotNull property="sort">
+			<isNotEmpty property="cnSort">
+				A.clientNumber $cnSort$
+			</isNotEmpty>
+			<isNotEmpty property="dateSort">
+				A.consignDate $dateSort$
+			</isNotEmpty>
+		</isNotNull>
+	</dynamic>
+ </select>
+ 
+ <!-- 获取货物合计数量、重量、体积 -->
+ <select id="iBatisSelectGoodsCountByFromPartyId" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+ 	SELECT SUM(A.factnum) num,SUM(A.factweight) weight,SUM(A.factvolume) volume,SUM(A.receivablesum) receivablesum,SUM(A.payablesum) payablesum
+	FROM(
+	SELECT B.factnum factnum,B.factweight factweight,B.factvolume factvolume,C.receivablesum receivablesum,D.payablesum payablesum
+		FROM Waybill A
+	LEFT JOIN (SELECT g.waybillId,g.goodsName,g.goodsType,sum(g.factNum) factnum,sum(g.factWeight) factweight,sum(g.factVolume) factvolume
+		FROM Goods g GROUP BY g.waybillId
+	) B ON A.waybillId = B.waybillId
+	LEFT JOIN (SELECT W.waybillId,sum(W.amount) receivablesum
+		FROM WaybillAmount W WHERE W.inOrOut = 1 GROUP BY W.waybillId
+	) C ON A.waybillId = C.waybillId
+	LEFT JOIN (SELECT	W.waybillId,sum(W.amount) payablesum
+		FROM WaybillAmount W WHERE W.inOrOut = 0 GROUP BY W.waybillId
+	) D ON A.waybillId = D.waybillId
+	LEFT JOIN WaybillStowage ws ON A.waybillStowageId = ws.waybillStowageId
+	<dynamic prepend="where">
+		<isNotEmpty property="partyid" prepend="and">
+			 A.partyId = #partyid#
+		</isNotEmpty>
+		<isNotEmpty property="operatorid" prepend="and">
+			A.operatorId = #operatorid#
+		</isNotEmpty>
+		<isNotEmpty property="waybillnumber" prepend="and">
+			A.waybillNumber LIKE '%$waybillnumber$%'
+		</isNotEmpty>
+		<isNotEmpty property="clientnumber" prepend="and">
+			A.clientNumber LIKE '%$clientnumber$%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="fromdate">
+			A.consignDate <![CDATA[>=]]> str_to_date(#fromdate#, '%Y-%m-%d %H:%i:%s')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="todate">
+			A.consignDate <![CDATA[<=]]> str_to_date(#todate#, '%Y-%m-%d %H:%i:%s')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="urgencydegree">
+			A.urgencyDegree = #urgencydegree#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="consigneelinkman">
+			A.consigneeLinkMan LIKE '%$consigneelinkman$%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="consigneemobilenumber">
+			A.consigneeMobileNumber LIKE '%$consigneemobilenumber$%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="billstatus">
+			<isEqual property="billstatus" compareValue="all">
+				(A.billStatus = '未计费' or A.billStatus = '已计费' or A.billStatus = '已确认')
+			</isEqual>
+			<isEqual property="billstatus" compareValue="billConfirm">
+				(A.billStatus = '已计费' or A.billStatus = '已确认')
+			</isEqual>
+			<isEqual property="billstatus" compareValue="未计费">
+				A.billStatus = '未计费'
+			</isEqual>
+			<isEqual property="billstatus" compareValue="已计费">
+				A.billStatus = '已计费'
+			</isEqual>
+			<isEqual property="billstatus" compareValue="已确认">
+				(A.billStatus = '已确认' and A.inSettleBillId is NULL and A.outSettleBillId is NULL)
+			</isEqual>
+			<isEqual property="billstatus" compareValue="已结算">
+			  	(A.inSettleBillId is not NULL or A.outSettleBillId is not NULL)
+			</isEqual>
+		</isNotEmpty>
+		<isNotEmpty property="fromQuery">
+			<isEqual property="fromQuery" compareValue="waybillList">
+				<isNotEmpty prepend="and" property="status">
+					A.status = #status#
+				</isNotEmpty>
+			</isEqual>
+			<isEqual property="fromQuery" compareValue="waybillListFhf">
+				<isNotEmpty prepend="and" property="status">
+					A.status = #status#
+				</isNotEmpty>
+				<isEmpty prepend="and" property="status">
+					(A.status != '待分派' and A.status != '已作废' and A.status is not null)
+				</isEmpty>
+			</isEqual>
+			<isEqual property="fromQuery" compareValue="waybillmanager">
+				<isNotEmpty prepend="and" property="status">
+					A.status = #status#
+				</isNotEmpty>
+				<isEmpty prepend="and" property="status">
+					(A.status != '待分派' and A.status != '已作废' and A.status is not null)
+				</isEmpty>
+			</isEqual>
+			<isEqual property="fromQuery" compareValue="waybillupdate">
+				<isNotEmpty prepend="and" property="status">
+					A.status = #status#
+				</isNotEmpty>
+			</isEqual>
+			<isEqual property="fromQuery" compareValue="waybillamount">
+				<isNotEmpty prepend="and" property="status">
+					A.status = #status#
+				</isNotEmpty>
+				<isEmpty prepend="and" property="status">
+					(A.status = '已装车' or A.status = '已发车' or A.status = '已到车' or A.status = '已签收')
+				</isEmpty>
+			</isEqual>
+			<isEqual property="fromQuery" compareValue="waybillassign">
+				<isNotEmpty prepend="and" property="status">
+					A.status = #status#
+				</isNotEmpty>
+			</isEqual>
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="topartyid">
+			A.toPartyId = #topartyid#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="frompartyid">
+			A.fromPartyId = #frompartyid#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="consignortown">
+			(A.consignorProvince like '%$consignortown$%'
+			or
+			A.consignorCity like '%$consignortown$%'
+			or
+			A.consignorRegion like '%$consignortown$%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="consigneetown">
+			(A.consigneeProvince like '%$consigneetown$%'
+			or
+			A.consigneeCity like '%$consigneetown$%'
+			or
+			A.consigneeRegion like '%$consigneetown$%')
+		</isNotEmpty>
+		<isNotEmpty  property="menuindex">
+			<isEqual prepend="and" property="menuindex" compareValue="1">
+			</isEqual>
+			<isEqual prepend="and" property="menuindex" compareValue="2">
+				A.status not in ('待分派','待配载','已作废')
+			</isEqual>
+		</isNotEmpty>
+		<isNotEmpty property="fromIdList">
+			<iterate prepend="and" property="fromIdList" conjunction="or" open="(" close=")">
+				A.fromPartyId = #fromIdList[]# 
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty  property="toIdList">
+			<iterate prepend="and" property="toIdList" conjunction="or" open="(" close=")">
+				A.toPartyId = #toIdList[]# 
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty  property="waybillIdList">
+			<iterate prepend="and" property="waybillIdList" conjunction="or" open="(" close=")">
+				A.waybillId = #waybillIdList[]# 
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty property="systemdispatchnumber" prepend="and">
+			ws.systemDispatchNumber like '%$systemdispatchnumber$%'
+		</isNotEmpty>
+	</dynamic>
+	) A
+ </select>
+<!-- 获取记录昨日发货数目 返回String add by xiayao 2014-01-09 -->
+<select id="iBatisSelectYestodayCount" parameterClass="java.util.HashMap" resultClass="java.lang.String">
+	select COUNT(*) from Waybill 
+	 where status != '已作废' and status != '待分派' and fromPartyId=#frompartyid#
+	   and consignDate <![CDATA[=]]> str_to_date(#consigndate#, '%Y-%m-%d %H:%i:%s')
+</select>
+<!-- 获取记录本月发货数目 返回String add by xiayao 2014-01-09 -->
+<select id="iBatisSelectMouthCount" parameterClass="java.util.HashMap" resultClass="java.lang.String">
+	select COUNT(*) from Waybill 
+	 where status != '已作废' and status != '待分派' and fromPartyId=#frompartyid# 
+	   and consignDate<![CDATA[>=]]> str_to_date(#fromdate#, '%Y-%m-%d %H:%i:%s')
+	   and consignDate <![CDATA[<=]]> str_to_date(#todate#, '%Y-%m-%d %H:%i:%s')
+</select>
+
+<!-- 获取记录查询的条数 返回String -->
+ <select id="iBatisSelectCount" parameterClass="java.util.HashMap" resultClass="java.lang.String">
+  select count(*) from Waybill A
+   LEFT JOIN WaybillStowage ws ON A.waybillStowageId = ws.waybillStowageId
+   <dynamic prepend="where">
+		<isNotEmpty property="partyid" prepend="and">
+			 A.partyId = #partyid#
+		</isNotEmpty>
+		<isNotEmpty property="operatorid" prepend="and">
+			A.operatorId = #operatorid#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="waybillnumber">
+			A.waybillNumber LIKE '%$waybillnumber$%'
+		</isNotEmpty>
+		<isNotEmpty property="clientnumber" prepend="and">
+			A.clientNumber LIKE '%$clientnumber$%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="fromdate">
+			A.consignDate <![CDATA[>=]]> str_to_date(#fromdate#, '%Y-%m-%d %H:%i:%s')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="todate">
+			A.consignDate <![CDATA[<=]]> str_to_date(#todate#, '%Y-%m-%d %H:%i:%s')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="urgencydegree">
+			A.urgencyDegree = #urgencydegree#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="consigneelinkman">
+			A.consigneeLinkMan LIKE '%$consigneelinkman$%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="consigneemobilenumber">
+			A.consigneeMobileNumber LIKE '%$consigneemobilenumber$%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="billstatus">
+			<isEqual property="billstatus" compareValue="all">
+				(A.billStatus = '未计费' or A.billStatus = '已计费' or A.billStatus = '已确认')
+			</isEqual>
+			<isEqual property="billstatus" compareValue="billConfirm">
+				(A.billStatus = '已计费' or A.billStatus = '已确认')
+			</isEqual>
+			<isEqual property="billstatus" compareValue="未计费">
+				A.billStatus = '未计费'
+			</isEqual>
+			<isEqual property="billstatus" compareValue="已计费">
+				A.billStatus = '已计费'
+			</isEqual>
+			<isEqual property="billstatus" compareValue="已确认">
+				(A.billStatus = '已确认' and A.inSettleBillId is NULL and A.outSettleBillId is NULL)
+			</isEqual>
+			<isEqual property="billstatus" compareValue="已结算">
+				(A.inSettleBillId is not NULL or A.outSettleBillId is not null)
+			</isEqual>
+		</isNotEmpty>
+		<isNotEmpty property="fromQuery">
+			<isEqual property="fromQuery" compareValue="waybillList">
+				<isNotEmpty prepend="and" property="status">
+					A.status = #status#
+				</isNotEmpty>
+			</isEqual>
+			<isEqual property="fromQuery" compareValue="waybillListFhf">
+				<isNotEmpty prepend="and" property="status">
+					A.status = #status#
+				</isNotEmpty>
+				<isEmpty prepend="and" property="status">
+					(A.status != '待分派' and A.status != '已作废' and A.status is not null)
+				</isEmpty>
+			</isEqual>
+			<isEqual property="fromQuery" compareValue="waybillmanager">
+				<isNotEmpty prepend="and" property="status">
+					A.status = #status#
+				</isNotEmpty>
+				<isEmpty prepend="and" property="status">
+					(A.status != '待分派' and A.status != '已作废' and A.status is not null)
+				</isEmpty>
+			</isEqual>
+			<isEqual property="fromQuery" compareValue="waybillupdate">
+				<isNotEmpty prepend="and" property="status">
+					A.status = #status#
+				</isNotEmpty>
+			</isEqual>
+			<isEqual property="fromQuery" compareValue="waybillamount">
+				<isNotEmpty prepend="and" property="status">
+					A.status = #status#
+				</isNotEmpty>
+				<isEmpty prepend="and" property="status">
+					(A.status = '已装车' or A.status = '已发车' or A.status = '已到车' or A.status = '已签收')
+				</isEmpty>
+			</isEqual>
+			<isEqual property="fromQuery" compareValue="waybillassign">
+				<isNotEmpty prepend="and" property="status">
+					A.status = #status#
+				</isNotEmpty>
+			</isEqual>
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="topartyid">
+			A.toPartyId = #topartyid#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="frompartyid">
+			A.fromPartyId = #frompartyid#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="consignortown">
+			(A.consignorProvince like '%$consignortown$%'
+			or
+			A.consignorCity like '%$consignortown$%'
+			or
+			A.consignorRegion like '%$consignortown$%')
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="consigneetown">
+			CONCAT(A.consigneeProvince,A.consigneeCity,IFNULL(A.consigneeRegion,'')) like '%$consigneetown$%'
+		</isNotEmpty>
+		<isNotEmpty  property="menuindex">
+			<isEqual prepend="and" property="menuindex" compareValue="1">
+				A.status !='待分派'
+			</isEqual>
+			<isEqual prepend="and" property="menuindex" compareValue="2">
+				A.status not in ('待分派','待配载','已作废')
+			</isEqual>
+		</isNotEmpty>
+		<isNotEmpty property="fromIdList">
+			<iterate prepend="and" property="fromIdList" conjunction="or" open="(" close=")">
+				A.fromPartyId = #fromIdList[]# 
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty  property="toIdList">
+			<iterate prepend="and" property="toIdList" conjunction="or" open="(" close=")">
+				A.toPartyId = #toIdList[]# 
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty  property="waybillIdList">
+			<iterate prepend="and" property="waybillIdList" conjunction="or" open="(" close=")">
+				A.waybillId = #waybillIdList[]# 
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty property="systemdispatchnumber" prepend="and">
+			ws.systemDispatchNumber like '%$systemdispatchnumber$%'
+		</isNotEmpty>
+	</dynamic>
+ </select> 
+ 
+
+ <select id="iBatisAddList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT wb.waybillId as waybillid,wb.fromPartyId as frompartyid,wb.toPartyId as topartyid, wb.waybillNumber AS waybillnumber,wb.clientNumber as clientnumber,date_format(wb.consignDate, '%Y-%m-%d') AS consigndate, SUM(wba.amount) AS amount,
+		concat(wb.consignorcity, wb.consignorregion) as fromaddress,
+		concat(wb.consigneecity, wb.consigneeregion) as toaddress
+		FROM Waybill wb	Right JOIN WaybillAmount wba ON wb.waybillId = wba.waybillId and 
+			wba.toPartyId=#frompartyid# and wba.inOrOut=#inorout#
+		 where wb.partyId=#partyid# 
+		 	 and wb.billStatus='已确认'
+			<isEqual property="partytype" compareValue="1" prepend="and">
+				wb.fromPartyId=#frompartyid# and wb.inSettleBillId is  null
+			</isEqual>
+			<isEqual property="partytype" compareValue="0" prepend="and">
+				wb.toPartyId=#frompartyid# and wb.outSettleBillId is  null
+			    <!-- 应付结算发货方检索条件 add by xiayao 2014-3-4-->
+			    <isNotEmpty prepend="and" property="inoutpartyidsec">
+			 		wb.fromPartyId=#inoutpartyidsec#
+			    </isNotEmpty>
+			</isEqual>
+		<isNotEmpty prepend="and" property="waybillnumber">
+			wb.waybillNumber like '%$waybillnumber$%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="consignorprovince">
+			wb.consignorProvince=#consignorprovince#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="consignorcity">
+			wb.consignorCity=#consignorcity#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="consignorregion">
+			wb.consignorRegion=#consignorregion#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="consigneeprovince">
+			wb.consigneeProvince=#consigneeprovince#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="consigneecity">
+			wb.consigneeCity=#consigneecity#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="consigneeregion">
+			wb.consigneeRegion=#consigneeregion#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="clientnumber">
+			wb.clientNumber like '%$clientnumber$%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="fromdate">
+			date_format(wb.consignDate, '%Y-%m-%d')  <![CDATA[>= ]]>#fromdate#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="todate">
+			date_format(wb.consignDate, '%Y-%m-%d')  <![CDATA[<= ]]>#todate#
+		</isNotEmpty>	
+		GROUP BY wb.waybillId
+ </select>
+ <select id="iBatisStatisticsWaybillAmount" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+ 	SELECT SUM(t.amount)as needinoutallamount,date_format(MIN(t.min), '%Y-%m-%d %k:%i:%s') as startdate,date_format(max(t.min), '%Y-%m-%d %k:%i:%s') as enddate FROM(SELECT  date_format(wb.consignDate, '%Y-%m-%d %k:%i:%s') AS min,SUM(wba.amount) AS amount FROM Waybill wb 
+		LEFT JOIN WaybillAmount wba ON wb.waybillId = wba.waybillId AND wba.inOrOut=#inorout#
+		WHERE wb.waybillId IN
+			<isNotEmpty property="waybillids">
+			    <iterate property="waybillids" open="(" close=")" conjunction=",">
+			    	#waybillids[]#
+			    </iterate>
+		    </isNotEmpty>
+		 GROUP BY wb.waybillId)t
+ </select>
+ <!-- 
+ <select id="iBatisSelectStowageList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+ 	SELECT A.*,B.goodsName,B.goodsType,B.num,B.factweight,B.factvolume FROM Waybill A
+		LEFT JOIN (SELECT g.waybillId,g.goodsName,g.goodsType,sum(g.num) num,sum(g.weight) factweight,sum(g.volume) factvolume
+		FROM Goods g GROUP BY g.waybillId) B ON A.waybillId = B.waybillId
+	   <dynamic prepend="WHERE">
+			<isNotEmpty prepend="and" property="waybillid">
+				A.waybillId=#waybillid#
+			</isNotEmpty>
+ 		</dynamic>
+ </select>  -->
+  <!-- 修改运单 add by yao.xia 2013-11-25 -->
+ <update id="iBatisUpdateWayBill" parameterClass="tf56.contract.domain.Waybill">
+ 	update Waybill set partyId=#partyid#,waybillNumber=#waybillnumber#,status=#status#,consignDate=#consigndate#,
+		  fromPartyId=#frompartyid#,consignorLinkMan=#consignorlinkman#,consignorTelephoneNumber=#consignortelephonenumber#,
+		  consignorMobileNumber=#consignormobilenumber#,consignorProvince=#consignorprovince#,
+		  consignorCity=#consignorcity#,consignorRegion=#consignorregion#,consignorTown=#consignortown#,
+		  consignee=#consignee#,consigneeLinkMan=#consigneelinkman#,consigneeTelephoneNumber=#consigneetelephonenumber#,
+		  consigneeMobileNumber=#consigneemobilenumber#,consigneeProvince=#consigneeprovince#,
+		  consigneeCity=#consigneecity#,consigneeRegion=#consigneeregion#,consigneeTown=#consigneetown#,
+		  distance=#distance#,settleType=#settletype#,receiveType=#receivetype#,
+		  arriveType=#arrivetype#,backBillType=#backbilltype#,backBillNum=#backbillnum#,urgencyDegree=#urgencydegree#,
+		  shipType=#shiptype#,toPartyId=#topartyid#,<!-- inputMan=#inputman#,inputDate=#inputdate#, -->
+		  sureMan=#sureman#,sureDate=#suredate#,carBeginDate=#carbegindate#,
+		  carEndDate=#carenddate#,
+		  waybillStowageId=#waybillstowageid#,memo=#memo#,operatorId=#operatorid#,clientNumber=#clientnumber#
+	where waybillId=#waybillid#
+ </update>
+ 
+ <!-- 修改接单管理 add by xianjing.ni 2013-12-13 -->
+ <update id="iBatisUpdateWayBillgoods" parameterClass="tf56.contract.domain.Waybill">
+ 	update Waybill set partyId=#partyid#,waybillNumber=#waybillnumber#,status=#status#,consignDate=#consigndate#,
+		  fromPartyId=#frompartyid#,consignorLinkMan=#consignorlinkman#,consignorTelephoneNumber=#consignortelephonenumber#,
+		  consignorMobileNumber=#consignormobilenumber#,consignorProvince=#consignorprovince#,
+		  consignorCity=#consignorcity#,consignorRegion=#consignorregion#,consignorTown=#consignortown#,
+		  consignee=#consignee#,consigneeLinkMan=#consigneelinkman#,consigneeTelephoneNumber=#consigneetelephonenumber#,
+		  consigneeMobileNumber=#consigneemobilenumber#,consigneeProvince=#consigneeprovince#,
+		  consigneeCity=#consigneecity#,consigneeRegion=#consigneeregion#,consigneeTown=#consigneetown#,
+		  distance=#distance#,settleType=#settletype#,receiveType=#receivetype#,
+		  arriveType=#arrivetype#,backBillType=#backbilltype#,backBillNum=#backbillnum#,urgencyDegree=#urgencydegree#,
+		  shipType=#shiptype#,toPartyId=#topartyid#,inputMan=#inputman#,inputDate=#inputdate#,
+	 <!-- update by yao.xia 2014-02-12 sureMan=#sureman#,sureDate=#suredate#,carBeginDate=#carbegindate#,
+		  carEndDate=#carenddate#,waybillStowageId=#waybillstowageid#, 运单不需要修改的信息(接单修改时还没有这些数据) -->
+		  memo=#memo#,operatorId=#operatorid#,clientNumber=#clientnumber#
+		  <isNotEmpty prepend="," property="sourcesystem">
+			  		sourcesystem=#sourcesystem#
+			  	</isNotEmpty>
+	where waybillId=#waybillid#
+ </update>
+ 
+ <update id="iBatisUpdateWayBillSettleBillNumber" parameterClass="java.util.HashMap">
+ 	update Waybill set 		
+ 		<isEqual property="inorout" compareValue="1">inSettleBillId=#settlebillid# </isEqual>
+		<isEqual property="inorout" compareValue="0">outSettleBillId=#settlebillid# </isEqual> where 
+ 			waybillId IN
+		    <iterate property="waybillids" open="(" close=")" conjunction=",">
+		    	#waybillids[]#
+		    </iterate>
+ </update>
+ <select id="iBatisSelectAddedList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 	
+		wb.waybillId AS waybillid ,
+		wb.waybillNumber AS waybillnumber,
+		wb.clientNumber AS clientnumber,
+		wb.status,nm.volume,nm.num,
+		wb.inSettleBillId AS insettlebillid ,
+		wb.outSettleBillId AS outsettlebillid ,
+		date_format(wb.consigndate, '%Y-%m-%d') AS consigndate,nm.weight,nm1.amount,nm.goodsName AS goodsname FROM Waybill wb LEFT JOIN(SELECT sum(gs.weight) as weight,SUM(gs.volume) AS volume,SUM(gs.num) AS num,gs.goodsName,gs.waybillId
+		FROM Goods gs WHERE gs.waybillId in(SELECT waybillId FROM (SELECT * FROM Waybill WHERE 
+		<isEqual property="inorout" compareValue="1">inSettleBillId=#settlebillid# </isEqual>
+		<isEqual property="inorout" compareValue="0">outSettleBillId=#settlebillid# </isEqual>
+		GROUP BY waybillId) as son ) GROUP BY gs.waybillId) nm
+		on wb.waybillId=nm.waybillId LEFT JOIN
+		(SELECT SUM(wba.amount) AS amount,wba.waybillId  FROM WaybillAmount wba WHERE wba.waybillId IN
+		(SELECT waybillId FROM (SELECT * FROM Waybill WHERE 
+		<isEqual property="inorout" compareValue="1">inSettleBillId=#settlebillid# </isEqual>
+		<isEqual property="inorout" compareValue="0">outSettleBillId=#settlebillid# </isEqual> 
+		GROUP BY waybillId) as son) AND wba.inOrOut=#inorout#
+		GROUP BY wba.waybillId)  nm1 ON wb.waybillId=nm1.waybillId WHERE 
+		<isEqual property="inorout" compareValue="1">wb.inSettleBillId=#settlebillid# </isEqual>
+		<isEqual property="inorout" compareValue="0">wb.outSettleBillId=#settlebillid# </isEqual> 	
+			GROUP BY 
+			wb.waybillId,
+			wb.waybillNumber,
+			wb.clientNumber,
+			wb.status,wb.consignDate ORDER BY wb.consignDate ASC
+ </select>
+  <select id="iBatisWayBillOfSettleBillList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 	
+		wb.waybillId AS waybillid ,
+		wb.waybillNumber AS waybillnumber,
+		wb.clientNumber AS clientnumber,
+		wb.status,nm.volume,nm.num,
+		wb.inSettleBillId AS insettlebillid ,
+		wb.outSettleBillId AS outsettlebillid ,
+		date_format(wb.consigndate, '%Y-%m-%d') AS consigndate,nm.weight,nm1.amount,nm.goodsName AS goodsname FROM Waybill wb LEFT JOIN(SELECT sum(gs.factWeight) as weight,SUM(gs.factVolume) AS volume,SUM(gs.factNum) AS num,gs.goodsName,gs.waybillId
+		FROM Goods gs WHERE gs.waybillId in(SELECT waybillId FROM (SELECT * FROM Waybill WHERE 
+		<isEqual property="inorout" compareValue="1">inSettleBillId=#settlebillid# </isEqual>
+		<isEqual property="inorout" compareValue="0">outSettleBillId=#settlebillid# </isEqual>
+		GROUP BY waybillId) as son ) GROUP BY gs.waybillId) nm
+		on wb.waybillId=nm.waybillId LEFT JOIN
+		(SELECT SUM(wba.amount) AS amount,wba.waybillId  FROM WaybillAmount wba WHERE wba.waybillId IN
+		(SELECT waybillId FROM (SELECT * FROM Waybill WHERE  
+		<isEqual property="inorout" compareValue="1">inSettleBillId=#settlebillid# </isEqual>
+		<isEqual property="inorout" compareValue="0">outSettleBillId=#settlebillid# </isEqual>
+		GROUP BY waybillId) as son) AND wba.inOrOut=#inorout#
+		GROUP BY wba.waybillId)  nm1 ON wb.waybillId=nm1.waybillId WHERE 
+		<isEqual property="inorout" compareValue="1">wb.inSettleBillId=#settlebillid# </isEqual>
+		<isEqual property="inorout" compareValue="0">wb.outSettleBillId=#settlebillid# </isEqual> 	
+			GROUP BY 
+			wb.waybillId,
+			wb.waybillNumber,
+			wb.clientNumber,
+			wb.status,wb.consignDate ORDER BY wb.consignDate ASC
+ </select>
+  <select id="wayBillOfSettleBillListWithCondition" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT 	
+		wb.waybillId AS waybillid ,
+		wb.waybillNumber AS waybillnumber,
+		wb.clientNumber AS clientnumber,
+		wb.status,nm.volume,nm.num,
+		wb.inSettleBillId AS insettlebillid ,
+		wb.outSettleBillId AS outsettlebillid ,
+		date_format(wb.consigndate, '%Y-%m-%d') AS consigndate,nm.weight,nm1.amount,nm.goodsName AS goodsname FROM Waybill wb
+		LEFT JOIN(SELECT sum(gs.weight) as weight,SUM(gs.volume) AS volume,SUM(gs.num) AS num,gs.goodsName,gs.waybillId
+		FROM Goods gs WHERE gs.waybillId in(SELECT waybillId FROM (SELECT * FROM Waybill WHERE 
+		<isEqual property="inorout" compareValue="1">inSettleBillId=#settlebillid# </isEqual>
+		<isEqual property="inorout" compareValue="0">outSettleBillId=#settlebillid# </isEqual>
+		GROUP BY waybillId) as son ) GROUP BY gs.waybillId) nm
+		on wb.waybillId=nm.waybillId LEFT JOIN
+		(SELECT SUM(wba.amount) AS amount,wba.waybillId  FROM WaybillAmount wba WHERE wba.waybillId IN
+		(SELECT waybillId FROM (SELECT * FROM Waybill WHERE  
+		<isEqual property="inorout" compareValue="1">inSettleBillId=#settlebillid# </isEqual>
+		<isEqual property="inorout" compareValue="0">outSettleBillId=#settlebillid# </isEqual>
+		GROUP BY waybillId) as son) AND wba.inOrOut=#inorout#
+		GROUP BY wba.waybillId)  nm1 ON wb.waybillId=nm1.waybillId WHERE 
+		<isEqual property="inorout" compareValue="1">wb.inSettleBillId=#settlebillid# </isEqual>
+		<isEqual property="inorout" compareValue="0">wb.outSettleBillId=#settlebillid# </isEqual>
+		<isNotEqual prepend="and" property="waybillid" compareValue="%%">
+			wb.waybillNumber like '%$waybillnumber$%'
+		</isNotEqual>
+		<isNotEqual prepend="and" property="clientnumber" compareValue="%%">
+			wb.clientNumber like '%$clientnumber$%'
+		</isNotEqual>
+			GROUP BY 
+			wb.waybillId,
+			wb.waybillNumber,
+			wb.clientNumber,
+			wb.status,wb.consignDate ORDER BY wb.consignDate ASC
+ </select>
+ <update id="iBatisDeleteWayBillOfSettleBill" parameterClass="java.util.HashMap">
+ 	update Waybill set 
+		<isEqual property="inorout" compareValue="1">inSettleBillId=null </isEqual>
+		<isEqual property="inorout" compareValue="0">outSettleBillId=null </isEqual>
+	 where waybillId=#waybillid#
+ </update>
+ <select id="iBatisStatisticsAmountBySettleBillId" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+ 	SELECT SUM(t.amount)as needinoutallamount,date_format(MIN(t.min), '%Y-%m-%d %k:%i:%s') as startdate,date_format(max(t.min), '%Y-%m-%d %k:%i:%s') as enddate FROM(SELECT  date_format(wb.consignDate, '%Y-%m-%d %k:%i:%s') AS min,SUM(wba.amount) AS amount FROM Waybill wb 
+		LEFT JOIN WaybillAmount wba ON wb.waybillId = wba.waybillId 
+		WHERE 
+		<isEqual property="inorout" compareValue="1">wb.inSettleBillId=#settlebillid# and wba.inOrOut='1'</isEqual>
+		<isEqual property="inorout" compareValue="0">wb.outSettleBillId=#settlebillid# and wba.inOrOut='0'</isEqual> 	
+ 		GROUP BY wb.waybillId)t 
+ </select>
+ <!-- 根据运单id获得对应收入单价  -->
+ <select id="iBatisIncomeById" parameterClass="java.util.HashMap" resultClass="tf56.contract.domain.Waybill">
+SELECT A.eachVolumePrice eachvolumeprice,A.eachWeightPrice eachweightprice,A.eachTonKilometerPrice eachtonkilometerprice,A.eachCarPrice eachcarprice,A.eachCubeKilometerPrice eachcubekilometerprice,
+       A.billType billtype,A.reportType reporttype,A.settleSetId settlesetid
+  FROM SettleSet A,Waybill B
+ WHERE replace(A.fromAddress,'-','') LIKE concat('%',B.consignorProvince,B.consignorCity,IFNULL(B.consignorRegion,''),'%')
+   AND replace(A.toAddress,'-','') LIKE concat('%',B.consigneeProvince,B.consigneeCity,IFNULL(B.consigneeRegion,''),'%')
+   AND A.toPartyId = B.fromPartyId
+	 AND B.waybillId = #waybillid#
+ </select> 
+  <!-- 根据运单id获得对应支出单价  -->
+ <select id="iBatisExpenditureById" parameterClass="java.util.HashMap" resultClass="tf56.contract.domain.Waybill">
+  SELECT A.eachVolumePrice eachvolumeprice,A.eachWeightPrice eachweightprice,A.eachTonKilometerPrice eachtonkilometerprice,A.eachCarPrice eachcarprice,A.eachCubeKilometerPrice eachcubekilometerprice,
+         A.billType billtype,A.reportType reporttype,A.settleSetId settlesetid
+  FROM SettleSet A,Waybill B
+ WHERE replace(A.fromAddress,'-','') LIKE concat('%',B.consignorProvince,B.consignorCity,IFNULL(B.consignorRegion,''),'%')
+   AND replace(A.toAddress,'-','') LIKE concat('%',B.consigneeProvince,B.consigneeCity,IFNULL(B.consigneeRegion,''),'%')
+   AND A.toPartyId = B.toPartyId
+	 AND B.waybillId = #waybillid#
+ </select> 
+	<select id="selectAddedList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	 	SELECT wb.waybillNumber as waybillnumber,wb.waybillId as waybillid,wb.clientNumber as clientnumber,consignDate as consigndate,SUM(wba.amount)as amount FROM Waybill wb LEFT JOIN WaybillAmount  wba ON wba.waybillId=wb.waybillId AND wba.inOrOut=#inorout#
+		 WHERE wb.inSettleBillId=#insettlebillid# GROUP BY wb.waybillId
+	</select>
+    <!-- 根据settlebillid查询包括WayBill,Goods,WaybillAmount三张表的联合信息   author:wei.huang -->
+ 	<select id="iBatisSelectMixedInfBySettleBillId" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+ 		SELECT wb.waybillId as waybillid,wb.waybillNumber as waybillnumber,DATE_FORMAT(wb.consignDate,'%Y-%m-%d') as consigndate,wb.consignee,wb.settleType as settletype,wb.arriveType as arrivetype,wb.backBillType as backbilltype,
+			 wb.consignorProvince as consignorprovince,wb.consignorCity as consignorcity,wb.consignorRegion as consignorregion,
+			 wb.consigneeProvince as consigneeprovince,wb.consigneeCity as consigneecity,wb.consigneeRegion as consigneeregion,
+			 myGoods.goodsname,myGoods.factnum,myGoods.factvolume,myGoods.factweight,myGoods.packagename,myAmount.needamount
+		from Waybill as wb,
+			(select temp.waybillId as waybillid,temp.goodsName as goodsname,temp.packageName as packagename,sum(temp.factNum) as factnum,sum(temp.factWeight) as factweight,sum(temp.factVolume) as factvolume from (select * from Goods order by goodsId asc) as temp group by temp.waybillId) as myGoods,
+			(select waybillId as waybillid,sum(amount) as needamount from WaybillAmount where inOrOut=#inorout:VARCHAR# group by waybillId) as myAmount 
+		where wb.waybillid=myGoods.waybillid and wb.waybillid=myAmount.waybillid
+			  <dynamic>
+			  	<isNotEmpty prepend="and" property="insettlebillid">
+			  		wb.inSettleBillId=#insettlebillid:VARCHAR#
+			  	</isNotEmpty>
+			  	<isNotEmpty prepend="and" property="outsettlebillid">
+			  		wb.outSettleBillId=#outsettlebillid:VARCHAR#
+			  	</isNotEmpty>
+			  </dynamic>
+ 	</select>
+ 	<!--根据结算单id更新运单结算单id为null  -->
+ 	<update id="iBatisUpdateWayBillOfSettleBill" parameterClass="java.util.HashMap">
+ 		update Waybill set 
+		<isEqual property="inorout" compareValue="1">inSettleBillId=null where inSettleBillId=#settlebillid#</isEqual>
+		<isEqual property="inorout" compareValue="0">outSettleBillId=null where outSettleBillId=#settlebillid#</isEqual>
+ 	</update>
+ 	<update id="iBatisUpdateBillStatusByWaybillId" parameterClass="map">
+ 		update Waybill set billStatus = #billstatus# where waybillId = #waybillid#
+ 	</update>
+ 	<!-- 报表查询下的托运单明细   author:wei.huang -->
+ 	<select id="iBatisSelectWaybillDetailForReport" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			wb.waybillId AS waybillid,
+			wb.waybillNumber AS waybillnumber,
+			DATE_FORMAT(wb.consignDate, '%Y.%m.%d') AS consigndate,
+			wb.status,
+			wb.urgencyDegree AS urgencydegree,
+			wb.partyId AS partyid,
+			wb.fromPartyId AS frompartyid,
+			wb.toPartyId AS topartyid,
+			wb.consignorProvince AS consignorprovince,
+			wb.consignorCity AS consignorcity,
+			wb.consignorRegion AS consignorregion,
+			wb.consigneeProvince AS consigneeprovince,
+			wb.consigneeCity AS consigneecity,
+			wb.consigneeRegion AS consigneeregion,
+			myGoods.factnum,
+			myGoods.factvolume,
+			myGoods.factweight
+		FROM
+			(
+				SELECT * FROM Waybill WHERE partyId=#partyid:VARCHAR#
+				<dynamic>
+					<isNotEmpty prepend="AND" property="waybillnumber">
+						waybillNumber like '%$waybillnumber$%'
+					</isNotEmpty>
+					<isNotEmpty prepend="AND" property="status">
+						status=#status:VARCHAR#
+					</isNotEmpty>
+					<isEmpty prepend="AND" property="status">
+						status!='已作废'
+					</isEmpty>
+					<isNotEmpty prepend="AND" property="frompartyidlist">
+						fromPartyId in ($frompartyidlist$)
+					</isNotEmpty>
+					<isNotEmpty prepend="AND" property="topartyidlist">
+						toPartyId in ($topartyidlist$)
+					</isNotEmpty>
+					<isNotEmpty prepend="AND" property="startdate">
+						consignDate <![CDATA[ >= ]]> #startdate:VARCHAR#
+					</isNotEmpty>
+					<isNotEmpty prepend="AND" property="enddate">
+						consignDate <![CDATA[ <= ]]> #enddate:VARCHAR#
+					</isNotEmpty>
+					<isNotEmpty prepend="AND" property="consignorprovince">
+						consignorProvince = #consignorprovince:VARCHAR#
+					</isNotEmpty>
+					<isNotEmpty prepend="AND" property="consignorcity">
+						consignorCity = #consignorcity:VARCHAR#
+					</isNotEmpty>
+					<isNotEmpty prepend="AND" property="consignorregion">
+						consignorRegion = #consignorregion:VARCHAR#
+					</isNotEmpty>
+					<isNotEmpty prepend="AND" property="consigneeprovince">
+						consigneeProvince = #consigneeprovince:VARCHAR#
+					</isNotEmpty>
+					<isNotEmpty prepend="AND" property="consigneecity">
+						consigneeCity = #consigneecity:VARCHAR#
+					</isNotEmpty>
+					<isNotEmpty prepend="AND" property="consigneeregion">
+						consigneeRegion = #consigneeregion:VARCHAR#
+					</isNotEmpty>
+				</dynamic>
+			) AS wb,
+			(SELECT waybillId,sum(factNum) AS factnum,sum(factWeight) AS factweight,sum(factVolume) AS factvolume FROM Goods GROUP BY waybillId) AS myGoods
+		WHERE
+			wb.waybillid = myGoods.waybillId order by wb.consignDate desc
+ 	</select>
+ 	<!--查询某条结算单下的运单信息 add by liangggui.zhou -->
+ 	<select id="iBatisSelectWaybillsOfSettBill" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+ 		SELECT
+			waybillNumber AS waybillnumber,
+			clientNumber AS clientnumber,
+			consignDate AS consigndate,
+			consigneeTown AS detailaddress,
+			CONCAT(
+				consignorProvince,
+				consignorCity,
+				consignorRegion
+			) AS shipregion,
+			distance,
+			settleType AS settletype
+		FROM
+			Waybill
+		WHERE
+			<isEqual property="inorout" compareValue="1">
+				inSettleBillId=#settlebillid#	
+			</isEqual>
+ 			<isEqual property="inorout" compareValue="0">
+ 				outSettleBillId=#settlebillid#
+ 			</isEqual>
+ 	</select>
+ 	
+ 	<!-- 获取同一总包会员下的不重复的 frompartyid  author:wei.huang-->
+ 	<select id="iBatisSelectNoRepeatFromPartyId" parameterClass="java.lang.String" resultClass="java.lang.String">
+ 		select distinct fromPartyId as frompartyid from Waybill where partyId=#partyid:VARCHAR#
+ 	</select>
+ 	<!-- 获取同一总包会员下的不重复的 topartyid  author:wei.huang-->
+ 	<select id="iBatisSelectNoRepeatToPartyId" parameterClass="java.lang.String" resultClass="java.lang.String">
+ 		select distinct toPartyId as topartyid from Waybill where partyId=#partyid:VARCHAR#
+ 	</select>
+ 	<!-- 根据运单号查询订单到详情              nixianjing -->
+ 	<select id="iBatisSelectWaybillNumber" parameterClass="java.lang.String" resultClass="java.lang.String">
+ 		select waybillId from Waybill where waybillNumber=#waybillnumber:VARCHAR#
+ 	</select>
+ 	
+ 	<!-- 根据客户号模糊查询得到最新的运单号   nixianjing -->
+ 	<select id="iBatisSelectWaybillNumberList" parameterClass="java.util.HashMap" resultClass="waybill">
+  		SELECT * FROM Waybill WHERE waybillNumber LIKE '%$waybillnumber$%' order by waybillId desc
+ 	</select>
+ 
+	 <!-- 判断同一张调度单的运单状态是否一致 haoyong -->
+	 <select id="iBatisCheckWaybillStatus" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	 	select waybillStowageId as waybillstowageid,count(waybillId) as waybillnum from Waybill where waybillStowageId=(
+		select w.waybillStowageId from Waybill w where w.waybillId=#waybillid#)
+		and status in 
+		<iterate open="(" close=")" conjunction="," property="statuslist">
+			#statuslist[]#
+		</iterate>
+	 </select>
+ 	<!-- 根据调度单查寻运单（包括货物信息）xianjing.ni -->
+ 	<select id="iBatisSelectWaybillGoodsByStowageId" parameterClass="java.util.HashMap" resultClass="waybill">
+ 		select t.partyId as partyid, t.fromPartyId as frompartyid,t.fromPartyId as frompartyname,t.consignorTown as consignortown,
+		t.consigneeCity as consigneecity,t.consigneeRegion as consigneeregion,t.clientNumber as clientnumber, 
+ 		(select t1.goodsName from Goods t1 where t1.waybillId=t.waybillId order by t1.goodsId ASC limit 1) as goodsname,
+		(select t1.spec from Goods t1 where t1.waybillId=t.waybillId order by t1.goodsId ASC limit 1) as spec,
+		(select t1.model from Goods t1 where t1.waybillId=t.waybillId order by t1.goodsId ASC limit 1) as model,
+		(select SUM(t1.num) from Goods t1 where t1.waybillId=t.waybillId) as num,
+		(select t1.packageName from Goods t1 where t1.waybillId=t.waybillId order by t1.goodsId ASC limit 1) as packagename
+ 		from Waybill t where t.waybillStowageId=#waybillstowageid#
+ 	</select>
+ 	<!-- 获取总包层面的货物统计信息  author:wei.huang -->
+ 	<select id="iBatisSelectStatistic_Contract_Goods" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT partyid,count(DISTINCT waybillid) as totalwaybill,sum(factnum) as totalnum,sum(factweight) as totalweight,sum(factvolume) as totalvolume FROM
+			(SELECT Waybill.waybillId as waybillid,Waybill.partyId as partyid,Waybill.fromPartyId as frompartyid,Waybill.toPartyId as topartyid,
+			 Goods.factNum as factnum,Goods.factWeight as factweight,Goods.factVolume as factvolume FROM Waybill,Goods where Waybill.waybillId=Goods.waybillId and Waybill.status!='已作废'
+			 <dynamic>
+			 	<isNotEmpty prepend="AND" property="partyidlist">
+					Waybill.partyId in ($partyidlist$)
+				</isNotEmpty>
+			 	<isNotEmpty prepend="AND" property="startdate">
+					<![CDATA[Waybill.consignDate >= #startdate:VARCHAR#]]>
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="enddate">
+					<![CDATA[Waybill.consignDate <= #enddate:VARCHAR#]]>
+				</isNotEmpty>
+			 </dynamic>
+			 order by Waybill.consignDate desc
+			 ) as w_g
+		GROUP BY w_g.partyid;
+	</select>
+	<!-- 获取总包层面的费用统计信息  author:wei.huang -->
+	<select id="iBatisSelectStatistic_Contract_Amount" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT partyid,inorout,sum(amount) as totalamount FROM
+			(SELECT Waybill.waybillId as waybillid,Waybill.partyId as partyid,Waybill.fromPartyId as frompartyid,Waybill.toPartyId as topartyid,
+			WaybillAmount.inOrOut as inorout,WaybillAmount.amount FROM Waybill,WaybillAmount where Waybill.waybillId=WaybillAmount.waybillId and Waybill.status!='已作废'
+			<dynamic>
+				<isNotEmpty prepend="AND" property="partyidlist">
+					Waybill.partyId in ($partyidlist$)
+				</isNotEmpty>
+			 	<isNotEmpty prepend="AND" property="startdate">
+					<![CDATA[Waybill.consignDate >= #startdate:VARCHAR#]]>
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="enddate">
+					<![CDATA[Waybill.consignDate <= #enddate:VARCHAR#]]>
+				</isNotEmpty>
+				order by Waybill.consignDate desc
+			 </dynamic>
+			) as w_w
+		GROUP BY w_w.partyid,w_w.inorout;
+	</select>
+	<!-- 获取发货方层面的货物统计信息  author:wei.huang -->
+	<select id="iBatisSelectStatistic_Consignor_Goods" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT frompartyid,count(DISTINCT waybillid) as totalwaybill,sum(factnum) as totalnum,sum(factweight) as totalweight,sum(factvolume) as totalvolume FROM
+		(SELECT Waybill.waybillId as waybillid,Waybill.partyId as partyid,Waybill.fromPartyId as frompartyid,Waybill.toPartyId as topartyid,
+		Goods.factNum as factnum,Goods.factWeight as factweight,Goods.factVolume as factvolume FROM Waybill,Goods where Waybill.waybillId=Goods.waybillId and Waybill.status!='已作废'
+		and Waybill.partyId=#partyid#
+			<dynamic>
+				<isNotEmpty prepend="AND" property="partyidlist">
+					Waybill.fromPartyId in ($partyidlist$)
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="startdate">
+					<![CDATA[Waybill.consignDate >= #startdate:VARCHAR#]]>
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="enddate">
+					<![CDATA[Waybill.consignDate <= #enddate:VARCHAR#]]>
+				</isNotEmpty>
+			</dynamic>
+			order by Waybill.consignDate desc
+		) as w_g
+		GROUP BY w_g.frompartyid;
+	</select>
+	<!-- 获取发货方层面的费用统计信息  author:wei.huang -->
+	<select id="iBatisSelectStatistic_Consignor_Amount" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT frompartyid,inorout,sum(amount) as totalamount FROM
+			(SELECT Waybill.waybillId as waybillid,Waybill.partyId as partyid,Waybill.fromPartyId as frompartyid,Waybill.toPartyId as topartyid,
+			WaybillAmount.inOrOut as inorout,WaybillAmount.amount FROM Waybill,WaybillAmount where Waybill.waybillId=WaybillAmount.waybillId and Waybill.status!='已作废'
+			and Waybill.partyId=#partyid#
+			<dynamic>
+				<isNotEmpty prepend="AND" property="partyidlist">
+					Waybill.fromPartyId in ($partyidlist$)
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="startdate">
+					<![CDATA[Waybill.consignDate >= #startdate:VARCHAR#]]>
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="enddate">
+					<![CDATA[Waybill.consignDate <= #enddate:VARCHAR#]]>
+				</isNotEmpty>
+			</dynamic>
+			order by Waybill.consignDate desc
+			) as w_w
+		GROUP BY w_w.frompartyid,w_w.inorout;
+	</select>
+	<!-- 获取不重复的 partyid  author:wei.huang-->
+ 	<select id="iBatisSelectNoRepeatPartyId" parameterClass="java.lang.String" resultClass="java.lang.String">
+ 		select distinct partyId as partyid from Waybill where 1=1
+ 	</select>
+ 	<!-- 获取运单层面的货物统计信息  author:wei.huang -->
+	<select id="iBatisSelectStatistic_Waybill_Goods" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT  waybillid,waybillnumber,clientnumber,sum(factnum) as totalnum,sum(factweight) as totalweight,sum(factvolume) as totalvolume FROM
+		(SELECT Waybill.waybillId as waybillid,Waybill.partyId as partyid,Waybill.fromPartyId as frompartyid,Waybill.toPartyId as topartyid,Waybill.clientNumber as clientnumber,Waybill.waybillNumber as waybillnumber,
+		Goods.factNum as factnum,Goods.factWeight as factweight,Goods.factVolume as factvolume FROM Waybill,Goods where Waybill.waybillId=Goods.waybillId and Waybill.status!='已作废'
+		and Waybill.partyId=#partyid# and Waybill.fromPartyId=#frompartyid#
+		<dynamic>
+			<isNotEmpty prepend="AND" property="startdate">
+				<![CDATA[Waybill.consignDate >= #startdate:VARCHAR#]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="enddate">
+				<![CDATA[Waybill.consignDate <= #enddate:VARCHAR#]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="waybillnumber">
+				Waybill.waybillNumber like '%$waybillnumber$%'
+			</isNotEmpty>
+		</dynamic>
+		order by Waybill.consignDate desc
+		) as w_g GROUP BY waybillid;
+	</select>
+	<!-- 获取运单层面的费用统计信息  author:wei.huang -->
+	<select id="iBatisSelectStatistic_Waybill_Amount" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT waybillid,inorout,sum(amount) as totalamount FROM
+		(SELECT waybillId as waybillid,inOrOut as inorout,amount from WaybillAmount where waybillId in 
+		(SELECT DISTINCT waybillId FROM Waybill where Waybill.partyId=#partyid# and Waybill.fromPartyId=#frompartyid#
+		<dynamic>
+			<isNotEmpty prepend="AND" property="startdate">
+				<![CDATA[Waybill.consignDate >= #startdate:VARCHAR#]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="enddate">
+				<![CDATA[Waybill.consignDate <= #enddate:VARCHAR#]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="waybillnumber">
+				Waybill.waybillNumber like '%$waybillnumber$%'
+			</isNotEmpty>
+		</dynamic>
+		order by Waybill.consignDate desc
+		))
+		as w_w GROUP BY waybillid,inorout;
+	</select>
+</sqlMap>

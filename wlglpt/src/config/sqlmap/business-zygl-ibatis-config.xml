@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+	<typeHandler jdbcType="CLOB" javaType="java.lang.String" callback="org.springframework.orm.ibatis.support.ClobStringTypeHandler" />
+	<typeHandler jdbcType="BLOB" javaType="[B" callback="org.springframework.orm.ibatis.support.BlobByteArrayTypeHandler" />
+	<!-- 资源管理模块start -->
+	<sqlMap resource="com/cy/common/xmlsql/business/zygl/bus_zygl_qykhdjxx.xml"/>  
+	<sqlMap resource="com/cy/common/xmlsql/business/zygl/bus_zygl_qykhhwxx.xml"/> 
+	<sqlMap resource="com/cy/common/xmlsql/business/zygl/bus_zygl_qykhzhdz.xml"/> 
+    <sqlMap resource="com/cy/common/xmlsql/business/zygl/bus_zygl_qykhshdz.xml"/> 
+	<sqlMap resource="com/cy/common/xmlsql/business/zygl/bus_zygl_qykhhwxh.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/zygl/bus_zygl_qyfbsdjxx.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/zygl/bus_zygl_qyfbsjsjg.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/zygl/bus_zygl_qyfbslxdj.xml"/>
+	
+    <sqlMap resource="com/cy/common/xmlsql/crud/zygl/qy_kh_djxx.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/crud/zygl/qy_kh_hwxx.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/crud/zygl/qy_kh_zhdz.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/zygl/qy_kh_hwxh.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/crud/zygl/qy_kh_shdz.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/crud/zygl/qy_fbs_jsjg.xml"/>
+	
+    <sqlMap resource="com/cy/common/xmlsql/crud/zygl/qy_fbs_djxx.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/crud/zygl/qy_fbs_lxdj.xml"/>
+
+	<sqlMap resource="com/cy/common/xmlsql/business/zygl/bus_zygl_fbsyhgl.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/crud/zygl/qy_fbs_yh.xml"/>
+    
+    <sqlMap resource="com/cy/common/xmlsql/business/zygl/bus_zygl_qyjcbmjldw.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/crud/zygl/qy_jcbm_jldw.xml"/>
+    
+    <sqlMap resource="com/cy/common/xmlsql/business/zygl/bus_zygl_qyylclxx.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/crud/zygl/qy_yl_clxx.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/crud/zygl/qy_yl_clxx_sj.xml"/>
+
+    <sqlMap resource="com/cy/common/xmlsql/business/zygl/bus_zygl_qyxxzjdjxx.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/crud/zygl/qy_xxzj_djxx.xml"/>
+
+	<sqlMap resource="com/cy/common/xmlsql/business/zygl/bus_zygl_qyxlwh.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/crud/zygl/qy_xlwh.xml"/>
+	
+    <sqlMap resource="com/cy/common/xmlsql/business/zygl/bus_zygl_qykhjsjg.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/crud/zygl/qy_kh_jsjg.xml"/>
+
+	<sqlMap resource="com/cy/common/xmlsql/business/zygl/bus_zygl_qyclxhwh.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/crud/zygl/qy_clxhwh.xml"/>
+    
+    <sqlMap resource="com/cy/common/xmlsql/business/zygl/bus_zygl_qythshdz.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/crud/zygl/qy_th_shdz.xml"/>
+    
+      <sqlMap resource="com/cy/common/xmlsql/business/zygl/bus_zygl_qywlssyy.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/crud/zygl/qy_wlssyy.xml"/>
+    
+    
+    <sqlMap resource="com/cy/common/xmlsql/business/zygl/bus_zygl_qyfydjxm.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/crud/zygl/qy_fydjxm.xml"/>
+    
+    <sqlMap resource="com/cy/common/xmlsql/business/zygl/bus_zygl_qydzcyyy.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/crud/zygl/qy_dzcyyy.xml"/>
+	<!-- 资源管理模块end --> 
+</sqlMapConfig>

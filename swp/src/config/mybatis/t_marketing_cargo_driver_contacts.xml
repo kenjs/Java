@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.swp.dao.MarketingCargoDriverContactsDao"><!-- 货源司机电话回访记录表 -->
+	<resultMap type="MarketingCargoDriverContacts" id="marketing_cargo_driver_contacts_result">
+	  <result property="id" column="id"/>
+	  <result property="assistId" column="assist_id"/>
+	  <result property="driverUserId" column="driver_user_id"/>
+	  <result property="callTime" column="call_time"/>
+	  <result property="replyResult" column="reply_result"/>
+	  <result property="remark" column="remark"/>
+	  <result property="createTime" column="create_time"/>
+	  <result property="assisterName" column="assister_name"/>
+	</resultMap>
+	
+	<!-- 根据driver_user_id查询司机回复记录 -->
+	<select id="queryDriverReplyByDriverId" parameterType="String" resultMap="marketing_cargo_driver_contacts_result">
+		SELECT id,
+		 assist_id,
+        driver_user_id,
+        call_time,
+        reply_result,
+        remark,
+        create_time,
+        assister_name
+		FROM t_marketing_cargo_driver_contacts 
+		where driver_user_id = #{driverUserId}
+	</select>
+	
+	<!-- 根据协助专员Id和司机的回复查询总记录数 -->
+	<select id="countDriverReplyByAssistIdAndResult" parameterType="map" resultType="Integer">
+	SELECT count(DISTINCT driver_user_id) FROM t_marketing_cargo_driver_contacts 
+	WHERE assist_id = #{assistId} AND reply_result = #{replyResult} 
+	</select>
+	
+	<!-- 添加货源司机电话回访记录-->
+	<insert id="addCargoDriverContacts" parameterType="MarketingCargoDriverContacts" useGeneratedKeys="true" keyProperty="id">
+	INSERT INTO t_marketing_cargo_driver_contacts(
+        assist_id,
+        driver_user_id,
+        call_time,
+        reply_result,
+        remark,
+        create_time,
+		assister_name
+        ) VALUES(
+        #{assistId},#{driverUserId},sysdate(), #{replyResult},#{remark},sysdate(),#{assisterName})
+	</insert>
+</mapper>

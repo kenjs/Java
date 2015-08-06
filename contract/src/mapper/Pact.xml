@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+
+<sqlMap>
+   <typeAlias type="tf56.contract.domain.Pact" alias="pact"/>
+ <!-- 新增记录 -->
+ <select id="iBatisSelectPactsList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+ 	select pactId as pactid,pactNumber as pactnumber,type,fromPartyId as frompartyid,fromPartyRealName as frompartyrealname,
+ 	 fromPartySignMan as frompartysignman,toPartyId as topartyid,toPartyRealName as topartyrealname,toPartySignMan as topartysignman,
+ 	 date_format(signDate, '%Y-%m-%d') as  signdate,memo,date_format(inputDate,'%Y-%m-%d') as inputdate,inputMan as inputman,
+ 	 case when 
+		endDate <![CDATA[<= ]]> #limitdate# and
+	 	endDate <![CDATA[>= ]]> now() then '即将过期' 
+	 	  when endDate <![CDATA[< ]]> now() then '已过期' 
+	 	  else '正常' 
+	 end state
+ 	 from Pact  where partyId=#partyid#
+	 	<dynamic prepend="and">
+	 		<isNotEmpty prepend="and" property="pactnumber">
+	 			pactNumber=#pactnumber#
+	 		</isNotEmpty>
+	 		<isNotEmpty prepend="and" property="fromdate">
+	 			date_format(signDate, '%Y-%m-%d')  <![CDATA[>= ]]>#fromdate#
+	 		</isNotEmpty>
+	 		<isNotEmpty prepend="and" property="todate">
+	 			date_format(signDate, '%Y-%m-%d')  <![CDATA[<= ]]>#todate#
+	 		</isNotEmpty>
+	 		<isNotEmpty prepend="and" property="partyname">
+	 			(fromPartyRealName=#partyname# or toPartyRealName=#partyname#)
+	 		</isNotEmpty>
+	 		<isEqual prepend="and" property="state" compareValue="1">
+	 			date_format(endDate, '%Y-%m-%d') <![CDATA[<= ]]> #limitdate# and
+	 			date_format(endDate, '%Y-%m-%d') <![CDATA[>= ]]> now()
+	 		</isEqual>
+	 		<isEqual prepend="and" property="state" compareValue="2">
+	 			date_format(endDate, '%Y-%m-%d') <![CDATA[< ]]> now()
+	 		</isEqual>
+	 		<isEqual prepend="and" property="state" compareValue="3">
+	 			date_format(endDate, '%Y-%m-%d') <![CDATA[> ]]> #limitdate#
+	 		</isEqual>
+	 	</dynamic>
+	 		order by pactId DESC LIMIT $skipCount$,$pageSize$
+ </select>
+  <select id="iBatisSelectPactsListCount" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+ 	select count(*) from Pact  where partyId=#partyid#
+	 	<dynamic prepend="and">
+	 		<isNotEmpty prepend="and" property="pactnumber">
+	 			pactNumber=#pactnumber#
+	 		</isNotEmpty>
+	 		<isNotEmpty prepend="and" property="fromdate">
+	 			date_format(signDate, '%Y-%m-%d')  <![CDATA[>= ]]>#fromdate#
+	 		</isNotEmpty>
+	 		<isNotEmpty prepend="and" property="todate">
+	 			date_format(signDate, '%Y-%m-%d')  <![CDATA[<= ]]>#todate#
+	 		</isNotEmpty>
+	 		<isNotEmpty prepend="and" property="partyname">
+	 			(fromPartyRealName=#partyname# or toPartyRealName=#partyname#)
+	 		</isNotEmpty>
+	 		<isEqual prepend="and" property="state" compareValue="1">
+	 			date_format(endDate, '%Y-%m-%d') <![CDATA[<= ]]> #limitdate# and
+	 			date_format(endDate, '%Y-%m-%d') <![CDATA[>= ]]> now()
+	 		</isEqual>
+	 		<isEqual prepend="and" property="state" compareValue="2">
+	 			date_format(endDate, '%Y-%m-%d') <![CDATA[< ]]> now()
+	 		</isEqual>
+	 		<isEqual prepend="and" property="state" compareValue="3">
+	 			date_format(endDate, '%Y-%m-%d') <![CDATA[> ]]> #limitdate#
+	 		</isEqual>
+	 		<!--  <isNotEmpty prepend="or" property="partyname">
+	 			toPartyRealName=#partyname#
+	 		</isNotEmpty>-->
+	 	</dynamic>
+ </select>
+ <insert id="iBatisAddPact" parameterClass="pact">
+ 	  insert into Pact (partyId,pactNumber,type,fromPartyId,fromPartyRealName,fromPartySignMan,toPartyId,toPartyRealName,toPartySignMan,signDate,endDate,memo,inputDate,inputMan)
+   values (#partyid:VARCHAR#,#pactnumber:VARCHAR#,#type:VARCHAR#,#frompartyid:VARCHAR#,#frompartyrealname:VARCHAR#,#frompartysignman:VARCHAR#,#topartyid:VARCHAR#,#topartyrealname:VARCHAR#,#topartysignman:VARCHAR#,#signdate:VARCHAR#,#enddate:VARCHAR#,#memo:VARCHAR#,NOW(),#inputman:VARCHAR#)
+  <selectKey resultClass="String" keyProperty="pactid">
+   select last_insert_id() as id
+  </selectKey>
+ </insert>
+ <select id="iBatisQueryPactDetailById" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+ 	select pactId as pactid,pactNumber as pactnumber,type,fromPartyId as frompartyid,fromPartyRealName as frompartyrealname,
+	 	 fromPartySignMan as frompartysignman,toPartyId as topartyid,toPartyRealName as topartyrealname,toPartySignMan as topartysignman,
+	 	 date_format(signDate, '%Y-%m-%d') as  signdate,date_format(endDate, '%Y-%m-%d') as enddate,memo,date_format(inputDate,'%Y-%m-%d') as inputdate,
+	 	 date_format(endDate,'%Y-%m-%d') as enddate,inputMan as inputman
+	 	 from Pact where pactId=#pactid#
+ </select>
+ <!--此处用于合同删除并删除合同附件开始-->
+ <delete id="iBatisPactDel" parameterClass="java.util.HashMap">
+ 	delete from Pact where pactId=#pactid#
+ </delete>
+ <delete id="iBatisDelContractAppendix" parameterClass="java.util.HashMap">
+ 	delete from ContractAppendix where tableId=#tableid# and tableName=#tablename#
+ </delete>
+  <!--此处用于合同删除并删除合同附件结束-->
+  <update parameterClass="java.util.HashMap" id="iBatisEditPact">
+  		update Pact set inputDate=NOW()
+  			<dynamic>
+  				<isNotEmpty prepend="," property="pactnumber">
+  					pactNumber=#pactnumber#
+  				</isNotEmpty>
+   				<isNotEmpty prepend="," property="type">
+  					type=#type#
+  				</isNotEmpty>
+  				<isNotEmpty prepend="," property="frompartyid">
+  					fromPartyId=#frompartyid#
+  				</isNotEmpty> 
+   				<isNotEmpty prepend="," property="frompartyrealname">
+  					fromPartyRealName=#frompartyrealname#
+  				</isNotEmpty>
+  				<isNotEmpty prepend="," property="frompartysignman">
+  					fromPartySignMan=#frompartysignman#
+  				</isNotEmpty> 
+   				<isNotEmpty prepend="," property="topartyid">
+  					toPartyId=#topartyid#
+  				</isNotEmpty>
+  				<isNotEmpty prepend="," property="topartyrealname">
+  					toPartyRealName=#topartyrealname#
+  				</isNotEmpty>  
+   				<isNotEmpty prepend="," property="topartysignman">
+  					toPartySignMan=#topartysignman#
+  				</isNotEmpty>
+  				<isNotEmpty prepend="," property="memo">
+  					memo=#memo#
+  				</isNotEmpty>  
+   				<isNotEmpty prepend="," property="signdate">
+  					signDate=#signdate#
+  				</isNotEmpty>
+   				<isNotEmpty prepend="," property="enddate">
+  					endDate=#enddate#
+  				</isNotEmpty>
+  				<isNotEmpty prepend="," property="inputman">
+  					inputMan=#inputman#
+  				</isNotEmpty>   				 				 				  				 				 				
+  			</dynamic>
+  			where pactId=#pactid#
+  </update>
+</sqlMap>
+
+

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="functionInfoDomain" type="com.cy.dctms.common.domain.FunctionInfoDomain"/>
+	
+	
+	<resultMap class="functionInfoDomain" id="manager_function_info_domain_result">
+		<result property="id" column="number"/>
+		<result property="name" column="name"/>
+		<result property="url" column="url"/>
+		<result property="parentId" column="parent_number"/>
+		<result property="parentName" column="parent_name"/>
+		<result property="createTime" column="create_time" />
+		<result property="modifyTime" column="modify_time" />
+		<result property="deleteFlag" column="delete_flag" />
+	</resultMap>
+	
+	<resultMap class="functionInfoDomain" id="function_info_domain_result">
+				<result property="id" column="id"/>
+				<result property="number" column="number"/>
+				<result property="name" column="name"/>
+				<result property="parentNumber" column="parent_number"/>
+				<result property="url" column="url"/>
+				<result property="createTime" column="create_time"/>
+				<result property="modifyTime" column="modify_time"/>
+				<result property="deleteFlag" column="delete_flag"/>
+			</resultMap>
+		
+	<select id="query_function_info" parameterClass="String" resultMap="manager_function_info_domain_result">
+			select t2.number,
+           t2.name,
+           t2.parent_number,
+           (select name from t_manager_function_info where number = t2.parent_number) as parent_name,
+           t2.url,
+           t.create_time,
+           t.modify_time,
+           t.delete_flag
+      from t_manager_function_relation_info t ,t_manager_function_info t2 
+      where  t.delete_flag = 0 and t2.delete_flag =0
+      and t.function_id = t2.id and t.manager_id = #userId#
+       order  by t2.number
+	</select>
+	
+	<select id="query_function_info_id_is_1" parameterClass="String" resultMap="manager_function_info_domain_result">
+			select t.number,
+           t.name,
+           t.parent_number,
+           (select name from t_manager_function_info where number = t.parent_number) as parent_name,
+           t.url,
+			t.create_time,
+           t.modify_time,
+           t.delete_flag
+      from  t_manager_function_info t
+      where  t.delete_flag = 0 
+	  and t.parent_number is not null
+       order  by t.number
+	</select>
+	
+
+		<select id="query_function_info_by_id" parameterClass="String" resultMap="function_info_domain_result">
+			select t.id,
+			       t.number,
+			       t.name,
+			       t.parent_number,
+			       t.url,
+			       t.create_time,
+			       t.modify_time,
+			       t.delete_flag
+			  from t_manager_function_info t
+			  where id = #id# and delete_flag = 0
+		</select>
+
+		<select id="query_function_info_by_page" parameterClass="java.util.Map" resultMap="function_info_domain_result">
+			select t.id,
+			       t.number,
+			       t.name,
+			       	t.parent_number,
+			       t.url,
+			       t.create_time,
+			       t.modify_time,
+			       t.delete_flag
+			  from t_manager_function_info t
+			  where  delete_flag = 0
+			  order  by t.number
+			  limit  #start#,#pageSize#
+		</select>
+
+		<select id="query_function_info_count"  parameterClass="java.util.Map" resultClass="Integer">
+			select count(t.id)
+			  from t_manager_function_info t
+			  where  delete_flag = 0
+		</select>
+
+		<update id="modify_function_info" parameterClass="com.cy.dctms.common.bo.FunctionInfo">
+			update t_manager_function_info T
+			   set 
+			   	t.number = #number#,
+			   	t.name = #name#,
+			   	t.parent_number = #parentNumber#,
+			   	t.url = #url#,
+				t.modify_time = now()
+			 where t.id = #id#
+		</update>	
+
+		<insert id="add_function_info" parameterClass="com.cy.dctms.common.bo.FunctionInfo">
+			insert into t_manager_function_info (
+				number,
+				name,
+				parent_number,
+				url,
+				create_time,
+				delete_flag
+			) values(
+				#number#,
+				#name#,
+				#parentNumber#,
+				#url#,
+				now(),
+				0
+			)
+
+		</insert>
+
+		<update id="delete_function_info_by_id" parameterClass="String">
+			update t_manager_function_info t
+			   set 
+			   	t.delete_flag = 1,
+				t.modify_time = now()
+			 where t.id = #id#
+		</update>
+	
+	
+</sqlMap>

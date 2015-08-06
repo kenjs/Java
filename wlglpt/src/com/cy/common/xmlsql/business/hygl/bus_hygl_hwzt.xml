@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.hygl.dao.BusHyglHwztMapper">
+	
+    <parameterMap class="java.util.Map" id="hwztParMapForSelect">
+    	<parameter property="ssJgbm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="thrqQ" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="thrqZ" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="shrMc" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="thbz" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	
+    	<parameter property="start" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+    	<parameter property="pagSize" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+    	<parameter property="pageCount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+    	<parameter property="pageCurcount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+    	<parameter property="dataList" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" resultMap="hwztResMap"/>
+    </parameterMap>
+    
+    <resultMap class="com.cy.hygl.domain.HwztDomain" id="hwztResMap">
+    	<result property="hwztDjxh" column="HWZT_DJXH" />
+    	<result property="ddbh" column="DDBH" />
+    	<result property="zt" column="ZT" />
+    	<result property="shrMc" column="SHR_MC" />
+    	<result property="hwmc" column="HWMC" />
+    	<result property="srDf" column="SR_DF" />
+    	<result property="dsHk" column="FY_DSHK" />
+    	<result property="shrDz" column="SHR_DZ" />
+    	<result property="shrLxdh" column="SHR_LXDH" />
+    	<result property="bz" column="BZ" />
+    	<result property="sl" column="SL" />
+    	<result property="zl" column="ZL" />
+    	<result property="tj" column="TJ" />
+    	<result property="jsSl" column="JS_SL" />
+    	<result property="jbrCzyDjxh" column="JBR_CZY_DJXH" />
+    	<result property="jbrmc" column="JBRMC" />
+    	<result property="thrq" column="THRQ" />
+    	<result property="thrMc" column="THRMC" />
+    	<result property="thrLxdh" column="THR_LXDH" />
+    	<result property="thrSfzh" column="THR_SFZH" />
+    </resultMap>
+    
+    <procedure id="hyglZyglHwztCx" parameterMap="hwztParMapForSelect" resultMap="hwztResMap">
+    	{call P_HYGL_ZYGL_HWZT_CX(?,?,?,?,?,?,?,?,?,?)}
+    </procedure>
+    
+    <select id="selectHwztAll" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HwztDomain">
+		select 
+			  A.HWZT_DJXH hwztDjxh,
+			  A.WFH_DJXH wfhDjxh,
+			  A.DD_DJXH ddDjxh,
+			  A.XH xh,
+			  A.JBR_CZY_DJXH jbrCzyDjxh,
+			  A.THRQ thrq,
+			  A.BZSM bzsm,
+			  A.THBZ thbz,
+			  A.YXBZ yxbz,
+			  A.CJR_CZY_DJXH cjrCzyDjxh,
+			  A.CJRQ cjrq,
+			  A.XGR_CZY_DJXH xgrCzyDjxh,
+			  A.XGRQ xgrq
+		from HY_HWZT A
+ 		WHERE A.yxbz = 'Y'
+ 		ORDER BY A.HWZT_DJXH desc
+    </select>
+
+    <parameterMap class="java.util.Map" id="HwztMap">
+		<parameter property="hwztDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>	
+		<parameter property="rtnCode" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+		<parameter property="rtnMess" javaType="java.lang.String" jdbcType="VARCHAR" mode="OUT"/>	
+	</parameterMap>
+	
+	<procedure id="callHyglZyglHwztHxcl" parameterMap="HwztMap">
+		{call P_HYGL_ZYGL_HWZT_HXCL(?,?,?)}
+	</procedure>
+</sqlMap>

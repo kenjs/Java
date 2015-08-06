@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="DriverCargoCollectInfoBo" type="com.cy.common.bo.DriverCargoCollectInfoBo"/>
+	
+	<resultMap class="com.cy.driver.cargo.domain.OrderCargoInfoDomain" id="OrderCargoInfoDomainDetail">
+		<result property="id" column="ID"/>
+		<result property="startProvince" column="START_PROVINCE"/>
+		<result property="startCity" column="START_CITY"/>
+		<result property="startCounty" column="START_COUNTY"/>
+		<result property="startTown" column="START_TOWN"/>
+		<result property="endProvince" column="END_PROVINCE"/>
+		<result property="endCity" column="END_CITY"/>
+		<result property="endCounty" column="END_COUNTY"/>
+		<result property="endTown" column="END_TOWN"/>
+		<result property="requestStartTime" column="REQUEST_START_TIME"/>
+		<result property="requestEndTime" column="REQUEST_END_TIME"/>		
+		<result property="cargoName" column="CARGO_NAME"/>
+		<result property="cargoType" column="CARGO_TYPE"/>
+		<result property="cargoWeight" column="CARGO_WEIGHT"/>
+		<result property="cargoCubage" column="CARGO_CUBAGE"/>
+		<result property="remark" column="REMARK"/>
+		<result property="contactName" column="CONTACT_NAME"/>		
+		<result property="contactMobilephone" column="CONTACT_MOBILEPHONE"/>
+		<result property="contactTelephone" column="CONTACT_TELEPHONE"/>
+	</resultMap>
+	
+	<!-- 新增货源关注 -->
+	<insert id="iBatisInsertDriverCargoCollectInfo" parameterClass="DriverCargoCollectInfoBo">
+		insert into t_driver_cargo_collect_info
+			(DRIVER_ID,CARGO_ID,CREATE_TIME)
+		values
+			(#driverId#,#cargoId#,sysdate())
+		<selectKey keyProperty="id" resultClass="Integer">
+			select last_insert_id() as id
+		</selectKey>
+	</insert>
+	
+	<!-- 取消关注 -->
+	<delete id="iBatisDeleteDriverCargoCollectInfo" parameterClass="String">
+		delete from t_driver_cargo_collect_info where ID = #id#
+	</delete>
+	
+	<!-- 查找关注的货源数量 -->
+	<select id="iBatisQueryDriverCargoCollectInfoCount" parameterClass="String" resultClass="Integer">
+		select count(CARGO_ID) from t_driver_cargo_collect_info where DRIVER_ID = #driverId#
+	</select>
+	
+	<!-- 是否已关注 -->
+	<select id="iBatisCheckIsAttention" parameterClass="map" resultClass="Integer">
+		select count(ID) from t_driver_cargo_collect_info where DRIVER_ID = #driverId# and CARGO_ID = #cargoId#
+	</select>
+	
+	<!-- 查找关注的货源集合 -->
+	<select id="iBatisQueryDriverCargoCollectInfoList" parameterClass="map" resultMap="OrderCargoInfoDomainDetail">
+		select
+			t2.ID,
+			t2.START_PROVINCE,
+			t2.START_CITY,
+			t2.START_COUNTY,
+			t2.START_TOWN,
+			t2.END_PROVINCE,
+			t2.END_CITY,
+			t2.END_COUNTY,
+			t2.END_TOWN,
+			t2.REQUEST_START_TIME,	
+			t2.REQUEST_END_TIME,
+			t2.CARGO_NAME,
+			t2.CARGO_TYPE,
+			t2.CARGO_WEIGHT,
+			t2.CARGO_CUBAGE,
+			t2.REMARK,
+			t2.CONTACT_NAME,
+			t2.CONTACT_MOBILEPHONE,
+			t2.CONTACT_TELEPHONE
+		from 
+			t_driver_cargo_collect_info t1,t_order_cargo_info t2
+		where 
+			t1.DRIVER_ID = #driverId#
+		and 
+			t1.CARGO_ID = t2.ID
+		and 
+			t2.DELETED_FLAG = 0
+		and 
+			t2.CARGO_FLAG = 0
+		and 
+			t2.REQUEST_START_TIME <![CDATA[>=]]> DATE_FORMAT(SYSDATE(),'%Y-%m-%d')
+		order by t2.REQUEST_START_TIME asc
+		limit $fromSize$,$listSize$
+	</select>
+</sqlMap>

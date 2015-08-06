@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.bggl.dao.BgMpjMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectBgMpjByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgMpjDomain">
+		select a.BG_DJXH as bgDjxh,a.CZY_DJXH as czyDjxh,a.XM as xm,a.ZW as zw,a.GS as gs,
+		a.DZ as dz,a.DH as dh,a.CZ as cz,a.SJ as sj,a.WZ as wz,
+		a.YB as yb,a.DY as dy,a.YXBZ as yxbz,a.CJR_CZY_DJXH as cjrCzyDjxh,a.CJRQ as cjrq,
+		a.XGR_CZY_DJXH as xgrCzyDjxh,a.XGRQ as xgrq from BG_MPJ a  where a.BG_DJXH=#bgDjxh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertBgMpj"  parameterClass="com.cy.common.bo.BgMpj">
+		<selectKey keyProperty="bgDjxh" resultClass="String" type="pre"> 
+			select SEQ_BG_DJXH.nextval as bgDjxh from dual 
+		</selectKey> 
+		insert into BG_MPJ(BG_DJXH,CZY_DJXH,XM,ZW,GS,
+		DZ,DH,CZ,SJ,WZ,
+		YB,DY,YXBZ,CJR_CZY_DJXH,CJRQ,
+		XGR_CZY_DJXH,XGRQ)
+		values(#bgDjxh:NUMERIC#,#czyDjxh:NUMERIC#,#xm:VARCHAR#,#zw:VARCHAR#,#gs:VARCHAR#,
+		#dz:VARCHAR#,#dh:VARCHAR#,#cz:VARCHAR#,#sj:VARCHAR#,#wz:VARCHAR#,
+		#yb:VARCHAR#,#dy:VARCHAR#,#yxbz:VARCHAR#,#cjrCzyDjxh:NUMERIC#,to_date(#cjrq:DATE#,'yyyy-MM-dd'),
+		#xgrCzyDjxh:NUMERIC#,to_date(#xgrq:DATE#,'yyyy-MM-dd'))
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateBgMpjByKey" parameterClass="com.cy.common.bo.BgMpj">
+        update BG_MPJ set BG_DJXH=#bgDjxh#,CZY_DJXH=#czyDjxh#,XM=#xm#,ZW=#zw#,GS=#gs#,
+		DZ=#dz#,DH=#dh#,CZ=#cz#,SJ=#sj#,WZ=#wz#,
+		YB=#yb#,DY=#dy#,YXBZ=#yxbz#,CJR_CZY_DJXH=#cjrCzyDjxh#,CJRQ=to_date(#cjrq#, 'YYYY-MM-DD'),
+		XGR_CZY_DJXH=#xgrCzyDjxh#,XGRQ=to_date(#xgrq#, 'YYYY-MM-DD') where BG_DJXH=#bgDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteBgMpjByKey" parameterClass="java.util.Map">
+		update BG_MPJ set yxbz='N' where BG_DJXH=#bgDjxh#
+    </delete>
+</sqlMap>

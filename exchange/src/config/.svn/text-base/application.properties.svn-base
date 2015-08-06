@@ -1,0 +1,43 @@
+#oracle database settings
+#jdbc.driver=oracle.jdbc.driver.OracleDriver
+#jdbc.url=jdbc:oracle:thin:@10.100.0.153:1521:tulip
+#jdbc.username=tulip
+#jdbc.password=oracle
+
+#mysql database settings
+#jdbc.driver=com.mysql.jdbc.Driver
+#jdbc.url=jdbc:mysql://10.100.0.151/tulip?useUnicode=true&characterEncoding=utf-8
+#jdbc.username=tulip
+#jdbc.password=tulip321
+
+#jdbc.driver=com.microsoft.sqlserver.jdbc.SQLServerDriver
+#jdbc.url=jdbc:sqlserver://172.16.118.25:1433;databaseName=Test
+#jdbc.username=sa
+#jdbc.password=tf56.com
+
+jdbc.driver=com.microsoft.sqlserver.jdbc.SQLServerDriver
+jdbc.url=jdbc:sqlserver://172.16.118.25:1433;databaseName=PartySys
+jdbc.username=sa
+jdbc.password=tf56.com
+
+#jdbc.driver=com.mysql.jdbc.Driver
+#jdbc.url=jdbc\:mysql\://localhost\:3306/trade?useUnicode\=true&characterEncoding\=utf-8
+#jdbc.username=root
+#jdbc.password=root123
+Logisticscommunity
+#jdbc.driver=com.mysql.jdbc.Driver
+#jdbc.url=jdbc:mysql://172.16.118.203:3306/trade?useUnicode=true&characterEncoding=utf-8
+#jdbc.username=trade
+#jdbc.password=123456
+
+#jdbc.driver=com.mysql.jdbc.Driver
+#jdbc.url=jdbc:mysql://172.16.118.83:3306/trade?useUnicode=true&characterEncoding=utf-8
+#jdbc.username=trade
+#jdbc.password=123456
+#dbcp settings
+dbcp.maxIdle=5
+dbcp.maxActive=40
+
+#scheduler setting
+scheduler.gps=true
+scheduler.transport=true

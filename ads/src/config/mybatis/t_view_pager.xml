@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.driver.dao.ViwePagerDao">
+    <resultMap id="imgDeployInfoDomainMap" type="ImgDeployInfoDomain">
+        <result column="id" property="id" />
+        <result column="order_num" property="orderNum" />
+        <result column="img_name" property="imgName" />
+        <result column="img_path" property="imgPath" />
+        <result column="img_filemd5" property="imgFilemd5" />
+        <result column="width" property="width" />
+        <result column="height" property="height" />
+        <result column="use_begin_date" property="useBeginDate" />
+        <result column="use_end_date" property="useEndDate" />
+        <result column="click_response" property="clickResponse" />
+    </resultMap>
+
+    <select id="queryViewPagers" resultMap="imgDeployInfoDomainMap">
+        SELECT
+          *
+        FROM
+        t_img_deploy_info
+        WHERE
+        delete_flag = 0
+        AND to_application = 1
+        AND use_for = 101
+        AND use_begin_date &lt;= CURDATE()
+        AND CURDATE() &lt;= use_end_date
+        ORDER BY
+        order_num asc
+        LIMIT 3
+    </select>
+</mapper>

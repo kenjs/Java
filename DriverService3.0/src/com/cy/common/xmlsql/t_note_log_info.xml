@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="NoteLogInfo" type="com.cy.common.bo.NoteLogInfo"/>
+	
+	<!-- 短信发送记录新增 -->
+	<insert id="iBatisInsertNoteLogInfo" parameterClass="NoteLogInfo">
+		insert into t_note_log_info 
+			(MOBILEPHONE,NOTE_CODE,SEND_START,SNDE_TIME,CREATE_TIME,VISIT_IP,RETURNED_VALUE) 
+		values 
+			(#mobilephone#,#noteCode#,#sendStart#,sysdate(),sysdate(),#visitIp#,#returnedValue#)
+		<selectKey keyProperty="id" resultClass="Integer">
+			select last_insert_id() as id
+		</selectKey>
+	</insert>
+</sqlMap>

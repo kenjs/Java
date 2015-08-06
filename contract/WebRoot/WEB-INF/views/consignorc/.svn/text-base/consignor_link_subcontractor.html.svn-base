@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+ 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="pragma" content="no-cache"/>
+    <meta http-equiv="Cache-Control" content="no-cache,must-revalidate"/>
+    
+    <link href="../css/webui/main.css" rel="stylesheet" />	
+    <script src="../js/jquery/jquery-1.8.3.min.js" type=text/javascript></script>
+	<link href="../js/sys/ymPrompt/skin/ch/ymPrompt.css" rel="stylesheet"/>
+	<link href="../css/webui/hgrid.css" rel="stylesheet" />
+	<link href="../css/themes/subcontractorc/subcontractorList.css" rel="stylesheet"/>
+    <script type="text/javascript" src="../js/sys/DatePicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="../js/sys/ymPrompt/ymPrompt.js"></script>
+	<script type="text/javascript" src="../js/sys/webui/hgrid.js"></script>
+	 <style>
+		#btnsave{color:white;font-size:14px;font-weight:bold; margin-left:100px;background-image: url("../imgs/sys/bt-bg.png");background-repeat: no-repeat;border: none;height: 40px;width: 99px;cursor: pointer;}
+		#reback{color:white;font-size:14px;font-weight:bold; background-image: url("../imgs/sys/bt-bg.png");background-repeat: no-repeat;border: none;height: 40px;width: 99px;cursor: pointer;} 
+		#top{width: 600px;margin-left: 20px;}
+		#btnquery{width: 48px;height: 27px;line-height: 24px;cursor: pointer;}
+		#organization,#partyname{width: 160px;height: 28px;line-height: 24px;color: #444444;}
+		.tdleft{height: inherit;height: 24px;
+		}
+		.page_nav{
+		
+			width: 520px;
+		}
+  </style>
+ </head>
+  <body  style="overflow: hidden;">
+  	<div style="width: 600px;">
+  		<div id="top" style="margin-top: 20px;">
+  			<label>会员名</label>
+  			<input id="partyname" name="partyname"/>
+  			<label style="margin-left: 30px;">分包商名称</label><input id="partyid1" type="hidden"/>
+  			<input id="organization" name="organization"/>
+  			<input id="btnquery" name="btnquery" type="button" value="查询"/>
+  		</div>
+		<div style="width: 600px;margin-top: 5px;margin-left: 20px;margin-right: 20px;">
+  			<table id="hgrid"  style="width: 540px;"></table>
+  		</div>
+  		<div id="button" style="width: 600px;margin-left: 15%;margin-top:10px;">
+  			<div >
+  				<input name="btnsave" id="btnsave" onclick="save(this)" type="button" value="确定"/>
+  				<input name="reback" id="reback" onclick="reback()" type="button" value="取消"/>
+  			</div>
+  		</div>
+  	</div>
+  <script type="text/javascript" src="../js/themes/consignorc/consignor_link_subcontractor.js"></script>
+  <script type="text/javascript">
+ 	 f_hgrid_ini();
+ 	 $(".page_nav").next().remove();
+ 	 $("#pagecode").val("1");
+ 	 var organization=trim($("#organization").val());var partyname=trim($("#partyname").val());
+ 	 var params=getid()+"&organization="+organization+"&partyname="+partyname+"&partytype=总分发"+"&random="+Math.random();
+ 	 f_hgrid_json(params);
+ 	 $("#btnquery").click(function(){
+ 	  	 var organization=trim($("#organization").val());var partyname=trim($("#partyname").val());
+ 	  	 var params1=getid()+"&organization="+organization+"&partyname="+partyname+"&partytype=总分发"+"&random="+Math.random();
+ 	 	 $("#pagecode").val("1");
+ 	 	 f_hgrid_json(params1);
+ 	 });
+  </script>	
+  </body>
+</html>

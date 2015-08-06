@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.zygl.dao.HyPcXydjMapper">
+
+    <!--根据主键取DOMAIN-->
+		<select id="selectHyPcXydjByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.zyegl.domain.HyPcXydjDomain">
+		select a.PC_DJXH as pcDjxh,a.XYH as xyh,a.YF_HJ as yfHj,a.YF_YFYF as yfYfyf,a.YF_YJ as yfYj,
+		a.YF_XXF as yfXxf,a.YF_SJS as yfSjs,a.YF_HDYF as yfHdyf,a.YF_HDF as yfHdf,a.BZ as bz,
+		a.YWY_CZY_DJXH as ywyCzyDjxh,
+		(SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=a.YWY_CZY_DJXH) ywyCzyMc,
+		a.YXBZ as yxbz,a.CJR_CZY_DJXH as cjrCzyDjxh,a.CJRQ as cjrq,a.XGR_CZY_DJXH as xgrCzyDjxh,
+		a.XGRQ as xgrq,a.SPBZ as spbz,a.WSSPZT_DM as wsspztDm,a.WS_SPXH as wsSpxh ,
+		a.yfbgbz,a.slbgbz
+		from HY_PC_XYDJ a  where a.PC_DJXH=#pcDjxh#
+		</select>
+
+	<!--插入数据-->
+		<insert id="insertHyPcXydj"  parameterClass="com.cy.common.bo.HyPcXydj">
+		insert into HY_PC_XYDJ(PC_DJXH,XYH,YF_HJ,YF_YFYF,YF_YJ,
+		YF_XXF,YF_SJS,YF_HDYF,YF_HDF,BZ,
+		YWY_CZY_DJXH,YXBZ,CJR_CZY_DJXH,CJRQ,XGR_CZY_DJXH,
+		XGRQ,SPBZ,WSSPZT_DM,WS_SPXH,YFBGBZ,SLBGBZ)
+		SELECT #pcDjxh:NUMERIC#,#xyh:VARCHAR#,#yfHj:NUMERIC#,#yfYfyf:NUMERIC#,#yfYj:NUMERIC#,
+		#yfXxf:NUMERIC#,#yfSjs:NUMERIC#,#yfHdyf:NUMERIC#,#yfHdf:NUMERIC#,#bz:VARCHAR#,
+		#ywyCzyDjxh:NUMERIC#,#yxbz:VARCHAR#,#cjrCzyDjxh:NUMERIC#,#cjrq:DATE#,#xgrCzyDjxh:NUMERIC#,
+		#xgrq:DATE#,#spbz:VARCHAR#,#wsspztDm:NUMERIC#,#wsSpxh:NUMERIC#,
+		CASE WHEN N>0 THEN 'N' ELSE 'Y' END,'N' 
+			FROM (
+			SELECT COUNT(*) N FROM HY_PC PC
+			WHERE PC.YF_HJ = #yfHj# AND PC.YF_YFYF = #yfYfyf# AND PC.YF_YJ = #yfYj#
+			AND PC.YF_XXF = #yfXxf# AND PC.YF_SJS = #yfSjs# AND PC.YF_HDYF = #yfHdyf#
+			AND PC.YF_HDF = #yfHdf# AND PC.PC_DJXH = #pcDjxh#)
+		</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+        <update id="updateHyPcXydjByKey" parameterClass="com.cy.common.bo.HyPcXydj">
+		UPDATE HY_PC_XYDJ SET XYH = #xyh#,YF_HJ = #yfHj#,YF_YFYF = #yfYfyf#,YF_YJ = #yfYj#,
+		YF_XXF = #yfXxf#,YF_SJS = #yfSjs#,YF_HDYF = #yfHdyf#,YF_HDF = #yfHdf#,BZ = #bz#,
+		YWY_CZY_DJXH = #ywyCzyDjxh#,XGR_CZY_DJXH = #xgrCzyDjxh#,
+		XGRQ = #xgrq# ,YFBGBZ = (SELECT CASE WHEN N>0 THEN 'N' ELSE 'Y' END FROM (
+			SELECT COUNT(*) N FROM HY_PC PC
+			WHERE PC.YF_HJ = #yfHj# AND PC.YF_YFYF = #yfYfyf# AND PC.YF_YJ = #yfYj#
+			AND PC.YF_XXF = #yfXxf# AND PC.YF_SJS = #yfSjs# AND PC.YF_HDYF = #yfHdyf#
+			AND PC.YF_HDF = #yfHdf# AND PC.PC_DJXH = #pcDjxh#))
+		where PC_DJXH=#pcDjxh#
+		</update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteHyPcXydjByKey" parameterClass="java.util.Map">
+		UPDATE HY_PC_XYDJ SET YXBZ = 'N' where PC_DJXH=#pcDjxh#
+    </delete>
+    
+    <select id="initXydj" parameterClass="java.util.Map"
+    	resultClass="com.cy.zyegl.domain.HyPcXydjDomain">
+    	select AA.pcDjxh,AA.XYH,
+		       AA.yfHj,AA.yfYfyf,AA.yfYj,
+		       AA.yfXxf,AA.yfSjs,AA.yfHdyf,AA.yfHdf,
+		       AA.bz,AA.ywyCzyDjxh
+		FROM (
+			SELECT '1' YXJ,PC.PC_DJXH pcDjxh, '' xyh,
+			       PC.YF_HJ yfHj, PC.YF_YFYF yfYfyf, PC.YF_YJ yfYj,
+			       PC.YF_XXF yfXxf, PC.YF_SJS yfSjs, PC.YF_HDYF yfHdyf, PC.YF_HDF yfHdf,
+			       '' BZ, NULL ywyCzyDjxh
+			      FROM HY_PC PC
+			      WHERE PC.YXBZ = 'Y'
+			      AND PC.PC_DJXH = #pcDjxh# 
+			UNION ALL
+			select '2' YXJ,a.PC_DJXH as pcDjxh,a.XYH as xyh,
+			       a.YF_HJ as yfHj,a.YF_YFYF as yfYfyf,a.YF_YJ as yfYj,
+			       a.YF_XXF as yfXxf,a.YF_SJS as yfSjs,a.YF_HDYF as yfHdyf,a.YF_HDF as yfHdf,
+			       a.BZ as bz,
+					   a.YWY_CZY_DJXH as ywyCzyDjxh
+			       from HY_PC_XYDJ a  
+			       where a.PC_DJXH=#pcDjxh#
+			 ORDER BY YXJ DESC
+		) AA WHERE ROWNUM = 1   
+    </select>
+    
+    <update id="updatePcXydjSlbgbz" parameterClass="com.cy.zyegl.domain.HyPcHwxxXydjDomain">
+    	UPDATE HY_PC_XYDJ SET SLBGBZ = (SELECT CASE WHEN N>0 THEN 'N' ELSE 'Y' END FROM (
+			SELECT COUNT(*) N FROM HY_PC_HWXX PCHW
+			WHERE PCHW.JS_SL = #szJsSl# AND PCHW.PC_DJXH = #pcDjxh# AND PCHW.WFH_DJXH = #wfhDjxh#))
+			WHERE PC_DJXH=#pcDjxh#
+    </update>
+    
+</sqlMap>

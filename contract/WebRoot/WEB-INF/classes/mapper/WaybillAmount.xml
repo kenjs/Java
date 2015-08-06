@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<!-- 运单费用 -->
+<sqlMap >
+ <typeAlias type="tf56.contract.domain.WaybillAmount" alias="waybillAmount"/>
+ <resultMap id="waybillAmountFieldMap" class="waybillAmount">
+  <result column="waybillAmountId" property="waybillamountid" jdbcType="VARCHAR" />   <!-- 编码Id -->
+  <result column="waybillId" property="waybillid" jdbcType="VARCHAR" />   <!-- 运单Id -->
+  <result column="inOrOut" property="inorout" jdbcType="VARCHAR" />   <!-- 应收应付 -->
+  <result column="fromPartyId" property="frompartyid" jdbcType="VARCHAR" />   <!-- 总包会员Id -->
+  <result column="toPartyId" property="topartyid" jdbcType="VARCHAR" />   <!-- 发货方或分包商会员Id -->
+  <result column="amountItem" property="amountitem" jdbcType="VARCHAR" />   <!-- 费用项目 -->
+  <result column="amount" property="amount" jdbcType="VARCHAR" />   <!--  -->
+ </resultMap>
+
+ <!-- 新增记录 -->
+ <insert id="iBatisInsertWaybillAmount" parameterClass="waybillAmount">
+  insert into WaybillAmount (waybillId,inOrOut,fromPartyId,toPartyId,amountItem,amount)
+   values (#waybillid:VARCHAR#,#inorout:VARCHAR#,#frompartyid:VARCHAR#,#topartyid:VARCHAR#,#amountitem:VARCHAR#,#amount:VARCHAR#)
+  <selectKey resultClass="String" keyProperty="waybillamountid">
+   select last_insert_id() as id
+  </selectKey>
+ </insert>
+
+ <!-- 根据waybillid 删除用户对象 -->
+ <delete id="iBatisDeleteWaybillAmount" parameterClass="java.util.HashMap">
+  delete from WaybillAmount where waybillId = #waybillid#
+ </delete>
+
+ <!-- 更新用户对象 -->
+ <update id="iBatisUpdateWaybillAmount" parameterClass="waybillAmount">
+  update WaybillAmount set waybillId=#waybillid:VARCHAR#,inOrOut=#inorout:VARCHAR#,fromPartyId=#frompartyid:VARCHAR#,toPartyId=#topartyid:VARCHAR#,amountItem=#amountitem:VARCHAR#,amount=#amount:VARCHAR# where waybillAmountId=#waybillamountid#
+ </update>
+ <!-- 运单修改时，改topartyid -->
+ <update id="iBatisUpdateWaybillAmountTopartyid" parameterClass="java.util.HashMap">
+ UPDATE WaybillAmount
+    SET toPartyId = #topartyid#
+  WHERE fromPartyId = #partyid#
+    AND waybillId = #waybillid#
+    AND inOrOut = 0
+ </update>
+ <!-- 根据id获得用户对象, 返回bean -->
+ <select id="iBatisSelectWaybillAmountById" parameterClass="java.util.HashMap" resultClass="waybillAmount">
+  select * from WaybillAmount where waybillAmountId=#waybillamountid# limit 20
+ </select> 
+
+ <!-- 获取多条记录查询列表 返回List -->
+ <select id="iBatisSelectWaybillAmountList" parameterClass="java.util.HashMap" resultClass="waybillAmount">
+  select * from WaybillAmount order by waybillAmountId desc limit 20
+ </select>
+ <!-- 获取多条记录查询列表 返回List 根据运单id-->
+ <select id="iBatisSelectWaybillAmountListByWaybillId" parameterClass="java.util.HashMap" resultClass="waybillAmount">
+  select * from WaybillAmount where waybillId = #waybillid#
+ </select>
+ <!-- 为报表查询应收应付统计金额信息   author:wei.huang -->
+ <select id="iBatisSelectStatisticAmountForReport" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+ 	SELECT waybillId AS waybillid,inOrOut as inorout,sum(amount) AS amount FROM WaybillAmount WHERE fromPartyId=#partyid:VARCHAR# GROUP BY waybillId,inOrOut;
+ </select>
+</sqlMap>

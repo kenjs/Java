@@ -1,0 +1,522 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:flex="http://www.springframework.org/schema/flex"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context   
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+	http://www.springframework.org/schema/flex	http://www.springframework.org/schema/flex/spring-flex-1.0.xsd
+   http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
+
+    <bean id="propertyConfigurer1" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"> 
+	    <property name="ignoreUnresolvablePlaceholders" value="true" /> 
+	    <property name="location"> 
+	       <value>classpath:database.properties</value> 
+	    </property> 
+	</bean> 
+	
+	<bean id="propertyConfigurer2" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"> 
+	    <property name="ignoreUnresolvablePlaceholders" value="true" /> 
+	    <property name="location"> 
+	       <value>classpath:config.properties</value> 
+	    </property> 
+	    <property name="fileEncoding"> 
+	       <value>UTF8</value> 
+	     </property> 
+	</bean> 
+
+	<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
+		
+	<!-- <tx:annotation-driven>这项配置告诉spring去检查容器中所有不管在类层面还是方法层面配置了
+		注解@Transactional的bean,找到后<tx:annotation-driven>会为它们执行事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">  
+    	<property name="dataSource" ref="dataSource" />  
+	</bean>  
+		
+    <!-- action begin -->
+ 
+<!--  	<bean name="queryWebUserInfoCodeAction" class="com.cy.dcts.webUser.action.QueryWebUserInfoCodeAction"> -->
+<!-- 		<property name="queryWebUserInfoService" ref="queryWebUserInfoService"></property> -->
+<!--     </bean> -->
+
+ 	<!-- 版本更新检查 -->
+ 	<bean name="checkAppVersionAction" class="com.cy.version.CheckAppVersionAction">
+ 		<property name="androidNewVersion" value="${android.new.version}"></property>
+ 		<property name="androidNewVersionMeta" value="${android.new.version.meta}"></property>
+ 		<property name="androidNewVersionForceUpdate" value="${android.new.version.force.update}"></property>
+ 		<property name="versionCode" value="${version.code}"></property>
+ 		<property name="iosNewVersion" value="${ios.new.version}"></property>
+ 		<property name="iosNewVersionMeta" value="${ios.new.version.meta}"></property>
+ 		<property name="appDatabaseUpdate" value="${app.database.update}"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 新版本下载 -->
+ 	<bean name="appDowloadAction" class="com.cy.version.AppDowloadAction">
+ 		<property name="androidDownloadFilepath" value="${android.download.filepath}"></property>
+ 		<property name="androidDownloadFilename" value="${android.download.filename}"></property>
+ 		<property name="iosDownloadFilepath" value="${ios.download.filepath}"></property>
+ 		<property name="iosDownloadFilename" value="${ios.download.filename}"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 注册 -->
+ 	<bean name="register" class="com.cy.driver.user.action.Register">
+ 		<property name="loginUserInfoService" ref="loginUserInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 注册完善资料 -->
+ 	<bean name="driverUserAddInfoAction" class="com.cy.driver.user.action.DriverUserAddInfoAction">
+ 		<property name="driverLineInfoService" ref="driverLineInfoService"></property>
+ 		<property name="driverUserCargoInfoService" ref="driverUserCargoInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- APP 用户登录 -->
+ 	<bean name="loginUserInfoAction" class="com.cy.driver.user.action.LoginUserInfoAction">
+ 		<property name="loginUserInfoService" ref="loginUserInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 		<property name="driverUserCargoInfoService" ref="driverUserCargoInfoService"></property>
+ 	</bean>
+ 	
+ 	<!-- 新增预约 -->
+ 	<bean name="driverBusinessLineInfoAddAction" class="com.cy.driver.order.action.DriverBusinessLineInfoAddAction">
+ 		<property name="driverBusinessLineInfoService" ref="driverBusinessLineInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 修改预约 -->
+ 	<bean name="driverBusinessLineInfoUpdateAction" class="com.cy.driver.order.action.DriverBusinessLineInfoUpdateAction">
+ 		<property name="driverBusinessLineInfoService" ref="driverBusinessLineInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 删除预约 -->
+ 	<bean name="driverBusinessLineInfoDeleteAction" class="com.cy.driver.order.action.DriverBusinessLineInfoDeleteAction">
+ 		<property name="driverBusinessLineInfoService" ref="driverBusinessLineInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 查询预约 -->
+ 	<bean name="driverBusinessLineInfoQueryAction" class="com.cy.driver.order.action.DriverBusinessLineInfoQueryAction">
+ 		<property name="driverBusinessLineInfoService" ref="driverBusinessLineInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 查询预约数目 -->
+ 	<bean name="driverBusinessLineInfoNumQueryAction" class="com.cy.driver.order.action.DriverBusinessLineInfoNumQueryAction">
+ 		<property name="driverBusinessLineInfoService" ref="driverBusinessLineInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 附近货物数量 -->
+ 	<bean name="selectNearByCargoCountAction" class="com.cy.driver.user.action.SelectNearByCargoCountAction">
+ 		<property name="driverUserCargoInfoService" ref="driverUserCargoInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 货源详情 -->
+ 	<bean name="selectOrderCargoDetailAction" class="com.cy.driver.cargo.action.SelectOrderCargoDetailAction">
+ 		<property name="orderCargoInfoService" ref="orderCargoInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 符合预约的货源量 -->
+ 	<bean name="selectOrderCargoCountAction" class="com.cy.driver.user.action.SelectOrderCargoCountAction">
+ 		<property name="driverUserCargoInfoService" ref="driverUserCargoInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 附近货源列表 -->
+ 	<bean name="selectNearByCargoListAction" class="com.cy.driver.cargo.action.SelectNearByCargoListAction">
+ 		<property name="orderCargoInfoService" ref="orderCargoInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 符合预约的货源列表 -->
+ 	<bean name="selectCargoSuitOrderListAction" class="com.cy.driver.cargo.action.SelectCargoSuitOrderListAction">
+ 		<property name="orderCargoInfoService" ref="orderCargoInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 修改司机信息 -->
+ 	<bean name="updateDriverUserInfoAction" class="com.cy.driver.user.action.UpdateDriverUserInfoAction">
+ 		<property name="driverUserCargoInfoService" ref="driverUserCargoInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 营运线路增删改查 begin -->
+ 	<bean name="driverLineInfoAddAction" class="com.cy.driver.line.action.DriverLineInfoAddAction">
+ 		<property name="driverLineInfoService" ref="driverLineInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	<bean name="driverLineInfoDeleteAction" class="com.cy.driver.line.action.DriverLineInfoDeleteAction">
+ 		<property name="driverLineInfoService" ref="driverLineInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	<bean name="driverLineInfoUpdateAction" class="com.cy.driver.line.action.DriverLineInfoUpdateAction">
+ 		<property name="driverLineInfoService" ref="driverLineInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	<bean name="driverLineInfoSelectAction" class="com.cy.driver.line.action.DriverLineInfoSelectAction">
+ 		<property name="driverLineInfoService" ref="driverLineInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	<!-- 营运线路增删改查 end -->
+ 	
+ 	<!-- 用户基本信息查询 -->
+ 	<bean name="userBasicInformationQueryAction" class="com.cy.driver.user.action.UserBasicInformationQueryAction">
+ 		<property name="driverUserCargoInfoService" ref="driverUserCargoInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 搜索找货 -->
+ 	<bean name="selectCargoListAction" class="com.cy.driver.cargo.action.SelectCargoListAction">
+ 		<property name="orderCargoInfoService" ref="orderCargoInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 企业用车订单条数 -->
+ 	<bean name="transactionNumberWithComAction" class="com.cy.driver.transaction.action.TransactionNumberWithComAction">
+ 		<property name="transactionInfoService" ref="transactionInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 司机订单列表 -->
+ 	<bean name="transactionInfoListAction" class="com.cy.driver.transaction.action.TransactionInfoListAction">
+ 		<property name="transactionInfoService" ref="transactionInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 订单详情 -->
+ 	<bean name="transactionInfoDetailAction" class="com.cy.driver.transaction.action.TransactionInfoDetailAction">
+ 		<property name="transactionInfoService" ref="transactionInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 根据司机线路查找符合条件的货物数量 -->
+ 	<bean name="selectCargoNumByDriverLineAction" class="com.cy.driver.cargo.action.SelectCargoNumByDriverLineAction">
+ 		<property name="orderCargoInfoService" ref="orderCargoInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 根据司机线路查找符合条件的货物 -->
+ 	<bean name="selectCargoListByDriverLineAction" class="com.cy.driver.cargo.action.SelectCargoListByDriverLineAction">
+ 		<property name="orderCargoInfoService" ref="orderCargoInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 所有报过价的订单列表 -->
+ 	<bean name="selectQuoteTransactionListAction" class="com.cy.driver.record.action.SelectQuoteTransactionListAction">
+ 		<property name="quoteInfoService" ref="quoteInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 根据交易状态查找 -->
+ 	<bean name="selecTransactionListByTradeStatAction" class="com.cy.driver.record.action.SelecTransactionListByTradeStatAction">
+ 		<property name="quoteInfoService" ref="quoteInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 位置信息上传 -->
+ 	<bean name="locationLastInfoInsertAction" class="com.cy.driver.location.action.LocationLastInfoInsertAction">
+ 		<property name="locationLastInfoService" ref="locationLastInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 新增报价 -->
+ 	<bean name="addQuoteInfoAction" class="com.cy.driver.record.action.AddQuoteInfoAction">
+ 		<property name="quoteInfoService" ref="quoteInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 新增货源评价 -->
+ 	<bean name="addNewDriverUserAssessAction" class="com.cy.driver.assess.action.AddNewDriverUserAssessAction">
+ 		<property name="driverUserAssessInfoService" ref="driverUserAssessInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 修改货源评价 -->
+ 	<bean name="updateDriverUserAssessAction" class="com.cy.driver.assess.action.UpdateDriverUserAssessAction">
+ 		<property name="driverUserAssessInfoService" ref="driverUserAssessInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 手机短信验证码 -->
+ 	<bean name="noteSendAction" class="com.cy.driver.user.action.NoteSendAction">
+ 		<property name="driverUserCargoInfoService" ref="driverUserCargoInfoService"></property>
+ 		<property name="loginUserInfoService" ref="loginUserInfoService"></property>
+ 		<property name="codeExistTime" value="${ds.code.exist.time}"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 接收用户上传信息 -->
+ 	<bean name="receiveUploadFileAction" class="com.cy.driver.user.action.ReceiveUploadFileAction" scope="prototype">
+ 		<property name="imgPath" value="${upload.img.path}"></property>
+ 		<property name="driverUserCargoInfoService" ref="driverUserCargoInfoService"/>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 消息列表查询 -->
+ 	<bean name="queryDriverNotificationInfoListAction" class="com.cy.driver.user.action.QueryDriverNotificationInfoListAction">
+ 		<property name="driverUserCargoInfoService" ref="driverUserCargoInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 关注货源 -->
+ 	<bean name="attentionCargoInfoAction" class="com.cy.driver.cargo.action.AttentionCargoInfoAction">
+ 		<property name="orderCargoInfoService" ref="orderCargoInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 点评货源 -->
+ 	<bean name="commentCargoInfoAction" class="com.cy.driver.cargo.action.CommentCargoInfoAction">
+ 		<property name="orderCargoInfoService" ref="orderCargoInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 我关注的货源 -->
+ 	<bean name="selectAttentionCargoListAction" class="com.cy.driver.record.action.SelectAttentionCargoListAction">
+ 		<property name="quoteInfoService" ref="quoteInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 修改交易状态 -->
+ 	<bean name="updateTransactionInfoById" class="com.cy.driver.transaction.action.UpdateTransactionInfoById">
+ 		<property name="transactionInfoService" ref="transactionInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 修改手机号 -->
+ 	<bean name="driverUserUpdateCodeAction" class="com.cy.driver.user.action.DriverUserUpdateCodeAction">
+ 		<property name="loginUserInfoService" ref="loginUserInfoService"></property>
+ 		<property name="driverUserCargoInfoService" ref="driverUserCargoInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 单播消息推送 -->
+ 	<bean name="pushUnicastMessageAction" class="com.cy.driver.baidunyunpush.action.PushUnicastMessageAction">
+ 		<property name="androidPushMessageService" ref="androidPushMessageService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 组播消息推送 -->
+ 	<bean name="pushTagMessageAction" class="com.cy.driver.baidunyunpush.action.PushTagMessageAction">
+ 		<property name="androidPushMessageService" ref="androidPushMessageService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 广播消息推送 -->
+ 	<bean name="pushBroadcastMessageAction" class="com.cy.driver.baidunyunpush.action.PushBroadcastMessageAction">
+ 		<property name="androidPushMessageService" ref="androidPushMessageService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 查找公司信息 -->
+ 	<bean name="selectCompanyInfoAction" class="com.cy.driver.user.action.SelectCompanyInfoAction">
+ 		<property name="driverUserCargoInfoService" ref="driverUserCargoInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 已经成交货源 -->
+ 	<bean name="selectTransactionCargoList" class="com.cy.driver.transaction.action.SelectTransactionCargoList">
+ 		<property name="transactionInfoService" ref="transactionInfoService" />
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 新增交易状态历史 -->
+ 	<bean name="addTransactionLastInfo" class="com.cy.driver.transaction.action.AddTransactionLastInfo">
+ 		<property name="transactionInfoService" ref="transactionInfoService" />
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 司机取消订单 -->
+ 	<bean name="driverCancelTransactionAction" class="com.cy.driver.transaction.action.DriverCancelTransactionAction">
+ 		<property name="transactionInfoService" ref="transactionInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 待评价订单 -->
+ 	<bean name="selecWaitEvaluationTransactionListAction" class="com.cy.driver.record.action.SelecWaitEvaluationTransactionListAction">
+ 		<property name="quoteInfoService" ref="quoteInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 根据货源id和司机id查找报价信息  -->
+ 	<bean name="selectQuoteInfoByDriverAndCargoId" class="com.cy.driver.record.action.SelectQuoteInfoByDriverAndCargoId">
+ 		<property name="quoteInfoService" ref="quoteInfoService" />
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 我的订单数量 -->
+ 	<bean name="selectOrderNumAction" class="com.cy.driver.transaction.action.SelectOrderNumAction">
+ 		<property name="transactionInfoService" ref="transactionInfoService" />
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 取消用车 -->
+ 	<bean name="cancelConfirmUseCarAction" class="com.cy.driver.transaction.action.CancelConfirmUseCarAction">
+ 		<property name="transactionInfoService" ref="transactionInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 		<property name="orderCargoInfoDao" ref="orderCargoInfoDao"></property>
+ 	</bean>
+ 	
+ 	<!-- 我的记录（已经成交的订单） -->
+ 	<bean name="selectDealedTransactionInMyLogAction" class="com.cy.driver.record.action.SelectDealedTransactionInMyLogAction">
+ 		<property name="quoteInfoService" ref="quoteInfoService" />
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 上传身份证 -->
+ 	<bean name="uploadIdentityNumberAction" class="com.cy.driver.user.action.UploadIdentityNumberAction">
+ 		<property name="driverUserCargoInfoService" ref="driverUserCargoInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 下载图片 -->
+ 	<bean name="downloadImage" class="com.cy.driver.file.action.DownloadImage">
+ 		<property name="driverUserCargoInfoService" ref="driverUserCargoInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 获取文件名 -->
+ 	<bean name="getFileName" class="com.cy.driver.file.action.GetFileName">
+ 		<property name="driverUserCargoInfoService" ref="driverUserCargoInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 根据交易id查找用户对司机是否已评价 -->
+ 	<bean name="selectUserDriverAssessById" class="com.cy.driver.assess.action.SelectUserDriverAssessById">
+ 		<property name="driverUserAssessInfoService" ref="driverUserAssessInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 百度云推送id -->
+ 	<bean name="setBaiduPushIdAction" class="com.cy.driver.user.action.SetBaiduPushIdAction">
+ 		<property name="loginUserInfoService" ref="loginUserInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 货源消息提醒 -->
+ 	<bean name="cargoInfoRemindAction" class="com.cy.driver.user.action.CargoInfoRemindAction">
+ 		<property name="driverUserCargoInfoService" ref="driverUserCargoInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 某条货源被多少次标注为货已走 -->
+ 	<bean name="selectDriverCargoAssessNumByCargoId" class="com.cy.driver.cargo.action.SelectDriverCargoAssessNumByCargoId">
+ 		<property name="orderCargoInfoService" ref="orderCargoInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 修改老用户信息 -->
+ 	<bean name="updateOldUserInfoAction" class="com.cy.driver.user.action.UpdateOldUserInfoAction">
+ 		<property name="driverUserCargoInfoService" ref="driverUserCargoInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 查询用户对司机的评价信息 -->
+ 	<bean name="selectUserDriverAssessNum" class="com.cy.driver.assess.action.SelectUserDriverAssessNum">
+ 		<property name="driverUserAssessInfoService" ref="driverUserAssessInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 查询web端用户对司机的评价信息 -->
+ 	<bean name="selectUserDriverAssessInfoList" class="com.cy.driver.assess.action.SelectUserDriverAssessInfoList">
+ 		<property name="driverUserAssessInfoService" ref="driverUserAssessInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 用户信息修改 -->
+ 	<bean name="driverUserInfoUpdate" class="com.cy.driver.user.action.DriverUserInfoUpdate">
+ 		<property name="driverUserCargoInfoService" ref="driverUserCargoInfoService"></property>
+ 		<property name="operationLogService" ref="operationLogService"></property>
+ 	</bean>
+ 	
+ 	<!-- 根据 ‘发货单号’查询订单信息 -->
+ 	<bean name="selectTransactionByShipperOrderNo" class="com.cy.driver.transaction.action.SelectTransactionByShipperOrderNo">
+ 		<property name="transactionInfoService" ref="transactionInfoService" />
+ 		<property name="operationLogService" ref="operationLogService" />
+ 	</bean>
+ 	
+ 	<!-- 根据parentId和encoded查询 -->
+ 	<bean name="selectWebuserInfoByParentIdAndEncoded" class="com.cy.driver.webUser.action.SelectWebuserInfoByParentIdAndEncoded">
+ 		<property name="webUserInfoService" ref="webUserInfoService"/>
+ 		<property name="operationLogService" ref="operationLogService"/>
+ 	</bean>
+ 	
+ 	 <!-- 回单操作 -->
+ 	 <bean name="receiptUpload" class="com.cy.driver.receipt.action.ReceiptUploadAction" scope="prototype">
+ 	 	<property name="transactionReceiptPathService" ref="transactionReceiptPathService"/>
+ 	 	<property name="operationLogService" ref="operationLogService"/>
+ 	 	<property name="receiptUploadPath" value="${receipt.upload.path}" />
+ 	 </bean>
+ 	
+ 	<!-- 货单确认 -->
+ 	<bean name="receiptVerify" class="com.cy.driver.receipt.action.ReceiptVerifyAction">
+ 		<property name="transactionInfoService" ref="transactionInfoService" />
+ 		<property name="operationLogService" ref="operationLogService"/>
+ 		<property name="orderCargoInfoService" ref="orderCargoInfoService" />
+ 	</bean>
+ 	
+ 	<!-- 回单删除 -->
+ 	<bean name="receiptDeleteAction" class="com.cy.driver.receipt.action.ReceiptDeleteAction">
+ 		<property name="transactionReceiptPathService" ref="transactionReceiptPathService"/>
+ 	 	<property name="operationLogService" ref="operationLogService"/>
+ 	</bean>
+ 	
+ 	<!-- 回单查询 -->
+ 	<bean name="selectReceiptListByTransactionId" class="com.cy.driver.receipt.action.SelectReceiptListByTransactionId">
+ 		<property name="transactionReceiptPathService" ref="transactionReceiptPathService"/>
+ 	 	<property name="operationLogService" ref="operationLogService"/>
+ 	</bean>
+ 	
+ 	<!-- 回单查询 -->
+ 	<bean name="selectReceiptById" class="com.cy.driver.receipt.action.SelectReceiptById">
+ 		<property name="transactionReceiptPathService" ref="transactionReceiptPathService"/>
+ 	 	<property name="operationLogService" ref="operationLogService"/>
+ 	</bean>
+ 	
+ 	<!-- 下载回单上传图片 -->
+ 	<bean name="receiptDownLoadImg" class="com.cy.driver.receipt.action.DownloadImage">
+ 		<property name="transactionReceiptPathService" ref="transactionReceiptPathService" />
+ 	</bean>
+ 	
+ 	<!--                  导入的订单                                  -->
+ 	<bean name="selectImportDealedTransactionList" class="com.cy.driver.record.action.SelectImportDealedTransactionList">
+ 		<property name="quoteInfoService" ref="quoteInfoService" />
+ 		<property name="operationLogService" ref="operationLogService" />
+ 	</bean>
+ 	<bean name="selectWaittingLoadImportTransactionList" class="com.cy.driver.record.action.SelectWaittingLoadImportTransactionList">
+ 		<property name="quoteInfoService" ref="quoteInfoService" />
+ 		<property name="operationLogService" ref="operationLogService" />
+ 	</bean>
+ 	<bean name="selectWaittingUnloadImportTransactionList" class="com.cy.driver.record.action.SelectWaittingUnloadImportTransactionList">
+ 		<property name="quoteInfoService" ref="quoteInfoService" />
+ 		<property name="operationLogService" ref="operationLogService" />
+ 	</bean>
+ 	
+ 	<!-- 合同车源查询 -->
+ 	<bean name="queryPactDriverInfoByType" class="com.cy.driver.pactDriver.action.QueryPactDriverInfoByType">
+ 		<property name="pactDriverInfoService" ref="pactDriverInfoService" />
+ 		<property name="operationLogService" ref="operationLogService" />
+ 	</bean> 
+ 	
+ 	<!-- 合同车源修改 -->
+ 	<bean name="updatePactDriverInfo" class="com.cy.driver.pactDriver.action.UpdatePactDriverInfo">
+ 		<property name="pactDriverInfoService" ref="pactDriverInfoService" />
+ 		<property name="operationLogService" ref="operationLogService" />
+ 	</bean> 	
+	<!-- action end -->
+
+   
+</beans>

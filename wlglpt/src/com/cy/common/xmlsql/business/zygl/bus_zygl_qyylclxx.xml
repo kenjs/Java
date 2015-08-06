@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.ylgl.dao.BusYlglQyylclxxMapper">
+	<select id="selectQyYlClxxPage" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyYlClxxDomain">
+		SELECT A.CL_DJXH AS clDjxh,
+		       A.CZ_XM AS czXm,
+		       A.CZ_ZJLX_DM AS czZjlxDm,
+		       A.CZ_ZJHM AS czZjhm,
+		       A.CZ_LXDH AS czLxdh,
+		       A.CLHM AS clhm,
+		       A.CLSX_DM AS clsxDm,
+		       A.THCLBZ AS thclbz,
+		       A.YSCLBZ AS ysclbz,
+		       A.PSCLBZ AS psclbz,
+		       A.BZ AS bz,
+		       A.DJR_CZY_DJXH AS djrCzyDjxh,
+		       A.DJRQ AS djrq,
+		       A.DJ_JGBM AS djJgbm,
+		       A.SS_JGBM AS ssJgbm,
+		       A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) AS cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) AS xgrMc,
+		       (select ZJLX.ZJLX_MC FROM DM_ZJLX ZJLX WHERE ZJLX.ZJLX_DM=A.CZ_ZJLX_DM) AS zjlxMc
+		  FROM QY_YL_CLXX A 
+		  WHERE A.SS_JGBM =#ssJgbm#
+		  <dynamic> 
+			<isNotEmpty property="clhm" prepend="and">
+				A.CLHM LIKE #clhm#
+			</isNotEmpty>
+			<isNotEmpty property="czXm" prepend="and">
+				A.CZ_XM LIKE #czXm#
+			</isNotEmpty>
+		  </dynamic>
+		  AND A.YXBZ='Y'
+		  AND A.Clsx_Dm = #clsxDm#	  
+		  $orderStr$
+    </select>
+    
+    <select id="selectQyYlClxxAll" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyYlClxxDomain">
+		SELECT A.CL_DJXH AS clDjxh,
+		       A.CZ_XM AS czXm,
+		       A.CZ_ZJLX_DM AS czZjlxDm,
+		       A.CZ_ZJHM AS czZjhm,
+		       A.CZ_LXDH AS czLxdh,
+		       A.CLHM AS clhm,
+		       A.CLSX_DM AS clsxDm,
+		       A.THCLBZ AS thclbz,
+		       A.YSCLBZ AS ysclbz,
+		       A.PSCLBZ AS psclbz,
+		       A.BZ AS bz,
+		       A.DJR_CZY_DJXH AS djrCzyDjxh,
+		       A.DJRQ AS djrq,
+		       A.DJ_JGBM AS djJgbm,
+		       A.SS_JGBM AS ssJgbm,
+		       A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc,
+		       (select ZJLX.ZJLX_MC FROM DM_ZJLX ZJLX WHERE ZJLX.ZJLX_DM=A.CZ_ZJLX_DM) AS zjlxMc
+		  FROM QY_YL_CLXX A 
+		  WHERE A.SS_JGBM =#ssJgbm#
+		  <dynamic> 
+			<isNotEmpty property="clhm" prepend="and">
+				A.CLHM LIKE #clhm#
+			</isNotEmpty>
+			<isNotEmpty property="czXm" prepend="and">
+				A.CZ_XM LIKE #czXm#
+			</isNotEmpty>
+		  </dynamic>
+		  AND A.YXBZ='Y'
+		  AND A.Clsx_Dm = #clsxDm#
+		  ORDER by A.CL_DJXH ASC
+    </select>
+
+	<select id="getQyYlClxxRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.CL_DJXH) 
+		  FROM QY_YL_CLXX A 
+		  WHERE A.SS_JGBM =#ssJgbm# 
+		  <dynamic> 
+			<isNotEmpty property="clhm" prepend="and">
+				A.CLHM LIKE #clhm#
+			</isNotEmpty>
+			<isNotEmpty property="czXm" prepend="and">
+				A.CZ_XM LIKE #czXm#
+			</isNotEmpty>
+		  </dynamic>
+			AND A.YXBZ='Y'
+		    AND A.Clsx_Dm = #clsxDm#
+    </select>
+    
+    <select id="selectQyYlClxxSjByClDjxh" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyYlClxxDomain">
+		SELECT A.CL_DJXH AS clDjxh,
+		       A.SJ_XM AS sjXm,
+		       A.SJ_ZJHM AS sjZjhm,
+		       A.SJ_SJHM AS sjSjhm,
+		       A.SJ_LXDH AS sjLxdh,
+		       A.JSZHM AS jszhm,
+		       A.XH as xh
+		  FROM QY_YL_CLXX_SJ A 
+		  WHERE A.CL_DJXH=#clDjxh# 
+    </select>
+    
+    <select id="checkClhm" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+    	select count(*) from QY_YL_CLXX where SS_JGBM=#ssJgbm#
+    	<dynamic> 
+			<isNotEmpty property="clDjxh" prepend="and">
+				<![CDATA[CL_DJXH <> #clDjxh# ]]>
+			</isNotEmpty>
+		</dynamic>
+		and CLHM=#clhm# and yxbz='Y'
+    	
+    </select>
+    
+    <select id="getMaxXh" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+    	select nvl(max(a.xh),0) from Qy_Yl_Clxx_Sj a where a.cl_djxh=#clDjxh#
+    </select>
+    
+    
+    <select id="getCurrentXh" resultClass="java.lang.String">
+		select SEQ_ZY_DJXH.CURRVAL as clDjxh from dual
+    </select>
+</sqlMap>

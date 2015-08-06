@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>查询车源</title>
+<link href="../../resource/css/searchCar.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<div class="midNav">
+	<a href="#">首页</a>>>查询车源
+</div>
+<div class="menubox">
+	<div class="menuTop">
+        <div class="menuLeft">
+        	<div class="weizhi">当前位置：<select><option value="浙江" selected="selected">浙江</option>
+            <option value="江苏">江苏</option>
+            <option value="广东">广东</option>
+            <option value="湖南">湖南</option>
+            <option value="江西">江西</option>
+            </select>省
+            <select><option value="杭州" selected="selected">杭州</option>
+            <option value="宁波">宁波</option>
+            <option value="金华">金华</option>
+            <option value="绍兴">绍兴</option>
+            <option value="义乌">义乌</option>
+            </select>市
+            <select><option value="杭州" selected="selected">杭州</option>
+            <option value="宁波">宁波</option>
+            <option value="金华">金华</option>
+            <option value="绍兴">绍兴</option>
+            <option value="义乌">义乌</option>
+            </select>区
+            </div>
+            <div class="chexing">车型：<select name="chang"><option value="请选择" selected="selected">请选择</option>
+            <option value="江苏">江苏</option>
+            <option value="广东">广东</option>
+            <option value="湖南">湖南</option>
+            <option value="江西">江西</option>
+            </select>长
+            <select name="ban"><option value="请选择" selected="selected">请选择</option>
+            <option value="01">01</option>
+            <option value="02">02</option>
+            <option value="03">03</option>
+            <option value="04">04</option>
+            </select>板
+            <select name="lan"><option value="请选择" selected="selected">请选择</option>
+            <option value="01">01</option>
+            <option value="02">02</option>
+            <option value="03">03</option>
+            <option value="04">04</option>
+            </select>栏
+            <select name="dun"><option value="请选择" selected="selected">请选择</option>
+            <option value="01">01</option>
+            <option value="02">02</option>
+            <option value="03">03</option>
+            <option value="04">04</option>
+            </select>吨
+            <select name="fang"><option value="请选择" selected="selected">请选择</option>
+            <option value="01">01</option>
+            <option value="02">02</option>
+            <option value="03">03</option>
+            <option value="04">04</option>
+            </select>方
+            </div>
+            
+        </div>
+        <div class="menuRight">
+            <div class="chepai">车牌号：<input type="text" />
+            </div>
+            <div class="yunying">
+            	运营状态：<select>
+                	<option value="空闲" selected="selected">空闲</option>
+                    <option value="运营中">运营中</option>
+                </select>
+            </div>
+            </div>
+            <div class="menuButton">
+            	<input type="button" value="查询" />
+            </div>
+    </div>
+</div>
+
+<div class="tablebox">
+	<table>
+		<tr class="menu">
+        	<td width="80px">车牌</td><td width="180px">车型</td><td width="80px">运营状态</td><td width="120px">路线</td><td width="120px">当前位置</td><td width="120px">时间</td><td width="80px">联系方式</td><td width="80px">操作</td>
+        </tr>
+		<tr class="selected">
+        	<td>浙G123454</td><td>17.5米、30吨、平板、高栏</td><td>空闲</td><td>杭州→上海</td><td>浙江省杭州市西湖区</td><td>2014-2-19&nbsp;12:20</td><td>12354697825</td><td><input class="currentInput" type="button" value="成交" /></td>
+            </tr>
+            <tr>
+        	<td>浙G123454</td><td>17.5米、30吨、平板、高栏</td><td>空闲</td><td>杭州→上海</td><td>浙江省杭州市西湖区</td><td>2014-2-19&nbsp;12:20</td><td>12354697825</td><td><input type="button" value="成交" /></td>
+            </tr>
+            <tr>
+        	<td>浙G123454</td><td>17.5米、30吨、平板、高栏</td><td>空闲</td><td>杭州→上海</td><td>浙江省杭州市西湖区</td><td>2014-2-19&nbsp;12:20</td><td>12354697825</td><td><input type="button" value="成交" /></td>
+            </tr>
+         
+    </table>
+</div>    
+<div class="numberBox">
+    <ul class="number">
+    	<li><a href="#">首页</a></li>
+        <li><a href="#">上一页</a></li>
+        <li><a href="#">1</a></li>
+        <li><a class="currentA" href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#">4</a></li>
+        <li><a href="#">5</a></li>
+        <li><a href="#">6</a></li>
+        <li>...</li>
+        <li><a href="#">下一页</a></li>
+        <li class="jump">第<input type="text"  />页<input class="go-botton"  type="button" value="GO" /></li>
+        <li>共32页</li>
+    </ul>
+</div>
+
+
+</body>
+</html>

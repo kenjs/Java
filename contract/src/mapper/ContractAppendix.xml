@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+
+<sqlMap >
+   <typeAlias type="tf56.contract.domain.ContractAppendix" alias="contractAppendix"/>
+ <!-- 新增记录 -->
+ <insert id="iBatisInsertContractAppendix" parameterClass="contractAppendix">
+  insert into ContractAppendix (tableName,tableId,type,fileName,url,inputDate)
+   values (#tablename:VARCHAR#,#tableid:VARCHAR#,#type:VARCHAR#,#filename:VARCHAR#,#url:VARCHAR#,#inputdate:VARCHAR#)
+  <selectKey resultClass="String" keyProperty="contractappendixid">
+   select last_insert_id() as id
+  </selectKey>
+ </insert>
+ <update id="iBatisUpdateAppendixTableId" parameterClass="java.util.HashMap">
+ 	update ContractAppendix set tableId=#tableid# where contractAppendixId=#contractappendixid#
+ </update>
+ <select id="iBatisSelectContractAppendixList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+ 	select fileName as filename,url,contractAppendixId as contractappendixid from ContractAppendix where tableId=#tableid# and tableName=#tablename#
+ </select>
+ <select id="iBatisSelectContractAppendixById" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+ 	select fileName as filename,url,contractAppendixId as contractappendixid from ContractAppendix where contractAppendixId=#contractappendixid#
+ </select>
+ <select id="iBatisSelectExistContractAppendixByURL" parameterClass="java.util.HashMap" resultClass="java.lang.String">
+ 	select count(*) from ContractAppendix where url=#url#
+ </select>
+ <delete id="iBatisDeleteContractAppendix" parameterClass="java.util.HashMap">
+ 	delete from ContractAppendix where contractAppendixId=#contractappendixid#
+ </delete>
+</sqlMap>
+
+

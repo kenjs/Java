@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.xtgl.dao.BusXtglSwdnglMapper">
+	<select id="selectSwdnglPage" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.QySwdnDshDomain">
+		select B.SQR_CZY_DJXH,
+			(SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=B.SQR_CZY_DJXH) AS sqrMc,
+       		B.SQRQ AS sqrq,
+       		B.SHR_CZY_DJXH,
+       		(SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=B.SHR_CZY_DJXH) AS shrMc,
+       		B.SHRQ AS shrq,
+       		A.MAC AS mac,
+       		A.BZSM AS bzsm,
+	   		A.QYBZ AS qybz,
+       		A. GG_DJXH AS ggDjxh
+		from QY_SWDN A, QY_SWDN_DSH B
+		where A.GG_DJXH=B.GG_DJXH
+		and A.YXBZ='Y'
+		order by A.GG_DJXH desc
+    </select>
+	
+	<select id="selectSwdnglAll" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.QySwdnDshDomain">
+		select B.SQR_CZY_DJXH,
+			(SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=B.SQR_CZY_DJXH) AS sqrMc,
+       		B.SQRQ AS sqrq,
+       		B.SHR_CZY_DJXH,
+       		(SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=B.SHR_CZY_DJXH) AS shrMc,
+       		B.SHRQ AS shrq,
+       		A.MAC AS mac,
+       		A.BZSM AS bzsm,
+	   		A.QYBZ AS qybz,
+       		A. GG_DJXH AS ggDjxh
+		from QY_SWDN A, QY_SWDN_DSH B
+		where A.GG_DJXH=B.GG_DJXH
+		and A.YXBZ='Y'
+		order by A.GG_DJXH desc
+    </select>
+    
+	<select id="getSwdnglRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.GG_DJXH) 
+		from QY_SWDN A, QY_SWDN_DSH B
+		where A.GG_DJXH=B.GG_DJXH
+		and A.YXBZ='Y'
+    </select>
+    
+</sqlMap>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.common.dao.BusXtglCommonMapper">
+
+	<!--根据企业机构编码取级别代码-->
+	<select id="getQyJbdmByJgbm" parameterClass="java.util.Map"
+		resultClass="java.lang.String">
+		SELECT A.JBDM as jbdm
+		  FROM QY_ZZJG A 
+		  WHERE A.JGBM = #jgbm#
+    </select>
+    
+    <!--根据企业机构编码取可应用的所有角色-->
+	<select id="getJsListByJgbm" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.QyJsDomain">
+		select a.JS_DJXH as jsDjxh , a.JS_JC as jsJc,a.JS_MC as jsMc,a.BZSM as bzsm,
+		(select b.jc from QY_ZZJG b where b.jgbm=a.ss_jgbm) as sjMc
+		FROM QY_JS a,QY_ZZJG DM,QY_ZZJG JG
+		 WHERE A.SS_JGBM = DM.JGBM
+		   AND a.YXBZ = 'Y'
+		   AND a.QYBZ = 'Y'
+		   AND JG.JGBM = #jgbm#
+		   AND JG.JBDM LIKE DM.JBDM || '%'
+		
+    </select>
+    
+    <!--根据企业机构编码取上级机构编码-->
+	<select id="getSjJgbmByJgbm" parameterClass="java.util.Map"
+		resultClass="java.lang.String">
+		SELECT A.SJ_JGBM as sjJgbm
+		  FROM QY_ZZJG A 
+		  WHERE A.JGBM = #jgbm#
+    </select>
+    
+    <select id="selectSequence" parameterClass="java.util.Map" resultClass="java.lang.String">
+    	select $seqName$.nextval as xh from dual
+    </select>
+    
+    <parameterMap class="java.util.Map" id="getXtcsParMap">
+    	<parameter property="csz" javaType="java.lang.String" jdbcType="VARCHAR" mode="OUT"/>
+    	<parameter property="csxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="jgbm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="cslb" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    </parameterMap>
+    
+    <procedure id="getFunXtXtcs" parameterMap="getXtcsParMap">
+    	{? = call F_XT_GET_XTCS(?,?,?)} 
+    </procedure>
+    
+</sqlMap>

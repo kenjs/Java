@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+        
+<sqlMapConfig>
+	<typeHandler jdbcType="CLOB" javaType="java.lang.String" callback="org.springframework.orm.ibatis.support.ClobStringTypeHandler" />
+	<typeHandler jdbcType="BLOB" javaType="[B" callback="org.springframework.orm.ibatis.support.BlobByteArrayTypeHandler" />
+	
+	<sqlMap resource="com/cy/common/xmlsql/business/cwgl/bus_cwhbzccsh.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/cwgl/bus_cwhbzczhjl.xml"/>
+	
+	
+	<sqlMap resource="com/cy/common/xmlsql/crud/cwgl/cw_hbzc_csh.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/cwgl/cw_hbzc_zhjl.xml"/>
+	
+    <sqlMap resource="com/cy/common/xmlsql/business/cwgl/bus_cwhbzcyecx.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/cwgl/bus_cwhbzclsjl.xml"/>
+	
+	<sqlMap resource="com/cy/common/xmlsql/business/cwgl/bus_cwgl_cwkpdj.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/cwgl/cw_kpdj.xml"/>
+
+	<sqlMap resource="com/cy/common/xmlsql/business/cwgl/bus_cwfpkpdj.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/cwgl/cw_fp_kpdj.xml"/>
+
+	<sqlMap resource="com/cy/common/xmlsql/business/cwgl/bus_cwgl_zfdj.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/cwgl/cw_zfdj.xml"/>
+	
+	<sqlMap resource="com/cy/common/xmlsql/business/cwgl/bus_cw_ysyf_srdj.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/cwgl/cw_srdj.xml"/>
+
+	<sqlMap resource="com/cy/common/xmlsql/business/cwgl/bus_cwfylb.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/cwgl/cw_fylb.xml"/>
+	
+	<sqlMap resource="com/cy/common/xmlsql/business/cwgl/bus_cwfyxmwh.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/cwgl/cw_fyxm_wh.xml"/>
+	
+	<sqlMap resource="com/cy/common/xmlsql/business/cwgl/bus_cwzjdbgl.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/cwgl/cw_zjdbgl.xml"/>
+	
+	<sqlMap resource="com/cy/common/xmlsql/business/cwgl/bus_cwzzjxb.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/cwgl/cw_zzjxb.xml"/>
+
+	<sqlMap resource="com/cy/common/xmlsql/business/cwgl/bus_cwfybxsq.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/cwgl/cw_fybxsq.xml"/>
+	
+	<sqlMap resource="com/cy/common/xmlsql/business/cwgl/bus_cwfybxsqsh.xml"/>
+
+	<sqlMap resource="com/cy/common/xmlsql/business/cwgl/bus_cwkhysgl.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/cwgl/cw_khysgl.xml"/>
+	
+	<sqlMap resource="com/cy/common/xmlsql/business/cwgl/bus_cwzjrb.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/cwgl/cw_zjrb.xml"/>
+	
+	<sqlMap resource="com/cy/common/xmlsql/business/cwgl/bus_cwqtsr.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/cwgl/cw_qtsr.xml"/>
+</sqlMapConfig>        

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.driver.dao.PactDriverInfoDao">
+
+	<resultMap type="PactDriverInfoDomain" id="pactDriverInfoDomainMap">
+		<result property="id" column="ID"/>
+		<result property="driverId" column="DRIVER_ID"/>
+		<result property="userId" column="COMPANY_ID"/>
+		<result property="pactStartTime" column="PACT_START_TIME"/>
+		<result property="pactEndTime" column="PACT_END_TIME"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="modifyTime" column="MODIFY_TIME"/>
+		<result property="pactValidDay" column="PACT_VALID_DAY"/>
+		<result property="pactType" column="PACT_TYPE"/>
+		<result property="pactStart" column="PACT_START"/>
+		<result property="companyName" column="COMPANY_NAME"/>
+		<result property="driverName" column="DRIVER_NAME"/>
+	</resultMap>
+
+	<!-- 查询会员信息 -->
+	<select id="selectPactDriverInfoList" parameterType="map" resultMap="pactDriverInfoDomainMap">
+		SELECT
+			pact.ID,
+			pact.DRIVER_ID,
+			pact.COMPANY_ID,
+			pact.PACT_START_TIME,
+			pact.PACT_END_TIME,
+			pact.CREATE_TIME,
+			pact.MODIFY_TIME,
+			pact.PACT_TYPE,
+			pact.PACT_VALID_DAY,
+			pact.PACT_START,
+			(select c.COMPANY_NAME from t_company_info c where c.ID = pact.COMPANY_ID) COMPANY_NAME,
+			(select u.`NAME` from t_driver_user_info u where u.ID = pact.DRIVER_ID) DRIVER_NAME
+		FROM
+			t_pact_driver_info pact
+		WHERE
+			pact.DELETED_FLAG = 0
+		AND
+			pact.DRIVER_ID = #{driverId}
+		AND PACT_START <![CDATA[<>]]> -1
+        <if test="pactType != null and pactType != ''">
+            AND pact.PACT_TYPE = #{pactType}
+        </if>
+		ORDER BY pact.PACT_END_TIME ASC
+		LIMIT ${fromSize},${listSize}
+	</select>
+
+	<!-- 修改合同状态 -->
+	<update id="updatePactDriverInfo" parameterType="PactDriverInfo">
+		update t_pact_driver_info set PACT_START = #{pactStart} where ID = #{id}
+	</update>
+
+	<!-- vip会员线路数 -->
+	<select id="queryVipDriverLineNum" parameterType="string" resultType="java.lang.Integer">
+		SELECT COUNT(ID) FROM `t_vip_driver_line_info` WHERE PACT_DRIVER_ID = #{pactDriverId}
+		AND DELETE_FLAG = 0 and START = 0
+	</select>
+
+	<!-- 查询vip线路 -->
+	<select id="queryVipDriverLineList" parameterType="map" resultType="VipDriverLineInfoDomain">
+		SELECT
+			ID AS id,
+			START_PROVINCE AS startProvince,
+			START_CITY AS startCity,
+			START_COUNTY AS startCounty,
+			END_PROVINCE AS endProvince,
+			END_CITY AS endCity,
+			END_COUNTY AS endCounty,
+			DRIVER_ID AS driverId,
+			`START` AS start,
+			COMPANY_ID AS userId,
+			DELETE_FLAG as deleteFlag,
+			CREATE_TIME AS createTime,
+			MODIFY_TIME AS modifyTime
+		FROM
+			`t_vip_driver_line_info`
+		WHERE
+			PACT_DRIVER_ID = #{pactDriverId}
+		AND DELETE_FLAG = 0
+		ORDER BY CREATE_TIME DESC
+		LIMIT ${fromSize},${listSize}
+	</select>
+
+    <!-- vip 会员线路确认 -->
+    <update id="updateVipDriverLineInfo" parameterType="map">
+        update t_vip_driver_line_info set MODIFY_TIME = sysdate(),START = #{start} where ID = #{id}
+    </update>
+</mapper>

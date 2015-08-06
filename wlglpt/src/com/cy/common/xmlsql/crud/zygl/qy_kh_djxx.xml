@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.zygl.dao.QyKhDjxxMapper">
+
+	<!--根据主键取DOMAIN-->
+	<select id="selectQyKhDjxxByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyKhDjxxDomain">
+		select a.KH_DJXH as khDjxh,a.SS_JGBM as ssJgbm,a.KHMC as khmc,a.KHJC as khjc,a.PYQC as pyqc,
+		a.PYJC as pyjc,
+		a.XZQH_DM as xzqhDm,
+		(SELECT DM.XZQH_MC FROM DM_XZQH DM WHERE DM.XZQH_DM=a.XZQH_DM) AS xzqhMc,
+		(SELECT DM.XZQH_QC FROM DM_XZQH DM WHERE DM.XZQH_DM=a.XZQH_DM) AS xzqhQc,
+		a.DZ as dz,a.DH as dh,a.YB as yb,
+		a.FZR as fzr,a.BZ as bz,a.DJ_JGBM as djJgbm,a.DJR_CZY_DJXH as djrCzyDjxh,a.DJRQ as djrq,
+		a.QYBZ as qybz,a.YXBZ as yxbz,a.CJR_CZY_DJXH as cjrCzyDjxh,a.CJRQ as cjrq,a.XGR_CZY_DJXH as xgrCzyDjxh,
+		a.XGRQ as xgrq,
+		a.KHLX_DM as khlxDm,
+		(SELECT B.KHLX_MC FROM DM_KHLX B WHERE B.KHLX_DM=a.KHLX_DM)  khlxMc,
+		a.YKJSFS_DM as ykjsfsDm,
+		(SELECT B.YKJSFS_MC FROM  DM_YKJSFS B WHERE B.YKJSFS_DM=a.YKJSFS_DM)  ykjsfsMc,
+		(SELECT ZZ.MC FROM QY_ZZJG ZZ WHERE ZZ.JGBM=A.SS_JGBM) AS ssjgmc,
+     	(SELECT ZZ.MC FROM QY_ZZJG ZZ WHERE ZZ.JGBM=A.DJ_JGBM) AS djjgmc,
+     	(SELECT QR.MC FROM QY_RYDJ QR WHERE QR.CZY_DJXH=A.DJR_CZY_DJXH) AS djrmc,
+     	(SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		(SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc,
+		A.XXGXFS_DM AS XXGXFSDM,
+		A.KH_QYBM AS khbm
+		 from QY_KH_DJXX a  where a.KH_DJXH=#khDjxh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertQyKhDjxx"  parameterClass="com.cy.common.bo.QyKhDjxx">
+		<selectKey keyProperty="khDjxh" resultClass="string" type="pre"> 
+			select SEQ_ZY_DJXH.nextval as khDjxh from dual 
+		</selectKey> 
+		insert into QY_KH_DJXX(KH_DJXH,SS_JGBM,KHMC,KHJC,PYQC,
+		PYJC,XZQH_DM,DZ,DH,YB,
+		FZR,BZ,DJ_JGBM,DJR_CZY_DJXH,DJRQ,
+		QYBZ,YXBZ,CJR_CZY_DJXH,CJRQ,XGR_CZY_DJXH,
+		XGRQ,KHLX_DM,YKJSFS_DM,XXGXFS_DM,KH_QYBM)
+		values(#khDjxh:NUMERIC#,#ssJgbm:NUMERIC#,#khmc:VARCHAR#,#khjc:VARCHAR#,#pyqc:VARCHAR#,
+		#pyjc:VARCHAR#,#xzqhDm:VARCHAR#,#dz:VARCHAR#,#dh:VARCHAR#,#yb:VARCHAR#,
+		#fzr:VARCHAR#,#bz:VARCHAR#,#djJgbm:NUMERIC#,#djrCzyDjxh:NUMERIC#,to_date(#djrq:DATE#,'yyyy-MM-dd'),
+		#qybz:VARCHAR#,#yxbz:VARCHAR#,#cjrCzyDjxh:NUMERIC#,to_date(#cjrq:DATE#,'yyyy-MM-dd'),#xgrCzyDjxh:NUMERIC#,
+		to_date(#xgrq:DATE#,'yyyy-MM-dd'),#khlxDm:NUMERIC#,#ykjsfsDm:NUMERIC#,#xxgxfsDm:NUMERIC#,#khbm:VARCHAR#)
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateQyKhDjxxByKey" parameterClass="com.cy.common.bo.QyKhDjxx">
+        update QY_KH_DJXX set KH_DJXH=#khDjxh#,SS_JGBM=#ssJgbm#,KHMC=#khmc#,KHJC=#khjc#,PYQC=#pyqc#,
+		PYJC=#pyjc#,XZQH_DM=#xzqhDm#,DZ=#dz#,DH=#dh#,YB=#yb#,
+		FZR=#fzr#,BZ=#bz#,DJ_JGBM=#djJgbm#,DJR_CZY_DJXH=#djrCzyDjxh#,DJRQ=to_date(#djrq#, 'YYYY-MM-DD'),
+		QYBZ=#qybz#,YXBZ=#yxbz#,CJR_CZY_DJXH=#cjrCzyDjxh#,CJRQ=to_date(#cjrq#, 'YYYY-MM-DD'),XGR_CZY_DJXH=#xgrCzyDjxh#,
+		XGRQ=to_date(#xgrq#, 'YYYY-MM-DD'),KHLX_DM=#khlxDm#,YKJSFS_DM=#ykjsfsDm#,XXGXFS_DM=#xxgxfsDm#,KH_QYBM=#khbm# 
+		where KH_DJXH=#khDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：软删除-->
+	<delete id="deleteQyKhDjxxByKey" parameterClass="java.util.Map">
+		update QY_KH_DJXX set yxbz='N' where KH_DJXH=#khDjxh#
+    </delete>
+</sqlMap>

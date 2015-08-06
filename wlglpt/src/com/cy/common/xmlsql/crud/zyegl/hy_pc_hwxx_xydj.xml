@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.zyegl.dao.HyPcHwxxXydjMapper">
+
+	<!--根据主键取DOMAIN-->
+	<select id="selectHyPcHwxxXydjByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.zyegl.domain.HyPcHwxxXydjDomain">
+		select a.PC_DJXH as pcDjxh,a.WFH_DJXH as wfhDjxh,a.DD_DJXH as ddDjxh,a.XH as xh,a.SHR_DJXH as shrDjxh,
+		a.SHR_MC as shrMc,a.SHR_DZ as shrDz,a.SHR_LXR as shrLxr,a.SHR_LXDH as shrLxdh,
+		a.SHR_XZQH_DM as shrXzqhDm,(SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = A.SHR_XZQH_DM) shrXzqhMc,
+		a.SZ_HW_BZ_HLDW_DM as szHwBzHldwDm,a.SZ_HW_SL as szHwSl,a.SZ_HW_ZL as szHwZl,a.SZ_HW_TJ as szHwTj,a.YQ_DDRQ as yqDdrq,
+		a.SHFS_DM as shfsDm,a.SZ_JS_SL as szJsSl,a.BZ as bz,A.HDBH
+		from HY_PC_HWXX_XYDJ a  where a.PC_DJXH=#pcDjxh# and a.WFH_DJXH=#wfhDjxh#
+    </select>
+    
+    <select id="initHwxxXydj" parameterClass="java.util.Map"
+    	resultClass="com.cy.zyegl.domain.HyPcHwxxXydjDomain">
+    	SELECT AA.hwmc,AA.pcDjxh,AA.wfhDjxh,AA.ddDjxh,AA.xh,AA.shrDjxh,
+		       AA.shrMc,AA.shrDz,AA.shrLxr,AA.shrLxdh,
+		       AA.shrXzqhDm,(SELECT QH.XZQH_JC FROM DM_XZQH QH WHERE QH.XZQH_DM = AA.shrXzqhDm) shrXzqhMc,
+		       AA.szHwBzHldwDm,
+		       AA.szHwSl,(SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '01' AND DM.JLDW_DM = AA.HW_SL_JLDW_DM) hwSlJldwMc,
+		       AA.szHwZl,(SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '02' AND DM.JLDW_DM = AA.Hw_Zl_Jldw_Dm) hwZlJldwMc,
+		       AA.szHwTj,(SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '03' AND DM.JLDW_DM = AA.HW_TJ_JLDW_DM) hwTjJldwMc,
+		       AA.yqDdrq,AA.shfsDm,AA.szJsSl,AA.BZ,AA.HDBH
+		FROM (
+			select '1' YXJ,a.hwmc,a.PC_DJXH as pcDjxh,a.WFH_DJXH as wfhDjxh,a.DD_DJXH as ddDjxh,a.XH as xh,a.SHR_DJXH as shrDjxh,
+			      a.SHR_MC as shrMc,a.SHR_DZ as shrDz,a.SHR_LXR as shrLxr,a.SHR_LXDH as shrLxdh,
+			        a.SHR_XZQH_DM as shrXzqhDm,
+			      a.HW_BZ_HLDW_DM as szHwBzHldwDm,
+			        a.HW_SL as szHwSl,A.HW_SL_JLDW_DM,
+			        a.HW_ZL as szHwZl,A.Hw_Zl_Jldw_Dm,
+			        a.HW_TJ as szHwTj,A.HW_TJ_JLDW_DM,
+			        a.YQ_DDRQ as yqDdrq,
+			        a.SHFS_DM as shfsDm,a.JS_SL as szJsSl,'' as bz ,
+			        (SELECT HW.HDBH FROM HY_DD_HWMX HW WHERE HW.DD_DJXH = A.DD_DJXH AND HW.XH = A.XH) HDBH
+			        from HY_PC_HWXX a  
+			        where a.PC_DJXH=#pcDjxh# and a.WFH_DJXH=#wfhDjxh#
+			 UNION ALL 
+			 select '2' YXJ,B.HWMC,a.PC_DJXH as pcDjxh,a.WFH_DJXH as wfhDjxh,a.DD_DJXH as ddDjxh,a.XH as xh,a.SHR_DJXH as shrDjxh,
+					a.SHR_MC as shrMc,a.SHR_DZ as shrDz,a.SHR_LXR as shrLxr,a.SHR_LXDH as shrLxdh,
+			    a.SHR_XZQH_DM as shrXzqhDm,
+					a.SZ_HW_BZ_HLDW_DM as szHwBzHldwDm,
+			    a.SZ_HW_SL as szHwSl,B.HW_SL_JLDW_DM,
+			    a.SZ_HW_ZL as szHwZl,B.HW_ZL_JLDW_DM,
+			    a.SZ_HW_TJ as szHwTj,B.HW_TJ_JLDW_DM,a.YQ_DDRQ as yqDdrq,
+					a.SHFS_DM as shfsDm,a.SZ_JS_SL as szJsSl,a.BZ as bz,A.HDBH 
+			    from HY_PC_HWXX_XYDJ a,HY_PC_HWXX B
+			    where A.PC_DJXH = B.PC_DJXH
+			    AND A.WFH_DJXH = B.WFH_DJXH
+			    AND a.PC_DJXH=#pcDjxh# and a.WFH_DJXH=#wfhDjxh#
+			 ORDER BY YXJ DESC
+		)AA WHERE ROWNUM = 1 
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertHyPcHwxxXydj"  parameterClass="com.cy.common.bo.HyPcHwxxXydj">
+		insert into HY_PC_HWXX_XYDJ(PC_DJXH,WFH_DJXH,DD_DJXH,XH,SHR_DJXH,
+		SHR_MC,SHR_DZ,SHR_LXR,SHR_LXDH,SHR_XZQH_DM,
+		SZ_HW_BZ_HLDW_DM,SZ_HW_SL,SZ_HW_ZL,SZ_HW_TJ,YQ_DDRQ,
+		SHFS_DM,SZ_JS_SL,BZ,HDBH)
+		values(#pcDjxh:NUMERIC#,#wfhDjxh:NUMERIC#,#ddDjxh:NUMERIC#,#xh:NUMERIC#,#shrDjxh:NUMERIC#,
+		#shrMc:VARCHAR#,#shrDz:VARCHAR#,#shrLxr:VARCHAR#,#shrLxdh:VARCHAR#,#shrXzqhDm:VARCHAR#,
+		#szHwBzHldwDm:VARCHAR#,#szHwSl:NUMERIC#,#szHwZl:NUMERIC#,#szHwTj:NUMERIC#,#yqDdrq:DATE#,
+		#shfsDm:NUMERIC#,#szJsSl:NUMERIC#,#bz:VARCHAR#,#hdbh:VARCHAR#)
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateHyPcHwxxXydjByKey" parameterClass="com.cy.common.bo.HyPcHwxxXydj">
+        update HY_PC_HWXX_XYDJ set SHR_DJXH=#shrDjxh#,
+		SHR_MC=#shrMc#,SHR_DZ=#shrDz#,SHR_LXR=#shrLxr#,SHR_LXDH=#shrLxdh#,SHR_XZQH_DM=#shrXzqhDm#,
+		SZ_HW_BZ_HLDW_DM=#szHwBzHldwDm#,SZ_HW_SL=#szHwSl#,SZ_HW_ZL=#szHwZl#,SZ_HW_TJ=#szHwTj#,YQ_DDRQ=#yqDdrq#,
+		SHFS_DM=#shfsDm#,SZ_JS_SL=#szJsSl#,BZ=#bz#,HDBH=#hdbh#
+		where PC_DJXH=#pcDjxh# and WFH_DJXH=#wfhDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：软删除-->
+	<delete id="deleteHyPcHwxxXydjByKey" parameterClass="java.util.Map">
+		delete from HY_PC_HWXX_XYDJ where PC_DJXH=#pcDjxh# and WFH_DJXH=#wfhDjxh#
+    </delete>
+    
+    <delete id="deleteHyPcHwxxXydjByPcDjxh" parameterClass="java.util.Map">
+    	delete from HY_PC_HWXX_XYDJ where PC_DJXH=#pcDjxh#
+    </delete>
+</sqlMap>

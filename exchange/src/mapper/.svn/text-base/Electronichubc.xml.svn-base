@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<!-- 电子枢纽交互接口-->
+<sqlMap>
+	
+	<!-- uploadInvoice -->
+	<!-- 根据id获得用户对象 -->
+	<select id="iBatisSelectInvoiceByCUploadStates" resultMap="invoiceFieldMap">
+		select top 1 * from TParkInvList where cUploadState is null or cUploadState='01' 
+	</select> 
+	
+	<update id="iBatisUpdateTParkInvListByinvoiceCodess" parameterClass="java.util.HashMap">
+		update TParkInvList set cUploadState=#cuploadstate:VARCHAR#,
+				dUploadDate=#duploaddate:VARCHAR#,cNetworkAcceptNumber=#cnetworkacceptnumber:VARCHAR# 
+			where iInvCode=#invoicecode#
+	</update>
+	<!-- uploadInvoice -->
+	
+	<!-- invalidInvoice -->
+	<!-- 根据发票号码获取发票对象 -->
+	<select id="iBatisSelectInvoiceByCIinvCodess"  parameterClass="java.lang.String" resultMap="invoiceFieldMap">
+		select * from TParkInvList where iInvCode =#value#  
+	</select>
+	<!-- 更新发票作废后状态 -->
+	<update id="iBatisUpdateInvoiceByCIinvCodess"  parameterClass="java.util.HashMap" >
+		update  TParkInvList set    
+			where  iInvCode=#invoicecode#
+	</update>
+	<!-- invalidInvoice -->
+ </sqlMap>

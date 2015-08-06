@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<!-- 自有营业系统开具网络发票交互接口-->
+<sqlMap>
+	<typeAlias type="tf56.exchange.domain.Invoice" alias="invoice"/>
+	<resultMap id="invoiceFieldMap" class="invoice">
+		<result column="iParkInvListID" property="iparkinvlistid" jdbcType="VARCHAR" />			<!--编码   --> 
+		<result column="cComputer" property="ccomputer" jdbcType="VARCHAR" />			<!--计算机名   -->  
+		<result column="cInvType" property="cinvtype" jdbcType="VARCHAR" />			<!-- 发票类别    -->  
+		<result column="iInvCode" property="iinvcode" jdbcType="VARCHAR" />			 <!-- 发票号码     -->  
+		<result column="dDate" property="ddate" jdbcType="VARCHAR" />			 <!-- 使用时间     -->  
+		<result column="cInputMan" property="cinputman" jdbcType="VARCHAR" />		<!-- 收款人    -->  	 
+		<result column="nMoney" property="nmoney" jdbcType="VARCHAR" />			<!-- 金额     -->   
+		<result column="cCarName" property="ccarname" jdbcType="VARCHAR" />			<!-- 车号 -->    
+		<result column="cKpItem" property="ckpitem" jdbcType="VARCHAR" />			 <!-- 收费项目名称     -->  
+		<result column="dCancelDate" property="dcanceldate" jdbcType="VARCHAR" />			<!-- 作废日期    -->   
+		<result column="cCancelMan" property="ccancelman" jdbcType="VARCHAR" />			 <!-- 作废人-->   
+		<result column="cSource" property="csource" jdbcType="VARCHAR" />			<!-- 来源  -->   
+		<result column="iID" property="iid" jdbcType="VARCHAR" />			<!-- 编码   -->   
+		<result column="cUploadCancelState" property="cuploadcancelstate" jdbcType="VARCHAR" />			<!-- 上传发票作废返回的状态  00 作废成功 01 作废失败    -->  
+		<result column="cUploadState" property="cuploadstate" jdbcType="VARCHAR" />			<!--发票上传状态  00 上传成功空  01 上传失败    -->    
+		<result column="dUploadDate" property="duploaddate" jdbcType="VARCHAR" />			 <!--  认证日期    --> 
+		<result column="cNetworkAcceptNumber" property="cnetworkacceptnumber" jdbcType="VARCHAR" />			<!-- 网络受理号 或错误    -->   
+	</resultMap>
+	<!--
+	 uploadInvoice 
+	 根据id获得用户对象 
+	-->
+	<select id="iBatisSelectInvoiceByCUploadState" resultMap="invoiceFieldMap">
+		select top 1 * from TParkInvList where cUploadState is null or cUploadState='01' 
+	</select> 
+	
+	<update id="iBatisUpdateTParkInvListByinvoiceCode" parameterClass="java.util.HashMap">
+		update TParkInvList set cUploadState=#cuploadstate:VARCHAR#,
+				dUploadDate=#duploaddate:VARCHAR#,cNetworkAcceptNumber=#cnetworkacceptnumber:VARCHAR# 
+			where iInvCode=#invoicecode#
+	</update>
+	<!--
+	 uploadInvoice 
+	
+	 invalidInvoice 
+	 根据发票号码获取发票对象 
+	-->
+	<select id="iBatisSelectinvalidInvoiceByCIinvCode"  parameterClass="java.lang.String" resultMap="invoiceFieldMap">
+		select * from TParkInvList where iInvCode =#iInvCode#  and cuploadstate='00'
+	</select>
+	<!--
+	 更新发票作废后状态 
+	-->
+	<update id="iBatisUpdateinvalidInvoiceByCIinvCode"  parameterClass="java.util.HashMap" >
+		update  TParkInvList set  dCancelDate=#dcanceldate#,cUploadCancelState="cuploadcancelstate"  
+			where  iInvCode=#invoicecode#
+	</update>
+	 
+ </sqlMap>

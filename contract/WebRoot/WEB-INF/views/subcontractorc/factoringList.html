@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+ 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="pragma" content="no-cache"/>
+    <meta http-equiv="Cache-Control" content="no-cache,must-revalidate"/>
+    
+    <title>银行保理管理</title>
+	
+	<link href="../css/webui/main.css" rel="stylesheet" />
+		
+    <script src="../js/jquery/jquery-1.8.3.min.js" type="text/javascript"></script>
+    <script src="../js/sys/webui/contract/header.js"></script>   
+    <script src="../js/sys/webui/logo.js"></script>   	 
+	
+    <link href="../js/sys/ymPrompt/skin/ch/ymPrompt.css" rel="stylesheet" />
+	<link href="../css/webui/hgrid.css" rel="stylesheet" />
+	<link href="../js/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" type="text/css" />
+	
+	<script src="../js/sys/ymPrompt/ymPrompt.js" type="text/javascript"></script>
+	<script src="../js/sys/webui/hgrid.js" type="text/javascript"></script>
+	<script src="../js/sys/webui/contract/left.js" type="text/javascript"></script>
+	<script type="text/javascript" src="../js/sys/DatePicker/WdatePicker.js"></script>
+	<!-- <script src="../js/themes/waybillc/waybill_add.js"  type="text/javascript"></script> -->
+	<link href="../css/webui/commonPage.css" rel="stylesheet" />
+	<script type="text/javascript" src="../js/themes/subcontractorc/factoringList.js"></script>
+	<script type="text/javascript" src="../js/sys/webui/SelectSimu.js"></script>
+	<style>
+			.btn{
+			  	display: inline-block;
+			 	  position: relative;
+			 	  margin: 0px;
+				  text-align: center;
+			  	  text-decoration: none;
+			     font: bold 12px/25px Arial, sans-serif;
+			     text-shadow: 1px 1px 1px rgba(255,255,255, .22);
+			     -webkit-border-radius: 2px;
+			     -moz-border-radius: 2px;
+			     border-radius: 2px;
+			}
+			#btn_add{
+				width: 86px;
+				height: 27px;
+				line-height: 24px;
+				cursor: pointer;
+				background-color: #ef6d21;color:#ffffff;
+				font-weight: bold;border: none;
+				margin-left:0px; 
+				border-right-width: 0px;
+			}
+			@-moz-document url-prefix()
+			{
+				#btn_add {
+					width: 86px;
+					height: 27px;
+					line-height: 24px;
+					cursor: pointer;
+					background-color: #ef6d21;color:#ffffff;
+					font-weight: bold;border: none;
+					margin-left:47px; 
+					border-right-width: 0px;
+			 	}
+			}
+			#btn_add:hover{
+				height: 27px;
+				line-height: 24px;
+				cursor: pointer;
+				background-color: #ec6110;color:#ffffff;
+			}
+		</style>
+	<script type="text/javascript">
+		$(function(){
+			$(".com_input").val("");
+			$(".select").val("");
+			f_hgrid_ini();
+			$("#pagecode").val("1");
+			$('.status').SelectSimu({
+				width : 110,
+				zIndex : 1,
+				listNum : 3,
+				listValue : ['0','1','2'],
+				listOption : ['全部','启用','停用'],
+				imgSrc : '../imgs/sys/icon_down.png'
+			});
+ 			var status = $('.status div span').text();
+ 			if(status=="全部"){
+ 				status="";
+ 			}
+ 			var topartyname =$("#topartyname").val();
+			var params="organization="+topartyname+"&status="+status+"&partytype=分包";
+			f_hgrid_json(params);
+			$('input').keydown(function(e){
+				if(e.keyCode==13){
+				 	f_searchclick();
+				}
+			});
+		});
+	</script>
+ </head>
+  
+  <body>
+    	<!-- 顶部 --开始  此处须由js动态加入-->
+		<div id="header" class="c-header" >
+	
+		</div>
+		<!-- 顶部 --结束-->
+	
+		<!-- LOGON --开始   此处须由js动态加入-->
+		<div id="logo" class="c-logo" >
+		
+		</div>
+	<!-- LOGON --结束-->
+
+	<div id="main" class="c-main">
+		
+  		<div id="left" class="c-left">
+			<div id="accordion"> 
+			</div>  
+		</div>
+  		<div id="right" class="c-right">
+  				<div class="crumbs fn-mt10 fn-cGray3">
+						<span class="house"></span>
+						<span class="links"><a href="../logincs/index_main" class="fn-cBlue">首页</a>
+						<span class="fn-ml5 fn-mr5">&gt;</span><b>银行保理管理</b></span>
+				</div>
+				<div class="fgxDiv"></div>
+				<table class="formTable" style="width:820px;">
+					<tr>
+						<td class="rightTd" width="80px">分包商名称</td>
+						<td width="120px"><input id="topartyname" type="text" class="com_input"/></td>
+						<td class="rightTd" width="80px">保理状态</td>
+						<td width="120px">
+							<div class="status"></div>
+						</td>
+						<td width="210px">
+						<button class="btn-white fn-noborder" style="margin-left: 20px;" onclick="f_searchclick()">查询</button>
+						</td>
+						<td width="210px">
+						<input type="button" class="btn" id="btn_add" style="margin-left: 20px;" value="新增" onclick="f_add()"/> 
+						</td>
+					</tr>
+				</table>
+	        	<table id="hgrid" cellspacing="0" ></table>
+       		</div>
+  		</div>
+  </body>
+</html>

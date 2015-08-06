@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.xtgl.dao.BusXtglQyrydjMapper">
+	<select id="selectXtszPage" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.XtszDomain">
+		SELECT A.CZY_DJXH AS czyDjxh,
+		       A.MC AS mc,
+		       A.QY_ZCXH AS qyZcxh,
+		       A.QYBM AS qybm,
+		       A.ZH AS zh,
+		       A.PWD AS pwd,
+		       A.SJHM AS sjhm,
+		       A.SJDH AS sjdh,
+		       A.BGDH AS bgdh,
+		       A.BGDHAO AS bgdhao,
+		       A.JTDH AS jtdh,
+		       A.QQ AS qq,
+		       A.MSN AS msn,
+		       A.EMAIL AS email,
+		       A.XTGLYBZ AS xtglybz,
+		       A.RYLB_DM AS rylbDm,
+		       A.DLYZFS_DM AS dlyzfsDm,
+		       A.QYBZ AS qybz,
+		       A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       A.QX_JGBM AS qxJgbm,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM QY_RYDJ A 
+		  WHERE A.YXBZ='Y' 
+
+		  $hstOrderStr$
+    </select>
+    
+    <select id="selectXtszAll" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.XtszDomain">
+		SELECT A.CZY_DJXH AS czyDjxh,
+		       A.MC AS mc,
+		       A.QY_ZCXH AS qyZcxh,
+		       A.QYBM AS qybm,
+		       A.ZH AS zh,
+		       A.PWD AS pwd,
+		       A.SJHM AS sjhm,
+		       A.SJDH AS sjdh,
+		       A.BGDH AS bgdh,
+		       A.BGDHAO AS bgdhao,
+		       A.JTDH AS jtdh,
+		       A.QQ AS qq,
+		       A.MSN AS msn,
+		       A.EMAIL AS email,
+		       A.XTGLYBZ AS xtglybz,
+		       A.RYLB_DM AS rylbDm,
+		       A.DLYZFS_DM AS dlyzfsDm,
+		       A.QYBZ AS qybz,
+		       A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       A.QX_JGBM AS qxJgbm,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM QY_RYDJ A 
+		  WHERE A.YXBZ='Y' 
+
+		  ORDER by A.CZY_DJXH ASC
+    </select>
+
+	<select id="getXtszRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.CZY_DJXH) 
+		  FROM QY_RYDJ A 
+		  WHERE A.YXBZ='Y' 
+
+    </select>
+    
+	<select id="getXtszBypwd" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		select count(*) from qy_rydj where czy_djxh = #czyDjxh# and pwd= #pwd#
+    </select>
+    
+	<select id="selectXtXtcsYx" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.XtszDomain">
+		select CSXH AS csxh ,CSMC AS csmc , SJXLB_DM AS sjxlbDm , XZXM_DM AS xzxmDm , CSMRZ AS csmrz ,SYSM As sysm from xt_xtcs where cslb_dm ='3' and yxbz='Y'
+	</select>  
+	
+	<select id="selectXtDmXzxm" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.XtszDomain">
+		select XZXM_DM AS xzxmDm ,XZXM_VALUE_DM AS xzxmValueDm, XZXM_VALUE_MC AS xzxmValueMc from dm_xzxm where yxbz ='Y' and xybz ='Y' order by pxxh
+	</select>  
+</sqlMap>

@@ -1,0 +1,68 @@
+/*regist
+#regist .mt{height:33px;background:url(i/tit_regist.jpg) repeat-x 0 -34px;}
+#regist .mt h2{float:left;height:33px;padding-left:15px;background:url(i/tit_regist.jpg) no-repeat 0 0;line-height:33px;}
+#regist .mt span{float:right;height:33px;line-height:33px;text-align:right;}
+#regist .mt b{float:right;width:10px;height:33px;background:url(i/tit_regist.jpg) no-repeat 0 -68px;}*/
+#regist .mc{padding:15px 20px 20px;border:solid #D1D1D1;border-width:0 1px 1px;}
+#regist .tab{height:29px;overflow:visible;padding-left:300px;margin-bottom:25px;border-bottom:1px solid #FFCC66;}
+#regist .tab li{width:102px;padding-top:3px;height:27px;font-size:14px;text-align:center;line-height:27px;color:#F79100;}
+#regist .tab .curr{position:relative;background:url(i/bg_regist.jpg) no-repeat 0 -83px;font-weight:bold;z-index:10;color:#a0410a;}
+#regist .tab .line{background:url(i/bg_shortcut_line.jpg) no-repeat right 7px;}
+#regist .tab a:link,#regist .tab a:visited{display:block;overflow:hidden;width:74px;height:23px;margin:0 auto;line-height:23px;}
+#regist .tab a:hover,#regist .tab a:active{background:url(i/bg_regist.jpg) no-repeat -167px 0;color:#fff;text-decoration:none;}
+*html #regist .tab{overflow:hidden;}
+#regist h3{border-top:1px solid #E7E7E7;padding:10px 0 16px 220px;}
+#regist .item{padding-top:5px;height:50px;line-height:26px;}
+#regist .item a:link,#regist .item a:visited{text-decoration:underline;}
+#regist .label{width:300px;text-align:right;font-size:14px;}
+#regist .label b{font-family:"宋体";margin-right:5px;font-weight:normal;}
+#regist .text{width:240px;height:16px;padding:4px 3px;border:1px solid #bbb;font-size:14px;font-family:arial,"宋体";}
+#regist .text-1{width:100px;}
+#regist .blank{width:16px;height:16px;margin:2px 5px 0;}
+#regist .pad{padding-right:10px;}
+#regist .mar{margin-right:10px;}
+#regist .img img{height:26px;margin:0 5px;}
+#regist .succeed{background:url(../../imgs/regc/right.png) no-repeat -2px -2px;}
+#regist .myerror{background:url(../../imgs/regc/error.png) no-repeat -2.6px -2px;}
+#regist .btn-regist{width:124px;height:32px;background-color:#aaa ;font-size:14px;font-weight:bold;color:#fff;}
+#regist .highlight1{border:1px solid #EFA100;outline:2px solid #FFDC97;*border:2px solid #ffcc66;*padding:3px 2px;}
+#regist .highlight2{border:1px solid #f00;outline:1px solid #FFC1C1;color:#f00;}
+#regist .pwdbg{background:#FFF8EB;}
+#regist .focus{color:#999;line-height:22px;*line-height:20px;}
+#regist select{margin-top:5px;}
+#regist .null,#regist .error{color:red;line-height:22px;*line-height:20px;}
+#regist .checkbox{margin-top:6px;*margin-top:2px;}
+#regist #referrer{color:#999;font-size:12px;}
+#pwdstrength{color:#999;line-height:22px;padding-right:10px;}
+#pwdstrength b{float:left;width:104px;height:13px;overflow:hidden;margin-top:5px;*margin-top:3px;}
+.strengthA b{background:url(../../imgs/regc/s1.png) no-repeat 0 0;}
+.strengthB b{background:url(../../imgs/regc/s2.png) no-repeat 0 0;}
+.strengthC b{background:url(../../imgs/regc/s3.png) no-repeat 0 0;}
+#protocol-con{width:600px;height:80px;margin:0 auto;border:1px solid #ccc;padding:8px;overflow-y:scroll;color:#666;}
+/*superior*/
+#superior{padding:30px 0 20px;background:url(i/bg_welcome_company.gif) no-repeat 20px 0;overflow:hidden;zoom:1;}
+#superior dl{float:left;width:270px;height:120px;padding:10px 20px;border-left:1px solid #E0E0E0;}
+#superior dl.fore{border-left:0;}
+#superior dl.fore dd{line-height:30px;}
+#superior dt{font-size:14px;font-weight:bold;margin-bottom:8px;}
+#superior dd{text-align:justify;color:#666;}
+#superior em{font-size:24px;color:#F79100;}
+/*-moz-*/
+@-moz-document url-prefix(){#regist .btn-regist{padding-bottom:5px;}}
+@-moz-document url-prefix(){#regist .checkbox{margin-top:7px;}}
+#protocol-con{
+	padding:10px;
+	border: 1px solid #CCCCCC;
+    color: #666666;
+    height: 80px;
+    margin: 0 auto;
+    overflow-y: scroll;
+    padding: 8px;
+    width: 600px;
+}
+#protocol-con h4{padding-bottom:10px;font-size:14px;text-align:center;}
+#protocol-con h5{padding:5px 0;text-indent:2em;}
+#protocol-con p{text-indent:2em;}
+#protocol-con em{font-style:italic;}
+#protocol-con span{text-decoration:underline;}
+#protocol-con strong{margin-right:5px;}

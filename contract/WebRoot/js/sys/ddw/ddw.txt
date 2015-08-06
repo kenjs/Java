@@ -1,0 +1,6 @@
+	弹出框
+	<script type='text/javascript' src='js/ddw/thickbox-compressed.js'></script>
+	
+	
+	 解决 IE6下select穿透 div等层
+  	<script type='text/javascript' src='js/ddw/jquery.bgiframe.min.js'></script>  

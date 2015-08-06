@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.bggl.dao.BgRcapMapper">
+
+    <!--根据主键取DOMAIN-->
+		<select id="selectBgRcapByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgRcapDomain">
+		select a.BG_DJXH as bgDjxh,a.CZY_DJXH as czyDjxh,a.RQ as rq,a.NR as nr,a.DX_FSXH as dxFsxh,
+		a.CKBZ as ckbz,a.YXBZ as yxbz,a.CJR_CZY_DJXH as cjrCzyDjxh,a.CJRQ as cjrq,a.XGR_CZY_DJXH as xgrCzyDjxh,
+		a.XGRQ as xgrq from BG_RCAP a  where a.YXBZ='Y'
+		<dynamic>
+			<isNotEmpty prepend="and" property="czyDjxh">
+				a.CZY_DJXH=#czyDjxh#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="rq">
+				a.RQ=TO_DATE(#rq#,'YYYY-MM-DD')
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="bgDjxh">
+				a.BG_DJXH=#bgDjxh#
+			</isNotEmpty>
+		</dynamic>
+		
+		 
+		</select>
+
+	<!--插入数据-->
+		<insert id="insertBgRcap"  parameterClass="com.cy.common.bo.BgRcap">
+		<selectKey keyProperty="bgDjxh" resultClass="java.lang.String" type="pre"> 
+			select SEQ_BG_DJXH.nextval as bgDjxh from dual 
+		</selectKey> 
+		insert into BG_RCAP(BG_DJXH,CZY_DJXH,RQ,NR,DX_FSXH,
+		CKBZ,YXBZ,CJR_CZY_DJXH,CJRQ,XGR_CZY_DJXH,
+		XGRQ)
+		values(#bgDjxh:String#,#czyDjxh:NUMERIC#,to_date(#rq:DATE#,'yyyy-MM-dd'),#nr:VARCHAR#,#dxFsxh:NUMERIC#,
+		#ckbz:VARCHAR#,#yxbz:VARCHAR#,#cjrCzyDjxh:NUMERIC#,to_date(#cjrq:DATE#,'yyyy-MM-dd'),#xgrCzyDjxh:NUMERIC#,
+		to_date(#xgrq:DATE#,'yyyy-MM-dd')) 
+		</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+        <update id="updateBgRcapByKey" parameterClass="com.cy.common.bo.BgRcap">
+        update BG_RCAP set BG_DJXH=#bgDjxh#,CZY_DJXH=#czyDjxh#,RQ=to_date(#rq#, 'YYYY-MM-DD'),NR=#nr#,DX_FSXH=#dxFsxh#,
+		CKBZ=#ckbz#,YXBZ=#yxbz#,CJR_CZY_DJXH=#cjrCzyDjxh#,CJRQ=to_date(#cjrq#, 'YYYY-MM-DD'),XGR_CZY_DJXH=#xgrCzyDjxh#,
+		XGRQ=to_date(#xgrq#, 'YYYY-MM-DD') where BG_DJXH=#bgDjxh#
+		</update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteBgRcapByKey" parameterClass="java.util.Map">
+		update BG_RCAP set yxbz='N' where BG_DJXH=#bgDjxh#
+    </delete>
+</sqlMap>

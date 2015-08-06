@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.driver.dao.DriverBusinessLineInfoDao">
+	<!-- 新增预约 -->
+	<insert id="insertDriverBusinessLineInfo" parameterType="DriverBusinessLineInfo" useGeneratedKeys="true" keyProperty="id">
+		insert into t_driver_business_line_info(DRIVER_ID,START_TIME,END_TIME,START_PROVINCE,
+			START_CITY,START_COUNTY,END_PROVINCE,END_CITY,END_COUNTY,QUOTE_FAIR,QUOTE_TYPE,START,
+			CREATE_TIME,MODIFY_TIME)
+		values(#{driverId},#{startTime},#{endTime},#{startProvince},#{startCity},#{startCounty},#{endProvince},
+			#{endCity},#{endCounty},#{quoteFair},#{quoteType},0,sysdate(),sysdate())
+	</insert>	
+	<!-- 修改预约 -->
+	<update id="updateDriverBusinessLineInfo" parameterType="DriverBusinessLineInfo">
+		update t_driver_business_line_info set 
+        <if test="startTime != null and startTime != '' ">
+            START_TIME = #{startTime},
+        </if>
+        <if test="endTime != null and endTime != ''">
+            END_TIME = #{endTime},
+        </if>
+        <if test="startProvince != null and startProvince != ''">
+            START_PROVINCE = #{startProvince},
+        </if>
+        <if test="startCity != null and startCity != ''">
+            START_CITY = #{startCity},
+        </if>
+        <if test="startCounty != null and startCounty != ''">
+            START_COUNTY = #{startCounty},
+        </if>
+        <if test="endProvince != null and endProvince != ''">
+            END_PROVINCE = #{endProvince},
+        </if>
+        <if test="endCity != null and endCity != ''">
+            END_CITY = #{endCity},
+        </if>
+        <if test="endCounty != null and endCounty != ''">
+            END_COUNTY = #{endCounty},
+        </if>
+        <if test="quoteFair != null and quoteFair != ''">
+            QUOTE_FAIR = #{quoteFair},
+        </if>
+        <if test="quoteType != null and quoteType != ''">
+            QUOTE_TYPE = #{quoteType},
+        </if>
+		MODIFY_TIME = sysdate()
+		where ID = #{id}
+	</update>
+	<!-- 删除预约 -->
+	<delete id="deleteDriverBusinessLineInfo" parameterType="string">
+		update t_driver_business_line_info set START = 1 where ID = #{id}
+	</delete>
+	<!-- 预约查询 -->
+	<select id="selectDriverBusinessLineInfoList" parameterType="string" resultType="DriverBusinessLineInfoDomain">
+		select ID as id,
+			 DRIVER_ID as driverId,
+		   	 START_PROVINCE as startProvince,
+			 START_CITY as startCity,
+			 END_PROVINCE as endProvince,
+			 END_CITY as endCity,
+			 START_TIME as startTime,
+			 END_TIME as endTime,
+			 QUOTE_FAIR as quoteFair,
+             QUOTE_TYPE as quoteType
+ 		from t_driver_business_line_info 
+ 			where DRIVER_ID = #{driverId}
+ 			and START = 0
+ 			and END_TIME <![CDATA[>=]]> DATE_FORMAT(SYSDATE(),'%Y-%m-%d')
+ 			order by MODIFY_TIME DESC LIMIT 3
+	</select>
+	<!-- 检索司机添加的预约数目 -->
+	<select id="selectDriverBusinessLineInfoCount" parameterType="string" resultType="integer">
+		select count(id) from t_driver_business_line_info where DRIVER_ID = #{driverId} and END_TIME  <![CDATA[>=]]> sysdate() and START = 0
+	</select>
+</mapper>

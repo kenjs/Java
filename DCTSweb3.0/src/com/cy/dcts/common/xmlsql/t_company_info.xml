@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="CompanyInfo" type="com.cy.dcts.common.bo.CompanyInfo"/><!-- 公司表 -->
+	
+	<resultMap class="CompanyInfo" id="company_info_result">
+		<result property="id" column="ID"/>
+		<result property="companyName" column="COMPANY_NAME"/>
+		<result property="companyProvince" column="COMPANY_PROVINCE"/>
+		<result property="companyCity" column="COMPANY_CITY"/>
+		<result property="companyCounty" column="COMPANY_COUNTY" />
+		<result property="companyAddress" column="COMPANY_ADDRESS" />
+		<result property="businessLicence" column="BUSINESS_LICENCE" />
+		<result property="organizationCode" column="ORGANIZATION_CODE" />
+		<result property="businessImages" column="BUSINESS_IMAGES" />
+		<result property="contactName" column="CONTACT_NAME" />
+		<result property="contactTelephone" column="CONTACT_TELEPHONE" />
+		<result property="deletedFlag" column="DELETED_FLAG"/>
+		<result property="createTime" column="CREATE_TIME" />
+		<result property="modifyTime" column="MODIFY_TIME" />
+		<result property="organizationImages" column="ORGANIZATION_IMAGES" />
+		<result property="userOrigin" column="USER_ORIGIN" />
+		<!--20140808(货主版新增字段1个) 所属物流企业标识（父级0，子级为父级id） -->
+		<result property="parentCompanyId" column="PARENT_COMPANY_ID" />
+		<result property="companyType" column="COMPANY_TYPE" />
+	</resultMap>
+	
+	<!-- 根据公司名称查询 -->
+	<select id="query_company_info" parameterClass="map" resultMap="company_info_result">
+		select * from t_company_info t where t.USER_ORIGIN = 0 
+		<dynamic prepend="and "> 
+				<isNotEmpty property="id" prepend="and "> ID = #id# </isNotEmpty>
+				<isNotEmpty property="companyName" prepend="and "> COMPANY_NAME = #companyName# </isNotEmpty>
+				<isNotEmpty property="deletedFlag" prepend="and "> DELETED_FLAG = #deletedFlag# </isNotEmpty>
+				<isNotEmpty property="parentCompanyId" prepend="and "> PARENT_COMPANY_ID = #parentCompanyId# </isNotEmpty>
+				<isNotEmpty property="companyType" prepend="and "> COMPANY_TYPE = #companyType# </isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<!-- 根据公司id查询 -->
+	<select id="query_company_info_by_id" parameterClass="String" resultMap="company_info_result">
+		select * from t_company_info t where ID = #id#
+	</select>
+	
+	 <!-- 新增公司信息 -->
+	<insert id="insert_company_info" parameterClass="CompanyInfo">
+		INSERT INTO t_company_info(
+			COMPANY_NAME,DELETED_FLAG,USER_ORIGIN,CREATE_TIME,MODIFY_TIME
+		)VALUES(
+			#companyName#,
+			#deletedFlag#,
+			#userOrigin#,
+			sysdate(),
+			sysdate()
+		)
+		<selectKey resultClass="String" keyProperty="id">
+   			select last_insert_id() as id
+  		</selectKey>
+	</insert>
+	
+	
+	<!-- 新增公司信息 -->
+	<insert id="insert_son_company_info" parameterClass="CompanyInfo">
+		INSERT INTO t_company_info(
+			COMPANY_NAME,DELETED_FLAG,USER_ORIGIN,CREATE_TIME,MODIFY_TIME,PARENT_COMPANY_ID,COMPANY_TYPE,
+			COMPANY_PROVINCE,COMPANY_CITY,COMPANY_COUNTY,COMPANY_ADDRESS,CONTACT_NAME,CONTACT_TELEPHONE
+		)VALUES(
+			#companyName#,
+			#deletedFlag#,
+			#userOrigin#,
+			sysdate(),
+			sysdate(),
+			#parentCompanyId#,
+			#companyType#,
+			#companyProvince#,
+			#companyCity#,
+			#companyCounty#,
+			#companyAddress#,
+			#contactName#,
+			#contactTelephone#
+			
+		)
+		<selectKey resultClass="String" keyProperty="id">
+   			select last_insert_id() as id
+  		</selectKey>
+	</insert>
+	
+	
+	<!-- 完善公司信息  -->
+	<update id="modify_company_info_by_id" parameterClass="CompanyInfo">
+		UPDATE t_company_info T SET 
+			<dynamic>
+				<isNotNull property="companyProvince">
+					COMPANY_PROVINCE = #companyProvince#,
+				</isNotNull>
+				<isNotNull property="companyCity">
+					COMPANY_CITY = #companyCity#,
+				</isNotNull>
+				<isNotNull property="companyCounty">
+					COMPANY_COUNTY = #companyCounty#,
+				</isNotNull>
+				<isNotNull property="businessImages">
+					BUSINESS_IMAGES = #businessImages#,
+				</isNotNull>
+				<isNotNull property="contactName">
+					CONTACT_NAME = #contactName#,
+				</isNotNull>
+				<isNotNull property="deletedFlag">
+					DELETED_FLAG = #deletedFlag#,
+				</isNotNull>
+				<isNotNull property="companyAddress">
+					COMPANY_ADDRESS = #companyAddress#,
+				</isNotNull>
+				<isNotNull property="businessLicence">
+					BUSINESS_LICENCE = #businessLicence#,
+				</isNotNull>
+				<isNotNull property="organizationCode">
+					ORGANIZATION_CODE = #organizationCode#,
+				</isNotNull>
+				<isNotNull property="contactTelephone">
+					CONTACT_TELEPHONE = #contactTelephone#,
+				</isNotNull>
+				<isNotNull property="organizationImages">
+					ORGANIZATION_IMAGES = #organizationImages#,
+				</isNotNull>
+			</dynamic>
+			MODIFY_TIME = sysdate()
+		 WHERE T.ID = #id#
+	</update>
+	
+	
+	<!-- 修改子公司  -->
+	<update id="modify_son_company_info_by_id" parameterClass="CompanyInfo">
+		UPDATE t_company_info T SET 
+			COMPANY_PROVINCE = #companyProvince#,
+			COMPANY_CITY = #companyCity#,
+			COMPANY_COUNTY = #companyCounty#,
+			COMPANY_ADDRESS = #companyAddress#,
+			CONTACT_NAME = #contactName#,
+			CONTACT_TELEPHONE = #contactTelephone#,
+			MODIFY_TIME = sysdate()
+		 WHERE T.ID = #id# and T.PARENT_COMPANY_ID = #parentCompanyId#
+	</update>
+	<!-- 删除子公司  -->
+	<update id="delete_son_company_info_by_id" parameterClass="CompanyInfo">
+		UPDATE t_company_info T SET 
+			DELETED_FLAG = #deletedFlag#,
+			MODIFY_TIME = sysdate()
+		 WHERE T.ID = #id#
+	</update>
+</sqlMap>

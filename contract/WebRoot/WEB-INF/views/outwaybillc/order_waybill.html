@@ -1,0 +1,388 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		<title>确认转单</title>
+		
+		
+		
+		<link href="../css/webui/main.css" rel="stylesheet" type="text/css"/>
+		<link href="../css/webui/commonPage.css" rel="stylesheet" type="text/css" />
+		<link href="../css/themes/waybill/waybill_add.css" rel="stylesheet" type="text/css"/>
+		
+		
+		<script src="../js/jquery/jquery-1.8.3.min.js" type=text/javascript></script>
+		<script src="../js/sys/system.js" type="text/javascript"></script>
+		<script src="../js/sys/webui/contract/header.js"></script>
+		<script src="../js/sys/webui/logo.js"></script>
+		<script src="../js/sys/webui/contract/left.js" type="text/javascript"></script>
+		<script type="text/javascript" src="../js/sys/DatePicker/WdatePicker.js"></script>
+		<script type="text/javascript" src="../js/themes/outwaybillc/order_waybill.js"></script>
+		<!-- 地区插件 -->
+		<link href="../js/sys/CityPicker/cityLayout.css" rel="stylesheet" type="text/css" />
+		<link href="../js/sys/CityPicker/buju.css" rel="stylesheet" type="text/css" />
+		<!-- 地区插件 -->
+		<script type="text/javascript" src="../js/sys/ymPrompt/ymPrompt.js"></script>
+		<link href="../js/sys/ymPrompt/skin/ch/ymPrompt.css" rel="stylesheet" />
+		<script type="text/javascript" src="../js/uploadify/jquery.uploadify.min.js"></script>   
+		<script type="text/javascript" src="../js/themes/waybillc/frompartyIdList.js"></script>
+		<script type="text/javascript" src="../js/themes/waybillc/consignorlinkmanList.js"></script>
+		<script type="text/javascript" src="../js/themes/waybillc/consigneeList.js"></script>
+		<script type="text/javascript" src="../js/themes/waybillc/goodsnameList.js"></script>
+		<script type="text/javascript" src="../js/themes/waybillc/topartyNameList.js"></script>
+		<style type="text/css">
+			
+		body{/**font-size:12px;*/color:#000;}
+		
+		a:VISITED {
+			color: #1560ea;
+		}
+		a:hover{
+			color: #ec6110;
+			text-decoration: underline;
+		}
+		.g_d{width:95px; height:30px; cursor:pointer;}
+		#overlay {
+		    background: #000;
+		    filter: alpha(opacity=50); /* IE的透明度 */
+		    opacity: 0.5;  /* 透明度 */
+		    position: absolute;
+		    top: 0px;
+		    left: 0px;
+		    width: 100%;
+		    z-index: 100; /* 此处的图层要大于页面 */
+		    text-align: center;
+		    padding-top: 350px; 
+		    display: none;
+		}
+		#pic{
+			filter: alpha(opacity=100); /* IE的透明度 */
+		    opacity: 1;  /* 透明度 */
+		}
+		</style>
+		
+		
+</head>
+
+<body>
+	<!-- 顶部 --开始  此处须由js动态加入-->
+	<div id="header" class="c-header" >
+
+	</div>
+	<!-- 顶部 --结束-->
+
+	<!-- LOGON --开始   此处须由js动态加入-->
+	<div id="logo" class="c-logo" >
+	
+	</div>
+	<!-- LOGON --结束-->
+	<div id="overlay"><img id="pic" border="0" src="../imgs/sys/loading.gif"/></div>
+	<div id="main" class="c-main">
+		<div id="left" class="c-left">
+			<div id="accordion">
+			</div>  
+		</div>
+    	<div id="right" class="c-right">
+  			<div class="crumbs fn-mt10 fn-cGray3">
+				<span class="house"></span>
+				<span class="links"><a href="../logincs/index_main" class="fn-cBlue">首页</a>
+				<span class="fn-ml5 fn-mr5">&gt;</span><a href="../outwaybillcs/orderManage?order=25" class="fn-cBlue">订单管理</a>
+				<span class="fn-ml5 fn-mr5">&gt;</span><b>确认转单</b></span>
+			</div>
+			<div class="fgxDiv"></div>
+			<!-- 右边新增内容开始 -->
+			<table width="820px" class="table1" border="0" cellspacing="0" cellpadding="0">
+				<tr class="tr2">
+					<td align="right" style="width:60px;">运单号：
+					<input type="hidden" name="waybillid" id="waybillid" value="" /><!-- 主键id -->
+					<input type="hidden" name="partyid" id="partyid" value="" /><!-- 总包partyid -->
+					<input type="hidden" name="waybillnumber" id="waybillnumber" value="" /><!-- 运单号 -->
+					<input type="hidden" name="status" id="status" value="" /><!-- 运单状态 -->
+					<input type="hidden" name="sourcesystem" id="sourcesystem" value="" /><!-- 运单状态 -->
+					<input type="hidden" name="primarykeyid" id="primarykeyid" value="" /><!-- 运单状态 -->
+					</td>
+					<td align="left" style="width:130px;" id="waybillnumberDiv"></td>
+					<td align="right" style="width:75px;">客户单号&nbsp;</td>
+					<td align="left"   colspan="3" style="width:315px;"><input type="text" style="width:120px;" class="com_input" id="clientnumber" name="clientnumber" onchange="input_onfocus(this)" value="" /></td>
+					<td align="right" style="width:120px;">托运日期&nbsp;</td>
+					<td align="left" style="width:120px;"><input type="text" name="consigndate" style="width:110px;" id="consigndate" class="Wdate comDate"  onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"  style="width: 100px;" /></td>
+				</tr>
+				<tr>
+					<td align="right" style="width:60px;"><span style='color: red;margin-right:1px;'>*</span>发货方&nbsp;</td>
+					<td align="left" style="width:130px;">
+						<input name="frompartyid" id="frompartyid" type="text" style="width:120px;" class="com_input" onchange="f_check_frompartyNAME()" onfocus="onFocus(this,'发货方')" /><!-- onblur="f_check_frompartyid(this)" -->
+  						<span class="frompartyrealname" style="display: none; color: Red;font-size: 10px;"></span>
+  					    <div id="auto"></div>  
+					</td>
+					<td align="right" style="width:75px;"><span style='color: red;margin-right:1px;'>*</span>联系人&nbsp;</td>
+					<td align="left" style="width:125px;">
+						<input name="consignorlinkman" id="consignorlinkman" type="text" style="width:120px;" class="com_input" onfocus="onFocues(this)"/>
+  						<span class="frompartyrealname" style="display: none; color: Red;font-size: 10px;"></span>
+  					    <div id="auto"></div> 
+					</td>
+					<td align="right" style="width:65px;">联系电话&nbsp;</td>
+					<td align="left" style="width:125px;"><input type="text" style="width:120px;" class="com_input" id="consignortelephonenumber" name="consignortelephonenumber" onchange="input_onfocus(this)" value="" /></td>
+					<td align="right" >手机&nbsp;</td>
+					<td align="left"><input type="text" maxlength="11" style="width:120px;" class="com_input" id="consignormobilenumber" name="consignormobilenumber" onchange="input_onfocus(this)" value="" /></td>
+				</tr>
+				<tr class="tr2">
+					<td align="right"><span style='color: red;margin-right:1px;'>*</span>发货地&nbsp;&nbsp;</td>
+					<td align="left">
+						<input onchange="input_onfocus(this)" onblur="consignor_cityDistance('','')" style="background:transparent; border:1px solid #CCCCCC;width:123px;height:25px;font-size:12px;padding-left:0px;text-align:left; line-height:25px;margin-top: 8px;margin-right: 8px;margin-bottom: 8px;" name="consignorprovince" id="consignorprovince" autocomplete="off" type="text" value="请选择/输入城市名称" class="city_input  inputFocus proCityQueryAll proCitySelAll" ov="请选择/输入城市名称" />
+					</td>
+					<td align="right">详细地址&nbsp;</td>
+					<td align="left" colspan="3"><input type="text" style="width:312px;" class="com_input" id="consignortown" name="consignortown" onchange="input_onfocus(this)" value="" /></td>
+					<td align="right"><button onclick="f_save_arddes();" class="g_d" style="margin-left: 5px;">新增发货地址</button></td>
+					<td align="right"><button onclick="f_save_arddes();" class="g_d" style="margin-left: 5px;">新增收货地址</button></td>
+				</tr>
+				<tr>
+					<td align="right"><span style='color: red;margin-right:1px;'>*</span>收货方&nbsp;</td>
+					<td align="left">
+						<input name="consignee" id="consignee" type="text" style="width:120px;" class="com_input" onfocus="onFocuesg(this)"/>
+  						<span class="frompartyrealname" style="display: none; color: Red;font-size: 10px;"></span>
+  					    <div id="auto"></div> 
+					</td>
+					<td align="right"><span style='color: red;margin-right:1px;'>*</span>联系人&nbsp;</td>
+					<td align="left"><input type="text" style="width:120px;" class="com_input" id="consigneelinkman" name="consigneelinkman" value="" onchange="input_onfocus(this)"/></td>
+					<td align="right" >联系电话&nbsp;</td>
+					<td align="left"><input type="text" style="width:120px;" class="com_input" id="consigneetelephonenumber" name="consigneetelephonenumber" onchange="input_onfocus(this)" value="" /></td>
+					<td align="right">手机&nbsp;</td>
+					<td align="left"><input type="text" maxlength="11" style="width:120px;" class="com_input" id="consigneemobilenumber" name="consigneemobilenumber" onchange="input_onfocus(this)" value="" /></td>
+				</tr>
+				<tr>
+					<td align="right"><span style='color: red;margin-right:1px;'>*</span>收货地&nbsp;</td>
+					<td align="left"><input onchange="input_onfocus(this)" onblur="consignor_cityDistance('','')" style="background:transparent; border:1px solid #CCCCCC;width:123px;height:25px;font-size:12px;padding-left:0px;text-align:left; line-height:25px;margin-top: 8px;margin-right: 8px;margin-bottom: 8px;" name="consigneeprovince" id="consigneeprovince" autocomplete="off" type="text" value="请选择/输入城市名称" class="city_input  inputFocus proCityQueryAll proCitySelAll" ov="请选择/输入城市名称" /></td>
+					<td align="right"><span style='color: red;margin-right:1px;'>*</span>详细地址&nbsp;</td>
+					<td align="left" colspan="3"><input style="width:312px;" class="com_input" type="text" onchange="input_onfocus(this)"  id="consigneetown" name="consigneetown" value="" /></td>
+					<td align="right">城区间距离(公里)&nbsp;</td>
+					<td align="left"><input type="text" style="width:120px;" class="com_input" id="distance" name="distance" value="" /></td>
+				</tr>
+			</table>
+			<table id="hgrid" border="0" cellspacing="0" style="width:820px;"  cellpadding="0">
+				<tr>
+					<th style="text-align:center;" width="90px" height="10px" scope="col"><span style='color: red;margin-right:5px;'>*</span>货物名称</th>
+					<th style="text-align:center;" width="70px" height="10px" scope="col">货物类型</th>
+					<th style="text-align:center;" width="70px" height="10px" scope="col">规格</th>
+					<th style="text-align:center;" width="70px" height="10px" scope="col">型号</th>
+					<th style="text-align:center;" width="60px" height="10px" scope="col"><span style='color: red;margin-right:5px;'>*</span>数量</th>
+					<th style="text-align:center;" width="60px" height="10px" scope="col">包装</th>
+					<th style="text-align:center;" width="75px" height="10px" scope="col">重量</th>
+					<th style="text-align:center;" width="70px" height="10px" scope="col">重量单位</th>
+					<th style="text-align:center;" width="70px" height="10px" scope="col">体积</th>
+					<!--  <th width="90px" height="10px" scope="col">声明价值/元</th>-->
+					<th style="text-align:center;" width="65px" height="10px" scope="col">计费方式</th>
+					<th style="text-align:center;" width="45px" height="10px" scope="col">操作</th>
+				</tr>
+				<tr style="height:40px;">
+					<td>
+						<input type="hidden" name="goodsid" id="goodsid" value="" /><!--主键ID -->
+						<input type="hidden" name="unitWeight" id="unitWeight" value="0" /><!-- 单位重量公斤 -->
+						<input type="hidden" name="unitVolume" id="unitVolume" value="0"/><!-- 单位体积M3 -->
+						<input name="goodsname" id="goodsname" style="width:85px;" type="text" class="com_input" onfocus="onFocues_goods(this,'')" onblur="consignor_goods(this,'')"/><!-- onfocus="input_onfocus(this)" onblur="input_onblur(this)" -->
+  						<span class="frompartyrealname" style="display: none; color: Red;font-size: 10px;"></span>
+  					    <div id="auto"></div> 				
+					</td>
+					<td>
+						<select style="width:70px; height: 25px;padding-top:4px;" id="goodstype" name="goodstype" class=""><!-- 货物类型 -->
+							<option value=''></option>
+						</select>
+					</td>
+					<td><input style="width:65px;" class="com_input" type="text" name="spec" id="spec" value=""/></td><!-- 规格 -->
+					<td><input style="width:65px;" class="com_input" type="text" name="model" id="model" value=""/></td><!-- 型号 -->
+					<td><input style="width:55px;" class="com_input" type="text" name="num" id="num" value="" onfocus="input_onfocuses('num')" onkeyup="myNumberictow(this)" onblur="num_goods(this,'')"/></td><!-- 数量 -->
+					<td>
+						<select style="width:60px;height: 25px;padding-top:4px;" id="packagename" name="packagename" class="">
+							<option value=''></option>
+						</select><!-- 包装 -->
+					</td>
+					<td><input style="width:70px;" class="com_input" type="text" name="weight" id="weight" value="" onkeyup="myNumberic(this)" onblur="num_count()"/></td><!-- 重量 -->
+					<td>
+						<select style="width:70px;height: 25px;padding-top:4px;" id="weightType" name="weightType" class="">
+							<option value=''></option>
+						</select><!-- 重量单位 -->
+					</td>
+					<td><input style="width:65px;" class="com_input" type="text" name="volume" id="volume" value="" onkeyup="myNumberic(this)" onblur="num_count()"/></td><!-- 体积-->
+					<!-- <td><input style="width:85px;" class="com_input" type="text" name="claimvalue" id="claimvalue" value="" onblur="num_count()"/></td>声明价值 -->
+					<td>
+						<select style="width:65px;height: 25px;padding-top:4px;" id="measuretype" name="measuretype" class="">
+							<option value=''></option>
+						</select><!-- 计费方式 -->
+					</td>
+					<td><a style="margin-left:20px;" href="javascript:void(0)" onclick="tabendAdd()">添加</a></td>
+				</tr>
+			</table>
+			<table  border="0" style="height:30px;background-color:#dcdcdc;width:823px;"  cellspacing="0" cellpadding="0">
+				<tr>
+					<th width="96px" scope="col">合计</th>
+					<th width="76px" scope="col"></th>
+					<th width="76px" scope="col"></th>
+					<th width="88px" scope="col"></th>
+					<th width="66px" align="center" scope="col" id="numZ">0</th>
+					<th width="66px" scope="col"></th>
+					<th width="124px" colspan="2"   align="left" scope="col" id="weightZ">0   公斤</th>
+					<th width="120px" colspan="2" align="center" scope="col" id="volumeZ">0立方</th>
+					<!-- <th width="90px" align="center" scope="col" id="claimvalueZ" >0</th>-->
+					<th width="45px" scope="col"></th>
+				</tr>
+			</table>
+			<table class="table3" width="820px" border="0" cellspacing="0" cellpadding="0">
+				<tr>
+					<td align="right" style="width:90px">结算方式 &nbsp;</td>
+					<td align="left" style="width:115px">  
+						<select style="width:100px;height: 25px;padding-top:4px;" name="settletype" id="settletype" >
+					    	<option selected="selected" value="0"></option>
+					    </select>
+					</td>
+					<td align="right" style="width:65px">收货方式&nbsp;</td>
+					<td align="left" style="width:85px">
+					<select style="width:80px;height: 25px;padding-top:4px;" name="receivetype" id="receivetype" >
+					    	<option selected="selected" value="0"></option>
+					    </select>
+					</td>
+					<td align="right" style="width:65px">到货方式&nbsp;</td>
+					<td align="left" style="width:85px">
+						<select style="width:80px;height: 25px;padding-top:4px;" name="arrivetype" id="arrivetype" >
+					    	<option selected="selected" value="0"></option>
+					    </select>
+					</td>
+					<td align="right" style="width:65px">回单方式&nbsp;</td>
+					<td align="left" style="width:85px">
+					<select style="width:80px;height: 25px;padding-top:4px;" name="backbilltype" id="backbilltype" >
+					    	<option selected="selected" value="0"></option>
+					    </select>
+					</td>
+					<td align="right" style="width:85px">回单张数&nbsp;</td>
+					<td align="left" style="width:80px"><input type="text" class="com_input" style="width:80px;" id="backbillnum" name="backbillnum" value="" /></td>
+					</tr>
+					<tr class="tr3">
+					<td align="right">备注&nbsp;</td>
+					<td colspan="9" align="left"><input style="width:745px;" class="com_input" type="text"  id="memo" name="memo" value="" /></td>
+				</tr>
+				<tr class="tr3">
+					<td align="right">分派分包商&nbsp;</td>
+					<td align="left">
+					<input name="topartyid" id="topartyid" myid="" type="text" style="width:110px;" class="com_input" onfocus="onFocu_toparty(this,'分包')"/>
+  					<span class="frompartyrealname" style="display: none; color: Red;font-size: 10px;"></span>
+  					<div id="auto"></div> 
+					<td align="right">运输方式&nbsp;</td> 
+					<td align="left">
+						<select style="width:80px;height: 25px;padding-top:4px;" name="shiptype" id="shiptype" >
+					    	<option selected="selected" value="0"></option>
+					    </select></td>
+					<td align="right">紧急程度&nbsp;</td>
+					<td align="left">
+						<select style="width:80px;height: 25px;padding-top:4px;" name="urgencydegree" id="urgencydegree" >
+					    	<option selected="selected" value="0"></option>
+					    </select></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td align="right">录单人：<input type="hidden" name="inputman" id="inputman" value="" /><input type="hidden" name="operatorid" id="operatorid" value="" /><!-- 录单人 --></td>
+					<td align="left" id="inputmanDiv"></td>
+					<td></td> 
+					<td></td>
+					<td align="right">审核人：</td>
+					<td align="left"></td>
+					<td></td>
+					<td align="right">录单时间：<input type="hidden" name="inputdate" id="inputdate" value="" /><!-- 录单时间 --></td>
+					<td align="left" colspan="2" id="inputdateDiv"></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td> 
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td colspan="10">
+					<!-- 
+						<input id="btnadd" name="btnadd" class="btn" value="复制新增" type="button" onclick='f_insertclick()' style="margin-left: 30px;"/>
+						<input id="btnadd" name="btnadd" class="btn" value="新增" type="button" onclick='insertclick()' style="margin-left: 30px;"/>
+						 -->
+						<input id="btnadd" name="btnadd" class="btn" value="保存" type="button" onclick="save('确定保存运单吗?')" style="margin-left: 30px;"/>
+						<input id="btnadd" name="btnadd" class="btn" value="返回列表" type="button" onclick='f_fanhui()' style="margin-left: 30px;"/>
+						<!--  
+						<button class="btn_add" onclick="f_insertclick()" style="margin-left: 30px;">复制新增</button>
+						<button class="btn_add" onclick="insertclick()" style="margin-left: 30px;">新增</button>
+						<button class="btn_add" onclick="save('确定保存订单吗?')" id="buttonSave" style="margin-left: 30px;" >保存</button>
+						<button class="btn_add" onclick="f_insertclick()" style="margin-left: 30px;">打印运单</button>
+						<button class="btn_add" onclick="f_fanhui()" style="margin-left: 30px;">返回列表</button>-->
+					</td>
+				</tr>
+			</table>
+			<!-- 右边新增内容结束 -->
+       	</div>
+	</div>
+<!--弹出省省市-->
+<div class="provinceCityAll">
+  <div class="tabs clearfix">
+    <ul class="">
+      <li><a href="javascript:" class="current" tb="hotCityAll">热门城市</a></li>
+      <li><a href="javascript:" tb="provinceAll">省份</a></li>
+      <li><a href="javascript:" tb="cityAll" id="cityAll">城市</a></li>
+      <li><a href="javascript:" tb="countyAll" id="countyAll">区县</a></li>
+    </ul>
+  </div>
+  <div class="con">
+    <div class="hotCityAll invis">
+      <div class="pre"><a></a></div>
+      <div class="list">
+        <ul>
+          <!-- 					<li><a href="javascript:"  class="current">南京</a></li> -->
+        </ul>
+      </div>
+      <div class="next"><a class="can"></a></div>
+    </div>
+    <div class="provinceAll invis">
+      <div class="pre"><a></a></div>
+      <div class="list">
+        <ul>
+          <!-- 					<li><a href="javascript:"  class="current">江西省</a></li> -->
+        </ul>
+      </div>
+      <div class="next"><a class="can"></a></div>
+    </div>
+    <div class="cityAll invis">
+      <div class="pre"><a></a></div>
+      <div class="list">
+        <ul>
+          <!-- 					<li><a href="javascript:"  class="current">南京</a></li> -->
+        </ul>
+      </div>
+      <div class="next"><a class="can"></a></div>
+    </div>
+    <div class="countyAll invis">
+      <div class="pre"><a></a></div>
+      <div class="list">
+        <ul>
+        </ul>
+      </div>
+      <div class="next"><a class="can"></a></div>
+    </div>
+  </div>
+</div>
+<script src="../js/sys/CityPicker/publictow.js"></script>
+<script>
+	$(function(){
+		tabChange("tab-change-title");
+		//showOverlay();
+		//hideOverlay();
+	});
+	
+	$("#select").change(function(){
+		$("#consignor").val($("#select").val());
+		$("#select").attr("name",$("#select").find("option:selected").attr("id"));
+		$("#consignor").attr("frompartyid",$("#select").attr("name"));
+	})
+</script>	
+</body>
+</html>

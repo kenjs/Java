@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.bggl.dao.BusBgglBgdddlMapper">
+	<select id="selectBgDddlPage" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgDddlDomain">
+		SELECT A.DDDL_DJXH AS dddlDjxh,
+		       A.JGBM AS jgbm,
+		       A.MC AS mc,
+		       A.URL AS url,
+		       A.DLFS_DM AS dlfsDm,
+		       A.XJGXBZ AS xjgxbz,
+		       A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc,
+			   (SELECT DLFS.DLFS_MC FROM DM_DLFS DLFS WHERE DLFS.DLFS_DM=A.DLFS_DM) AS dlfsMc
+		  FROM BG_DDDL A 
+		  WHERE A.YXBZ='Y' 
+				and A. JGBM=#jgbm#
+		  <dynamic>
+       		<isNotEmpty prepend="and" property="mc">
+       			A.MC LIKE #mc#
+       		</isNotEmpty>
+       	 </dynamic> 	
+
+		  $orderStr$
+    </select>
+    
+    <select id="selectBgDddlAll" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgDddlDomain">
+		SELECT A.DDDL_DJXH AS dddlDjxh,
+		       A.JGBM AS jgbm,
+		       A.MC AS mc,
+		       A.URL AS url,
+		       A.DLFS_DM AS dlfsDm,
+		       A.XJGXBZ AS xjgxbz,
+		       A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc,
+			   (SELECT DLFS.DLFS_MC FROM DM_DLFS DLFS WHERE DLFS.DLFS_DM=A.DLFS_DM) AS dlfsMc
+		  FROM BG_DDDL A 
+		  WHERE A.YXBZ='Y' 
+				and A. JGBM=#jgbm#
+		  <dynamic>
+       		<isNotEmpty prepend="and" property="mc">
+       			A.MC LIKE #mc#
+       		</isNotEmpty>
+       	 </dynamic> 	
+
+		  ORDER by A.DDDL_DJXH DESC
+    </select>
+
+	<select id="getBgDddlRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.DDDL_DJXH) 
+		  FROM BG_DDDL A 
+		  WHERE A.YXBZ='Y' 
+		  and A. JGBM=#jgbm#
+		  <dynamic>
+       		<isNotEmpty prepend="and" property="mc">
+       			A.MC LIKE #mc#
+       		</isNotEmpty>
+       	 </dynamic> 	
+
+    </select>
+</sqlMap>

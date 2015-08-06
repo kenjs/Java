@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+<typeAlias alias="TransactionLastInfo" type="com.cy.dcts.common.bo.TransactionLastInfo"/><!-- 交易状态历史记录表 -->
+<resultMap class="TransactionLastInfo" id="transaction_last_info_result">
+  <result property="id" column="ID"/>
+  <result property="cargoId" column="CARGO_ID"/> 	
+  <result property="driverId" column="DRIVER_ID"/>
+  <result property="transactionId" column="TRANSACTION_ID"/>
+  <result property="start" column="START"/>
+  <result property="remark" column="REMARK"/> 
+  <result property="createTime" column="CREATE_TIME"/>
+</resultMap> 
+
+<insert id="isnert_transaction_last_info" parameterClass="Map">
+  INSERT INTO t_transaction_last_info(
+	cargo_id,
+	driver_id,
+	transaction_id,
+	start,
+	remark,
+	create_time 
+	) VALUES(
+	 #cargoId#,#driverId#, #transactionId#,#start#,#remark#,sysdate()
+	)
+
+<selectKey resultClass="String" keyProperty="id">
+	    SELECT last_insert_id() as id
+	   </selectKey>
+</insert>
+
+
+<!-- 查询交易历史记录  -->
+<select id="query_transaction_last_info_byIdAndStart" parameterClass="Map" resultMap="transaction_last_info_result">
+   SELECT id,
+	cargo_id,
+	driver_id,
+	transaction_id,
+	start,
+	remark,
+	create_time 
+	FROM t_transaction_last_info 
+  <dynamic prepend="WHERE"> 
+     <isNotEmpty prepend="AND" property="transactionId"> transaction_id = #transactionId# </isNotEmpty>
+     <isNotEmpty prepend="AND" property="start"> start = #start#  </isNotEmpty>
+  </dynamic>
+	limit 1
+</select>
+</sqlMap>
+

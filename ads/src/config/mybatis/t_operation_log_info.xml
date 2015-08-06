@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.driver.dao.OperationLogDao">
+	<!-- 新增操作日志 -->
+	<insert id="insertOperationLogBatch" parameterType="java.util.List">
+		insert into t_operation_log_info (USER_DRIVER_ID,TYPE,OPERATION_TYPE,OPERATION_NAME,REMARK,CREATE_TIME)
+		values
+        <foreach collection="list" item="item" separator="," index="index">
+            (#{item.userDriverId},#{item.type},#{item.operationType},#{item.operationName},#{item.remark},#{item.createTime})
+        </foreach>
+	</insert>
+
+    <!-- 短信发送记录新增 -->
+    <insert id="insertNoteLogInfo" parameterType="NoteLogInfo" keyProperty="id" useGeneratedKeys="true">
+        insert into t_note_log_info
+        (MOBILEPHONE,SEND_START,SNDE_TIME,CREATE_TIME,VISIT_IP,RETURNED_VALUE)
+        values
+        (#{mobilephone},#{sendStart},sysdate(),sysdate(),#{visitIp},#{returnedValue})
+    </insert>
+</mapper>

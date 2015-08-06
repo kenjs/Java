@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="OperationLogInfoBo" type="com.cy.common.bo.OperationLogInfoBo"/>
+	<!-- 新增操作日志 -->
+	<insert id="iBatisInsertOperationLogInfo" parameterClass="OperationLogInfoBo">
+		insert into t_operation_log_info (USER_DRIVER_ID,TYPE,OPERATION_TYPE,OPERATION_NAME,REMARK,CREATE_TIME)
+		values (#userDriverId#,#type#,#operationType#,#operationName#,#remark#,sysdate())
+		<selectKey resultClass="Integer" keyProperty="id">
+			select last_insert_id() as id
+		</selectKey>
+	</insert>	
+</sqlMap>

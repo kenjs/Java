@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap>
+ 	<typeAlias type="tf56.contract.domain.CityDistance" alias="cityDistance"/>
+ 	<!-- 根据fromPartyId和partyId查询城区距离详情列表 -->
+	<select id="iBatisSelectList" parameterClass="map" resultClass="cityDistance">
+		select * from CityDistance 
+			where fromPartyId = #frompartyid# and partyId = #partyid#
+				<dynamic prepend="and">
+					<isNotEmpty property="fromaddress" prepend="and">
+						fromAddress like '%$fromaddress$%'
+					</isNotEmpty>
+					<isNotEmpty property="toaddress" prepend="and">
+						toAddress like '%$toaddress$%'
+					</isNotEmpty>					
+				</dynamic>
+			
+			 order by updateDate desc
+	</select>
+	
+	<!-- 根据fromPartyId和partyId查询城区距离总条数 -->
+	<select id="iBatisCountCityDistanceList" parameterClass="map" resultClass="Integer">
+		select count(*) from CityDistance 
+			where fromPartyId = #frompartyid# and partyId = #partyid#
+					<dynamic prepend="and">
+					<isNotEmpty property="fromaddress" prepend="and">
+						fromAddress like '%$fromaddress$%'
+					</isNotEmpty>
+					<isNotEmpty property="toaddress" prepend="and">
+						toAddress like '%$toaddress$%'
+					</isNotEmpty>					
+				</dynamic>
+	</select>
+	
+	 <resultMap id="cityDistanceFieldMap" class="cityDistance">
+		  <result column="cityDistanceId" property="citydistanceid" jdbcType="VARCHAR" />   <!--  -->
+		  <result column="fromPartyId" property="frompartyid" jdbcType="VARCHAR" />   <!-- 发货方会员ID -->
+		  <result column="partyId" property="partyid" jdbcType="VARCHAR" />   <!-- 总包会员ID -->
+		  <result column="toPartyId" property="topartyid" jdbcType="VARCHAR" />   <!-- 分包商会员ID -->
+		  <result column="fromAddress" property="fromaddress" jdbcType="VARCHAR" />   <!--  -->
+		  <result column="toAddress" property="toaddress" jdbcType="VARCHAR" />   <!--  -->
+		  <result column="distance" property="distance" jdbcType="VARCHAR" />   <!--  -->
+		  <result column="inputDate" property="inputdate" jdbcType="VARCHAR" />   <!-- 新增日期 -->
+		  <result column="inputMan" property="inputman" jdbcType="VARCHAR" />   <!-- 输入人 -->
+		  <result column="updateDate" property="updatedate" jdbcType="VARCHAR" />   <!-- 最近修改日期 -->
+		  <result column="updateMan" property="updateman" jdbcType="VARCHAR" />   <!--修改人  -->
+	 </resultMap>
+
+	 <!-- 新增记录 -->
+	 <insert id="iBatisInsertCityDistance" parameterClass="cityDistance">
+		  insert into CityDistance (fromPartyId,partyId,toPartyId,fromAddress,toAddress,distance,inputDate,inputMan,updateDate,updateMan)
+		   values (#frompartyid:VARCHAR#,#partyid:VARCHAR#,#topartyid:VARCHAR#,#fromaddress:VARCHAR#,#toaddress:VARCHAR#,#distance:VARCHAR#,#inputdate:VARCHAR#,#inputman:VARCHAR#,#updatedate:VARCHAR#,#updateman:VARCHAR#)
+		  <selectKey resultClass="String" keyProperty="citydistanceid">
+		   select last_insert_id() as id
+		  </selectKey>
+	 </insert>
+
+	 <!-- 获取多条记录查询列表 返回List-->
+	 <select id="iBatisSelectCityDistanceList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT DISTINCT ContractAttribute.attributeValue ,temp.* from ContractAttribute,
+		(select CityDistance.cityDistanceId,CityDistance.fromPartyId,CityDistance.partyId,CityDistance.toPartyId,count(*) as routeCount,DATE_FORMAT(MAX(updateDate),'%Y-%m-%d %H:%i:%s') as updateDate
+		from CityDistance where CityDistance.partyId=#partyid:VARCHAR# group by CityDistance.fromPartyId,CityDistance.partyId) AS temp where ContractAttribute.fromPartyId=temp.partyId AND
+		ContractAttribute.toPartyId=temp.fromPartyId and ContractAttribute.attributeName='客户号'
+ 	 </select> 
+ 	 
+ 	 <!-- 查询指定发货方的城区距离列表 -->
+ 	 <select id="iBatisSelectCityDistanceListByFromAddressAndToAddress" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+ 	 	select fromPartyId as frompartyid,cityDistanceId as citydistanceid,toPartyId as topartyid,distance as distance,fromAddress as fromaddress,toAddress as toaddress from CityDistance where fromPartyId=#frompartyid:VARCHAR# and partyId=#partyid:VARCHAR#
+ 	 	<dynamic>
+ 	 		<isNotEmpty prepend="AND" property="fromaddress">  
+                fromAddress LIKE '%$fromaddress$%'  
+            </isNotEmpty>  
+            <isNotEmpty prepend="AND" property="toaddress">  
+                toAddress LIKE '%$toaddress$%'  
+            </isNotEmpty> 
+ 	 	</dynamic>
+ 	 </select>
+ 	 
+ 	  <!-- 查询指定发货方的城区距离 -->
+ 	 <select id="iBatisSelectCityDistanceByFromAddressAndToAddressList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+ 	 	select fromPartyId as frompartyid,cityDistanceId as citydistanceid,toPartyId as topartyid,distance as distance,fromAddress as fromaddress,toAddress as toaddress from CityDistance where fromPartyId=#frompartyid:VARCHAR# and partyId=#partyid:VARCHAR#
+ 	 	and fromAddress=#fromaddress:VARCHAR# and toAddress=#toaddress:VARCHAR#
+ 	 </select>
+ 	 
+ 	 <!-- 验证记录是否已经存在 -->
+ 	 <select id="iBatisCheckCityDistance" parameterClass="java.util.HashMap" resultClass="java.lang.String">
+ 	 	select count(*) from CityDistance where partyId=#partyid:VARCHAR# and fromPartyId=#frompartyid:VARCHAR# 
+ 	 	and fromAddress=#fromaddress:VARCHAR# and toAddress=#toaddress:VARCHAR#
+ 	 	<isNotEmpty prepend="and" property="citydistanceid">
+ 	 		citydistanceid=#citydistanceid#
+ 	 	</isNotEmpty>
+ 	 </select>
+ 	 
+	 <!-- 根据citydistenceid删除用户对象 -->
+	 <delete id="iBatisDeleteCityDistance" parameterClass="java.util.HashMap">
+	  	delete from CityDistance where cityDistanceId=#citydistanceid:VARCHAR#
+	 </delete>
+	 
+	 <!-- frompartyid和partyid删除用户对象 -->
+	 <delete id="iBatisDeleteCityDistanceByFromPartyIdAndPartyId" parameterClass="java.util.HashMap">
+	  	delete from CityDistance where fromPartyId=#frompartyid:VARCHAR# and partyId=#partyid:VARCHAR#
+	 </delete>
+
+	 <!-- 更新用户对象 -->
+	 <update id="iBatisUpdateCityDistance" parameterClass="cityDistance">
+	  	update CityDistance set toPartyId=#topartyid:VARCHAR#,fromAddress=#fromaddress:VARCHAR#,toAddress=#toaddress:VARCHAR#,distance=#distance:VARCHAR#,
+	  	updateDate=#updatedate:VARCHAR#,updateMan=#updateman:VARCHAR# where cityDistanceId=#citydistanceid:VARCAHR#
+	 </update>
+	 <select id="iBatisCheckConsignorExist" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+	 	select count(*) from CityDistance where fromPartyId=#frompartyid# and partyId=#partyid#
+	 </select>
+</sqlMap>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.xtgl.dao.BusQyXtCsMapper">
+    <select id="selectDmXzxmByXzxmDm" parameterClass="java.util.Map"
+		resultClass="com.cy.common.bo.DmXzxm">
+		SELECT XZXM_DM AS xzxmDm,
+		XZXM_VALUE_DM AS xzxmValueDm,
+		XZXM_VALUE_MC AS xzxmValueMc,
+		PXXH AS pxxh,
+		XYBZ AS xybz,
+		YXBZ AS yxbz 
+		FROM DM_XZXM WHERE XZXM_DM = #xzxmDm#
+	</select>
+</sqlMap>

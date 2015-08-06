@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap>
+ <typeAlias type="tf56.contract.domain.OutWaybill" alias="outWaybill"/>
+ 
+  <!--新增记录--> 
+ <insert id="iBatisInsertOutWaybill" parameterClass="outWaybill">
+  insert into OutWaybill (sourceSystem,partyId,clientNumber,status,consignDate,fromPartyId,consignor,consignorLinkMan,consignorTelephoneNumber,consignorMobileNumber,consignorProvince,consignorCity,consignorRegion,consignorTown,consignee,consigneeLinkMan,consigneeTelephoneNumber,consigneeMobileNumber,consigneeProvince,
+  consigneeCity,consigneeRegion,consigneeTown,memo)
+   values (#sourcesystem:VARCHAR#,#partyid:VARCHAR#,#clientnumber:VARCHAR#,#status:VARCHAR#,#consigndate:VARCHAR#,#frompartyid:VARCHAR#,#consignor:VARCHAR#,#consignorlinkman:VARCHAR#,#consignortelephonenumber:VARCHAR#,
+	#consignormobilenumber:VARCHAR#,#consignorprovince:VARCHAR#,#consignorcity:VARCHAR#,#consignorregion:VARCHAR#,#consignortown:VARCHAR#,#consignee:VARCHAR#,
+	#consigneelinkman:VARCHAR#,#consigneetelephonenumber:VARCHAR#,#consigneemobilenumber:VARCHAR#,#consigneeprovince:VARCHAR#,#consigneecity:VARCHAR#,
+	#consigneeregion:VARCHAR#,#consigneetown:VARCHAR#,#memo:VARCHAR#
+	)
+  <selectKey resultClass="String" keyProperty="waybillid">
+   select last_insert_id() as id
+  </selectKey>
+ </insert>
+ 
+ <!-- 根据主键查找订单 -->
+ <select id="iBatisSelectOutWaybillById" parameterClass="java.util.Map" resultClass="outWaybill">
+ 	SELECT * FROM OutWaybill WHERE waybillId = #waybillid#	
+ </select>
+ 
+  <select id="iBatisSelectWaybillIdByClientNumber"  parameterClass="java.util.HashMap" resultClass="java.lang.Integer" >
+   		    SELECT a.waybillId FROM OutWaybill a 
+   		     WHERE a.clientNumber = #clientnumber#  
+   		       AND a.fromPartyId = #frompartyid# 
+   		     LIMIT 1
+   </select>
+   <update id="iBatisUpdateOutWayBill" parameterClass="outWaybill">
+ 	update OutWaybill set consignDate=#consigndate#,consignorLinkMan=#consignorlinkman#,consignorTelephoneNumber=#consignortelephonenumber#,
+		  consignorMobileNumber=#consignormobilenumber#,consignorProvince=#consignorprovince#,
+		  consignorCity=#consignorcity#,consignorRegion=#consignorregion#,consignorTown=#consignortown#,
+		  consignee=#consignee#,consigneeLinkMan=#consigneelinkman#,consigneeTelephoneNumber=#consigneetelephonenumber#,
+		  consigneeMobileNumber=#consigneemobilenumber#,consigneeProvince=#consigneeprovince#,
+		  consigneeCity=#consigneecity#,consigneeRegion=#consigneeregion#,consigneeTown=#consigneetown#
+	where waybillId=#waybillid# AND status = '待确认'
+ </update>
+ 
+  <update id="iBatisSaveOrderWaybill" parameterClass="outWaybill">
+ 	update OutWaybill set status = #status#,operator=#operator#,operatetime=#operatetime#,contractWaybillId=#contractWaybillId#,waybillnumber=#waybillnumber#
+	where waybillId=#waybillid#  
+ </update>
+ 
+ <select id="iBatisSelectOutWaybillByPartyId" parameterClass="java.util.HashMap" resultClass="outWaybill">
+ select A.waybillId,A.sourceSystem,A.partyId,A.clientNumber,A.status,A.contractWaybillId,A.consignor,date_format(A.consignDate,'%Y-%m-%d') consignDate,waybillnumber from OutWaybill A
+	where partyId=#partyid#
+	<isNotEmpty prepend="and" property="clientnumber">
+	  		clientNumber=#clientnumber#
+	</isNotEmpty>
+	<isNotEmpty prepend="and" property="status">
+	  		status=#status#
+	</isNotEmpty>
+	<isNotEmpty prepend="and" property="consignor">
+	  		consignor like '%$consignor$%'
+	</isNotEmpty>
+	<isNotEmpty property="fromdate" prepend="and">
+	   consignDate    <![CDATA[>=]]> #fromdate# 				 			
+	 </isNotEmpty>
+	 <isNotEmpty property="todate" prepend="and">
+	   consignDate <![CDATA[<=]]> #todate# 				 			
+	 </isNotEmpty>
+	 order by consignDate desc
+	 <dynamic prepend="">
+	  	<isNotEmpty prepend="" property="skipCount">
+	  		limit  $skipCount$,$pageSize$
+	  	</isNotEmpty>
+  	</dynamic>
+ </select>
+ <select id="iBatisSelectOutWaybillByPartyIdCount" parameterClass="java.util.HashMap" resultClass="java.lang.String">
+ select count(A.waybillId) from OutWaybill A
+	where partyId=#partyid#
+	<isNotEmpty prepend="and" property="clientnumber">
+	  		clientNumber=#clientnumber#
+	</isNotEmpty>
+	<isNotEmpty prepend="and" property="status">
+	  		status=#status#
+	</isNotEmpty>
+	<isNotEmpty prepend="and" property="clientnumber">
+	  		consignor like '%$consignor$%'
+	</isNotEmpty>
+	<isNotEmpty property="fromdate" prepend="and">
+	   consignDate    <![CDATA[>]]> #fromdate# 				 			
+	 </isNotEmpty>
+	 <isNotEmpty property="todate" prepend="and">
+	   consignDate <![CDATA[<]]> #todate# 				 			
+	 </isNotEmpty> 
+ </select>
+</sqlMap>

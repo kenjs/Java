@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+		<!DOCTYPE sqlMap   
+		    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+		    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+		<sqlMap>
+			<typeAlias alias="funRealationInfoDomain" type="com.cy.dctms.common.domain.FunRealationInfoDomain"/>
+
+			<resultMap class="funRealationInfoDomain" id="funRelation_info_domain_result">
+				<result property="id" column="id"/>
+				<result property="number" column="number"/>
+				<result property="parentName" column="parent_name"/>
+				<result property="sunCount" column="sun_count"/>
+				<result property="name" column="name"/>
+				<result property="createTime" column="create_time"/>
+				<result property="modifyTime" column="modify_time"/>
+				<result property="deleteFlag" column="delete_flag"/>
+			</resultMap>
+
+			<select id="query_funRelation_info_by_page" parameterClass="java.util.Map" resultMap="funRelation_info_domain_result">
+						select t.id,
+				       t.number,
+				       t.name,
+					  (select name from t_manager_function_info where number = t.parent_number) as parent_name,
+                      (select count(id) from t_manager_function_relation_info where manager_id = #managerId# and function_id =t.id and delete_flag =0) as sun_count,
+				       t.create_time,
+				       t.modify_time,
+				       t.delete_flag
+				  from t_manager_function_info t ,t_manager_function_relation_info t2
+				  where  t.delete_flag = 0  and t2.delete_flag = 0  and t.id = t2.function_id
+								and t2.manager_id =#userId#
+			</select>
+			
+			<select id="query_funRelation_info_by_page_id_is_1" parameterClass="String" resultMap="funRelation_info_domain_result">
+						select t.id,
+				       t.number,
+				       t.name,
+					  (select name from t_manager_function_info where number = t.parent_number) as parent_name,
+                      (select count(id) from t_manager_function_relation_info where manager_id = #managerId# and function_id =t.id and delete_flag =0) as sun_count,
+				       t.create_time,
+				       t.modify_time,
+				       t.delete_flag
+				  from t_manager_function_info t 
+				  where  t.delete_flag = 0  
+				and t.parent_number is not null
+			order  by t.number
+			</select>
+
+			<insert id="add_funRelation_info" parameterClass="com.cy.dctms.common.bo.FunRealationInfo">
+				insert into t_manager_function_relation_info (
+					manager_id,
+					function_id,
+					create_time,
+					delete_flag
+				) values(
+					#managerId#,
+					#functionId#,
+					now(),
+					0
+				)
+			<selectKey resultClass="Long" keyProperty="id"> 
+				select last_insert_id() as id from t_manager_function_relation_info limit 1 
+			</selectKey> 
+
+			</insert>
+
+			<update id="delete_funRelation_info_by_id" parameterClass="String">
+				update t_manager_function_relation_info t
+				   set 
+				   	t.delete_flag = 1,
+					t.modify_time = now()
+				 where t.manager_id = #managerId#
+			</update>
+
+		</sqlMap>

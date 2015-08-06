@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.xtgl.dao.BusQywsdyszMapper">
+	<select id="selectQyWsdyszPage" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.QyWsdyszDomain">
+		SELECT A.WH_XH AS whXh,
+		       A.SS_JGBM AS ssJgbm,
+		       A.WS_DM AS wsDm,
+		       A.LEFT_MARGIN AS leftMargin,
+		       A.TOP_MARGIN AS topMargin,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM QY_WSDYSZ A 
+
+		  $orderStr$
+    </select>
+    
+    <select id="selectQyWsdyszAll" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.QyWsdyszDomain">
+		SELECT A.WH_XH AS whXh,
+		       A.SS_JGBM AS ssJgbm,
+		       A.WS_DM AS wsDm,
+		       A.LEFT_MARGIN AS leftMargin,
+		       A.TOP_MARGIN AS topMargin,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM QY_WSDYSZ A 
+
+		  ORDER by A.WH_XH ASC
+    </select>
+
+	<select id="getQyWsdyszRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.WH_XH) 
+		  FROM QY_WSDYSZ A 
+
+    </select>
+    
+    <!--根据主键取DOMAIN-->
+	<select id="getDomainByWsdm" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.QyWsdyszDomain">
+		select a.WH_XH as whXh,a.SS_JGBM as ssJgbm,a.WS_DM as wsDm,a.LEFT_MARGIN as leftMargin,a.TOP_MARGIN as topMargin,
+		a.CJR_CZY_DJXH as cjrCzyDjxh,a.CJRQ as cjrq,a.XGR_CZY_DJXH as xgrCzyDjxh,a.XGRQ as xgrq from QY_WSDYSZ a  
+		where a.SS_JGBM=#ssJgbm# and a.WS_DM = #wsDm# and rownum=1
+    </select>
+</sqlMap>

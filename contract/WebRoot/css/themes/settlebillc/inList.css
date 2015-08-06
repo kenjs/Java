@@ -1,0 +1,94 @@
+@CHARSET "UTF-8";
+		 .btn{
+		  	display: inline-block;
+		 	  position: relative;
+		 	  margin: 0px;
+			  text-align: center;
+		  	  text-decoration: none;
+		     font: bold 12px/25px Arial, sans-serif;
+		     text-shadow: 1px 1px 1px rgba(255,255,255, .22);
+		     -webkit-border-radius: 2px;
+		     -moz-border-radius: 2px;
+		     border-radius: 2px;
+		}
+		a:hover{
+			color:#ec6110;
+		}
+		input[type="text"]{
+			width: 105px;
+			height: 25px;
+			padding-left: 5px;
+			line-height: 24px;
+			padding-left: 5px;
+			color: #444444;
+			border: 1px solid #D3D7D4;
+			}
+		input[type="text"]:HOVER{
+			width: 105px;
+			height: 25px;
+			padding-left: 5px;
+			line-height: 24px;
+			border: 1px solid #a0cfe0;
+		}
+		#btnquery{
+			background-color:#fcfcfc ;
+			border: 1px solid #999999;
+			cursor: pointer;
+			height: 25px;
+			margin-left: 10px;
+			padding: 0;
+			width: 60px;
+		}
+		#btnquery:hover{
+			background-color: #f9f9f9;
+		}
+		#btnadd{
+			width: 86px;
+			height: 27px;
+			line-height: 24px;
+			cursor: pointer;
+			background-color: #ef6d21;color:#ffffff;
+			font-weight: bold;border: none;
+			margin-left:0px; 
+			border-right-width: 0px;
+		}
+		@-moz-document url-prefix()
+		{
+			#btnadd {
+				width: 86px;
+				height: 27px;
+				line-height: 24px;
+				cursor: pointer;
+				background-color: #ef6d21;color:#ffffff;
+				font-weight: bold;border: none;
+				margin-left:47px; 
+				border-right-width: 0px;
+		 	}
+		}
+		#btnadd:hover{
+			height: 27px;
+			line-height: 24px;
+			cursor: pointer;
+			background-color: #ec6110;color:#ffffff;
+		}
+		#querydiv{
+			width: 100%;
+			color: #444444;
+		}
+	.hgrid{margin-top: 5px;}	
+	#hgrid{width: 100%;}
+	#hgrid tr th{  
+		background-color: #EEEEEE;
+	    border-bottom: 0 solid #FDE6C3;
+	    border-right: 0 solid #FDE6C3;
+	    border-top: 0 solid #FDE6C3;
+	    color: #1C1C1C;
+	    font-family: "微软雅黑","宋体",Arial;
+	    height: 30px;
+	    letter-spacing: 2px;
+	    margin: auto;
+	    text-align: left;
+	    text-transform: uppercase;
+	    font-size: 12px;
+	}
+	#hgrid td{padding: 0px;font-size: 12px; border-bottom: 1px solid #DDDDDD;}		

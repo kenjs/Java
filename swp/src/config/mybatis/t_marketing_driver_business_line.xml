@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.swp.dao.MarketingDriverBusinessLineDao">
+
+    <!-- 客户司机预约线路 -->
+    <resultMap type="MarketingDriverBusinessLine" id="marketing_driver_business_line_result">
+        <!-- 主键 -->
+        <result property="id" column="id"/>
+        <!-- 客户司机ID(pk-t_marketing_driver_info.id) -->
+        <result property="customerDriverId" column="customer_driver_id"/>
+        <!-- 预约开始时间 -->
+        <result property="startTime" column="start_time"/>
+        <!-- 预约结束时间 -->
+        <result property="endTime" column="end_time"/>
+        <!-- 预约路线起-省 -->
+        <result property="startProvince" column="start_province"/>
+        <!-- 预约路线起-市 -->
+        <result property="startCity" column="start_city"/>
+        <!-- 预约路线起-县区 -->
+        <result property="startCounty" column="start_county"/>
+        <!-- 预约路线目-省 -->
+        <result property="endProvince" column="end_province"/>
+        <!-- 预约路线目-市 -->
+        <result property="endCity" column="end_city"/>
+        <!-- 预约路线目-县区 -->
+        <result property="endCounty" column="end_county"/>
+        <!-- 运费价格(字段长度double(11,2)) -->
+        <result property="quoteFair" column="quote_fair"/>
+        <!-- 报价类型 -->
+        <result property="quoteType" column="quote_type"/>
+        <!-- 状态(0有效1无效) -->
+        <result property="deleteFlag" column="delete_flag"/>
+        <!-- 创建时间 -->
+        <result property="createTime" column="create_time"/>
+        <!-- 修改时间 -->
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+
+    <!-- 司机预约线路 -->
+    <resultMap type="DriverBusinessLineInfo" id="driver_business_line_info_result">
+        <!-- 主键 -->
+        <result property="id" column="id"/>
+        <!-- 客户司机ID(pk-t_marketing_driver_info.id) -->
+        <result property="driverId" column="driver_id"/>
+        <!-- 预约开始时间 -->
+        <result property="startTime" column="start_time"/>
+        <!-- 预约结束时间 -->
+        <result property="endTime" column="end_time"/>
+        <!-- 预约路线起-省 -->
+        <result property="startProvince" column="start_province"/>
+        <!-- 预约路线起-市 -->
+        <result property="startCity" column="start_city"/>
+        <!-- 预约路线起-县区 -->
+        <result property="startCounty" column="start_county"/>
+        <!-- 预约路线目-省 -->
+        <result property="endProvince" column="end_province"/>
+        <!-- 预约路线目-市 -->
+        <result property="endCity" column="end_city"/>
+        <!-- 预约路线目-县区 -->
+        <result property="endCounty" column="end_county"/>
+        <!-- 运费价格(字段长度double(11,2)) -->
+        <result property="quoteFair" column="quote_fair"/>
+        <!-- 报价类型 -->
+        <result property="quoteType" column="quote_type"/>
+        <!-- 状态(0有效1无效) -->
+        <result property="start" column="start"/>
+        <!-- 创建时间 -->
+        <result property="createTime" column="create_time"/>
+        <!-- 修改时间 -->
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+
+    <resultMap  type="MarketingDriverBusinessLineDomain" id="marketing_driver_business_line_domain_result">
+        <result property="id" column="id"/>
+        <result property="customerDriverId" column="customerDriverId"/>
+        <result property="startTime" column="startTime"/>
+        <result property="endTime" column="endTime"/>
+        <result property="startProvince" column="startProvince"/>
+        <result property="startCity" column="startCity"/>
+        <result property="startCounty" column="startCounty"/>
+        <result property="endProvince" column="endProvince"/>
+        <result property="endCity" column="endCity"/>
+        <result property="endCounty" column="endCounty"/>
+        <result property="quoteFair" column="quoteFair"/>
+        <result property="quoteType" column="quoteType"/>
+    </resultMap>
+
+    <!-- 查询客户司机预约线路，返回List对象 -->
+    <select id="queryMarketingDriverBusinessLineByCustomerDriverId" parameterType="map" resultMap="marketing_driver_business_line_domain_result">
+        SELECT id as id,
+        customer_driver_id as customerDriverId,
+        DATE_FORMAT(start_time,'%Y-%m-%d') as startTime,
+        DATE_FORMAT(end_time,'%Y-%m-%d') as endTime,
+        start_province as startProvince,
+        start_city as startCity,
+        start_county as startCounty,
+        end_province as endProvince,
+        end_city as endCity,
+        end_county as endCounty,
+        quote_fair as quoteFair,
+        quote_type as quoteType
+        FROM t_marketing_driver_business_line
+        WHERE
+        customer_driver_id = #{customerDriverId}
+        and
+        delete_flag = #{deleteFlag}
+        and
+        DATE_FORMAT(end_time,'%Y-%m-%d') <![CDATA[>=]]> DATE_FORMAT(sysdate(),'%Y-%m-%d')
+        order by create_time ASC LIMIT 0,3
+    </select>
+
+
+    <!-- 查询司机预约线路，返回List对象 -->
+    <select id="queryDriverBusinessLineInfoByDriverId" parameterType="map" resultMap="marketing_driver_business_line_domain_result">
+        SELECT id as id,
+        driver_id as customerDriverId,
+        DATE_FORMAT(start_time,'%Y-%m-%d') as startTime,
+        DATE_FORMAT(end_time,'%Y-%m-%d') as endTime,
+        start_province as startProvince,
+        start_city as startCity,
+        start_county as startCounty,
+        end_province as endProvince,
+        end_city as endCity,
+        end_county as endCounty,
+        quote_fair as quoteFair,
+        quote_type as quoteType
+        FROM t_driver_business_line_info
+        WHERE
+        driver_id = #{driverId}
+        and
+        start = #{start}
+        and
+        DATE_FORMAT(end_time,'%Y-%m-%d') <![CDATA[>=]]> DATE_FORMAT(sysdate(),'%Y-%m-%d')
+        order by create_time ASC LIMIT 0,3
+    </select>
+
+    <!-- 查询客户司机预约线路，返回对象 -->
+    <select id="queryMarketingDriverBusinessLineById" parameterType="Integer" resultMap="marketing_driver_business_line_domain_result">
+        SELECT id as id,
+        customer_driver_id as customerDriverId,
+        DATE_FORMAT(start_time,'%Y-%m-%d') as startTime,
+        DATE_FORMAT(end_time,'%Y-%m-%d') as endTime,
+        start_province as startProvince,
+        start_city as startCity,
+        start_county as startCounty,
+        end_province as endProvince,
+        end_city as endCity,
+        end_county as endCounty,
+        quote_fair as quoteFair,
+        quote_type as quoteType
+        FROM t_marketing_driver_business_line
+        WHERE
+        id = #{id}
+    </select>
+
+    <!-- 查询司机预约线路，返回对象 -->
+    <select id="queryDriverBusinessLineInfoById" parameterType="Integer" resultMap="marketing_driver_business_line_domain_result">
+        SELECT id as id,
+        driver_id as customerDriverId,
+        DATE_FORMAT(start_time,'%Y-%m-%d') as startTime,
+        DATE_FORMAT(end_time,'%Y-%m-%d') as endTime,
+        start_province as startProvince,
+        start_city as startCity,
+        start_county as startCounty,
+        end_province as endProvince,
+        end_city as endCity,
+        end_county as endCounty,
+        quote_fair as quoteFair,
+        quote_type as quoteType
+        FROM t_driver_business_line_info
+        WHERE
+        id = #{id}
+    </select>
+
+
+
+
+    <!-- 修改客户司机预约线路 -->
+    <update id="updateMarketingDriverBusinessLine" parameterType="MarketingDriverBusinessLine">
+        UPDATE t_marketing_driver_business_line SET
+        customer_driver_id = #{customerDriverId},
+        start_time = #{startTime},
+        end_time = #{endTime},
+        start_province = #{startProvince},
+        start_city = #{startCity},
+        start_county = #{startCounty},
+        end_province = #{endProvince},
+        end_city = #{endCity},
+        end_county = #{endCounty},
+        quote_fair = #{quoteFair},
+        quote_type = #{quoteType},
+        modify_time = sysdate()
+        WHERE ID = #{id}
+    </update>
+
+
+    <!-- 修改司机预约线路 -->
+    <update id="updateDriverBusinessLineInfo" parameterType="DriverBusinessLineInfo">
+        UPDATE t_driver_business_line_info SET
+        driver_id = #{driverId},
+        start_time = #{startTime},
+        end_time = #{endTime},
+        start_province = #{startProvince},
+        start_city = #{startCity},
+        start_county = #{startCounty},
+        end_province = #{endProvince},
+        end_city = #{endCity},
+        end_county = #{endCounty},
+        quote_fair = #{quoteFair},
+        quote_type = #{quoteType},
+        modify_time = sysdate()
+        WHERE ID = #{id}
+    </update>
+
+    <!-- 保存客户司机预约线路 -->
+    <insert id="addMarketingDriverBusinessLine" parameterType="MarketingDriverBusinessLine" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_marketing_driver_business_line (
+        customer_driver_id,start_time,end_time,
+        start_province,start_city,start_county,
+        end_province,end_city,end_county,
+        quote_fair,quote_type,delete_flag,
+        create_time,modify_time)
+        VALUES (
+        #{customerDriverId},#{startTime},#{endTime},
+        #{startProvince},#{startCity},#{startCounty},
+        #{endProvince},#{endCity},#{endCounty},
+        #{quoteFair},#{quoteType},#{deleteFlag},
+        sysdate(),sysdate())
+    </insert>
+
+
+    <!-- 保存司机预约线路 -->
+    <insert id="addDriverBusinessLineInfo" parameterType="DriverBusinessLineInfo" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_driver_business_line_info (
+        driver_id,start_time,end_time,
+        start_province,start_city,start_county,
+        end_province,end_city,end_county,
+        quote_fair,quote_type,start,
+        create_time,modify_time)
+        VALUES (
+        #{driverId},#{startTime},#{endTime},
+        #{startProvince},#{startCity},#{startCounty},
+        #{endProvince},#{endCity},#{endCounty},
+        #{quoteFair},#{quoteType},#{start},
+        sysdate(),sysdate())
+    </insert>
+
+</mapper>

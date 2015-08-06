@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="pragma" content="no-cache"/>
+    <meta http-equiv="Cache-Control" content="no-cache,must-revalidate"/>
+    <title>业务轨迹跟踪</title>
+      <link href="../css/webui/main.css" rel="stylesheet" />	
+    <link href="../js/sys/ymPrompt/skin/ch/ymPrompt.css" rel="stylesheet" /> 		
+	<script src="../js/jquery/jquery.js" type=text/javascript></script>
+	
+ 	<!-- 地图mapabc  -->
+
+	
+	<!--<script type="text/javascript" src="http://map.tf56.com:8091/webapi/auth.json?t=javascriptmap&v=3.1.2&key=f03346eb3a99be025979045e8fa1a281c5159611e114c448f4ab8554ad14eff3d66dfeb3965ce8fc"></script>
+	-->
+	<!--<script type="text/javascript" src="http://map.tf56.com:8091/webapi/auth.json?t=javascriptmap&v=3.1.2&key=f03346eb3a99be025979045e8fa1a281c5159611e114c448f4ab8554ad14eff3d66dfeb3965ce8fc"></script>
+	-->
+	<!-- <script type="text/javascript" src="http://apis.mapabc.com/webapi/auth.json?t=javascriptmap&v=3.1.1&key=f6c97a7f64063cfee7c2dc2157847204d4dbf0933f083b8686f9e71eef9067551fbd34f941b42f01"></script> -->
+
+	<script type="text/javascript" src="../js/amap/basic_mmap.js"></script>
+	<script type="text/javascript" src="../js/amap/utils/gps_change.js"></script>
+	<link rel="stylesheet" type="text/css" href="../js/amap/css/basic.css" />
+	
+	
+	<!-- 此处注意，这里就是增加的js路径的 --> 
+  	<script src="../js/themes/lbsdevicec/lbsdeviceMap.js"></script> 
+  	<!-- 此处注意，这里就是增加的css路径的 --> 
+  	 <script src="../js/amap/mapabc_js.js" type="text/javascript"></script> 
+  	 <style>
+    	#main{width:998px;border:0px solid black;padding:0px;margin:0 auto;}
+		.tdcenter2{width: 100px;border: 0px solid red;}
+    </style>
+  	
+    <script src="../js/ligerUI/js/core/base.js" type="text/javascript"></script> 
+    <script src="../js/ligerUI/js/plugins/ligerAccordion.js" type="text/javascript"></script>
+  	  
+<style type="text/css">
+/*
+	本页面个性的css写在这里
+*/
+	.none{
+		display:none;
+	}
+</style>
+
+<script type="text/javascript"> 
+$(function ()
+{ 
+    $("#accordion").ligerAccordion(
+    {
+        //height: 300
+        
+    });
+    mmap_basic_init(13,"container",120.29731701,30.21907165);
+    //设置地图全屏显示
+    var showMap = document.getElementById("container"); 
+	showMap.style.width = document.documentElement.clientWidth + "px"; 
+	showMap.style.height = document.documentElement.clientHeight + "px"; 
+});      
+</script> 
+</head>
+ 
+<body style="overflow:scroll;overflow-y:hidden;overflow-x:hidden;">
+	<div id="float_location" style="z-index:2;position:absolute;bottom:50px;left:10px;" class="none">
+		<img src="../imgs/lbstrackc/position.png" width="50px" height="50px"  style="opacity:0.9" onclick="setLocation();"/>
+	</div>
+	<div id="container" style="z-index:1;"></div>
+</body>
+</html>

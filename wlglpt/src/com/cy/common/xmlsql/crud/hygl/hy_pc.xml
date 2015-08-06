@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.hygl.dao.HyPcMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectHyPcByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyPcxxglDomain">
+		select a.PC_DJXH as pcDjxh,a.PCDH as pcdh,a.CLSX_DM as clsxDm,a.CYR_CL_DJXH as cyrClhmXh,a.CYR_CZXM as cyrCzxm,a.CYR_CLHM as cyrClhm,
+		a.CYR_GCHM as cyrGchm,a.CYR_SJXM as cyrSjxm,a.CYR_SJSFZ as cyrSjsfz,a.CYR_SJSJHM as cyrSjsjhm,a.CYR_QTLXDH as cyrQtlxdh,
+		DECODE(a.YF_HJ,0,NULL,a.YF_HJ) as yfHj,DECODE(a.YF_YFYF,0,NULL,a.YF_YFYF) as yfYfyf,
+		DECODE(a.YF_YJ,0,NULL,a.YF_YJ) as yfYj,DECODE(a.YF_XXF,0,NULL,a.YF_XXF) as yfXxf,
+		DECODE(a.YF_SJS,0,NULL,a.YF_SJS) as yfSjs,DECODE(a.YF_HDYF,0,NULL,a.YF_HDYF) as yfHdyf,
+		DECODE(a.YF_HDF,0,NULL,a.YF_HDF) as yfHdf,DECODE(a.YF_ZJF,0,NULL,a.YF_ZJF) YFZJF,
+		a.YFJSF_DM as yfjsfDm,a.XXZJ_DJXH as xxzjDjxh,
+		a.BZ as bz,a.PCR_CZY_DJXH as pcrCzyDjxh,a.PCRQ as pcrq,a.PC_JGBM as pcJgbm,
+		a.SS_JGBM as ssJgbm,a.YXBZ as yxbz,a.CJR_CZY_DJXH as cjrCzyDjxh,a.CJRQ as cjrq,a.XGR_CZY_DJXH as xgrCzyDjxh,
+		a.XGRQ as xgrq,a.PCFS_DM as pcfsDm,a.YSFS_DM as ysfsDm,a.ZCFS_DM as zcfsDm,
+		(SELECT RY.MC FROM QY_RYDJ RY WHERE RY.CZY_DJXH = a.PCR_CZY_DJXH) AS pcrMc,
+		(SELECT GS.JC FROM QY_ZZJG GS WHERE GS.JGBM = a.PC_JGBM) AS pcJgbmMc,
+		a.WSSPZT_DM wsspztDm,a.SPBZ,a.DZRQ,a.CYR_QTLXDH2 cyrQtlxdh2,
+		x.zrbm_dm zrbmDm,x.zrbm_djxh zrbmDjxh,x.pchw_clfs_dm pchwClfsDm
+      from HY_PC a,hy_pc_hwxx x
+      where a.PC_DJXH=#pcDjxh# 
+        and x.pc_djxh(+) = a.pc_djxh 
+        and rownum =1
+	    
+    </select>
+    
+    <select id="queryHyPcYfxxByKey" parameterClass="java.util.Map"
+    	resultClass="com.cy.hygl.domain.HyPcxxglDomain">
+    	SELECT PC.PC_DJXH pcDjxh, 
+	       PC.YF_HJ yfHj, PC.YF_YFYF yfYfyf, PC.YF_YJ yfYj,
+	       PC.YF_XXF yfXxf, PC.YF_SJS yfSjs, PC.YF_HDYF yfHdyf, PC.YF_HDF yfHdf	       
+	      FROM HY_PC PC
+	      WHERE PC.YXBZ = 'Y'
+	      AND PC.PC_DJXH = #pcDjxh#
+    </select>
+    
+    <select id="selectPchwLsxh" resultClass="java.lang.String">
+    	select SEQ_PCHW_LSXH.nextval as pchwLsxh from dual
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertHyPc"  parameterClass="com.cy.common.bo.HyPc">
+		<selectKey keyProperty="pcDjxh" resultClass="string" type="pre">
+			select SEQ_PC_DJXH.nextval as pcDjxh from dual 
+		</selectKey>
+		insert into HY_PC(PC_DJXH,PCDH,CLSX_DM,CYR_CL_DJXH,CYR_CZXM,CYR_CLHM,
+		CYR_GCHM,CYR_SJXM,CYR_SJSFZ,CYR_SJSJHM,CYR_QTLXDH,CYR_QTLXDH2,DZRQ,
+		YF_HJ,YF_YFYF,YF_YJ,YF_XXF,YF_SJS,
+		YF_HDYF,YF_HDF,YF_ZJF,YFJSF_DM,XXZJ_DJXH,
+		BZ,PCR_CZY_DJXH,PCRQ,PC_JGBM,
+		SS_JGBM,YXBZ,CJR_CZY_DJXH,CJRQ,XGR_CZY_DJXH,
+		XGRQ,PCFS_DM,YSFS_DM,ZCFS_DM,SPBZ)
+		values(#pcDjxh:NUMERIC#,#pcdh:VARCHAR#,#clsxDm:NUMERIC#,#cyrClhmXh:NUMERIC#,#cyrCzxm:VARCHAR#,#cyrClhm:VARCHAR#,
+		#cyrGchm:VARCHAR#,#cyrSjxm:VARCHAR#,#cyrSjsfz:VARCHAR#,#cyrSjsjhm:VARCHAR#,#cyrQtlxdh:VARCHAR#,
+		#cyrQtlxdh2:VARCHAR#,#dzrq:DATE#,
+		#yfHj:NUMERIC#,#yfYfyf:NUMERIC#,#yfYj:NUMERIC#,#yfXxf:NUMERIC#,#yfSjs:NUMERIC#,
+		#yfHdyf:NUMERIC#,#yfHdf:NUMERIC#,#yfZjf:NUMERIC#,#yfjsfDm:NUMERIC#,#xxzjDjxh:NUMERIC#,
+		#bz:VARCHAR#,#pcrCzyDjxh:NUMERIC#,#pcrq:TIMESTAMP#,#pcJgbm:NUMERIC#,
+		#ssJgbm:NUMERIC#,#yxbz:VARCHAR#,#cjrCzyDjxh:NUMERIC#,#cjrq:TIMESTAMP#,#xgrCzyDjxh:NUMERIC#,
+		#xgrq:TIMESTAMP#,#pcfsDm:NUMERIC#,#ysfsDm:NUMERIC#,#zcfsDm:NUMERIC#,#spbz:VARCHAR#)
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateHyPcByKey" parameterClass="com.cy.common.bo.HyPc">
+        update HY_PC set PC_DJXH=#pcDjxh#,PCDH=#pcdh#,PCRQ=#pcrq#,CLSX_DM=#clsxDm#,CYR_CL_DJXH=#cyrClhmXh#,CYR_CZXM=#cyrCzxm#,CYR_CLHM=#cyrClhm#,
+		CYR_GCHM=#cyrGchm#,CYR_SJXM=#cyrSjxm#,CYR_SJSFZ=#cyrSjsfz#,CYR_SJSJHM=#cyrSjsjhm#,CYR_QTLXDH=#cyrQtlxdh#,
+		CYR_QTLXDH2=#cyrQtlxdh2#,
+		YF_HJ=#yfHj#,YF_YFYF=#yfYfyf#,YF_YJ=#yfYj#,YF_XXF=#yfXxf#,YF_SJS=#yfSjs#,
+		YF_HDYF=#yfHdyf#,YF_HDF=#yfHdf#,YF_ZJF=#yfZjf#,YFJSF_DM=#yfjsfDm#,XXZJ_DJXH=#xxzjDjxh#,
+		BZ=#bz#,XGR_CZY_DJXH=#xgrCzyDjxh#,
+		XGRQ=#xgrq# where PC_DJXH=#pcDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteHyPcByKey" parameterClass="java.util.Map">
+		update HY_PC set yxbz='N' where PC_DJXH=#pcDjxh#
+    </delete>
+</sqlMap>

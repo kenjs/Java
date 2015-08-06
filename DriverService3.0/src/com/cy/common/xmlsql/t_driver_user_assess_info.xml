@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<!-- 新增评价 -->
+	<insert id="iBatisInsertDriverUserAssessInfo" parameterClass="com.cy.common.bo.DriverUserAssessInfoBo">
+		insert into t_driver_user_assess_info
+		(CARGO_ID,DRIVER_ID,USER_ID,TRANSACTION_ID,ASSESS_EVALUATE_SCORE,ASSESS,CREATE_TIME,MODIFY_TIME) 
+		values
+		(#cargoId#,#driverId#,#userId#,#transactionId#,#assessEvaluateScore#,#assess#,sysdate(),sysdate())
+		<selectKey keyProperty="id" resultClass="Integer">
+			select last_insert_id() as id
+		</selectKey>
+	</insert>
+	
+	<!-- 更改评价 -->
+	<update id="iBatisUpdateDriverUserAssessInfo" parameterClass="com.cy.common.bo.DriverUserAssessInfoBo">
+		update t_driver_user_assess_info set 		
+		MODIFY_TIME = sysdate()
+		<dynamic>
+			<isNotEmpty property="assessEvaluateScore" prepend=",">				
+				ASSESS_EVALUATE_SCORE = #assessEvaluateScore#
+			</isNotEmpty>
+			<isNotEmpty property="assess" prepend=",">
+				ASSESS = #assess#
+			</isNotEmpty>
+		</dynamic>
+		where id = #id#
+	</update>
+	
+	<!-- 判断是否已评价 -->
+	<select id="iBatisSelectAssessNum" parameterClass="com.cy.common.bo.DriverUserAssessInfoBo" resultClass="Integer">
+		select ID from t_driver_user_assess_info where CARGO_ID = #cargoId# and DRIVER_ID = #driverId# and USER_ID = #userId# and TRANSACTION_ID = #transactionId#
+	</select>
+	
+	<!-- 根据订单id查找评价 -->
+	<select id="iBatisSelectDriverUserAssessByTransactionId" parameterClass="String" resultClass="Integer">
+		select count(ID) from t_driver_user_assess_info where TRANSACTION_ID = #transactionId#
+	</select>
+</sqlMap>

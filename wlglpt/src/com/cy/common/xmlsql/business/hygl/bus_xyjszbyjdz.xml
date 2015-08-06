@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.hygl.dao.BusXyjszbyjdzMapper">
+	<select id="selectXyjsZbYjdzPage" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.XyjsZbYjdzDomain">
+		SELECT A.Dz_Djxh as dzdjxh,
+		   B.mc AS jgmc,
+           C.Pcdh as pcdh,
+           C.Pcrq as pcrq,
+           D.Hwmc as hwmc,
+           E.Zrbm_Mc as zrbmmc,
+           case A.ZRBM_DM when 2 then (SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = A.ZRBM_DJXH) 
+             when 3 then (SELECT FBSJC FROM QY_FBS_DJXX DM WHERE DM.FBS_DJXH = A.ZRBM_DJXH) end as fbsmc,
+           A.JS_YJ AS jsYj,
+           A.DZJE AS dzje,
+           F.mc as dzrmc,
+           A.DZRQ AS dzrq,
+           G.Mc dzjgmc,
+           A.YXBZ AS yxbz,
+           A.DZBZ AS dzbz,
+           A.DZ_CYBZ AS dzCybz,
+           A.DZCYJE AS dzcyje,
+           A.SPBZ AS spbz,
+           A.WSSPZT_DM AS wsspztDm,
+           A.WS_SPXH AS wsSpxh
+      FROM XYJS_ZB_YJDZ A left join qy_rydj F on A.Dzr_Czy_Djxh=F.Czy_Djxh
+      	   left join qy_zzjg G on G.Jgbm = A.Dz_Jgbm,
+           qy_zzjg B,hy_pc C,hy_dd_hwmx D,dm_zrbm E
+      WHERE A.Ss_Jgbm=B.Jgbm and A.Pc_Djxh=C.Pc_Djxh and A.Dd_Djxh=D.Dd_Djxh and A.xh=D.Xh
+        and A.Zrbm_Dm=E.Zrbm_Dm and A.YXBZ='Y' 
+		<dynamic>
+		  	<isNotEmpty prepend="and" property="ssJgbm">
+		  		A.SS_JGBM like #ssJgbm#
+		  	</isNotEmpty>
+		  	<isNotEmpty prepend="and" property="zrbmDm">
+		  		A.ZRBM_DM like #zrbmDm#
+		  	</isNotEmpty>
+		  	<isNotEmpty prepend="and" property="zrbmDjxh">
+		  		A.ZRBM_DJXH like #zrbmDjxh#
+		  	</isNotEmpty>
+		  	<isNotEmpty prepend="and" property="pcrqQ">
+		  		C.Pcrq &gt;= to_date(#pcrqQ#,'yyyy-MM-dd')
+		  	</isNotEmpty>
+		  	<isNotEmpty prepend="and" property="pcrqZ">
+		  		C.Pcrq &lt;= to_date(#pcrqZ#,'yyyy-MM-dd')
+		  	</isNotEmpty>
+		  	<isNotEmpty prepend="and" property="dzbz">
+		  		A.DZBZ like #dzbz#
+		  	</isNotEmpty>
+		  </dynamic>
+		  $orderStr$
+    </select>
+    
+    <select id="selectXyjsZbYjdzAll" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.XyjsZbYjdzDomain">
+		SELECT A.Dz_Djxh as dzdjxh,
+		   B.mc AS jgmc,
+           C.Pcdh as pcdh,
+           C.Pcrq as pcrq,
+           D.Hwmc as hwmc,
+           E.Zrbm_Mc as zrbmmc,
+           case A.ZRBM_DM when 2 then (SELECT JC FROM QY_ZZJG DM WHERE DM.JGBM = A.ZRBM_DJXH) 
+             when 3 then (SELECT FBSJC FROM QY_FBS_DJXX DM WHERE DM.FBS_DJXH = A.ZRBM_DJXH) end as fbsmc,
+           A.JS_YJ AS jsYj,
+           A.DZJE AS dzje,
+           F.mc as dzrmc,
+           to_char(A.DZRQ,'yyyy-MM-dd') AS dzrq,
+           G.Mc dzjgmc,
+           A.YXBZ AS yxbz,
+           A.DZBZ AS dzbz,
+           A.DZ_CYBZ AS dzCybz,
+           A.DZCYJE AS dzcyje,
+           A.SPBZ AS spbz,
+           A.WSSPZT_DM AS wsspztDm,
+           A.WS_SPXH AS wsSpxh
+      FROM XYJS_ZB_YJDZ A left join qy_rydj F on A.Dzr_Czy_Djxh=F.Czy_Djxh
+      	   left join qy_zzjg G on G.Jgbm = A.Dz_Jgbm,
+           qy_zzjg B,hy_pc C,hy_dd_hwmx D,dm_zrbm E
+      WHERE A.Ss_Jgbm=B.Jgbm and A.Pc_Djxh=C.Pc_Djxh and A.Dd_Djxh=D.Dd_Djxh and A.xh=D.Xh
+        and A.Zrbm_Dm=E.Zrbm_Dm and A.YXBZ='Y' 
+		<dynamic>
+		  	<isNotEmpty prepend="and" property="ssJgbm">
+		  		A.SS_JGBM like #ssJgbm#
+		  	</isNotEmpty>
+		  	<isNotEmpty prepend="and" property="zrbmDm">
+		  		A.ZRBM_DM like #zrbmDm#
+		  	</isNotEmpty>
+		  	<isNotEmpty prepend="and" property="zrbmDjxh">
+		  		A.ZRBM_DJXH like #zrbmDjxh#
+		  	</isNotEmpty>
+		  	<isNotEmpty prepend="and" property="pcrqQ">
+		  		C.Pcrq &gt;= to_date(#pcrqQ#,'yyyy-MM-dd')
+		  	</isNotEmpty>
+		  	<isNotEmpty prepend="and" property="pcrqZ">
+		  		C.Pcrq &lt;= to_date(#pcrqZ#,'yyyy-MM-dd')
+		  	</isNotEmpty>
+		  	<isNotEmpty prepend="and" property="dzbz">
+		  		A.DZBZ like #dzbz#
+		  	</isNotEmpty>
+		  </dynamic>
+		  ORDER by A.DZ_DJXH ASC
+    </select>
+
+	<select id="getXyjsZbYjdzRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.DZ_DJXH) 
+      FROM XYJS_ZB_YJDZ A left join qy_rydj F on A.Dzr_Czy_Djxh=F.Czy_Djxh,
+           qy_zzjg B,hy_pc C,hy_dd_hwmx D,dm_zrbm E
+      WHERE A.Ss_Jgbm=B.Jgbm and A.Pc_Djxh=C.Pc_Djxh and A.Dd_Djxh=D.Dd_Djxh and A.xh=D.Xh
+        and A.Zrbm_Dm=E.Zrbm_Dm and A.YXBZ='Y'
+		<dynamic>
+		  	<isNotEmpty prepend="and" property="ssJgbm">
+		  		A.SS_JGBM like #ssJgbm#
+		  	</isNotEmpty>
+		  	<isNotEmpty prepend="and" property="zrbmDm">
+		  		A.ZRBM_DM like #zrbmDm#
+		  	</isNotEmpty>
+		  	<isNotEmpty prepend="and" property="zrbmDjxh">
+		  		A.ZRBM_DJXH like #zrbmDjxh#
+		  	</isNotEmpty>
+		  	<isNotEmpty prepend="and" property="pcrqQ">
+		  		C.Pcrq &gt;= to_date(#pcrqQ#,'yyyy-MM-dd')
+		  	</isNotEmpty>
+		  	<isNotEmpty prepend="and" property="pcrqZ">
+		  		C.Pcrq &lt;= to_date(#pcrqZ#,'yyyy-MM-dd')
+		  	</isNotEmpty>
+		  	<isNotEmpty prepend="and" property="dzbz">
+		  		A.DZBZ like #dzbz#
+		  	</isNotEmpty>
+		  </dynamic>
+    </select>
+</sqlMap>

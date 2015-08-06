@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.zygl.dao.Bus_zyglQykhdjxxMapper">
+	<select id="selectQyKhDjxxPage" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyKhDjxxDomain">
+		SELECT A.KH_DJXH AS khDjxh,
+		       A.SS_JGBM AS ssJgbm,
+		       A.KHMC AS khmc,
+		       A.KHJC AS khjc,
+		       A.PYQC AS pyqc,
+		       A.PYJC AS pyjc,
+		       A.XZQH_DM AS xzqhDm,
+		       (SELECT DM.XZQH_MC FROM DM_XZQH DM WHERE DM.XZQH_DM=A.XZQH_DM) AS xzqhMc,
+		       (SELECT DM.XZQH_QC FROM DM_XZQH DM WHERE DM.XZQH_DM=A.XZQH_DM) AS xzqhQc,
+		       A.DZ AS dz,
+		       A.DH AS dh,
+		       A.YB AS yb,
+		       A.FZR AS fzr,
+		       A.DJ_JGBM AS djJgbm,
+		       A.DJR_CZY_DJXH AS djrCzyDjxh,
+		       A.DJRQ AS djrq,
+		       A.QYBZ AS qybz,
+		       A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       A.KH_QYBM AS khbm,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc,
+		       A.KHLX_DM as khlxDm,
+			   (SELECT B.KHLX_MC FROM DM_KHLX B WHERE B.KHLX_DM=A.KHLX_DM)  khlxMc,
+			   A.YKJSFS_DM as ykjsfsDm,
+		      (SELECT B.YKJSFS_MC FROM  DM_YKJSFS B WHERE B.YKJSFS_DM=A.YKJSFS_DM)  ykjsfsMc,
+		      (SELECT ZZ.MC FROM QY_ZZJG ZZ WHERE ZZ.JGBM=A.SS_JGBM) AS ssjgmc,
+     		  (SELECT ZZ.MC FROM QY_ZZJG ZZ WHERE ZZ.JGBM=A.DJ_JGBM) AS djjgmc
+		  FROM QY_KH_DJXX A 
+		  WHERE A.YXBZ='Y' 
+		  <dynamic> 
+			<isNotEmpty property="ssJgbm" prepend="and">
+				A.SS_JGBM =#ssJgbm#
+			</isNotEmpty>
+			<isNotEmpty property="djJgbm" prepend="and">
+				A.DJ_JGBM =#djJgbm#
+			</isNotEmpty>
+			<isNotEmpty property="khmc" prepend="and">
+				A.KHMC LIKE #khmc#
+			</isNotEmpty>
+		  </dynamic>
+		  $orderStr$
+    </select>
+    
+    <select id="selectQyKhDjxxAll" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyKhDjxxDomain">
+		SELECT A.KH_DJXH AS khDjxh,
+		       A.SS_JGBM AS ssJgbm,
+		       A.KHMC AS khmc,
+		       A.KHJC AS khjc,
+		       A.PYQC AS pyqc,
+		       A.PYJC AS pyjc,
+		       A.XZQH_DM AS xzqhDm,
+		       (SELECT DM.XZQH_MC FROM DM_XZQH DM WHERE DM.XZQH_DM=A.XZQH_DM) AS xzqhMc,
+		       (SELECT DM.XZQH_QC FROM DM_XZQH DM WHERE DM.XZQH_DM=A.XZQH_DM) AS xzqhQc,
+		       A.DZ AS dz,
+		       A.DH AS dh,
+		       A.YB AS yb,
+		       A.FZR AS fzr,
+		       A.DJ_JGBM AS djJgbm,
+		       A.DJR_CZY_DJXH AS djrCzyDjxh,
+		       A.DJRQ AS djrq,
+		       A.QYBZ AS qybz,
+		       A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc,
+		       A.KHLX_DM as khlxDm,
+			   (SELECT B.KHLX_MC FROM DM_KHLX B WHERE B.KHLX_DM=A.KHLX_DM)  khlxMc,
+			   A.YKJSFS_DM as ykjsfsDm,
+		      (SELECT B.YKJSFS_MC FROM  DM_YKJSFS B WHERE B.YKJSFS_DM=A.YKJSFS_DM)  ykjsfsMc,
+		      (SELECT ZZ.MC FROM QY_ZZJG ZZ WHERE ZZ.JGBM=A.SS_JGBM) AS ssjgmc,
+     		  (SELECT ZZ.MC FROM QY_ZZJG ZZ WHERE ZZ.JGBM=A.DJ_JGBM) AS djjgmc
+		  FROM QY_KH_DJXX A 
+		  WHERE A.YXBZ='Y' 
+		  <dynamic> 
+			<isNotEmpty property="ssJgbm" prepend="and">
+				A.SS_JGBM =#ssJgbm#
+			</isNotEmpty>
+			<isNotEmpty property="djJgbm" prepend="and">
+				A.DJ_JGBM =#djJgbm#
+			</isNotEmpty>
+			<isNotEmpty property="khmc" prepend="and">
+				A.KHMC LIKE #khmc#
+			</isNotEmpty>
+		  </dynamic>
+		  ORDER by A.KH_DJXH ASC
+    </select>
+
+	<select id="getQyKhDjxxRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.KH_DJXH) 
+		  FROM QY_KH_DJXX A 
+		  WHERE A.YXBZ='Y' 
+		  <dynamic> 
+			<isNotEmpty property="ssJgbm" prepend="and">
+				A.SS_JGBM =#ssJgbm#
+			</isNotEmpty>
+			<isNotEmpty property="khmc" prepend="and">
+				A.KHMC LIKE #khmc#
+			</isNotEmpty>
+		  </dynamic>
+    </select>
+    
+    <select id="queryKhmcCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT COUNT(*) FROM QY_KH_DJXX WHERE YXBZ='Y'
+		  <dynamic> 
+		   <isNotEmpty property="khDjxh" prepend="and">
+		   		<![CDATA[
+					KH_DJXH <>#khDjxh#
+				]]>
+			</isNotEmpty>
+			<isNotEmpty property="ssJgbm" prepend="and">
+				SS_JGBM =#ssJgbm#
+			</isNotEmpty>
+			<isNotEmpty property="khmc" prepend="and">
+				KHMC = #khmc#
+			</isNotEmpty>
+		  </dynamic>
+    </select>
+    
+    <select id="queryXzqhList" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyKhDjxxDomain">
+		SELECT A.PYQC AS pyqc,
+		       A.PYJC AS pyjc,
+		       A.XZQH_DM AS xzqhDm,
+		       A.XZQH_MC AS xzqhMc,
+		       A.XZQH_JC AS xzqhJc,
+		       A.XZQH_QC AS xzqhQc
+		  FROM DM_XZQH A 
+		  WHERE A.YXBZ='Y' 
+		  ORDER BY JBDM
+    </select>
+    
+</sqlMap>

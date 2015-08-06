@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+    
+<sqlMap  namespace="com.cy.xtgl.dao.BusXtglQyrydjMapper">	  
+    <!--启用-->
+	<update id="startQyzzYhwhUse" parameterClass="java.util.Map">
+		update QY_RYDJ set qybz='Y' where CZY_DJXH=#czyDjxh#
+	</update>
+	
+	<!--停用-->
+	<update id="stopQyzzYhwhUse" parameterClass="java.util.Map">
+		update QY_RYDJ set qybz='N' where CZY_DJXH=#czyDjxh#
+	</update>	
+	 
+    <!--检查是否用重名-->
+	<select id="checkQyRydjMcRepeat" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+	   select count(*) from QY_RYDJ where QY_ZCXH=#qyzcxh# and ZH=#zh# and YXBZ='Y'
+		<dynamic>
+			<isNotEmpty prepend="and" property="czyDjxh">
+				<![CDATA[CZY_DJXH <> #czyDjxh# ]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="selectQyRydjYhwhPage" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.QyRydjDomain">
+		  SELECT A.CZY_DJXH AS czyDjxh,
+				 A.MC AS mc, 
+				 A.ZH AS zh, 
+				 A.QYBZ AS qybz, 
+				 A.SJHM AS sjhm, 
+				 A.SJDH AS sjdh, 
+				 A.BGDH AS bgdh, 
+				 A.BGDHAO AS bgdhao,
+				 A.JTDH AS jtdh, 
+				 A.QQ AS qq, 
+				 A.MSN AS msn,
+				 A.EMAIL AS	email,
+				 A.RYLB_DM AS rylbDm,
+				 A.CJR_CZY_DJXH AS cjrCzyDjxh, 
+				 A.CJRQ	AS cjrq,
+				 A.XGR_CZY_DJXH AS xgrCzyDjxh,
+				 A.XGRQ AS xgrq, 
+				(SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+				(SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH)  xgrMc,
+				 C.JC AS jc,
+				 (SELECT GW_MC FROM QY_GW DM WHERE DM.GW_DJXH = B.GW_DJXH) AS gwMc 
+		    FROM QY_RYDJ A , QY_RY_GW B, QY_ZZJG C 
+			WHERE   A.CZY_DJXH = B.CZY_DJXH
+            and B.SS_JGBM = C.JGBM 
+       		and A.YXBZ = 'Y' 
+      		and A.XTGLYBZ = 'N' 
+            and B.ZJBZ = 'Y' 
+         AND (C.JGBM = #jgbm# OR (C.SJ_JGBM = #jgbm# AND C.JGLB_DM = '4'))
+
+		      $orderStr$
+	</select>
+
+    <select id="selectQyRydjAll" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.QyRydjDomain">
+		SELECT A.CZY_DJXH AS czyDjxh,
+				 A.MC AS mc, 
+				 A.ZH AS zh, 
+				 A.QYBZ AS qybz, 
+				 A.SJHM AS sjhm, 
+				 A.SJDH AS sjdh, 
+				 A.BGDH AS bgdh, 
+				 A.BGDHAO AS bgdhao,
+				 A.JTDH AS jtdh, 
+				 A.QQ AS qq, 
+				 A.MSN AS msn,
+				 A.EMAIL AS	email,
+				 A.RYLB_DM AS rylbDm,
+				 A.CJR_CZY_DJXH AS cjrCzyDjxh, 
+				 A.CJRQ	AS cjrq,
+				 A.XGR_CZY_DJXH AS xgrCzyDjxh,
+				 A.XGRQ AS xgrq, 
+				(SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+				(SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc,
+				 C.JC AS jc 
+		    FROM QY_RYDJ A , QY_RY_GW B, QY_ZZJG C 
+			WHERE A.CZY_DJXH=B.CZY_DJXH
+				 and B.SS_JGBM=C.JGBM 
+				 and A.YXBZ='Y' 
+				 and A.XTGLYBZ='N' 
+				 and B.ZJBZ='Y' 
+				 and A.QY_ZCXH=#qyZcxh# 
+		       <dynamic>
+		        	<isNotEmpty property="jbdm" prepend="and">
+			        	C.JBDM LIKE '$jbdm$%'
+		        	</isNotEmpty>
+		      </dynamic>
+		  ORDER by A.CZY_DJXH DESC
+    </select>
+
+	<select id="getQyRydjRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		  SELECT count(A.CZY_DJXH)
+		  FROM QY_RYDJ A , QY_RY_GW B, QY_ZZJG C
+		  WHERE A.CZY_DJXH=B.CZY_DJXH
+            and B.SS_JGBM = C.JGBM 
+       		and A.YXBZ = 'Y' 
+      		and A.XTGLYBZ = 'N' 
+            and B.ZJBZ = 'Y' 
+         AND (C.JGBM = #jgbm# OR (C.SJ_JGBM = #jgbm# AND C.JGLB_DM = '4'))
+
+	</select>
+	
+	<select id="selectZgwByCzyDjxh" parameterClass="com.cy.xtgl.domain.QyRyGwDomain"
+		resultClass="com.cy.xtgl.domain.QyRyGwDomain">
+            select q.czy_djxh as czyDjxh,q.gw_djxh as gwDjxh,q.ss_jgbm as ssJgbm,q.zjbz as zjbz,q.qx_jgbm as qxJgbm from QY_RY_GW q where q.CZY_DJXH=#czyDjxh# and zjbz='Y'
+    </select>	
+</sqlMap>

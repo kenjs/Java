@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.driver.dao.WebUserInfoDao">
+	
+	<!-- 根据parentId 和 encoded 查询用户信息 -->
+	<select id="selectWebuserInfoByParentIdAndEncoded" parameterType="map" resultType="WebUserInfoDomain">
+		SELECT
+			t.ARRIVAL_SURE as receiveSure,
+			t.`CODE` as code,
+			t.COMPANY_ID as companyId,
+			(select c.COMPANY_NAME from t_company_info c where c.ID = t.COMPANY_ID) companyName,
+			t.DELETED_FLAG as deletedFlag,
+			t.DELIVERY_FLAG as deliveryFlag,
+			t.EMAIL as email,
+			t.ENCODED as encoded,
+			t.ENTERPRISE_FLAG as enterpriseFlag,
+			t.ENTERPRISE_TIME as enterpriseTime,
+			t.ID as id,
+			t.ID_CARD_NUMBER as idCardNumber,
+			t.LOGIN_IP as loginIp,
+			t.LOGIN_TIME as loginTime,
+			t.MOBILEPHONE as mobilephone,
+			t.`NAME` as name,
+			t.PACT_CAR_DRIVER_FLAG as pactCarDriverFlag,
+			t.PANYMENT_FLAG as panymentFlag,
+			t.PANYMENT_TIME as panymentTime,
+			t.PARENT_ID as parentId,
+			t.PERSONAGE_FLAG as personageFlag,
+			t.PERSONAGE_TIME as personageTime,
+			t.RECEIVE_SURE as receiveSure,
+			t.SUBMIT_TYPE as submitType,
+			t.USER_IMAGES as userImages,
+			t.USER_ORIGIN as userOrigin,
+			t.USER_QQ as userQq,
+			t.USER_TYPE as userType
+		FROM
+			t_web_user_info t
+		WHERE
+			t.DELETED_FLAG = 0
+		AND t.USER_ORIGIN = 0
+        <if test="parentId != null and parentId != ''">
+            AND t.PARENT_ID = #{parentId}
+        </if>
+        <if test="encoded != null and encoded != ''">
+            AND t.ENCODED = #{encoded}
+        </if>
+	</select>
+
+</mapper>

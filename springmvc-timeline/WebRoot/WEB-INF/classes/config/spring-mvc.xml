@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:p="http://www.springframework.org/schema/p"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:aop="http://www.springframework.org/schema/aop" 
+  xmlns:tx="http://www.springframework.org/schema/tx"
+  xmlns:mvc="http://www.springframework.org/schema/mvc"
+  xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-4.0.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd" 
+    default-lazy-init="true" default-autowire="byName">   
+	<!-- 扫描controller（controller层注入） -->	
+	<context:component-scan base-package="time.timeline.controllers"/>
+	<!-- 扫描文件（自动将servicec层注入） -->	
+	<context:component-scan base-package="time.timeline.services" />
+	
+	<!-- 避免IE在ajax请求时，返回json出现下载 -->
+	<bean id="jacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>
+					text/html;charset=UTF-8
+				</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 对模型视图添加前后缀 -->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	<mvc:resources location="/css/" mapping="/css/**"/>
+	<mvc:resources location="/js/" mapping="/js/**"/>
+	<mvc:resources location="/images/" mapping="/images/**"/>
+	<mvc:default-servlet-handler/>
+	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="order" value="1" />
+		<property name="mediaTypes">
+			<map>
+				<entry key="json" value="application/json" />
+			</map>
+		</property>
+		<property name="defaultViews">
+			<list>
+				<bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" />
+			</list>
+		</property>
+		 <property name="ignoreAcceptHeader" value="true" /> 
+	</bean>
+	
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	  <property name="location" value="classpath:config/application.properties"></property>
+	  <property name="ignoreUnresolvablePlaceholders" value="true"></property>
+	</bean>
+    <!-- 数据源配置,使用应用内的DBCP数据库连接池 --> 
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+    	<!-- Connection Info -->   
+	    <property name="driverClassName" value="${jdbc.driver}" />   
+	    <property name="url" value="${jdbc.url}" />   
+	    <property name="username" value="${jdbc.username}" />   
+	    <property name="password" value="${jdbc.password}" />  
+       	<!-- 数据库连接过多长时间不用将被视为被遗弃而收回连接池中 -->   
+       	<property name="removeAbandonedTimeout" value="30"/>
+    </bean>
+    
+    <!-- mybatis -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+    	<property name="dataSource" ref="dataSource" />
+    	
+    </bean>
+    
+    <!-- transaction manager -->
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    	<property name="dataSource" ref="dataSource" />
+    </bean>
+    <tx:advice id="txManageAdvice" transaction-manager="txManager">
+    	<tx:attributes>
+    		<tx:method name="delete*" propagation="REQUIRED" read-only="false"
+                rollback-for="java.lang.Exception" no-rollback-for="java.lang.RuntimeException" />
+            <tx:method name="insert*" propagation="REQUIRED" read-only="false"
+                rollback-for="java.lang.RuntimeException" />
+            <tx:method name="update*" propagation="REQUIRED" read-only="false"
+                rollback-for="java.lang.Exception" />
+            <tx:method name="find*" propagation="SUPPORTS" />
+            <tx:method name="get*" propagation="SUPPORTS" />
+            <tx:method name="select*" propagation="SUPPORTS" />
+    	</tx:attributes>
+    </tx:advice>
+    <aop:config proxy-target-class="true">
+    	<aop:pointcut expression="(execution(* time.timeline.services.impl.*.*(..)))" id="txManagerPoint"/>
+    	<aop:advisor advice-ref="txManageAdvice" pointcut-ref="txManagerPoint"/>
+    </aop:config>
+    
+    <!-- <bean id="mapperFactory" class="org.mybatis.spring.mapper.MapperFactoryBean">
+    	<property name="mapperInterface" value="com.hskj.mapper.UserMapper" />
+        <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+    </bean> -->
+    <bean id="mapperScanner" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+    	<property name="basePackage" value="time.timeline.services"/>
+    </bean>
+</beans>

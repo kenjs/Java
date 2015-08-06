@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<resultMap class="com.cy.driver.record.domain.QuoteInfoDomain" id="QuoteInfoDomain">
+		<result property="id" column="ID"/>
+		<result property="cargoId" column="CARGO_ID"/>
+		<result property="cargoType" column="CARGO_TYPE"/>
+		<result property="cargoName" column="CARGO_NAME"/>
+		<result property="startProvince" column="START_PROVINCE"/>
+		<result property="startCity" column="START_CITY"/>
+		<result property="startCounty" column="START_COUNTY"/>
+		<result property="startTown" column="START_TOWN"/>
+		<result property="endProvince" column="END_PROVINCE"/>
+		<result property="endCity" column="END_CITY"/>
+		<result property="endCounty" column="END_COUNTY"/>
+		<result property="endTown" column="END_TOWN"/>
+		<result property="requestStartTime" column="REQUEST_START_TIME"/>
+		<result property="requestEndTime" column="REQUEST_END_TIME"/>
+		<result property="requestCarLength" column="REQUEST_CAR_LENGTH"/>
+		<result property="requestCarPlateType" column="REQUEST_CAR_PLATE_TYPE"/>
+		<result property="contactName" column="CONTACT_NAME"/>
+		<result property="contactMobilephone" column="CONTACT_MOBILEPHONE"/>
+		<result property="contactTelephone" column="CONTACT_TELEPHONE"/>
+		<result property="cargoWeight" column="CARGO_WEIGHT"/>
+		<result property="cargoCubage" column="CARGO_CUBAGE"/>
+		<result property="remark" column="REMARK"/>
+		<result property="freight" column="FREIGHT"/>
+		<result property="cargoFlag" column="CARGO_FLAG"/>
+		<result property="quoteFair" column="QUOTE_FAIR"/>
+		<result property="quoteType" column="QUOTE_TYPE"/>
+	</resultMap>
+	
+	<!-- 所有报过价的订单列表 -->
+	<select id="iBatisSelectQuoteTransactionList" parameterClass="map" resultMap="QuoteInfoDomain">
+		SELECT
+			lt.ID,			
+			lt.QUOTE_TYPE,
+			lt.CARGO_ID,
+			rt.CARGO_TYPE,
+			rt.CARGO_NAME,
+			rt.START_PROVINCE,
+			rt.START_CITY,
+			rt.START_COUNTY,
+			rt.START_TOWN,
+			rt.END_PROVINCE,
+			rt.END_CITY,
+			rt.END_COUNTY,
+			rt.END_TOWN,
+			rt.REQUEST_START_TIME,
+			rt.REQUEST_END_TIME,
+			rt.REQUEST_CAR_LENGTH,
+			rt.REQUEST_CAR_PLATE_TYPE,
+			rt.CONTACT_NAME,
+			rt.CONTACT_MOBILEPHONE,
+			rt.CONTACT_TELEPHONE,
+			rt.CARGO_WEIGHT,
+			rt.CARGO_CUBAGE,
+			rt.REMARK,
+			rt.FREIGHT,
+			rt.CARGO_FLAG,
+			lt.QUOTE_FAIR
+		FROM
+			t_quote_info lt,
+			t_order_cargo_info rt
+		WHERE lt.CARGO_ID = rt.ID
+			and lt.DRIVER_ID = #driverId#
+			and lt.START = 0
+			and rt.CARGO_FLAG = 0
+			and rt.DELETED_FLAG = 0
+			and rt.REQUEST_START_TIME <![CDATA[>=]]> DATE_FORMAT(SYSDATE(),'%Y-%m-%d')
+		order by rt.REQUEST_START_TIME asc
+		limit $fromSize$,$listSize$
+	</select>
+	
+	<!-- 新增货源报价 -->
+	<insert id="iBatisInsertQuoteInfo" parameterClass="com.cy.common.bo.QuoteInfoBo">
+		insert into t_quote_info (CARGO_ID,DRIVER_ID,QUOTE_FAIR,QUOTE_TYPE,REMARK,START,CREATE_TIME,MODIFY_TIME,CASH_ADVANCE,PREPAID_OIL_CARD) 
+		values (#cargoId#,#driverId#,#quoteFair#,#quoteType#,#remark#,0,sysdate(),sysdate(),#cashAdvance:NUMERIC#,#prepaidOilCard:NUMERIC#)
+		<selectKey keyProperty="id" resultClass="Integer">
+			select last_insert_id() as id
+		</selectKey>
+	</insert>
+	
+	<!-- 修改货源 报价 -->
+	<update id="iBatisUpdateQuoteInfo" parameterClass="com.cy.common.bo.QuoteInfoBo">
+		update t_quote_info set MODIFY_TIME = sysdate()
+		<dynamic>
+			<isNotEmpty property="quoteFair" prepend=",">
+				QUOTE_FAIR = #quoteFair#
+			</isNotEmpty>
+			<isNotEmpty property="quoteType" prepend=",">
+				QUOTE_TYPE = #quoteType#
+			</isNotEmpty>
+			<isNotEmpty property="remark" prepend=",">
+				REMARK = #remark#
+			</isNotEmpty>
+			<isNotEmpty property="start" prepend=",">
+				START = #start#
+			</isNotEmpty>
+			<isNotEmpty property="cashAdvance" prepend=",">
+				CASH_ADVANCE = #cashAdvance#
+			</isNotEmpty>
+			<isNotEmpty property="prepaidOilCard" prepend=",">
+				PREPAID_OIL_CARD = #prepaidOilCard#
+			</isNotEmpty>
+		</dynamic>
+		where ID = #id#
+	</update>
+	
+	<!-- 根据货源id和司机id查找报价信息 -->
+	<select id="iBatisSelectQuoteInfoByDriverAndCargoId" parameterClass="map" resultClass="com.cy.driver.record.domain.QuoteInfoDomain">
+		select ID as id,
+				CARGO_ID as cargoId,
+				DRIVER_ID as driverId,
+				QUOTE_FAIR as quoteFair,
+				QUOTE_TYPE as quoteType,
+				REMARK as remark,
+				CREATE_TIME as createTime,
+				MODIFY_TIME as modifyTime,
+				CASH_ADVANCE as cashAdvance,
+				PREPAID_OIL_CARD as prepaidOilCard
+		 from t_quote_info where CARGO_ID = #cargoId# and DRIVER_ID = #driverId# and START = 0
+	</select>
+</sqlMap>

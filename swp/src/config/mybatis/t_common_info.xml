@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.swp.dao.CommonDao">
+
+    <select id="getSystemParameter" parameterType="hashmap" resultType="string">
+        select t.value from t_system_code t where t.code = #{code} and t.sp_key = #{spKey} and t.param_type = #{paramType} and t.delete_flag = #{deleteFlag}
+    </select>
+
+</mapper>

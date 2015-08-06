@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>应付核销</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link href="../css/webui/main.css" rel="stylesheet" />
+    <link href="../css/themes/settlebillverificationc/billVerification.css" rel="stylesheet" />
+	<link href="../js/sys/ymPrompt/skin/ch/ymPrompt.css" rel="stylesheet" />
+    <script src="../js/jquery/jquery-1.8.3.min.js" type=text/javascript></script>
+    <script src="../js/sys/webui/contract/header.js"></script>    	
+    <script src="../js/sys/webui/logo.js"></script>   	 
+    <script src="../js/sys/webui/contract/left.js"></script>
+    <script src="../js/sys/ymPrompt/ymPrompt.js" type="text/javascript"></script>
+	<script src="../js/sys/DatePicker/WdatePicker.js" type="text/javascript"></script>
+	<script src="../js/themes/settlebillverificationc/billVerification.js" type="text/javascript"></script>
+  </head>
+  
+  <body>
+    <!-- 顶部 --开始  此处须由js动态加入-->
+		<div id="header" class="c-header" >
+	
+		</div>
+		<!-- 顶部 --结束-->
+	
+		<!-- LOGON --开始   此处须由js动态加入-->
+		<div id="logo" class="c-logo" >
+		
+		</div>
+	<!-- LOGON --结束-->
+
+	<div id="main" class="c-main">
+		
+  		<div id="left" class="c-left">
+			<div id="accordion">
+				
+			</div>  
+		</div>
+			
+  		<div id="right" class="c-right">
+  			<div style="text-align:left;margin-bottom:7px">
+  				<img style="margin-bottom:-5px;margin-right:7px" src="../imgs/sys/home-icon.jpg"/>
+  				<a style="margin-right:7px" href="../logincs/index_main">首页</a>
+  				<span style="margin-right:7px">&gt;</span>
+  				<a style="margin-right:7px" href="../settlebillcs/verificationPayable?order=10">应付核销</a>
+  				<span style="margin-right:7px">&gt;</span>
+  				<span style="font-weight:bold">核销</span>
+  			</div>
+  			<div style="width:100%;padding:0px;border-width:1px 0px 0px 0px;border-style:solid;border-color:#C7C7C7"></div>
+  			<div id="top">
+  				<table class="myTable">
+					<tr>
+	  					<td class="tdright">
+	  						<input type="hidden" id="settlebillid"/>
+	  						<span>结算单号：</span>
+	  					</td>
+	  					<td class="tdleft">
+	  						<a id="settlebillnumber" href="javascript:void(0)" onclick="detail()">123456</a>
+	  					</td>
+	  					<td class="tdright">
+	  						<span>分包商：</span>
+	  					</td>
+	  					<td class="tdleft">
+	  						<span id="organization">哇哈哈</span>
+	  					</td>
+	  					<td class="tdright">
+	  						<span>结算单状态：</span>
+	  					</td>
+	  					<td class="tdleft">
+	  						<span id="status">已审核</span>
+	  					</td>
+	  				</tr>
+	  				<tr>
+	  					<td class="tdright">
+	  						<span>应付合计：</span>
+	  					</td>
+	  					<td class="tdleft">
+	  						<span id="needinoutallamount">1000000</span>
+	  					</td>
+	  					<td class="tdright">
+	  						<span>已开票合计：</span>
+	  					</td>
+	  					<td class="tdleft">
+	  						<span id="factamount">0</span>
+	  					</td>
+	  					<td class="tdright">
+	  						<span>未开票合计：</span>
+	  					</td>
+	  					<td class="tdleft">
+	  						<span id="needinoutremainamount">1000000</span>
+	  					</td>
+	  				</tr>
+				</table>
+       		</div>
+       		<div id="middle">
+       			<div class="middle_left">
+       				<span class="tab">发票核销</span>
+       				<span style="float:left;margin-top:9px;margin-left:20px">发票金额合计：</span>
+       				<span id="totalamount" style="float:left;margin-top:9px;color:red">0.00</span>
+       				<span style="float:left;margin-top:9px;color:red">&nbsp;元</span>
+       				<span style="float:left;margin-top:9px;margin-left:20px" class="isShow">计划付款日期：</span>
+       				<span style="float:left;margin-top:9px;margin-left:10px;" class="isShow">
+       					<input type="text" id="planpaydate" class="Wdate w80" style="margin-top:-6px;border-color:#C7C7C7;width:100px" onFocus="WdatePicker({firstDayOfWeek:1})"/>
+					</span>
+       			</div>
+       			<div class="middle_right">
+       				<input type="button" onclick="insertRow()" value="新增核销" style="float:right;height:25px" class="btn"/>
+       			</div>
+       		</div>
+       		<div>
+       			<table id="list_head">
+       				<tr>
+       					<th class="td0">序号</th>
+       					<th class="td1"><span style="color:red">*</span>&nbsp;发票代码</th>
+       					<th class="td2"><span style="color:red">*</span>&nbsp;发票号</th>
+       					<th class="td3"><span style="color:red">*</span>&nbsp;发票金额(元)</th>
+       					<th class="td4">开票人</th>
+       					<th class="td5">开票日期</th>
+       					<th class="td6">操作</th>
+
+       				</tr>
+       			</table>
+       			<div style="padding:0px;margin:0px;border:1px solid #c7c7c7;height:360px;overflow-y:auto;border-top-width:0px;">
+       				<table id="list_body"></table>
+       			</div>
+       			<div style="margin-top:30px">
+       				<input type="button" class="btn" value="确认核销" onclick="save()"/>
+       				<input type="button" class="btn" style="margin-left:40px" value="返回" onclick="back()"/>
+       			</div>
+       		</div>
+  		</div>
+	</div>
+  </body>
+</html>

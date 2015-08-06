@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+	<typeHandler jdbcType="CLOB" javaType="java.lang.String" callback="org.springframework.orm.ibatis.support.ClobStringTypeHandler" />
+	<typeHandler jdbcType="BLOB" javaType="[B" callback="org.springframework.orm.ibatis.support.BlobByteArrayTypeHandler" />
+	<!-- 系统管理模块start -->
+	<sqlMap resource="com/cy/common/xmlsql/business/common/bus_taglib.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/common/bus_xtgl_common.xml"/>
+	<!-- 系统管理模块end --> 
+	<!-- 人员选择start -->
+	<sqlMap resource="com/cy/common/xmlsql/business/common/bus_ryxz_common.xml"/>
+	<!-- 人员选择end -->
+	<sqlMap resource="com/cy/common/xmlsql/business/common/bus_wlgldropdown_common.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/common/bus_wssp_common.xml"/>
+</sqlMapConfig>

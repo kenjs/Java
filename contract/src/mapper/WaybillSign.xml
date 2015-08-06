@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<!-- 运单签收 -->
+<sqlMap >
+ <typeAlias type="tf56.contract.domain.WaybillSign" alias="waybillSign"/>
+ <resultMap id="waybillSignFieldMap" class="waybillSign">
+  <result column="waybillSignId" property="waybillsignid" jdbcType="VARCHAR" />   <!-- 编码Id -->
+  <result column="waybillId" property="waybillid" jdbcType="VARCHAR" />   <!-- 运单Id -->
+  <result column="waybillNumber" property="waybillnumber" jdbcType="VARCHAR" />   <!-- 运单编号 -->
+  <result column="signStatus" property="signstatus" jdbcType="VARCHAR" />   <!-- 签收状态 -->
+  <result column="signMan" property="signman" jdbcType="VARCHAR" />   <!-- 签收人 -->
+  <result column="signNum" property="signnum" jdbcType="VARCHAR" />   <!-- 签收数量 -->
+  <result column="backBillType" property="backbilltype" jdbcType="VARCHAR" />   <!-- 回单类型 -->
+  <result column="inputDate" property="inputdate" jdbcType="VARCHAR" />   <!-- 输入日期 -->
+  <result column="inputMan" property="inputman" jdbcType="VARCHAR" />   <!-- 输入人 -->
+  <result column="memo" property="memo" jdbcType="VARCHAR" />   <!-- 备注 -->
+ </resultMap>
+
+ <!-- 新增记录 -->
+ <insert id="iBatisInsertWaybillSign" parameterClass="waybillSign">
+  insert into WaybillSign (waybillId,waybillNumber,signStatus,signMan,signNum,backBillType,inputDate,inputMan,memo)
+   values (#waybillid:VARCHAR#,#waybillnumber:VARCHAR#,#signstatus:VARCHAR#,#signman:VARCHAR#,#signnum:VARCHAR#,#backbilltype:VARCHAR#,
+   		  #inputdate:VARCHAR#,#inputman:VARCHAR#,#memo:VARCHAR#)
+  <selectKey resultClass="String" keyProperty="waybillsignid">
+   select last_insert_id() as id
+  </selectKey>
+ </insert>
+<!-- 运单签收 -->
+ <!-- 根据运单id获得用户对象, 返回bean -->
+ <select id="iBatisSelectWaybillSignByWaybillId" parameterClass="java.util.HashMap" resultClass="waybillSign">
+  select * from WaybillSign where waybillId=#waybillid#
+ </select> 
+</sqlMap>

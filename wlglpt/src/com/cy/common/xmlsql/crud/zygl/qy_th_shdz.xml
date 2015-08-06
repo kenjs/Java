@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.zygl.dao.QyThShdzMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectQyThShdzByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyThShdzDomain">
+		select a.WH_XH as whXh,a.SS_JGBM as ssJgbm,a.DZ as dz,a.DH as dh,a.XZQH_DM as fhrXzqhDm,
+		a.YXBZ as yxbz,a.XGR_CZY_DJXH as xgrCzyDjxh,a.CJR_CZY_DJXH as cjrCzyDjxh,a.CJRQ as cjrq,a.FZR as fzr,
+		(SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		(SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc,
+		(select DX.XZQH_MC from DM_XZQH DX WHERE DX.XZQH_DM=A.XZQH_DM) fhrXzqhMc,
+		(select QZ.MC from QY_ZZJG QZ WHERE QZ.JGBM=A.SS_JGBM) ssJgmc,
+		a.XGRQ as xgrq from QY_TH_SHDZ a  where a.WH_XH=#whXh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertQyThShdz"  parameterClass="com.cy.common.bo.QyThShdz">
+		<selectKey keyProperty="whXh" resultClass="String" type="pre"> 
+			select SEQ_ZY_DJXH.nextval as whXh from dual 
+		</selectKey> 
+		insert into QY_TH_SHDZ(WH_XH,SS_JGBM,DZ,DH,XZQH_DM,
+		YXBZ,XGR_CZY_DJXH,CJR_CZY_DJXH,CJRQ,FZR,
+		XGRQ)
+		values(#whXh:NUMERIC#,#ssJgbm:NUMERIC#,#dz:VARCHAR#,#dh:VARCHAR#,#xzqhDm:VARCHAR#,
+		#yxbz:VARCHAR#,#xgrCzyDjxh:NUMERIC#,#cjrCzyDjxh:NUMERIC#,to_date(#cjrq:DATE#,'yyyy-MM-dd'),#fzr:VARCHAR#,
+		to_date(#xgrq:DATE#,'yyyy-MM-dd'))
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateQyThShdzByKey" parameterClass="com.cy.common.bo.QyThShdz">
+        update QY_TH_SHDZ set WH_XH=#whXh#,SS_JGBM=#ssJgbm#,DZ=#dz#,DH=#dh#,XZQH_DM=#xzqhDm#,
+		YXBZ=#yxbz#,XGR_CZY_DJXH=#xgrCzyDjxh#,CJR_CZY_DJXH=#cjrCzyDjxh#,CJRQ=to_date(#cjrq#, 'YYYY-MM-DD'),FZR=#fzr#,
+		XGRQ=to_date(#xgrq#, 'YYYY-MM-DD') where WH_XH=#whXh#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteQyThShdzByKey" parameterClass="java.util.Map">
+		update QY_TH_SHDZ set yxbz='N' where WH_XH=#whXh#
+    </delete>
+</sqlMap>

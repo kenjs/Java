@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.cwgl.dao.CwFpKpdjMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectCwZfdjByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.cwgl.domain.CwYsyfSrdjDomain">
+		select A.ZF_DJXH zfDjxh,
+       		A.YSYF_DJXH ysyfDjxh,
+       		A.YFJSF_DM yfjsfDm,
+       		A.YFJSF_DJXH yfjsfDjxh,
+       		A.SKFMC skfmc,
+       		A.JE je,
+    		A.RQ rq,
+       		A.ZFFS_DM zffsDm,
+     		A.ZCFL_DM zcflDm,
+   		    A.YH_CSH_DJXH yhCshDjxh,
+   		    A.LKR lkr,
+   		    A.LKR_ZJLX_DM lkrZjlxDm,
+   		    A.LKR_ZJHM lkrZjhm,
+  		    A.LKRQ lkrq,
+  		    A.YHMC yhmc,
+  		    A.HM hm,
+       		A.ZH zh,
+   		    A.ZZRQ zzrq,
+      		A.JBR_CZY_DJXH jbrCzyDjxh,
+      		A.SHR_CZY_DJXH shrCzyDjxh,
+       		A.SHRQ shrq,
+    		A.YXBZ yxbz,
+       		A.BZ bz,
+       		(select AA.mc from qy_rydj AA where AA.czy_djxh = A.DJR_CZY_DJXH) djrCzyDjxh,
+       		A.DJRQ djrq,
+       		A.DJ_JGBM djJgbm,
+       		A.SS_JGBM ssJgbm
+  		from cw_zfdj A
+		WHERE A.yxbz = 'Y' and ZF_DJXH = #zfDjxh#
+    </select>
+    
+    <insert id="saveCwZfdj" parameterClass="com.cy.common.bo.CwZfdj">
+    	<selectKey keyProperty="zfDjxh" resultClass="string" type="pre"> 
+			select SEQ_YSYF_DJXH.nextval as zfDjxh from dual 
+		</selectKey> 
+		insert into cw_zfdj(ZF_DJXH ,YSYF_DJXH ,YFJSF_DM ,YFJSF_DJXH ,
+              SKFMC ,JE ,RQ ,ZFFS_DM ,ZCFL_DM ,
+              YH_CSH_DJXH ,LKR ,LKR_ZJLX_DM ,LKR_ZJHM ,LKRQ ,YHMC,
+              HM ,ZH ,ZZRQ ,JBR_CZY_DJXH ,SHR_CZY_DJXH,
+              SHRQ ,YXBZ ,BZ ,DJR_CZY_DJXH ,DJRQ ,DJ_JGBM ,SS_JGBM
+              )
+		values(#zfDjxh:NUMERIC#, #ysyfDjxh:NUMERIC#, #yfjsfDm:NUMERIC#, #yfjsfDjxh:NUMERIC#, 
+				#skfmc:VARCHAR#, #je:NUMERIC#, to_date(#rq#, 'yyyy-MM-dd'), #zffsDm:NUMERIC#, #zcflDm:NUMERIC#,
+				#yhCshDjxh:NUMERIC#, #lkr:VARCHAR#, #lkrZjlxDm:NUMERIC#, #lkrZjhm:VARCHAR#, to_date(#lkrq#, 'yyyy-MM-dd'), #yhmc:VARCHAR#,
+				#hm:VARCHAR#, #zh:VARCHAR#, to_date(#zzrq#, 'yyyy-MM-dd'), #jbrCzyDjxh:NUMERIC#, #shrCzyDjxh:NUMERIC#,
+				to_date(#shrq#, 'yyyy-MM-dd'), #yxbz:VARCHAR#, #bz:VARCHAR#, #djrCzyDjxh:NUMERIC#, to_date(#djrq#, 'yyyy-MM-dd'),
+				#djJgbm:NUMERIC#, #ssJgbm:NUMERIC#
+			)
+    </insert>
+
+    <!--根据主键删除表数据：软删除-->
+	<delete id="deleteCwZfdjByKey" parameterClass="java.util.Map">
+		update cw_zfdj set yxbz='N' where ZF_DJXH=#zfDjxh#
+    </delete>
+
+    <!--根据主键删除表数据：软删除-->
+	<delete id="deleteCwZfdjByYsyfDjxh" parameterClass="com.cy.cwgl.domain.CwZfdjDomain">
+		update cw_zfdj set yxbz='N' where YSYF_DJXH=#ysyfDjxh#
+    </delete>
+    
+</sqlMap>

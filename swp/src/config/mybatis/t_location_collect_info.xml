@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.swp.dao.LocationInfoDao">
+
+    <resultMap type="LocationCollectInfoDomain" id="location_collectInfo_domain_result">
+        <result property="id" column="ID"/>
+        <result property="driverId" column="DRIVER_ID"/>
+        <result property="longitude" column="LONGITUDE"/>
+        <result property="latitude" column="LATITUDE"/>
+        <result property="province" column="PROVINCE"/>
+        <result property="city" column="CITY"/>
+        <result property="county" column="COUNTY"/>
+        <result property="town" column="TOWN"/>
+        <result property="location" column="LOCATION"/>
+        <result property="collectTime" column="COLLECT_TIME"/>
+        <result property="createTime" column="CREATE_TIME"/>
+    </resultMap>
+
+    <select id="queryLocationInfoPageList" parameterType="map" resultMap="location_collectInfo_domain_result">
+          select t.id,t.DRIVER_ID,t.LONGITUDE,t.LATITUDE,
+          t.PROVINCE,t.CITY,t.COUNTY,t.TOWN,t.LOCATION,
+          DATE_FORMAT(t.collect_time,'%Y-%m-%d') as COLLECT_TIME,
+          DATE_FORMAT(t.CREATE_TIME,'%Y-%m-%d') as CREATE_TIME
+          from
+          t_location_collect_info t
+          where
+          t.driver_id = #{driverId}
+          and DATE_FORMAT(t.collect_time,'%Y-%m-%d') <![CDATA[>]]> DATE_FORMAT(DATE_SUB(current_date,INTERVAL 15 DAY),'%Y-%m-%d')
+          ORDER BY t.id DESC
+          LIMIT #{curPage},#{pageSize}
+    </select>
+
+    <select id="queryLocationInfoList" parameterType="map" resultMap="location_collectInfo_domain_result">
+        select t.id,t.DRIVER_ID,t.LONGITUDE,t.LATITUDE,
+        t.PROVINCE,t.CITY,t.COUNTY,t.TOWN,t.LOCATION,
+        DATE_FORMAT(t.collect_time,'%Y-%m-%d') as COLLECT_TIME,
+        DATE_FORMAT(t.CREATE_TIME,'%Y-%m-%d') as CREATE_TIME
+        from
+        t_location_collect_info t
+        where
+        t.driver_id = #{driverId}
+        and DATE_FORMAT(t.collect_time,'%Y-%m-%d') <![CDATA[>]]> DATE_FORMAT(DATE_SUB(current_date,INTERVAL 15 DAY),'%Y-%m-%d')
+        ORDER BY t.id DESC
+    </select>
+
+    <select id="queryLocationInfoPageCount" parameterType="map" resultType="Integer">
+          select COUNT(*) from
+          t_location_collect_info t
+          where
+          t.driver_id = #{driverId}
+          and DATE_FORMAT(t.collect_time,'%Y-%m-%d') <![CDATA[>]]> DATE_FORMAT(DATE_SUB(current_date,INTERVAL 15 DAY),'%Y-%m-%d')
+    </select>
+
+
+</mapper>

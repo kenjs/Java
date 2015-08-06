@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="pragma" content="no-cache"/>
+    <meta http-equiv="Cache-Control" content="no-cache,must-revalidate"/>
+    
+    <title>结算单详情</title>
+	
+	<link href="../css/themes/settlebillc/settlebillDetail.css" rel="stylesheet" />
+	<link href="../css/webui/main.css" rel="stylesheet" />
+	<link href="../css/webui/hgrid.css" rel="stylesheet" />
+    <script src="../js/jquery/jquery-1.8.3.min.js" type=text/javascript></script>
+    <script src="../js/sys/webui/contract/header.js"></script>    	
+    <script src="../js/sys/webui/logo.js"></script>   	 
+	<script src="../js/sys/webui/hgrid.js" type="text/javascript"></script>
+	<script src="../js/themes/settlebillc/detail.js" type="text/javascript"></script>
+	
+	<script type="text/javascript">
+	$(function(){
+		settleBillDetail_Ini();
+		verificationBillDetail_Ini();
+		verificationBillDetail_Json();
+		wayBillDetail_Ini();
+		wayBillDetail_Json();
+	});
+	</script>
+  </head>
+  
+  <body>
+    <!-- 顶部 --开始  此处须由js动态加入-->
+		<div id="header" class="c-header" >
+	
+		</div>
+		<!-- 顶部 --结束-->
+	
+		<!-- LOGON --开始   此处须由js动态加入-->
+		<div id="logo" class="c-logo" >
+		
+		</div>
+	<!-- LOGON --结束-->
+	
+	<div id="main">
+		<div style="text-align:left;margin-bottom:7px;margin-top:10px;">
+  			<img style="margin-bottom:-5px;margin-right:10px" src="../imgs/sys/home-icon.jpg"/>
+  			<a style="margin-right:7px" href="../logincs/index_main">首页</a>
+  			<span style="margin-right:7px">&gt;</span>
+  			<!--<a style="margin-right:7px" href="#">结算管理</a>
+  			<span style="margin-right:7px">&gt;</span>
+  			--><a style="margin-right:7px" href="#">应收核销</a>
+  			<span style="margin-right:7px">&gt;</span>
+  			<span style="font-weight:bold">详情</span>
+  		</div>
+  		<div id="topdiv">
+  			<table>
+  				<tr>
+  					<td style="vertical-align:bottom;">
+  						<span>结算单号：</span>
+  						<span id="settlebillnumber"></span>
+  					</td>
+  					<td style="vertical-align:bottom">
+  						<span>结算单状态：</span>
+  						<span id="status" style="color:red"></span>
+  					</td>
+  				</tr>
+  				<tr>
+  					<td style="vertical-align:top">
+  						<span>结算期：</span>
+  						<span id="settledate"></span>
+  					</td>
+  					<td style="vertical-align:top">
+  						<span>发货方：</span>
+  						<span id="organization"></span>
+  					</td>
+  				</tr>
+  			</table>
+  		</div>
+  		<div style="margin:20px 0px 10px;">
+  			<span style="font-size:14px;font-weight:bolder">核销发票明细</span>
+  		</div>
+  		<div id="middlediv">
+  			<table id="verificationbilldetail"></table>
+  		</div>
+  		<div style="margin:20px 0px 10px;">
+  			<span style="font-size:14px;font-weight:bolder">托运单明细</span>
+  		</div>
+  		<div id="bottomdiv">
+  			<table id="waybilldetail"></table>
+  		</div>
+  		<div style="text-align:center;margin-top:20px;">
+  			<input type="button" value="导出" class="btn" onclick="exportExcel()"/>
+  			<input type="button" value="关闭" class="btn" onclick='back()'/>
+  		</div>
+	</div>
+  </body>
+</html>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cy.dctms.dao.DriverUserInfoDao">
+
+    <update id="updateDriverUserInfoById" parameterType="hashmap">
+        UPDATE t_driver_user_info SET used_recent_time = #{usedRecentTime} WHERE id = #{driverId}
+    </update>
+
+    <select id="queryDriverUserFromLog" resultType="hashmap">
+        SELECT
+            t.user_driver_id driverId,
+            t.create_time usedRecentTime
+        FROM
+            (
+                SELECT
+                    l.user_driver_id,
+                    l.create_time
+                FROM
+                    t_operation_log_info l
+                WHERE
+                    l.type = 1
+                    AND l.user_driver_id != 0
+                    AND l.operation_type NOT IN (3, 4, 12, 13, 27, 32, 41, 49, 50, 56, 59, 62, 79)
+                ORDER BY
+                    l.create_time DESC
+            ) t
+        GROUP BY
+            t.user_driver_id
+        ORDER BY
+            t.create_time DESC
+    </select>
+
+    <update id="updateMarketingDriverInfo" parameterType="hashmap">
+        UPDATE t_marketing_driver_info SET real_level = #{realLevel} where driver_id = #{driverId}
+    </update>
+
+    <!-- 查询认证通过的司机id -->
+    <select id="querySubmitedDriverId" resultType="string">
+        SELECT d.id FROM t_driver_user_info d WHERE d.delete_flag = 0
+                                                AND d.freeze_flag = 0 AND d.submit_type = 3
+                                                AND EXISTS (
+                SELECT 1 FROM t_marketing_driver_info m WHERE m.driver_id = d.id AND m.real_level != 'A')
+    </select>
+
+    <!-- 查询有经营线路的司机 -->
+    <select id="queryDriverDriverLineCount" resultType="string">
+        select l.driver_id from t_driver_line_info l where l.start = 0 AND EXISTS
+        (SELECT 1 FROM t_marketing_driver_info m WHERE m.driver_id = l.driver_id AND m.real_level NOT IN ('A','B'))
+        HAVING count(id) > 0
+    </select>
+
+    <!-- 查询司机月存活 -->
+    <select id="queryDriverAlive" resultType="string">
+        SELECT
+            bus.driver_id
+        FROM
+            t_daycount_driver_user_busi bus
+        WHERE
+            bus.record_day BETWEEN DATE_ADD(CURDATE(), INTERVAL - 1 MONTH)
+            AND CURDATE()
+            AND EXISTS
+            (SELECT 1 FROM t_marketing_driver_info m WHERE m.driver_id = bus.driver_id AND m.real_level NOT IN ('A','B','C'))
+    </select>
+
+    <!-- 查询营销专员id -->
+    <select id="queryMarketingAssisterId" parameterType="string" resultType="string">
+        select assister_id from t_marketing_driver_info where driver_id = #{driverId} and delete_flag = 0
+    </select>
+
+    <!-- 查询司机等级 -->
+    <select id="queryMarketingDriverLevel" parameterType="string" resultType="string">
+        select real_level from t_marketing_driver_info where driver_id = #{driverId} and delete_flag = 0
+    </select>
+    
+    <insert id="addMarketingDriverLevelChangeRecord" parameterType="MarketingDriverLevelChangeRecord" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO t_marketing_driver_level_change_record
+        (customer_id,before_change_level,after_change_level,change_date,before_change_assister_id)
+        VALUES
+        (#{customerId},#{beforeChangeLevel},#{afterChangeLevel},#{changeDate},#{beforeChangeAssisterId})
+    </insert>
+</mapper>

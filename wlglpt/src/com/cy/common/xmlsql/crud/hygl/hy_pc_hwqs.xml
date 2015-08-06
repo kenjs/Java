@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.hygl.dao.HyPcHwqsMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectHyPcHwqsByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyPcHwqsDomain">
+		select a.HWQS_DJXH as hwqsDjxh,a.PC_DJXH as pcDjxh,a.QSRQ as qsrq,a.QSR_CZY_DJXH as qsrCzyDjxh,a.BZ as bz,
+		a.NEW_DD_DJXH as newDdDjxh,a.DJ_JGBM as djJgbm,a.SS_JGBM as ssJgbm,a.YXBZ as yxbz,a.CJR_CZY_DJXH as cjrCzyDjxh,
+		a.CJRQ as cjrq,a.XGR_CZY_DJXH as xgrCzyDjxh,a.XGRQ as xgrq from HY_PC_HWQS a  where a.HWQS_DJXH=#hwqsDjxh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertHyPcHwqs"  parameterClass="com.cy.common.bo.HyPcHwqs">
+		<selectKey keyProperty="hwqsDjxh" resultClass="string" type="pre"> 
+			select SEQ_HWQS_DJXH.nextval as hwqsDjxh from dual 
+		</selectKey> 
+		insert into HY_PC_HWQS(HWQS_DJXH,PC_DJXH,QSRQ,QSR_CZY_DJXH,BZ,
+		NEW_DD_DJXH,DJ_JGBM,SS_JGBM,YXBZ,CJR_CZY_DJXH,
+		CJRQ,XGR_CZY_DJXH,XGRQ)
+		values(#hwqsDjxh:NUMERIC#,#pcDjxh:NUMERIC#,#qsrq:DATE#,#qsrCzyDjxh:NUMERIC#,#bz:VARCHAR#,
+		#newDdDjxh:NUMERIC#,#djJgbm:NUMERIC#,#ssJgbm:NUMERIC#,#yxbz:VARCHAR#,#cjrCzyDjxh:NUMERIC#,
+		#cjrq:DATE#,#xgrCzyDjxh:NUMERIC#,#xgrq:DATE#)
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateHyPcHwqsByKey" parameterClass="com.cy.common.bo.HyPcHwqs">
+        update HY_PC_HWQS set HWQS_DJXH=#hwqsDjxh#,PC_DJXH=#pcDjxh#,QSRQ=to_date(#qsrq#, 'YYYY-MM-DD'),QSR_CZY_DJXH=#qsrCzyDjxh#,BZ=#bz#,
+		NEW_DD_DJXH=#newDdDjxh#,DJ_JGBM=#djJgbm#,SS_JGBM=#ssJgbm#,YXBZ=#yxbz#,CJR_CZY_DJXH=#cjrCzyDjxh#,
+		CJRQ=to_date(#cjrq#, 'YYYY-MM-DD'),XGR_CZY_DJXH=#xgrCzyDjxh#,XGRQ=to_date(#xgrq#, 'YYYY-MM-DD') where HWQS_DJXH=#hwqsDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteHyPcHwqsByKey" parameterClass="java.util.Map">
+		update HY_PC_HWQS set yxbz='N' where HWQS_DJXH=#hwqsDjxh#
+    </delete>
+</sqlMap>

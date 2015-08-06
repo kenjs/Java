@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.swp.dao.MarketingMaintainRecordDao">
+
+    <!-- 客户维护记录表bo -->
+    <resultMap type="MarketingMaintainRecord" id="marketing_maintain_record_result">
+        <!-- 主键 -->
+        <result property="id" column="id"/>
+        <!-- 营销专员id -->
+        <result property="assisterId" column="assister_id"/>
+        <!-- 1 客户企业  2 客户司机 -->
+        <result property="customerKind" column="customer_kind"/>
+        <!-- 客户类别(1 2 3 4 5) -->
+        <result property="category" column="category"/>
+        <!-- 客户id -->
+        <result property="customerId" column="customer_id"/>
+        <!-- 维护动作类型:1 电话联系 2 发送短信 3 修改信息 -->
+        <result property="maintainAction" column="maintain_action"/>
+        <!-- 是否有效电话： 0 否 1 是 -->
+        <result property="isValidCall" column="is_valid_call"/>
+        <!-- 录音文件PATH -->
+        <result property="recordFilePath" column="record_file_path"/>
+        <!-- 记录内容 -->
+        <result property="recordContent" column="record_content"/>
+        <!-- 维护动作时间 -->
+        <result property="actionTime" column="action_time"/>
+    </resultMap>
+
+    <!-- 客户维护记录表Domain -->
+    <resultMap type="MarketingMaintainRecordDomain" id="marketing_maintain_record_domain_result">
+        <!-- 主键 -->
+        <result property="id" column="id"/>
+        <!-- 营销专员id -->
+        <result property="assisterId" column="assister_id"/>
+        <!-- 1 客户企业  2 客户司机 -->
+        <result property="customerKind" column="customer_kind"/>
+        <!-- 营销专员名称 -->
+        <result property="assisterName" column="assister_name"/>
+        <!-- 客户类别(1 2 3 4 5) -->
+        <result property="category" column="category"/>
+        <!-- 客户id -->
+        <result property="customerId" column="customer_id"/>
+        <!-- 维护动作类型:1 电话联系 2 发送短信 3 修改信息 -->
+        <result property="maintainAction" column="maintain_action"/>
+        <!-- 是否有效电话： 0 否 1 是 -->
+        <result property="isValidCall" column="is_valid_call"/>
+        <!-- 录音文件PATH -->
+        <result property="recordFilePath" column="record_file_path"/>
+        <!-- 记录内容 -->
+        <result property="recordContent" column="record_content"/>
+        <!-- 维护动作时间 -->
+        <result property="actionTime" column="action_time"/>
+    </resultMap>
+
+
+    <!-- 查询客户维护记录，返回List对象（分页） -->
+    <select id="queryMarketingMaintainRecordDomainList" parameterType="map" resultMap="marketing_maintain_record_domain_result">
+        SELECT t.id,t.assister_id,t.customer_kind,t.category,customer_id,t.maintain_action,t.is_valid_call,t.record_file_path,
+        t.record_content,date_format(t.action_time,'%Y-%m-%d %T') action_time,b.name as assister_name
+        FROM
+        t_marketing_maintain_record t,t_marketing_user_info b
+        WHERE t.assister_id = b.id
+        <if test="'' != customerKind and null != customerKind">
+              and t.customer_kind = #{customerKind}
+        </if>
+        <if test="'' != customerId and null != customerId">
+            and t.customer_id = #{customerId}
+        </if>
+        ORDER by action_time DESC
+        limit #{curPage},#{pageSize}
+    </select>
+
+    <!-- 查询客户维护记录总记录 -->
+    <select id="queryMarketingMaintainRecordDomainCount" parameterType="map" resultType="Integer">
+        SELECT
+        COUNT(*)
+        FROM
+        t_marketing_maintain_record
+        WHERE 1 = 1
+        <if test="'' != customerKind and null != customerKind">
+            and customer_kind = #{customerKind}
+        </if>
+        <if test="'' != customerId and null != customerId">
+            and customer_id = #{customerId}
+        </if>
+    </select>
+
+    <!-- 保存客户维护记录 -->
+    <insert id="addMarketingMaintainRecord" parameterType="MarketingMaintainRecord" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_marketing_maintain_record (assister_id,customer_kind,category,customer_id,maintain_action,is_valid_call,record_file_path,record_content)
+        VALUES (#{assisterId},#{customerKind},#{category},#{customerId},#{maintainAction},#{isValidCall},#{recordFilePath},#{recordContent})
+    </insert>
+
+    <!-- 根据客户种类、客户id记录内容查询客户维护记录，返回List对象 -->
+    <select id="queryByRecordContentList" parameterType="MarketingMaintainRecord" resultMap="marketing_maintain_record_domain_result">
+        SELECT
+        a.id ,a.record_content
+        ,date_format(a.action_time,'%Y-%m-%d %T') action_time
+        ,b.name as assisterName ,b.join_group as joinGroup
+        FROM
+        t_marketing_maintain_record a
+        left join t_marketing_user_info b
+        on a.assister_id = b.id
+        WHERE a.customer_kind = #{customerKind}
+        and a.customer_id = #{customerId}
+        and a.record_content = #{recordContent}
+        ORDER by a.action_time DESC
+    </select>
+</mapper>

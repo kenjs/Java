@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.hygl.dao.BushyzpajMapper">
+
+	<parameterMap class="java.util.Map" id="hyZpajMap">
+		<parameter property="pcJgbm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="bz" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="pcrCzyDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="pcrqq" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="pcrqz" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="clHm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="sjXm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="khDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="khmc" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="pcDh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="pageNum" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+		<parameter property="pageSize" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+		<parameter property="pageCount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+		<parameter property="reccount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+		<parameter property="dataList" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" resultMap="hyZpajResMap"/>
+	</parameterMap>
+	
+	<resultMap class="com.cy.hygl.domain.HyZpajDomain" id="hyZpajResMap">
+		<result property="pageXh" column="PAGE_XH"/>
+		<result property="ajCs" column="AJCS"/>
+		<result property="pcDjxh" column="PC_DJXH"/>
+		<result property="pcDh" column="PCDH"/>
+		<result property="pcrq" column="PCRQ"/>
+		<result property="czxm" column="CYR_CZXM"/>
+		<result property="clHm" column="CYR_CLHM"/>
+		<result property="gcHm" column="CYR_GCHM"/>
+		<result property="sjXm" column="CYR_SJXM"/>
+		<result property="sjHm" column="CYR_SJSJHM"/>
+		<result property="sjMc" column="sjMc"/>
+		<result property="bmMc" column="bmMc"/>
+		<result property="dianhua" column="CYR_QTLXDH"/>
+		<result property="pcrCzyDjxh" column="PCR_CZY_DJXH"/>
+		<result property="pcrXm" column="PCR__CZY_MC"/>
+	</resultMap>
+
+	<procedure id="queryHyZpajPage" parameterMap="hyZpajMap" resultMap="hyZpajResMap">
+		{call P_HYGL_DDGL_ZPAJ(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}
+	</procedure>
+	
+	<!--插入数据-->
+	<insert id="insertHyPcZpaj"  parameterClass="com.cy.common.bo.HyPcZpaj">
+		<selectKey keyProperty="ajDjxh" resultClass="String" type="pre"> 
+			select SEQ_ZY_DJXH.nextval as ajDjxh from dual 
+		</selectKey> 
+		insert into HY_PC_ZPAJ(AJ_DJXH,PC_DJXH,AJZP,BZ,PCR_CZY_DJXH,
+		PCRQ,PC_JGBM,SS_JGBM,YXBZ,CJR_CZY_DJXH,
+		CJRQ,XGR_CZY_DJXH,XGRQ,ZPDZ)
+		values(#ajDjxh:NUMERIC#,#pcDjxh:NUMERIC#,#ajzp:BLOB#,#bz:VARCHAR#,#pcrCzyDjxh:NUMERIC#,
+		to_date(#pcrq:DATE#,'yyyy-MM-dd'),#pcJgbm:NUMERIC#,#ssJgbm:NUMERIC#,#yxbz:VARCHAR#,#cjrCzyDjxh:NUMERIC#,
+		to_date(#cjrq:DATE#,'yyyy-MM-dd'),#xgrCzyDjxh:NUMERIC#,to_date(#xgrq:DATE#,'yyyy-MM-dd'),#zpdz:VARCHAR#)
+	</insert>
+	
+	 <select id="selectHyPcAll" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyZpajDomain">
+		SELECT 
+		       A.PCDH AS pcDh,
+		       A.CYR_CZXM AS czxm,
+		       A.CYR_CLHM AS clHm,
+		       A.CYR_GCHM AS gcHm,
+		       A.CYR_SJXM AS sjXm,
+		       A.CYR_SJSJHM AS sjHm,
+		       A.CYR_QTLXDH AS dianhua,
+		       A.BZ AS bz,
+		       (SELECT RY.MC FROM QY_RYDJ RY WHERE RY.CZY_DJXH = A.PCR_CZY_DJXH) pcrXm, 
+		       A.PCRQ AS pcrq,
+		       A.PC_JGBM AS pcJgbm,
+		       A.SS_JGBM AS ssJgbm,
+		       A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM HY_PC A 
+		  WHERE A.YXBZ='Y' AND A.PCR_CZY_DJXH=#pcr#
+
+		  ORDER by A.PC_DJXH ASC
+    </select>
+	
+	<!--根据主键取DOMAIN-->
+	<select id="selectHyPcByPcDjxh" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyZpajDomain">
+		SELECT A.PC_DJXH AS pcDjxh,
+			   (select DC.CLSX_MC from Dm_Clsx DC where DC.CLSX_DM=A.Clsx_Dm) as clsxMc,
+		       A.PCDH AS pcDh,
+		       A.CYR_CZXM AS czxm,
+		       A.CYR_CLHM AS clHm,
+		       A.CYR_GCHM AS gcHm,
+		       A.CYR_SJXM AS sjXm,
+		       A.CYR_SJSJHM AS sjHm,
+		       A.CYR_SJSJHM AS sjHm,
+		       A.Cyr_Sjsfz as sfz,
+		       A.CYR_QTLXDH AS dianhua,
+		       A.Yf_Hj as yfHj,
+		       A.Yf_Yfyf as yfYfyf,
+		       A.Yf_Yj as yfYj,
+		       A.Yf_Sjs as yfSjs,
+		       A.Yf_Hdyf as yfHdyf,
+		       A.Yf_Hdf as yfHdf,
+		       (select DY.YFJSF_MC from Dm_Yfjsf DY where DY.YFJSF_DM=A.Yfjsf_Dm) as yfjsfMc,
+		       A.Yf_Xxf as yfXxf,
+		       A.Xxzj_Djxh as xxzjDjxh,
+		       A.PCR_CZY_DJXH AS pcrCzyDjxh,
+		       (select QR.MC from Qy_Rydj QR where QR.CZY_DJXH=A.Pcr_Czy_Djxh) as pcrCzyMc,
+		       (SELECT RY.MC FROM QY_RYDJ RY WHERE RY.CZY_DJXH = A.PCR_CZY_DJXH) pcrXm, 
+		       A.PCRQ AS pcrq,
+		       (select DP.PCFS_MC from Dm_Pcfs DP where DP.Pcfs_Dm=A.PCFS_DM) as pcfsMc,
+		       (select D.YSFS_MC from Dm_Ysfs D where D.YSFS_DM=A.Ysfs_Dm) as ysfsMc,
+		       (select Z.ZCFS_MC from Dm_Zcfs Z where Z.ZCFS_DM=A.Zcfs_Dm) as zcfsMc,
+		       A.Bz as pcBz,
+		       A.PC_JGBM AS pcJgbm,
+		       (SELECT RY.JC FROM qy_zzjg RY WHERE RY.jgbm= A.PC_JGBM) pcXm, 
+		       A.SS_JGBM AS ssJgbm,
+		       (SELECT RY.JC FROM qy_zzjg RY WHERE RY.jgbm = A.SS_JGBM) ssXm, 
+		       A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM HY_PC A 
+		  WHERE A.PC_DJXH=#pcDjxh#
+    </select>
+    
+</sqlMap>

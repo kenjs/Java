@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.hygl.dao.BusHyhwqsMapper">
+	<select id="selectHyHwqsPage" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyHwqsDomain">
+		 select pc.hdbh as hdbh,pc.hwmc as hwMc,pc.hw_sl as hwSl,pc.sfd as sfd,pc.mdd as mdd,pc.shr_mc as shrMc,qs.hwqs_Djxh as hwqsDjxh,
+		 pc.shr_dz as shrDz,qs.qsrmc as qsrmc,qs.qsrq as qsrq,pc.PCDH as pcdh,pc.cyr_clhm || pc.cyr_sjxm || pc.cyr_sjsjhm as sjXm,pc.FHR_MC as fhrMc 
+		 ,pc.pcrq as pcrq,pc.pc_djxh as pcDjxh,pc.wfh_djxh as wfhdjxh,pc.dd_djxh as ddDjxh,pc.ddbh,pc.xh as xh from 
+    (SELECT PC.PCDH, PC.CYR_CLHM, PC.CYR_SJXM, PC.CYR_SJSJHM,PC. SS_JGBM,PCHW.FHR_MC,
+         PCHW.HDBH,PCHW.HWMC, PCHW.HW_SL, 
+         PCHW.FHR_XZQH_DM, (SELECT QH.XZQH_MC FROM DM_XZQH QH WHERE QH.XZQH_DM = PCHW.FHR_XZQH_DM) SFD,
+         PCHW.SHR_XZQH_DM, (SELECT QH.XZQH_MC FROM DM_XZQH QH WHERE QH.XZQH_DM = PCHW.SHR_XZQH_DM) MDD,
+         CASE WHEN B.SY_DD_DJXH IS NOT NULL THEN (SELECT SYDD.DDBH  FROM HY_DD SYDD WHERE SYDD.DD_DJXH = B.SY_DD_DJXH)
+                 ELSE A.DDBH END DDBH,
+         PCHW.SHR_LXR, PCHW.SHR_DZ,PCHW.PC_DJXH AS pc_djxh,PCHW.WFH_DJXH AS wfh_djxh,PCHW.DD_DJXH,PCHW.SHR_MC,PC.PCRQ,
+	       PCHW.XH AS xh
+			FROM HY_PC PC, HY_PC_HWXX PCHW,HY_DD_HWMX B,HY_DD A
+			WHERE PC.PC_DJXH = PCHW.PC_DJXH
+			  AND PCHW.DD_DJXH = A.DD_DJXH
+			  AND PCHW.DD_DJXH = B.DD_DJXH
+			  AND PCHW.XH = B.XH
+			  AND PC.YXBZ = 'Y'
+			  AND PCHW.YXBZ = 'Y'
+			  AND PC.PCFS_DM = 3
+			  AND PC.SS_JGBM = #ssJgbm#
+			  <dynamic>
+			  	<isNotEmpty prepend="and" property="pcdh">
+			  		PC.PCDH like #pcdh#
+			  	</isNotEmpty>
+			  	<isNotEmpty prepend="and" property="pcrqq">
+			  		PC.PCRQ &gt;= to_date(#pcrqq#,'yyyy-MM-dd')
+			  	</isNotEmpty>
+			  	<isNotEmpty prepend="and" property="pcrqz">
+			  		PC.PCRQ &lt;= to_date(#pcrqz#,'yyyy-MM-dd')
+			  	</isNotEmpty>
+			  	<isNotEmpty prepend="and" property="hdbh">
+			  		PCHW.hdbh like #hdbh#
+			  	</isNotEmpty>
+			  	<isNotEmpty prepend="and" property="hwmc">
+			  		PCHW.hwmc like #hwmc#
+			  	</isNotEmpty>
+			  	<isNotEmpty prepend="and" property="shrmc">
+			  		PCHW.SHR_MC like #shrmc#
+			  	</isNotEmpty>
+			  	
+			  </dynamic>
+			  ) pc left join hy_hwqs qs on qs.pc_djxh=pc.pc_djxh and qs.wfhdjxh=pc.wfh_djxh and qs.yxbz='Y'
+			 
+			  
+			 
+
+		  $orderStr$
+    </select>
+    
+    <select id="selectHyHwqsAll" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyHwqsDomain">
+		select pc.hdbh as hdbh,pc.hwmc as hwMc,pc.hw_sl as hwSl,pc.sfd as sfd,pc.mdd as mdd,pc.shr_mc as shrMc,qs.hwqs_Djxh as hwqsDjxh,
+		 pc.shr_dz as shrDz,qs.qsrmc as qsrmc,qs.qsrq as qsrq,pc.PCDH as pcdh,pc.cyr_clhm || pc.cyr_sjxm || pc.cyr_sjsjhm as sjXm,pc.FHR_MC as fhrMc 
+		 ,pc.pcrq as pcrq,pc.pc_djxh as pcDjxh,pc.wfh_djxh as wfhdjxh,pc.dd_djxh as ddDjxh,pc.ddbh,pc.xh as xh from 
+    (SELECT PC.PCDH, PC.CYR_CLHM, PC.CYR_SJXM, PC.CYR_SJSJHM,PC. SS_JGBM,PCHW.FHR_MC,
+         PCHW.HDBH,PCHW.HWMC, PCHW.HW_SL, 
+         PCHW.FHR_XZQH_DM, (SELECT QH.XZQH_MC FROM DM_XZQH QH WHERE QH.XZQH_DM = PCHW.FHR_XZQH_DM) SFD,
+         PCHW.SHR_XZQH_DM, (SELECT QH.XZQH_MC FROM DM_XZQH QH WHERE QH.XZQH_DM = PCHW.SHR_XZQH_DM) MDD,
+         CASE WHEN B.SY_DD_DJXH IS NOT NULL THEN (SELECT SYDD.DDBH  FROM HY_DD SYDD WHERE SYDD.DD_DJXH = B.SY_DD_DJXH)
+                 ELSE A.DDBH END DDBH,
+         PCHW.SHR_LXR, PCHW.SHR_DZ,PCHW.PC_DJXH AS pc_djxh,PCHW.WFH_DJXH AS wfh_djxh,PCHW.DD_DJXH,PCHW.SHR_MC,PC.PCRQ,
+	       PCHW.XH AS xh
+			FROM HY_PC PC, HY_PC_HWXX PCHW,HY_DD_HWMX B,HY_DD A
+			WHERE PC.PC_DJXH = PCHW.PC_DJXH
+			  AND PCHW.DD_DJXH = A.DD_DJXH
+			  AND PCHW.DD_DJXH = B.DD_DJXH
+			  AND PCHW.XH = B.XH
+			  AND PC.YXBZ = 'Y'
+			  AND PCHW.YXBZ = 'Y'
+			  AND PC.PCFS_DM = 3
+			  AND PC.SS_JGBM = #ssJgbm#
+			  <dynamic>
+			  	<isNotEmpty prepend="and" property="pcdh">
+			  		PC.PCDH like #pcdh#
+			  	</isNotEmpty>
+			  	<isNotEmpty prepend="and" property="pcrqq">
+			  		PC.PCRQ &gt;= to_date(#pcrqq#,'yyyy-MM-dd')
+			  	</isNotEmpty>
+			  	<isNotEmpty prepend="and" property="pcrqz">
+			  		PC.PCRQ &lt;= to_date(#pcrqz#,'yyyy-MM-dd')
+			  	</isNotEmpty>
+			  	<isNotEmpty prepend="and" property="hdbh">
+			  		PCHW.hdbh like #hdbh#
+			  	</isNotEmpty>
+			  	<isNotEmpty prepend="and" property="hwmc">
+			  		PCHW.hwmc like #hwmc#
+			  	</isNotEmpty>
+			  	<isNotEmpty prepend="and" property="shrmc">
+			  		PCHW.SHR_MC like #shrmc#
+			  	</isNotEmpty>
+			  	
+			  </dynamic>
+			  ) pc left join hy_hwqs qs on qs.pc_djxh=pc.pc_djxh and qs.wfhdjxh=pc.wfh_djxh and qs.yxbz='Y'
+			 
+		  ORDER by qs.HWQS_DJXH ASC
+    </select>
+
+	<select id="getHyHwqsRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		select count(*) from 
+    (SELECT PC.PCDH, PC.CYR_CLHM, PC.CYR_SJXM, PC.CYR_SJSJHM,PC. SS_JGBM,
+         PCHW.HDBH,PCHW.HWMC, PCHW.HW_SL, 
+         PCHW.FHR_XZQH_DM, (SELECT QH.XZQH_MC FROM DM_XZQH QH WHERE QH.XZQH_DM = PCHW.FHR_XZQH_DM) SFD,
+         PCHW.SHR_XZQH_DM, (SELECT QH.XZQH_MC FROM DM_XZQH QH WHERE QH.XZQH_DM = PCHW.SHR_XZQH_DM) MDD,
+         PCHW.SHR_LXR, PCHW.SHR_DZ,PCHW.PC_DJXH AS pc_djxh,PCHW.WFH_DJXH AS wfh_djxh,PCHW.DD_DJXH,PCHW.SHR_MC,PC.PCRQ,
+	       PCHW.XH AS xh
+			FROM HY_PC PC, HY_PC_HWXX PCHW
+			WHERE PC.PC_DJXH = PCHW.PC_DJXH
+			  AND PC.YXBZ = 'Y'
+			  AND PCHW.YXBZ = 'Y'
+			  AND PC.PCFS_DM = 3
+			  AND PC.SS_JGBM = #ssJgbm#
+			  <dynamic>
+			  	<isNotEmpty prepend="and" property="pcdh">
+			  		PC.PCDH like #pcdh#
+			  	</isNotEmpty>
+			  	<isNotEmpty prepend="and" property="pcrqq">
+			  		PC.PCRQ &gt;= to_date(#pcrqq#,'yyyy-MM-dd')
+			  	</isNotEmpty>
+			  	<isNotEmpty prepend="and" property="pcrqz">
+			  		PC.PCRQ &lt;=to_date(#pcrqz#,'yyyy-MM-dd')
+			  	</isNotEmpty>
+			  	<isNotEmpty prepend="and" property="hdbh">
+			  		PCHW.hdbh like #hdbh#
+			  	</isNotEmpty>
+			  	<isNotEmpty prepend="and" property="hwmc">
+			  		PCHW.hwmc like #hwmc#
+			  	</isNotEmpty>
+			  	<isNotEmpty prepend="and" property="shrmc">
+			  		PCHW.SHR_MC like #shrmc#
+			  	</isNotEmpty>
+			  </dynamic>
+			  ) pc left join hy_hwqs qs on qs.pc_djxh=pc.pc_djxh and qs.wfhdjxh=pc.wfh_djxh and qs.yxbz='Y'
+    </select>
+    
+    <select id="checkIsAllQs" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+    	SELECT count(*)
+			FROM HY_PC PC, HY_PC_HWXX PCHW
+			WHERE PC.PC_DJXH = PCHW.PC_DJXH
+			  AND PC.YXBZ = 'Y'
+			  AND PCHW.YXBZ = 'Y'
+			  AND PC.PCFS_DM = 3
+			  and PC.PC_DJXH=#pcDjxh#   
+			  and not exists(select 1 from hy_hwqs qs where
+			  qs.yxbz='Y'
+			  and qs.wfhdjxh=PCHW.wfh_djxh
+			  and qs.pc_djxh=PC.PC_DJXH
+			  )
+    </select>
+    
+    <parameterMap class="java.util.Map" id="saveParMap">
+    		<parameter property="pcDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    		<parameter property="code" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+    		<parameter property="sm" javaType="java.lang.String" jdbcType="VARCHAR" mode="OUT"/>
+    </parameterMap>
+    
+    <procedure id="HyHwQsHxCl" parameterMap="saveParMap">
+    	{call P_HYGL_PS_HWQS_HXCL(?,?,?)}
+    </procedure>
+</sqlMap>

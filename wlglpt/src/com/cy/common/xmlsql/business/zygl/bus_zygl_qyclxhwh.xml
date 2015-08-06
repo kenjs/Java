@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.zygl.dao.BusZyglQyclxhwhMapper">
+	<select id="selectQyClxhwhPage" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyClxhwhDomain">
+		SELECT A.CLXHWH_DJXH AS clxhwhDjxh,
+		       A.SS_JGBM AS ssJgbm,
+		       A.CLXH AS clxh,
+		       A.BZSM AS bzsm,
+		       A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc,
+		       A.CZ AS cz,
+		       A.TJ AS tj,
+		       A.CD AS cd,
+		       A.KD AS kd,
+		       A.GD AS gd
+		  FROM QY_CLXHWH A 
+		  WHERE A.YXBZ='Y' 
+		    AND A.SS_JGBM =#ssJgbm#
+		  $orderStr$
+    </select>
+    
+    <select id="selectQyClxhwhAll" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyClxhwhDomain">
+		SELECT A.CLXHWH_DJXH AS clxhwhDjxh,
+		       A.SS_JGBM AS ssJgbm,
+		       A.CLXH AS clxh,
+		       A.BZSM AS bzsm,
+		       A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc,
+		       A.CZ AS cz,
+		       A.TJ AS tj,
+		       A.CD AS cd,
+		       A.KD AS kd,
+		       A.GD AS gd
+		  FROM QY_CLXHWH A 
+		  WHERE A.YXBZ='Y' 
+		    AND A.SS_JGBM =#ssJgbm#
+		  ORDER by A.CLXHWH_DJXH ASC,A.SS_JGBM ASC
+    </select>
+
+	<select id="getQyClxhwhRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.CLXHWH_DJXH) 
+		  FROM QY_CLXHWH A 
+		  WHERE A.YXBZ='Y' 
+			   AND A.SS_JGBM =#ssJgbm#
+    </select>
+</sqlMap>

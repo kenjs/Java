@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.hygl.dao.BusHyglJssrdzqdMapper">
+	<select id="selectJsSrdzQdPage" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.JsSrdzQdDomain">
+		SELECT A.QD_DJXH AS qdDjxh,
+		       A.KH_DJXH AS khDjxh,
+		       (SELECT KH.KHMC FROM QY_KH_DJXX KH WHERE KH.KH_DJXH = A.KH_DJXH) khMc,
+		       A.QDMC AS qdmc,
+		       A.DZQD_HZFS_DM AS dzqdHzfsDm,
+		       (SELECT HZFS.DZQD_HZFS_MC FROM DM_DZQD_HZFS HZFS WHERE HZFS.DZQD_HZFS_DM = A.DZQD_HZFS_DM) dzqdhzfsMc,
+		       A.HE_JE AS heJe,
+		       A.YSQ_KPJE as ysqKpJe,
+		       A.WSQ_KPJE as wsqKpJe,
+		       A.DJR_CZY_DJXH AS djrCzyDjxh,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.DJR_CZY_DJXH) cjrMc,
+		       A.DJRQ AS djrq,
+		       A.DJ_JGBM AS djJgbm,
+		       (SELECT JG.JC FROM QY_ZZJG JG WHERE JG.JGBM= A.DJ_JGBM) bmMc, 
+		       A.SS_JGBM AS ssJgbm,
+		       (SELECT JG.JC FROM QY_ZZJG JG WHERE JG.JGBM = A.SS_JGBM) dwMc
+		  FROM JS_SRDZ_QD A 
+		  WHERE A.YXBZ='Y' 
+		  <dynamic> 
+		  	<isNotEmpty property="djJgbm" prepend="and">
+				A.DJ_JGBM =#djJgbm#
+			</isNotEmpty>
+			<isNotEmpty property="ssJgbm" prepend="and">
+				A.SS_JGBM =#ssJgbm#
+			</isNotEmpty>
+			<isNotEmpty property="khDjxh" prepend="and">
+				A.KH_DJXH = #khDjxh#
+			</isNotEmpty>
+			<isNotEmpty property="rqQ" prepend="and">
+				A.DJRQ >= TO_DATE(#rqQ#,'yyyy-MM-dd')
+			</isNotEmpty>
+			<isNotEmpty property="rqZ" prepend="and">
+				A.DJRQ &lt; TO_DATE(#rqZ#,'yyyy-MM-dd')+1
+			</isNotEmpty>
+			
+		  </dynamic>
+		  $orderStr$
+    </select>
+    
+    <select id="selectSrdzQdMxWhenWlss" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.JsSrdzQdDomain">
+		SELECT t.qd_djxh qdDjxh,t.yw_djxh ywDjxh,t.yw_mx_xh ywMxXh
+		FROM JS_SRDZ_QD_MX t 
+		where t.qd_djxh=#qdDjxh# and t.yw_lydm=3
+    </select>
+    
+    <select id="selectJsSrdzQdAll" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.JsSrdzQdDomain">
+		SELECT A.QD_DJXH AS qdDjxh,
+		       A.KH_DJXH AS khDjxh,
+		       (SELECT KH.KHMC FROM QY_KH_DJXX KH WHERE KH.KH_DJXH = A.KH_DJXH) khMc,
+		       A.QDMC AS qdmc,
+		       A.DZQD_HZFS_DM AS dzqdHzfsDm,
+		       (SELECT HZFS.DZQD_HZFS_MC FROM DM_DZQD_HZFS HZFS WHERE HZFS.DZQD_HZFS_DM = A.KH_DJXH) dzqdhzfsMc,
+		       A.HE_JE AS heJe,
+		       A.YSQ_KPJE as ysqKpJe,
+		       A.WSQ_KPJE as wsqKpJe,
+		       A.DJR_CZY_DJXH AS djrCzyDjxh,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.DJR_CZY_DJXH) cjrMc,
+		       A.DJRQ AS djrq,
+		       A.DJ_JGBM AS djJgbm,
+		       (SELECT JG.JC FROM QY_ZZJG JG WHERE JG.JGBM= A.DJ_JGBM) bmMc, 
+		       A.SS_JGBM AS ssJgbm,
+		       (SELECT JG.JC FROM QY_ZZJG JG WHERE JG.JGBM = A.SS_JGBM) dwMc
+		  FROM JS_SRDZ_QD A 
+		  WHERE A.YXBZ='Y' 
+		  <dynamic> 
+			<isNotEmpty property="djJgbm" prepend="and">
+				A.DJ_JGBM =#djJgbm#
+			</isNotEmpty>
+			<isNotEmpty property="ssJgbm" prepend="and">
+				A.SS_JGBM =#ssJgbm#
+			</isNotEmpty>
+			<isNotEmpty property="khDjxh" prepend="and">
+				A.KH_DJXH = #khDjxh#
+			</isNotEmpty>
+			<isNotEmpty property="rqQ" prepend="and">
+				A.DJRQ >= TO_DATE(#rqQ#,'yyyy-MM-dd')
+			</isNotEmpty>
+			<isNotEmpty property="rqZ" prepend="and">
+				A.DJRQ &lt; TO_DATE(#rqZ#,'yyyy-MM-dd')+1
+			</isNotEmpty>
+		  </dynamic>
+		  ORDER by A.QD_DJXH ASC
+    </select>
+
+	<select id="getJsSrdzQdRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.QD_DJXH) 
+		  FROM JS_SRDZ_QD A 
+		  WHERE A.YXBZ='Y' 
+		  <dynamic> 
+			<isNotEmpty property="djJgbm" prepend="and">
+				A.DJ_JGBM =#djJgbm#
+			</isNotEmpty>
+			<isNotEmpty property="ssJgbm" prepend="and">
+				A.SS_JGBM =#ssJgbm#
+			</isNotEmpty>
+			<isNotEmpty property="khDjxh" prepend="and">
+				A.KH_DJXH = #khDjxh#
+			</isNotEmpty>
+			<isNotEmpty property="rqQ" prepend="and">
+				A.DJRQ >= TO_DATE(#rqQ#,'yyyy-MM-dd')
+			</isNotEmpty>
+			<isNotEmpty property="rqZ" prepend="and">
+				A.DJRQ &lt; TO_DATE(#rqZ#,'yyyy-MM-dd')+1
+			</isNotEmpty>
+		  </dynamic>
+    </select>
+    
+    
+     <select id="selectYdzList" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.JsSrdzQdDomain">
+		  SELECT C.DZ_DJXH as ywDjxh,DD.DDBH as ddbh,DD.XDRQ as xdrq,C.JS_SR as jsSr,C.JS_YJ as jsYj,C.JS_WJ as jsWj,
+		       C.DZJE,
+		       C.DZ_CYBZ dzcybz,(CASE WHEN C.DZCYJE IS NULL OR C.DZCYJE = 0 THEN NULL ELSE C.DZCYJE END) dzcyje,
+		         C.DZR_CZY_DJXH as dzrCzyDjxh,(SELECT MC FROM QY_RYDJ DM WHERE DM.CZY_DJXH = C.DZR_CZY_DJXH) as dzrMc,
+		         C.DZRQ as dzrRq, 
+		         HW.HWMC as hwmc,
+		         (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '07' AND DM.JLDW_DM = HW.HW_BZ_HLDW_DM) bz,         
+		         HW.HDBH as hdbh,
+		         HW.SFD_XZQH_DM,(SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = HW.SFD_XZQH_DM) sfd,
+		           HW.MDD_XZQH_DM,(SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = HW.MDD_XZQH_DM) mdd,          
+		         (CASE WHEN HW.HW_SL IS NULL OR HW.HW_SL = 0 THEN NULL ELSE TO_CHAR(HW.HW_SL) || ' ' || (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '01' AND DM.JLDW_DM = HW.HW_SL_JLDW_DM) END) sl,
+		         (CASE WHEN HW.HW_ZL IS NULL OR HW.HW_ZL = 0 THEN NULL ELSE TO_CHAR(HW.HW_ZL) || ' ' || (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '02' AND DM.JLDW_DM = HW.HW_ZL_JLDW_DM) END) zl,
+		         (CASE WHEN HW.HW_TJ IS NULL OR HW.HW_TJ = 0 THEN NULL ELSE TO_CHAR(HW.HW_TJ) || ' ' || (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '03' AND DM.JLDW_DM = HW.HW_TJ_JLDW_DM) END) tj        
+		    FROM JS_SRDZ C,JS_DD_HWXX HW, HY_DD DD
+		   WHERE C.Js_Djxh = HW.Js_Djxh
+		     AND HW.DD_DJXH = DD.DD_DJXH
+		     AND C.YXBZ = 'Y'
+		     AND HW.YXBZ = 'Y'
+		     AND DD.YXBZ = 'Y'
+		     AND C.QD_DJXH IS NULL    
+		     AND (C.SPBZ = 'N' OR (C.SPBZ = 'Y' AND C.WSSPZT_DM = '3'))
+		     AND C.DZFS_DM = 2
+		     AND ((#dwbmbz# = 'D' AND C.SS_JGBM = #dwbmDm#) OR (#dwbmbz# = 'B' AND C.DZ_JGBM = #dwbmDm#)) 
+	   <dynamic> 
+	   		<isNotEmpty property="khDjxh" prepend="and">
+				DD.KH_DJXH = #khDjxh#
+			</isNotEmpty>
+			<isNotEmpty property="ddbh" prepend="and">
+				DD.DDBH LIKE '%' || #ddbh# || '%'
+			</isNotEmpty>
+			<isNotEmpty property="rqQ" prepend="and">
+				DD.XDRQ &gt;= TO_DATE(#rqQ#,'yyyy-MM-dd')
+			</isNotEmpty>
+			<isNotEmpty property="rqZ" prepend="and">
+				DD.XDRQ &lt; TO_DATE(#rqZ#,'yyyy-MM-dd')+1
+			</isNotEmpty>
+		  </dynamic>
+	</select>
+	
+	<select id="selectJsSrdzQdMx" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.JsSrdzQdDomain">
+		SELECT B.QD_DJXH AS qdDjxh,B.YW_DJXH || ',' || B.YW_MX_XH AS ywDjxh,  B.YW_MX_XH ywMxXh, B.YW_LYDM ywLydm,
+			   DD.DD_DJXH,DD.DDBH AS ddbh,DD.XDRQ AS xdrq,
+	           C.JS_SR AS jsSr,C.JS_YJ AS jsYj,C.JS_WJ AS jsWj,C.DZJE,
+		       C.DZ_CYBZ dzcybz,(CASE WHEN C.DZCYJE IS NULL OR C.DZCYJE = 0 THEN NULL ELSE C.DZCYJE END) dzcyje,
+		       HW.HWMC as hwmc, HW.HDBH as hdbh,
+		       (SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = HW.SFD_XZQH_DM) sfd,
+	           (SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = HW.MDD_XZQH_DM) mdd,
+		       (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '07' AND DM.JLDW_DM = HW.HW_BZ_HLDW_DM) bz, 
+		       (CASE WHEN HW.HW_SL IS NULL OR HW.HW_SL = 0 THEN NULL ELSE TO_CHAR(HW.HW_SL) || ' ' || (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '01' AND DM.JLDW_DM = HW.HW_SL_JLDW_DM) END) sl,
+		       (CASE WHEN HW.HW_ZL IS NULL OR HW.HW_ZL = 0 THEN NULL ELSE TO_CHAR(HW.HW_ZL) || ' ' || (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '02' AND DM.JLDW_DM = HW.HW_ZL_JLDW_DM) END) zl,
+		       (CASE WHEN HW.HW_TJ IS NULL OR HW.HW_TJ = 0 THEN NULL ELSE TO_CHAR(HW.HW_TJ) || ' ' || (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '03' AND DM.JLDW_DM = HW.HW_TJ_JLDW_DM) END) tj          
+		  FROM JS_SRDZ_QD A,JS_SRDZ_QD_MX B,JS_SRDZ C,JS_DD_HWXX HW,HY_DD DD
+			 WHERE A.QD_DJXH = B.QD_DJXH
+			 AND B.YW_DJXH = C.DZ_DJXH
+		     AND C.JS_DJXH = HW.JS_DJXH
+		     AND HW.DD_DJXH = DD.DD_DJXH
+		     AND C.YXBZ = 'Y'
+		     AND HW.YXBZ = 'Y'
+		     AND A.YXBZ = 'Y'
+		     AND DD.YXBZ = 'Y'
+		     AND B.YW_LYDM = 1
+		     AND (C.SPBZ = 'N' OR (C.SPBZ = 'Y' AND C.WSSPZT_DM = '3'))
+		  <dynamic> 
+			<isNotEmpty property="dzqdHzfsDm" prepend="and">
+				A.DZQD_HZFS_DM = #dzqdHzfsDm#
+			</isNotEmpty>
+			<isNotEmpty property="qdDjxh" prepend="and">
+				A.QD_DJXH =#qdDjxh#
+			</isNotEmpty>
+		  </dynamic>
+		  
+		  UNION ALL
+		  
+		   SELECT B.QD_DJXH AS qdDjxh,B.YW_DJXH || ',' || B.YW_MX_XH AS ywDjxh,  B.YW_MX_XH ywMxXh, B.YW_LYDM ywLydm,
+				DD.DD_DJXH,DD.DDBH, DD.XDRQ, 
+				NULL jsSr,NULL jsYj,NULL jsWj,FY.SRJE DZJE, 
+				NULL dzcybz, NULL dzcyje,
+		        HWMX.HWMC, HWMX.HDBH, 
+		           (SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = HWMX.FHR_XZQH_DM) sfd,
+		           (SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = HWMX.SHR_XZQH_DM) mdd,
+		           (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '07' AND DM.JLDW_DM = HWMX.HW_BZ_HLDW_DM) bz,
+		           (CASE WHEN HWMX.HW_SL IS NULL OR HWMX.HW_SL = 0 THEN NULL ELSE rtrim(TO_CHAR(HWMX.HW_SL,'fm99999999999990.99'),'.') || ' ' || (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '01' AND DM.JLDW_DM = HWMX.HW_SL_JLDW_DM) END) sl,
+		           (CASE WHEN HWMX.HW_ZL IS NULL OR HWMX.HW_ZL = 0 THEN NULL ELSE rtrim(TO_CHAR(HWMX.HW_ZL,'fm99999999999990.99'),'.') || ' ' || (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '02' AND DM.JLDW_DM = HWMX.HW_ZL_JLDW_DM) END) zl,
+		           (CASE WHEN HWMX.HW_TJ IS NULL OR HWMX.HW_TJ = 0 THEN NULL ELSE rtrim(TO_CHAR(HWMX.HW_TJ,'fm99999999999990.99'),'.') || ' ' || (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '03' AND DM.JLDW_DM = HWMX.HW_TJ_JLDW_DM) END) tj 
+		    FROM JS_SRDZ_QD_MX B,HY_FYDJ FY,HY_DD DD,HY_DD_HWMX HWMX
+		    WHERE B.YW_DJXH = FY.FY_DJXH
+		      AND B.YW_MX_XH = 0
+		      AND DD.DD_DJXH = HWMX.DD_DJXH
+		      AND FY.DD_DJXH = HWMX.DD_DJXH
+		      AND FY.HWMXXH = HWMX.XH
+		      AND FY.YXBZ = 'Y'
+		       AND HWMX.YXBZ = 'Y'
+		       AND DD.YXBZ = 'Y'
+		        AND B.YW_LYDM=2
+		      AND (FY.SPBZ = 'N' OR (FY.SPBZ = 'Y' AND FY.WSSPZT_DM = '3'))
+		  <dynamic>
+			<isNotEmpty property="qdDjxh" prepend="and">
+				B.QD_DJXH =#qdDjxh#
+			</isNotEmpty>
+		  </dynamic>
+		  
+		  UNION ALL
+		  
+		  SELECT B.QD_DJXH AS qdDjxh,B.YW_DJXH || ',' || B.YW_MX_XH AS ywDjxh,  B.YW_MX_XH ywMxXh, B.YW_LYDM ywLydm,
+		        DD.DD_DJXH,DD.DDBH, DD.XDRQ, 
+		        NULL jsSr,NULL jsYj,NULL jsWj,-SSMX.JE DZJE, 
+		        NULL dzcybz, NULL dzcyje,
+		        HWMX.HWMC, HWMX.HDBH, 
+		           (SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = HWMX.FHR_XZQH_DM) sfd,
+		           (SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = HWMX.SHR_XZQH_DM) mdd,
+		           (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '07' AND DM.JLDW_DM = HWMX.HW_BZ_HLDW_DM) bz,
+		           (CASE WHEN HWMX.HW_SL IS NULL OR HWMX.HW_SL = 0 THEN NULL ELSE rtrim(TO_CHAR(HWMX.HW_SL,'fm99999999999990.99'),'.') || ' ' || (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '01' AND DM.JLDW_DM = HWMX.HW_SL_JLDW_DM) END) sl,
+		           (CASE WHEN HWMX.HW_ZL IS NULL OR HWMX.HW_ZL = 0 THEN NULL ELSE rtrim(TO_CHAR(HWMX.HW_ZL,'fm99999999999990.99'),'.') || ' ' || (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '02' AND DM.JLDW_DM = HWMX.HW_ZL_JLDW_DM) END) zl,
+		           (CASE WHEN HWMX.HW_TJ IS NULL OR HWMX.HW_TJ = 0 THEN NULL ELSE rtrim(TO_CHAR(HWMX.HW_TJ,'fm99999999999990.99'),'.') || ' ' || (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '03' AND DM.JLDW_DM = HWMX.HW_TJ_JLDW_DM) END) tj 
+		    FROM JS_SRDZ_QD_MX B,HY_WLSSDJ WLSS,HY_WLSSDJ_MX SSMX, HY_DD DD,HY_DD_HWMX HWMX,
+		    		HY_PC_HWXX PCHW,HY_DD_WFHXX WFH
+		    WHERE B.YW_DJXH = SSMX.WLSS_DJXH
+			   AND B.YW_MX_XH = SSMX.XH
+			   AND WLSS.WLSS_DJXH = SSMX.WLSS_DJXH
+			   AND WLSS.PC_DJXH = PCHW.PC_DJXH
+			   AND WLSS.WFH_DJXH = PCHW.WFH_DJXH
+			   AND PCHW.WFH_DJXH = WFH.WFH_DJXH
+			   AND WFH.DD_DJXH = HWMX.DD_DJXH
+			   AND WFH.XH = HWMX.XH
+			   AND DD.DD_DJXH = HWMX.DD_DJXH
+			   AND PCHW.YXBZ = 'Y'
+			   AND SSMX.YXBZ = 'Y'
+			   AND WLSS.YXBZ = 'Y'
+			   AND HWMX.YXBZ = 'Y'
+			   AND DD.YXBZ = 'Y'
+			   AND B.YW_LYDM=3
+		      AND (WLSS.SPBZ = 'N' OR (WLSS.SPBZ = 'Y' AND WLSS.WSSPZT_DM = '3'))
+		  <dynamic>
+			<isNotEmpty property="qdDjxh" prepend="and">
+				B.QD_DJXH =#qdDjxh#
+			</isNotEmpty>
+		  </dynamic>
+		  
+		  ORDER by DD_DJXH ASC
+	</select>
+	<select id="selectJsSrdzQdMxTemp" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.JsSrdzQdDomain">
+		SELECT B.QD_DJXH AS qdDjxh,B.YW_DJXH || ',' || B.YW_MX_XH AS ywDjxh,  B.YW_MX_XH ywMxXh, B.YW_LYDM ywLydm,
+			DD.DD_DJXH,DD.DDBH AS ddbh,DD.XDRQ AS xdrq,
+	       C.JS_SR AS jsSr,C.JS_YJ AS jsYj,C.JS_WJ AS jsWj,C.DZJE,
+		       C.DZ_CYBZ dzcybz,(CASE WHEN C.DZCYJE IS NULL OR C.DZCYJE = 0 THEN NULL ELSE C.DZCYJE END) dzcyje,
+		       HW.HWMC as hwmc,HW.HDBH as hdbh,
+		       (SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = HW.SFD_XZQH_DM) sfd,
+	           (SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = HW.MDD_XZQH_DM) mdd,
+		       (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '07' AND DM.JLDW_DM = HW.HW_BZ_HLDW_DM) bz, 
+		       (CASE WHEN HW.HW_SL IS NULL OR HW.HW_SL = 0 THEN NULL ELSE rtrim(TO_CHAR(HW.HW_SL,'fm99999999999990.99'),'.') || ' ' || (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '01' AND DM.JLDW_DM = HW.HW_SL_JLDW_DM) END) sl,
+		       (CASE WHEN HW.HW_ZL IS NULL OR HW.HW_ZL = 0 THEN NULL ELSE rtrim(TO_CHAR(HW.HW_ZL,'fm99999999999990.99'),'.') || ' ' || (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '02' AND DM.JLDW_DM = HW.HW_ZL_JLDW_DM) END) zl,
+		       (CASE WHEN HW.HW_TJ IS NULL OR HW.HW_TJ = 0 THEN NULL ELSE rtrim(TO_CHAR(HW.HW_TJ,'fm99999999999990.99'),'.') || ' ' || (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '03' AND DM.JLDW_DM = HW.HW_TJ_JLDW_DM) END) tj          
+		  FROM JS_SRDZ_QD_MX_TEMP B,JS_SRDZ C,JS_DD_HWXX HW,HY_DD DD
+	     WHERE B.YW_DJXH = C.DZ_DJXH
+	     AND C.JS_DJXH = HW.JS_DJXH
+	     AND HW.DD_DJXH = DD.DD_DJXH
+	     AND C.YXBZ = 'Y'
+	     AND HW.YXBZ = 'Y'
+	     AND B.YW_LYDM=1
+		  <dynamic> 
+			<isNotEmpty property="qdDjxh" prepend="and">
+				B.QD_DJXH =#qdDjxh#
+			</isNotEmpty>
+		  </dynamic>
+		  
+		  UNION ALL
+		  
+		  SELECT B.QD_DJXH AS qdDjxh,B.YW_DJXH || ',' || B.YW_MX_XH AS ywDjxh,  B.YW_MX_XH ywMxXh, B.YW_LYDM ywLydm,
+				DD.DD_DJXH,DD.DDBH, DD.XDRQ, 
+				NULL jsSr,NULL jsYj,NULL jsWj,FY.SRJE DZJE, 
+				NULL dzcybz, NULL dzcyje,
+				HWMX.HWMC, HWMX.HDBH, 
+		       (SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = HWMX.FHR_XZQH_DM) sfd,
+	     		(SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = HWMX.SHR_XZQH_DM) mdd,
+	     		(SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '07' AND DM.JLDW_DM = HWMX.HW_BZ_HLDW_DM) bz,
+		       (CASE WHEN HWMX.HW_SL IS NULL OR HWMX.HW_SL = 0 THEN NULL ELSE rtrim(TO_CHAR(HWMX.HW_SL,'fm99999999999990.99'),'.') || ' ' || (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '01' AND DM.JLDW_DM = HWMX.HW_SL_JLDW_DM) END) sl,
+		       (CASE WHEN HWMX.HW_ZL IS NULL OR HWMX.HW_ZL = 0 THEN NULL ELSE rtrim(TO_CHAR(HWMX.HW_ZL,'fm99999999999990.99'),'.') || ' ' || (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '02' AND DM.JLDW_DM = HWMX.HW_ZL_JLDW_DM) END) zl,
+		       (CASE WHEN HWMX.HW_TJ IS NULL OR HWMX.HW_TJ = 0 THEN NULL ELSE rtrim(TO_CHAR(HWMX.HW_TJ,'fm99999999999990.99'),'.') || ' ' || (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '03' AND DM.JLDW_DM = HWMX.HW_TJ_JLDW_DM) END) tj 
+			FROM JS_SRDZ_QD_MX_TEMP B,HY_FYDJ FY,HY_DD DD,HY_DD_HWMX HWMX
+			WHERE B.YW_DJXH = FY.FY_DJXH
+			  AND B.YW_MX_XH = 0
+	      AND DD.DD_DJXH = HWMX.DD_DJXH
+	      AND FY.DD_DJXH = HWMX.DD_DJXH
+	      AND FY.HWMXXH = HWMX.XH
+	      AND FY.YXBZ = 'Y'
+	       AND HWMX.YXBZ = 'Y'
+	       AND DD.YXBZ = 'Y'
+	       AND B.YW_LYDM=2
+	      AND (FY.SPBZ = 'N' OR (FY.SPBZ = 'Y' AND FY.WSSPZT_DM = '3'))
+		  <dynamic> 
+			<isNotEmpty property="qdDjxh" prepend="and">
+				B.QD_DJXH =#qdDjxh#
+			</isNotEmpty>
+		  </dynamic>
+		  
+		  UNION ALL
+		  
+		  SELECT B.QD_DJXH AS qdDjxh,B.YW_DJXH || ',' || B.YW_MX_XH AS ywDjxh,  B.YW_MX_XH ywMxXh, B.YW_LYDM ywLydm,
+		        DD.DD_DJXH,DD.DDBH, DD.XDRQ, 
+		        NULL jsSr,NULL jsYj,NULL jsWj,-SSMX.JE DZJE, 
+		        NULL dzcybz, NULL dzcyje,
+		        HWMX.HWMC, HWMX.HDBH, 
+		           (SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = HWMX.FHR_XZQH_DM) sfd,
+		           (SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = HWMX.SHR_XZQH_DM) mdd,
+		           (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '07' AND DM.JLDW_DM = HWMX.HW_BZ_HLDW_DM) bz,
+		           (CASE WHEN HWMX.HW_SL IS NULL OR HWMX.HW_SL = 0 THEN NULL ELSE rtrim(TO_CHAR(HWMX.HW_SL,'fm99999999999990.99'),'.') || ' ' || (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '01' AND DM.JLDW_DM = HWMX.HW_SL_JLDW_DM) END) sl,
+		           (CASE WHEN HWMX.HW_ZL IS NULL OR HWMX.HW_ZL = 0 THEN NULL ELSE rtrim(TO_CHAR(HWMX.HW_ZL,'fm99999999999990.99'),'.') || ' ' || (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '02' AND DM.JLDW_DM = HWMX.HW_ZL_JLDW_DM) END) zl,
+		           (CASE WHEN HWMX.HW_TJ IS NULL OR HWMX.HW_TJ = 0 THEN NULL ELSE rtrim(TO_CHAR(HWMX.HW_TJ,'fm99999999999990.99'),'.') || ' ' || (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '03' AND DM.JLDW_DM = HWMX.HW_TJ_JLDW_DM) END) tj 
+		    FROM JS_SRDZ_QD_MX_TEMP B,HY_WLSSDJ WLSS,HY_WLSSDJ_MX SSMX, HY_DD DD,HY_DD_HWMX HWMX,
+			       HY_PC_HWXX PCHW,
+			       HY_DD_WFHXX WFH
+		    WHERE B.YW_DJXH = SSMX.WLSS_DJXH
+			   AND B.YW_MX_XH = SSMX.XH
+			   AND WLSS.WLSS_DJXH = SSMX.WLSS_DJXH
+			   AND WLSS.PC_DJXH = PCHW.PC_DJXH
+			   AND WLSS.WFH_DJXH = PCHW.WFH_DJXH
+			   AND PCHW.WFH_DJXH = WFH.WFH_DJXH
+			   AND WFH.DD_DJXH = HWMX.DD_DJXH
+			   AND WFH.XH = HWMX.XH
+			   AND DD.DD_DJXH = HWMX.DD_DJXH
+			   AND PCHW.YXBZ = 'Y'
+			   AND SSMX.YXBZ = 'Y'
+			   AND WLSS.YXBZ = 'Y'
+			   AND HWMX.YXBZ = 'Y'
+			   AND DD.YXBZ = 'Y'
+			   AND B.YW_LYDM=3
+		      AND (WLSS.SPBZ = 'N' OR (WLSS.SPBZ = 'Y' AND WLSS.WSSPZT_DM = '3'))
+		  <dynamic> 
+			<isNotEmpty property="qdDjxh" prepend="and">
+				B.QD_DJXH =#qdDjxh#
+			</isNotEmpty>
+		  </dynamic>
+		  ORDER by DD_DJXH ASC
+	</select>
+	
+	<select id="queryFydjList" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyZyglFydjDomain">
+		SELECT FY.FY_DJXH || ',' || '0' fyDjxh,FY.SRJE je, 
+        (SELECT XM.FYDJ_XMMC FROM QY_FYDJXM XM WHERE XM.WH_XH = FY.FYDJXM_WH_XH) fydjxmWhMc,
+          DD.KHMC,DD.DDBH, DD.XDRQ, HWMX.HWMC, HWMX.HDBH, 
+             (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '07' AND DM.JLDW_DM = HWMX.HW_BZ_HLDW_DM) bz,
+             (SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = HWMX.FHR_XZQH_DM) fhrXzqhMc,
+             (SELECT XZQH_JC FROM DM_XZQH DM WHERE DM.XZQH_DM = HWMX.SHR_XZQH_DM) shrXzqhMc,
+             (CASE WHEN HWMX.HW_SL IS NULL OR HWMX.HW_SL = 0 THEN NULL ELSE rtrim(TO_CHAR(HWMX.HW_SL,'fm99999999999990.99'),'.') || ' ' || (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '01' AND DM.JLDW_DM = HWMX.HW_SL_JLDW_DM) END) sl,
+             (CASE WHEN HWMX.HW_ZL IS NULL OR HWMX.HW_ZL = 0 THEN NULL ELSE rtrim(TO_CHAR(HWMX.HW_ZL,'fm99999999999990.99'),'.') || ' ' || (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '02' AND DM.JLDW_DM = HWMX.HW_ZL_JLDW_DM) END) zl,
+             (CASE WHEN HWMX.HW_TJ IS NULL OR HWMX.HW_TJ = 0 THEN NULL ELSE rtrim(TO_CHAR(HWMX.HW_TJ,'fm99999999999990.99'),'.') || ' ' || (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '03' AND DM.JLDW_DM = HWMX.HW_TJ_JLDW_DM) END) tj 
+      FROM HY_FYDJ FY,HY_DD DD,HY_DD_HWMX HWMX
+      WHERE FY.DD_DJXH = HWMX.DD_DJXH
+        AND FY.HWMXXH = HWMX.XH
+        AND DD.DD_DJXH = HWMX.DD_DJXH
+        AND FY.YXBZ = 'Y'
+        AND (FY.SPBZ = 'N' OR (FY.SPBZ = 'Y' AND FY.WSSPZT_DM = '3'))
+        AND (FY.SRJE IS NOT NULL AND FY.SRJE > 0)
+        AND FY.SS_JGBM = #ssJgbm#
+      <dynamic>
+        <isNotEmpty property="khDjxh" prepend="AND">
+          FY.KH_DJXH = #khDjxh#
+        </isNotEmpty> 
+        <isNotEmpty property="djJgbm" prepend="AND">
+          FY.DJ_JGBM = #djJgbm#
+        </isNotEmpty>
+        <isNotEmpty property="rqQ" prepend="AND">
+          DD.XDRQ &gt;= TO_DATE(#rqQ#,'YYYY-MM-DD')
+        </isNotEmpty>
+        <isNotEmpty property="rqZ" prepend="AND">
+          DD.XDRQ &lt; TO_DATE(#rqZ#,'YYYY-MM-DD')+1
+        </isNotEmpty>
+      </dynamic>
+        AND NOT EXISTS (
+          SELECT 1 FROM JS_SRDZ_QD QD,JS_SRDZ_QD_MX QDMX 
+          WHERE QD.QD_DJXH = QDMX.QD_DJXH
+          AND QDMX.YW_DJXH = FY.FY_DJXH
+          AND QDMX.YW_MX_XH = 0
+          AND QD.YXBZ = 'Y'
+          AND QDMX.YW_LYDM = 2
+          )
+	</select>
+	
+	<update id="updateQdHeJeByKey" parameterClass="java.util.Map">
+		UPDATE JS_SRDZ_QD QD SET QD.HE_JE = (
+		       SELECT NVL(SUM(DZ.DZJE),0) FROM JS_SRDZ DZ 
+		       WHERE EXISTS (
+		        SELECT 1 FROM JS_SRDZ_QD QD,JS_SRDZ_QD_MX QDMX
+		        WHERE QD.QD_DJXH = QDMX.QD_DJXH
+				  AND QDMX.YW_DJXH = DZ.DZ_DJXH
+		          AND QDMX.YW_LYDM = 1
+		          AND QD.YXBZ = 'Y'
+		          AND QDMX.QD_DJXH = #qdDjxh#)
+		) + (
+		  SELECT NVL(SUM(FYMX.SRJE),0) FROM HY_FYDJ FYMX
+		  WHERE EXISTS (
+		    SELECT 1 FROM JS_SRDZ_QD QD,JS_SRDZ_QD_MX QDMX
+		    WHERE QD.QD_DJXH = QDMX.QD_DJXH
+			  AND QDMX.YW_DJXH = FYMX.FY_DJXH
+		      AND QDMX.YW_MX_XH = 0
+		      AND QDMX.YW_LYDM = 2
+		      AND QD.YXBZ = 'Y'
+		      AND QDMX.QD_DJXH = #qdDjxh#)
+		) - (
+		  SELECT NVL(SUM(WLSS.JE),0) FROM HY_WLSSDJ_MX WLSS
+		  WHERE EXISTS (
+		     SELECT 1 FROM JS_SRDZ_QD QD,JS_SRDZ_QD_MX QDMX
+		     WHERE QD.QD_DJXH = QDMX.QD_DJXH
+			   AND QDMX.YW_DJXH = WLSS.WLSS_DJXH
+		       AND QDMX.YW_MX_XH = WLSS.XH
+		       AND QDMX.YW_LYDM = 3
+		       AND QD.YXBZ = 'Y'
+		       AND QDMX.QD_DJXH = #qdDjxh#)
+		)
+		WHERE QD.QD_DJXH = #qdDjxh#
+	</update>
+	
+	<select id="calQdHjJe" parameterClass="java.util.Map"
+		resultClass="java.lang.Double">
+		SELECT
+	      (SELECT NVL(SUM(DZ.DZJE),0) FROM JS_SRDZ DZ 
+	       WHERE EXISTS (
+	        SELECT 1 FROM JS_SRDZ_QD_MX_TEMP QDMX
+	        WHERE QDMX.YW_DJXH = DZ.DZ_DJXH
+	          AND QDMX.YW_LYDM = 1
+	          AND QDMX.QD_DJXH = #qdDjxh#))
+		 + 
+		  (SELECT NVL(SUM(FYMX.SRJE),0) FROM HY_FYDJ FYMX
+		  WHERE EXISTS (
+		    SELECT 1 FROM JS_SRDZ_QD_MX_TEMP QDMX
+		    WHERE QDMX.YW_DJXH = FYMX.FY_DJXH
+		      AND QDMX.YW_MX_XH = 0
+		      AND QDMX.YW_LYDM = 2
+		      AND QDMX.QD_DJXH = #qdDjxh#))
+		 - 
+		  (SELECT NVL(SUM(WLSS.JE),0) FROM HY_WLSSDJ_MX WLSS
+		  WHERE EXISTS (
+		     SELECT 1 FROM JS_SRDZ_QD_MX_TEMP QDMX
+		     WHERE QDMX.YW_DJXH = WLSS.WLSS_DJXH
+		       AND QDMX.YW_MX_XH = WLSS.XH
+		       AND QDMX.YW_LYDM = 3
+		       AND QDMX.QD_DJXH = #qdDjxh#))
+		 FROM DUAL
+	</select>
+	
+	<update id="updateJsSrdzQdxhToNullByQdDjxh" parameterClass="java.util.Map">
+		UPDATE JS_SRDZ DZ SET DZ.QD_DJXH = NULL 
+ 			WHERE DZ.QD_DJXH = #qdDjxh#
+	</update>
+	
+	<!-- 生成财务信息(不开票时) -->
+	<insert id="cwYsfSrdz" parameterClass="java.util.Map">
+		INSERT INTO CW_YSYF(YSYF_DJXH,YFJSF_DM,YFJSF_DJXH,KMDL_DM,KMXL_DM,ZDY_KMZL_DM,
+                       YSYFLY_DM,YW_DJXH,CSRQ,YSYFZT_DM,YSF_JE,YISF_JE,WSF_JE,SM,
+                       YXBZ,DJ_JGBM,SS_JGBM)
+       SELECT SEQ_YSYF_DJXH.NEXTVAL,
+          21,NULL,1,102,NULL,
+          8,QD.QD_DJXH,SYSDATE,21,QD.HE_JE,
+          QD.YF_JE,QD.WF_JE,
+          #qdmc# || QD.QDMC || #kh# || QD.JSDW || 
+          #ykp#|| QD.YSQ_KPJE || #wkp# || QD.WSQ_KPJE SM,
+          'Y',QD.DJ_JGBM,QD.SS_JGBM
+      FROM JS_SRDZ_QD QD
+      WHERE QD.YXBZ='Y'
+      AND QD.QD_DJXH=#qdDjxh#
+	</insert>
+	
+	 <select id="checkQdDelete" parameterClass="java.util.Map" resultClass="java.lang.Integer">    	
+    	SELECT COUNT(*) FROM JS_SRDZ_QD QD WHERE EXISTS 
+		(SELECT * FROM JS_KPSQ KPSQ WHERE KPSQ.YXBZ='Y' AND KPSQ.KPSQ_DJXH=
+		(SELECT KPMX.KPSQ_DJXH FROM JS_KPSQ_MX KPMX WHERE #qdDjxh#=KPMX.YW_DJXH AND KPMX.YXBZ='Y'))
+    </select>
+    
+    <select id="checkQdCwInfo" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+    	SELECT COUNT(YSYF.YSYF_DJXH) FROM CW_YSYF YSYF 
+		       WHERE YSYF.YW_DJXH = #qdDjxh# AND YSYF.YFJSF_DM=21 
+		       AND YSYF.YXBZ='Y' AND YSYF.KMXL_DM = 102 AND YSYF.YSYFZT_DM IN (12,22)         
+    </select>
+    
+    <update id="deleCwInfo" parameterClass="java.util.Map">
+    	UPDATE CW_YSYF YSYF SET YSYF.YXBZ='N' WHERE YSYF.YW_DJXH=#qdDjxh# AND YSYF.YFJSF_DM=21 AND YSYF.KMXL_DM = 102 AND YSYF.YSYFZT_DM IN (11,21)
+    </update>
+</sqlMap>

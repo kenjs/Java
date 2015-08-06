@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.hst.gnqx.dao.BusYhjswhMapper">
+	
+    <!--取系统参数-->
+    <parameterMap id="getXtcsCszParameters" class="java.util.HashMap" >
+		<parameter property="nsrsbh"  javaType="java.lang.String" mode="IN"/>
+		<parameter property="nsrSwjgDm"  javaType="java.lang.String" mode="IN"/>
+		<parameter property="csbm"  javaType="java.lang.String" mode="IN"/>   
+		<parameter property="czryDm"  javaType="java.lang.String" mode="IN"/> 
+		<parameter property="dwNsrsbh"  javaType="java.lang.String" mode="IN"/>
+		<parameter property="csz" jdbcType="VARCHAR" javaType="java.lang.String" mode="OUT"/>
+	</parameterMap>   
+	<procedure id="getXtcsCsz" parameterMap="getXtcsCszParameters">   
+		{call P_QY_GET_XTCS(?,?,?,?,?,?)}   
+	</procedure>     
+</sqlMap>

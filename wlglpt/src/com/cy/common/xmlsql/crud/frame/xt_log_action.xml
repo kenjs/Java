@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.framework.dao.XtLogActionMapper">
+
+	<!--插入数据-->
+	<insert id="insertXtLogAction"  parameterClass="com.cy.common.bo.XtLogAction">
+		<selectKey keyProperty="logXh" resultClass="long" type="pre"> 
+			select SEQ_LOG_XH.nextval as logXh from dual 
+		</selectKey> 
+		insert into XT_LOG_ACTION(LOG_XH,XTYHFL_DM,CZY_DJXH,XTML_XH,GNMK_DM,ACTION,KSSJ,JSSJ,
+		TIME_USED,SESSION_ID,SERVERIP,SERVERPORT,QTXX)
+		values(#logXh:NUMERIC#,#xtyhflDm:VARCHAR#,#czyDjXh:VARCHAR#,#xtmlXh:NUMERIC#,#gnmkDm:VARCHAR#,
+		#action:VARCHAR#,to_date(#kssj:DATE#,'yyyy-MM-dd hh24:mi:ss'),to_date(#jssj:DATE#,'yyyy-MM-dd hh24:mi:ss'),
+		#timeUsed:NUMERIC#,#sessionId:VARCHAR#,#serverip:VARCHAR#,#serverport:VARCHAR#,#qtxx:VARCHAR#)
+	</insert>
+
+</sqlMap>

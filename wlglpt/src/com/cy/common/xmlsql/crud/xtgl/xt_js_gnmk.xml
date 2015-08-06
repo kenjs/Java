@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.hst.gnqx.dao.XtJsGnmkMapper">
+
+	<!--根据主键取DOMAIN-->
+	<select id="selectXtJsGnmkByKey" parameterClass="java.util.Map"
+		resultClass="com.hst.gnqx.domain.XtJsGnmkDomain">
+		select a.JS_DM as jsDm,a.GNMK_DM as gnmkDm from XT_JS_GNMK a  where a.JS_DM=#jsDm# and a.GNMK_DM=#gnmkDm#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertXtJsGnmk"  parameterClass="com.hst.common.bo.XtJsGnmk">
+		insert into XT_JS_GNMK(JS_DM,GNMK_DM)
+		values(#jsDm:VARCHAR#,#gnmkDm:VARCHAR#)
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateXtJsGnmkByKey" parameterClass="com.hst.common.bo.XtJsGnmk">
+        update XT_JS_GNMK set JS_DM=#jsDm#,GNMK_DM=#gnmkDm# where JS_DM=#jsDm# and GNMK_DM=#gnmkDm#
+    </update>
+    
+	<!--根据主键删除表数据：软删除-->
+	<delete id="deleteXtJsGnmkByKey" parameterClass="java.util.Map">
+		delete XT_JS_GNMK where JS_DM=#jsDm# and GNMK_DM=#gnmkDm#
+    </delete>
+</sqlMap>

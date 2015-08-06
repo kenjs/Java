@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.hygl.dao.BusJsglPsfqrMapper">
+
+	<parameterMap class="java.util.Map" id="jsPsfqrParMap">
+		<parameter property="pcJgbm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="pcrqq" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="pcrqz" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="pcdh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		
+		<parameter property="pageNum" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+		<parameter property="pageSize" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+		<parameter property="pageCount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+		<parameter property="reccount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+		<parameter property="dataList" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" resultMap="jsPsfqrResMap"/>
+	</parameterMap>
+	
+	<resultMap class="com.cy.hygl.domain.HyPcxxglDomain" id="jsPsfqrResMap">
+		<result property="pageXh" column="PAGE_XH"/>
+		<result property="pcDjxh" column="PC_DJXH"/>
+		<result property="pcdh" column="PCDH"/>
+		<result property="pcrq" column="PCRQ"/>
+		<result property="pcfsDm" column="PCFS_DM"/>
+		<result property="pcfsMc" column="PCFS_MC"/>
+		<result property="zhuangche" column="ZCFS_DM"/>
+		<result property="zcfxMc" column="ZCFS_MC"/>
+		<result property="clxx" column="CLXX"/>
+		
+		<result property="yfHj" column="YF_HJ"/>
+		<result property="yfYfyf" column="YF_YFYF"/>
+		<result property="yfYj" column="YF_YJ"/>
+		<result property="yfXxf" column="YF_XXF"/>
+		<result property="yfSjs" column="YF_SJS"/>
+		<result property="yfHdyf" column="YF_HDYF"/>
+		<result property="yfHdf" column="YF_HDF"/>
+		<result property="yfZjf" column="YF_ZJF"/>
+		<result property="zrbmDjxh" column="ZRBM_DJXH"/>
+		<result property="zrbmDm" column="ZRBM_DM"/>
+		<result property="zrbmMc" column="ZRBM_MC"/>
+		<result property="pchwLsxh" column="XH"/>
+		<result property="hwMc" column="HWMC"/>
+
+		<result property="sl" column="SL"/>
+		<result property="zl" column="ZL"/>
+		<result property="tj" column="TJ"/>
+		<result property="jssl" column="JS_SL"/>
+		
+		<result property="shrMc" column="SHR_MC"/>
+		<result property="mddMc" column="SHR_DZ"/>
+		
+		<result property="srPsf" column="PSFY"/>
+		<result property="psfDjxh" column="PSF_DJXH"/>
+		<result property="wfhDjxh" column="WFH_DJXH"/>
+		
+		<result property="pcrCzyDjxh" column="PCR_CZY_DJXH"/>
+		<result property="pcrq" column="PCRQ"/>
+		<result property="pcrMc" column="PCR_MC"/>
+		<result property="pcJgbm" column="PC_JGBM"/>
+		<result property="pcJgbmMc" column="PC_JGMC"/>
+		<result property="ssJgbm" column="SS_JGBM"/>
+		<result property="ssJgbmMc" column="SS_JGMC"/>
+		<result property="fhrMc" column="KHMC"/>
+		<result property="dingdan" column="DDBH"/>
+		<result property="ddDjxh" column="DD_DJXH"/>
+		
+		<result property="yfhjyf" column="YFHJYF"/>
+		<result property="srhjdf" column="SRHJDF"/>
+		<result property="zcZl" column="ZCZL"/>
+		<result property="zcTj" column="ZCTJ"/>
+		<result property="zs" column="ZS"/>
+	</resultMap>
+	
+	<procedure id="queryJsPsfqrPage" parameterMap="jsPsfqrParMap" resultMap="jsPsfqrResMap">
+		{call P_HYGL_JSGL_PSFQR(?,?,?,?,?,?,?,?,?)}
+	</procedure>
+	
+	<select id="getPsfQrBz" parameterClass="java.util.Map" resultClass="java.lang.String">
+		SELECT PSF.SFQR FROM HY_PC_XYPSFLR PSF 
+			WHERE PSF.PSF_DJXH=#psfDjxh#
+	</select>
+	
+	<select id="viewPsfQrMx" parameterClass="java.util.Map" resultClass="com.cy.hygl.domain.HyPcxxglDomain">
+		SELECT HPX.PSFY AS srPsf,
+           HPX.SFQR AS sfQr,
+           HPX.CJRQ AS cjrq,
+           HPX.QRSM AS bz,
+           HPX.QRJG AS qrJg,
+           (SELECT QR.MC FROM QY_RYDJ QR WHERE QR.CZY_DJXH = HPX.XGR_CZY_DJXH) AS cjrMc
+      FROM HY_PC_XYPSFLR HPX
+      WHERE HPX.PSF_DJXH=#psfDjxh#
+	</select>
+	
+	<update id="updatePsrQrXx" parameterClass="com.cy.common.bo.XyPsfLr">
+		UPDATE HY_PC_XYPSFLR SET SFQR=#sfqr#,QRJG=#qrjg#,QRSM=#qrsm#,XGR_CZY_DJXH=#xgrCzyDjxh#,XGRQ=to_date(#xgrq#,'YYYY-MM-DD') WHERE PSF_DJXH=#psfDjxh#
+	</update>
+	
+	<!-- 验证配送费是否可以退回 -->
+	<select id="checkPsfCanBack" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+		SELECT COUNT(PC.PC_DJXH) FROM HY_PC PC,HY_PC_HWXX PCHW,
+		       (SELECT DDHW.DD_DJXH,DDHW.XH FROM HY_PC_XYPSFLR PSF,HY_DD_HWMX DDHW 
+		       WHERE DDHW.SY_DD_DJXH=PSF.DD_DJXH AND DDHW.SY_XH=PSF.HWMX_XH AND PSF.PSF_DJXH=#psfDjxh#
+		       AND DDHW.YXBZ='Y') A
+		WHERE PCHW.YXBZ='Y'
+		      AND PC.YXBZ='Y'
+		      AND PC.PC_DJXH=PCHW.PC_DJXH
+		      AND PCHW.DD_DJXH=A.DD_DJXH
+		      AND PCHW.XH=A.XH
+		      AND PC.PCFS_DM=3
+	</select>
+	
+	<!-- 配送费退回 -->
+	<delete id="psfOnBack" parameterClass="java.util.Map">
+		UPDATE HY_PC_XYPSFLR PSF SET PSF.SFQR='N',PSF.QRJG='N' WHERE PSF.PSF_DJXH=#psfDjxh# 
+	</delete>
+	
+	<select id="getPsfDomainByKey" parameterClass="java.util.Map" resultClass="com.cy.hygl.domain.HyPcxxglDomain">
+		SELECT PSF.PSF_DJXH AS psfDjxh,PSF.PSFY AS srPsf,PSF.QRJG AS qrJg,PSF.SFQR AS sfQr FROM HY_PC_XYPSFLR PSF WHERE PSF.PSF_DJXH=#psfDjxh# 
+	</select>
+</sqlMap>

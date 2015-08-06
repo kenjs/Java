@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.hygl.dao.BusHyTydWfhxxMapper">
+	
+	<parameterMap class="java.util.Map" id="hyTydwfhxxParMap">
+		<parameter property="dw4Query" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="fhrXzqhDm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="shrXzqhDm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="ddbh4Query" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="fhrDjxh4Query" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="khMc4Query" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="xdrqQ" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="xdrqZ" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="fhrqQ" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="fhrqZ" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="djrCzyDjxh4Query" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="djJgbm4Query" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="lb4Query" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="hwztDm4Query" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="bz" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="pcfsDm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="pchwLsxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="pcDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="pageNum" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+		<parameter property="pageSize" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+		<parameter property="pageCount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+		<parameter property="reccount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+		<parameter property="dataList" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" resultMap="hyTydwfhxxResMap"/>
+	</parameterMap>
+	
+	<resultMap class="com.cy.hygl.domain.HyTydWfhxxDomain" id="hyTydwfhxxResMap">
+		<result property="pageXh" column="PAGE_XH"/>
+		<result property="wfhDjxh" column="WFH_DJXH"/>
+		<result property="ddDjxh" column="DD_DJXH"/>
+		<result property="xh" column="XH"/>
+		<result property="ddbh" column="DDBH"/>
+		<result property="fhrMc" column="FHR_MC"/>
+		<result property="hwztDm" column="HWZT_DM"/>
+		<result property="hwztMc" column="HWZT_MC"/>
+		<result property="fhrXzqhDm" column="FHR_XZQH_DM"/>
+		<result property="fhrXzqhMc" column="FHR_XZQH_MC"/>
+		<result property="shrXzqhDm" column="SHR_XZQH_DM"/>
+		<result property="shrXzqhMc" column="SHR_XZQH_MC"/>
+		<result property="hwmc" column="HWMC"/>
+		<result property="bz" column="BZ"/>
+		<result property="sl" column="SL"/>
+		<result property="zl" column="ZL"/>
+		<result property="tj" column="TJ"/>
+		<result property="jssl" column="JS_SL"/>
+		<result property="lb" column="HWFL_MC" />
+		<result property="fhrDz" column="FHR_DZ"/>
+		<result property="fhRq" column="YQ_FHRQ"/>
+		<result property="shrMc" column="SHR_MC"/>
+		<result property="shDz" column="SHR_DZ"/>
+		<result property="yqDdrq" column="YQ_DDRQ"/>
+		<result property="djrCzyDjxh" column="DJR_CZY_DJXH"/>
+		<result property="djrMc" column="DJR_MC"/>
+		<result property="djRq" column="DJRQ"/>
+		<result property="djJgbm" column="DJ_JGBM"/>
+		<result property="djJgmc" column="DJ_JGMC"/>
+		<result property="ssJgbm" column="SS_JGBM"/>
+		<result property="ssJgmc" column="SS_JGMC"/>
+		<result property="shfsMc" column="SHFS_MC"/>
+		<result property="shfsDm" column="SHFS_DM"/>
+		<result property="df" column="DF"/>
+		<result property="thf" column="THF"/>
+		<result property="hdf" column="HDF"/>
+		<result property="srHj" column="SR_HJ"/>
+	</resultMap>
+	
+	<procedure id="queryHyTydwfhxxPage" parameterMap="hyTydwfhxxParMap" resultMap="hyTydwfhxxResMap">
+		{call P_HYGL_DDGL_WFHXX(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}
+	</procedure>
+    
+    <select id="selectHyTydWfhxxAll" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyTydWfhxxDomain">
+		SELECT A.WFH_DJXH AS wfhDjxh,
+		       A.HWZT_DM AS hwztDm,
+		       A.DD_DJXH AS ddDjxh,
+		       A.XH AS xh,
+		       A.HW_SL AS hwSl,
+		       A.HW_ZL AS hwZl,
+		       A.HW_TJ AS hwTj,
+		       A.FHR_DJXH AS fhrDjxh,
+		       A.FHR_MC AS fhrMc,
+		       A.FHR_DZ AS fhrDz,
+		       A.FHR_LXR AS fhrLxr,
+		       A.FHR_LXDH AS fhrLxdh,
+		       A.FHR_XZQH_DM AS fhrXzqhDm,
+		       A.PCBZ AS pcbz,
+		       A.PC_DJXH AS pcDjxh,
+		       A.YXBZ AS yxbz
+		  FROM HY_DD_WFHXX A 
+
+		  ORDER by A.WFH_DJXH ASC
+    </select>
+
+	<select id="getHyTydWfhxxRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.WFH_DJXH) 
+		  FROM HY_DD_WFHXX A 
+
+    </select>
+    
+    <select id="queryPchwClfsdmList" parameterClass="java.util.Map"
+    	resultClass="com.cy.common.domain.DmbGgDomain">
+    	SELECT A.PCHW_CLFS_DM dm, 
+    	<dynamic>
+    		<isEqual property="mcContainsDm" compareValue="Y">
+    			A.PCHW_CLFS_DM || ' ' || A.PCHW_CLFS_MC mc
+    		</isEqual>
+    		<isNotEqual property="mcContainsDm" compareValue="Y">
+    			' ' || A.PCHW_CLFS_MC mc
+    		</isNotEqual>
+    	</dynamic>
+    	 FROM DM_PCHW_CLFS A
+			WHERE A.YXBZ = 'Y'
+			AND A.PCFS_DM = #pcfsDm#
+			ORDER BY A.PCHW_CLFS_DM
+    </select>
+    
+</sqlMap>

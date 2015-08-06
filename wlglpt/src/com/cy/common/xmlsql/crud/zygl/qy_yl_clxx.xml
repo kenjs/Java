@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.dzgl.dao.QyYlClxxMapper">
+
+	<!--根据主键取DOMAIN-->
+	<select id="selectQyYlClxxByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyYlClxxDomain">
+		select a.CL_DJXH as clDjxh,
+		a.CZ_XM as czXm,
+		a.CZ_ZJLX_DM as	czZjlxDm,
+		a.CZ_ZJHM as czZjhm,
+		a.CZ_LXDH as czLxdh,
+		a.CLHM as clhm,
+		a.CLSX_DM as clsxDm,
+		a.THCLBZ as thclbz,
+		a.YSCLBZ as ysclbz,
+		a.PSCLBZ as	psclbz,
+		a.BZ as bz,
+		a.DJR_CZY_DJXH as djrCzyDjxh,
+		a.DJRQ as djrq,
+		a.DJ_JGBM as djJgbm,
+		a.SS_JGBM as ssJgbm,
+		a.YXBZ as yxbz,
+		a.CJR_CZY_DJXH	as cjrCzyDjxh,
+		a.CJRQ as cjrq,
+		a.XGR_CZY_DJXH as xgrCzyDjxh,
+		a.XGRQ as xgrq,
+		a.Xxgxfs_Dm as xxgxfsDm,
+		a.gcbz as gcbz,
+		a.clxhwh_djxh as clxhwhDjxh
+		from QY_YL_CLXX a
+		where a.CL_DJXH=#clDjxh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertQyYlClxx" parameterClass="com.cy.common.bo.QyYlClxx">
+		<selectKey keyProperty="clDjxh" resultClass="String" type="pre">
+			select SEQ_ZY_DJXH.nextval as clDjxh from dual 
+		</selectKey>
+		insert into QY_YL_CLXX
+		(CL_DJXH,CZ_XM,CZ_ZJLX_DM,CZ_ZJHM,
+		CZ_LXDH,GCBZ,CLHM,CLSX_DM,
+		THCLBZ,YSCLBZ,PSCLBZ,CLXHWH_DJXH,
+		BZ,DJR_CZY_DJXH,DJRQ,DJ_JGBM,
+		SS_JGBM,YXBZ,CJR_CZY_DJXH,CJRQ,
+		XGR_CZY_DJXH,XGRQ,Xxgxfs_Dm)
+		values
+		(#clDjxh:NUMERIC#,#czXm:VARCHAR#,#czZjlxDm:NUMERIC#,#czZjhm:VARCHAR#,
+		#czLxdh:VARCHAR#,#gcbz:VARCHAR#,#clhm:VARCHAR#,#clsxDm:NUMERIC#,
+		#thclbz:VARCHAR#,#ysclbz:VARCHAR#,#psclbz:VARCHAR#,#clxhwhDjxh:NUMERIC#,
+		#bz:VARCHAR#,#djrCzyDjxh:NUMERIC#,to_date(#djrq:DATE#, 'yyyy-MM-dd'),#djJgbm:NUMERIC#,
+		#ssJgbm:NUMERIC#,#yxbz:VARCHAR#,#cjrCzyDjxh:NUMERIC#,to_date(#cjrq:DATE#, 'yyyy-MM-dd'),
+		#xgrCzyDjxh:NUMERIC#,to_date(#xgrq:DATE#, 'yyyy-MM-dd'),#xxgxfsDm:NUMERIC#)
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateQyYlClxxByKey" parameterClass="com.cy.common.bo.QyYlClxx">
+        update QY_YL_CLXX set CL_DJXH=#clDjxh#,CZ_XM=#czXm#,CZ_ZJLX_DM=#czZjlxDm#,CZ_ZJHM=#czZjhm#,CZ_LXDH=#czLxdh#,GCBZ = #gcbz#,
+		CLHM=#clhm#,CLSX_DM=#clsxDm#,THCLBZ=#thclbz#,YSCLBZ=#ysclbz#,PSCLBZ=#psclbz#,CLXHWH_DJXH = #clxhwhDjxh#,
+		BZ=#bz#,DJR_CZY_DJXH=#djrCzyDjxh#,DJRQ=to_date(#djrq#, 'YYYY-MM-DD'),DJ_JGBM=#djJgbm#,SS_JGBM=#ssJgbm#,
+		YXBZ=#yxbz#,CJR_CZY_DJXH=#cjrCzyDjxh#,CJRQ=to_date(#cjrq#, 'YYYY-MM-DD'),XGR_CZY_DJXH=#xgrCzyDjxh#,XGRQ=to_date(#xgrq#, 'YYYY-MM-DD'),
+		Xxgxfs_Dm=#xxgxfsDm# where CL_DJXH=#clDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteQyYlClxxByKey" parameterClass="java.util.Map">
+		update QY_YL_CLXX set yxbz='N' where CL_DJXH=#clDjxh#
+    </delete>
+</sqlMap>

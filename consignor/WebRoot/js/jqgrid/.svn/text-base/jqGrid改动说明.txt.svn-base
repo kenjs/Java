@@ -1,0 +1,11 @@
+所有css中:
+font-family:"Courier New","Arial" 修改所有
+
+ 
+ui.jqgrid.css需处理
+.ui-jqgrid .ui-jqgrid-sortable {cursor:pointer;} =表格标题的有链接图标 删除
+
+
+jquery-ui-1.7.2.custom.css
+
+jquery-1.4.2.min.js 可以使用输入ajax, jquery-1.5.2.min.js还不能使用

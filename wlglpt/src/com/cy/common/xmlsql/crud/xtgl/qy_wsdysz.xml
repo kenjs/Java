@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.xtgl.dao.QyWsdyszMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectQyWsdyszByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.QyWsdyszDomain">
+		select a.WH_XH as whXh,a.SS_JGBM as ssJgbm,a.WS_DM as wsDm,a.LEFT_MARGIN as leftMargin,a.TOP_MARGIN as topMargin,
+		a.CJR_CZY_DJXH as cjrCzyDjxh,a.CJRQ as cjrq,a.XGR_CZY_DJXH as xgrCzyDjxh,a.XGRQ as xgrq from QY_WSDYSZ a  where a.WH_XH=#whXh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertQyWsdysz"  parameterClass="com.cy.common.bo.QyWsdysz">
+		<selectKey keyProperty="whXh" resultClass="string" type="pre"> 
+			select SEQ_ZY_DJXH.nextval as whXh from dual 
+		</selectKey> 
+		insert into QY_WSDYSZ(WH_XH,SS_JGBM,WS_DM,LEFT_MARGIN,TOP_MARGIN,
+		CJR_CZY_DJXH,CJRQ,XGR_CZY_DJXH,XGRQ)
+		values(#whXh:NUMERIC#,#ssJgbm:NUMERIC#,#wsDm:VARCHAR#,#leftMargin:NUMERIC#,#topMargin:NUMERIC#,
+		#cjrCzyDjxh:NUMERIC#,to_date(#cjrq:DATE#,'yyyy-MM-dd'),#xgrCzyDjxh:NUMERIC#,to_date(#xgrq:DATE#,'yyyy-MM-dd'))
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateQyWsdyszByKey" parameterClass="com.cy.common.bo.QyWsdysz">
+        update QY_WSDYSZ set WH_XH=#whXh#,SS_JGBM=#ssJgbm#,WS_DM=#wsDm#,LEFT_MARGIN=#leftMargin#,TOP_MARGIN=#topMargin#,
+		CJR_CZY_DJXH=#cjrCzyDjxh#,CJRQ=to_date(#cjrq#, 'YYYY-MM-DD'),XGR_CZY_DJXH=#xgrCzyDjxh#,XGRQ=to_date(#xgrq#, 'YYYY-MM-DD') where WH_XH=#whXh#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteQyWsdyszByKey" parameterClass="java.util.Map">
+		delete from QY_WSDYSZ where WH_XH=#whXh#
+    </delete>
+</sqlMap>

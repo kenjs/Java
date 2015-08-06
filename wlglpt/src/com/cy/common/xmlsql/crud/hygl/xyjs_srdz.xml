@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.hygl.dao.XyjsSrdzMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectXyjsSrdzByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.XyjsSrdzDomain">
+		select a.DZ_DJXH as dzDjxh,a.YW_DJXH as ywDjxh,a.YW_MX_XH as ywMxXh,
+	          a.JS_JE as jsJe,a.DZJE as dzje,a.DZCYJE as dzcyje,a.QD_DJXH as qdDjxh,
+	          A.BZ,
+	      (SELECT JG.JC FROM QY_ZZJG JG WHERE JG.JGBM = JSHW.ZRBM_DJXH ) xyMc,
+	      DD.DDBH, DD.XDRQ,
+	       (SELECT QH.XZQH_JC FROM DM_XZQH QH WHERE QH.XZQH_DM = JSHW.SFD_XZQH_DM) sfdXzqhMc,
+	       (SELECT QH.XZQH_JC FROM DM_XZQH QH WHERE QH.XZQH_DM = JSHW.MDD_XZQH_DM) mddXzqhMc,
+	       JSHW.HWMC,JSHW.HW_SL hwSl,JSHW.HW_ZL hwZl, JSHW.HW_TJ hwTj,DDHW.FHR_LXR fhrLxr,
+	       DDHW.SHR_MC shrMc,DDHW.SHR_LXR shrLxr,DDHW.SHR_DZ shrDz
+	    from XYJS_SRDZ a,XYJS_PC_HWXX JSHW,XYJS_SRDZ_QD QD,XYJS_SRDZ_QD_MX QDMX,HY_DD DD, HY_DD_HWMX DDHW
+	    where A.YW_DJXH = QDMX.YW_DJXH
+	      AND A.YW_MX_XH = QDMX.YW_MX_XH
+	      AND JSHW.JS_DJXH = QDMX.YW_DJXH
+	      AND QD.QD_DJXH = QDMX.QD_DJXH        
+	      AND JSHW.DD_DJXH = DD.DD_DJXH
+	      AND JSHW.DD_DJXH = DDHW.DD_DJXH
+	      AND JSHW.XH = DDHW.XH
+	      AND JSHW.YXBZ = 'Y'
+	      AND DD.YXBZ = 'Y'
+	      AND DDHW.YXBZ = 'Y'
+	      AND QD.YXBZ = 'Y'
+	      AND A.DZ_DJXH=#dzDjxh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertXyjsSrdz"  parameterClass="com.cy.common.bo.XyjsSrdz">
+		<selectKey keyProperty="dzDjxh" resultClass="string" type="pre"> 
+			select SEQ_DZ_DJXH.nextval as dzDjxh from dual 
+		</selectKey> 
+		insert into XYJS_SRDZ(DZ_DJXH,YW_DJXH,YW_MX_XH,SS_JGBM,
+		JS_JE,DZJE,DZR_CZY_DJXH,DZRQ,DZ_JGBM,
+		YXBZ,DZ_CYBZ,DZCYJE,SPBZ,WSSPZT_DM,
+		WS_SPXH,QD_DJXH,BZ)
+		values(#dzDjxh:NUMERIC#,#ywDjxh:NUMERIC#,#ywMxXh:NUMERIC#,#ssJgbm:NUMERIC#,
+		#jsJe:NUMERIC#,#dzje:NUMERIC#,#dzrCzyDjxh:NUMERIC#,#dzrq:DATE#,#dzJgbm:NUMERIC#,
+		#yxbz:VARCHAR#,#dzCybz:VARCHAR#,#dzcyje:NUMERIC#,#spbz:VARCHAR#,#wsspztDm:NUMERIC#,
+		#wsSpxh:NUMERIC#,#qdDjxh:NUMERIC#,#bz:VARCHAR#)
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateXyjsSrdzByKey" parameterClass="com.cy.common.bo.XyjsSrdz">
+        update XYJS_SRDZ set DZ_DJXH=#dzDjxh#,YW_DJXH=#ywDjxh#,YW_MX_XH=#ywMxXh#,
+		JS_JE=#jsJe#,DZJE=#dzje#,DZ_CYBZ=#dzCybz#,DZCYJE=#dzcyje#,
+		QD_DJXH=#qdDjxh#,BZ=#bz# where DZ_DJXH=#dzDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteXyjsSrdzByKey" parameterClass="java.util.Map">
+		update XYJS_SRDZ set yxbz='N' where DZ_DJXH=#dzDjxh#
+    </delete>
+    
+    <update id="updateXyjsSrdzQdDzje" parameterClass="java.util.Map">
+    	UPDATE XYJS_SRDZ_QD QD SET (QD.DZ_JE,QD.DZCY_JE) = (
+		       SELECT SUM(DZ.DZJE), SUM(DZ.DZCYJE) 
+		       FROM XYJS_SRDZ DZ
+		       WHERE DZ.QD_DJXH = #qdDjxh#
+		       AND DZ.YXBZ = 'Y'
+		       AND QD.FYLB_DM = DZ.YW_MX_XH
+		)
+		WHERE QD.QD_DJXH = #qdDjxh#
+    </update>
+    
+    <insert id="savePldz" parameterClass="java.util.Map">
+    	insert into XYJS_SRDZ(DZ_DJXH,YW_DJXH,YW_MX_XH,SS_JGBM,
+		JS_JE,DZJE,DZR_CZY_DJXH,DZRQ,DZ_JGBM,
+		YXBZ,DZ_CYBZ,DZCYJE,SPBZ,WSSPZT_DM,
+		WS_SPXH,QD_DJXH)
+		SELECT SEQ_DZ_DJXH.nextval,JSPC.JS_DJXH, #fylbDm#, #ssJgbm#,
+		         JSPC.ZC_PSF,JSPC.ZC_PSF,#dzrCzyDjxh#,SYSDATE,#dzJgbm#,
+		         'Y','N',NULL,'N',NULL,NULL,QDMX.QD_DJXH
+		  FROM XYJS_PC_HWXX JSPC,XYJS_SRDZ_QD QD,XYJS_SRDZ_QD_MX QDMX
+		  WHERE JSPC.JS_DJXH = QDMX.YW_DJXH
+		    AND QD.QD_DJXH = QDMX.QD_DJXH
+		    AND QDMX.YW_MX_XH = #fylbDm#
+		    AND JSPC.YXBZ = 'Y'
+		    AND QD.YXBZ = 'Y'
+		    AND JSPC.JS_DJXH IN
+		<iterate open="(" close=")" conjunction="," property="jsDjxhs">
+			#jsDjxhs[]# 
+		</iterate>
+    </insert>
+    
+    <select id="initDzxxByJsxx" parameterClass="java.util.Map" remapResults="true"
+    	resultClass="com.cy.hygl.domain.XyjsSrdzDomain">
+    	SELECT  QDMX.QD_DJXH qdDjxh, QDMX.YW_DJXH ywDjxh, QDMX.YW_MX_XH ywMxXh,
+		      (SELECT JG.JC FROM QY_ZZJG JG WHERE JG.JGBM = JSHW.ZRBM_DJXH ) xyMc,
+		      <dynamic>
+	    		<isEqual property="ywMxXh" compareValue="1">
+	    			JSHW.ZC_PSF jsJe,
+	    		</isEqual>
+	    		<isEqual property="ywMxXh" compareValue="2">
+	    			JSHW.ZC_DF jsJe,
+	    		</isEqual>
+	    		<isEqual property="ywMxXh" compareValue="3">
+	    			JSHW.ZC_DSHK jsJe,
+	    		</isEqual>
+	    	</dynamic>
+		      DD.DDBH, DD.XDRQ,
+		       (SELECT QH.XZQH_JC FROM DM_XZQH QH WHERE QH.XZQH_DM = JSHW.SFD_XZQH_DM) sfdXzqhMc,
+		       (SELECT QH.XZQH_JC FROM DM_XZQH QH WHERE QH.XZQH_DM = JSHW.MDD_XZQH_DM) mddXzqhMc,
+		       JSHW.HWMC,JSHW.HW_SL hwSl,JSHW.HW_ZL hwZl, JSHW.HW_TJ hwTj,DDHW.FHR_LXR fhrLxr,
+		       DDHW.SHR_MC shrMc,DDHW.SHR_LXR shrLxr,DDHW.SHR_DZ shrDz
+	      FROM XYJS_PC_HWXX JSHW,XYJS_SRDZ_QD QD,XYJS_SRDZ_QD_MX QDMX,HY_DD DD, HY_DD_HWMX DDHW
+	      WHERE JSHW.JS_DJXH = QDMX.YW_DJXH
+	        AND QD.QD_DJXH = QDMX.QD_DJXH        
+	        AND JSHW.DD_DJXH = DD.DD_DJXH
+	        AND JSHW.DD_DJXH = DDHW.DD_DJXH
+	        AND JSHW.XH = DDHW.XH
+	        AND JSHW.YXBZ = 'Y'
+	        AND DD.YXBZ = 'Y'
+	        AND DDHW.YXBZ = 'Y'
+	        AND QD.YXBZ = 'Y'
+	        AND QDMX.YW_DJXH = #ywDjxh#
+	        AND QDMX.YW_MX_XH = #ywMxXh#
+    </select>
+    
+</sqlMap>

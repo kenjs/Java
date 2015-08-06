@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<!-- 运单子表 -->
+<sqlMap >
+ <typeAlias type="tf56.contract.domain.Goods" alias="goods"/><!-- 
+ <resultMap id="goodsFieldMap" class="goods">
+  <result column="goodsId" property="goodsid" jdbcType="VARCHAR" />   编码Id
+  <result column="waybillId" property="waybillid" jdbcType="VARCHAR" />    运单Id 
+  <result column="goodsType" property="goodstype" jdbcType="VARCHAR" />   货物类型
+  <result column="goodsName" property="goodsname" jdbcType="VARCHAR" />   货物名称
+  <result column="spec" property="spec" jdbcType="VARCHAR" />    规格
+  <result column="model" property="model" jdbcType="VARCHAR" />   模式 
+  <result column="num" property="num" jdbcType="VARCHAR" />    数量 
+  <result column="factNum" property="factnum" jdbcType="VARCHAR" />   核定数量
+  <result column="packageName" property="packagename" jdbcType="VARCHAR" />   包装
+  <result column="weight" property="weight" jdbcType="VARCHAR" />    重量 
+  <result column="factWeight" property="factweight" jdbcType="VARCHAR" />   核定重量 
+  <result column="volume" property="volume" jdbcType="VARCHAR" />   体积 
+  <result column="factVolume" property="factvolume" jdbcType="VARCHAR" />   核定体积 
+  <result column="claimValue" property="claimvalue" jdbcType="VARCHAR" />    声明价值 
+  <result column="measureType" property="measuretype" jdbcType="VARCHAR" />    计费方式 
+ </resultMap> 
+ -->
+
+ <!-- 新增记录 -->
+ 
+ <insert id="iBatisInsertGoods" parameterClass="goods">
+  insert into Goods (waybillId,goodsType,goodsName,spec,model,num,factNum,packageName,weight,factWeight,volume,factVolume,claimValue,measureType,unitWeight,unitVolume)
+   values (#waybillid:VARCHAR#,#goodstype:VARCHAR#,#goodsname:VARCHAR#,#spec:VARCHAR#,#model:VARCHAR#,#num:VARCHAR#,#factnum:VARCHAR#,#packagename:VARCHAR#,
+   #weight:VARCHAR#,#factweight:VARCHAR#,#volume:VARCHAR#,#factvolume:VARCHAR#,#claimvalue:VARCHAR#,#measuretype:VARCHAR#,#unitweight:VARCHAR#,#unitvolume:VARCHAR#)
+  <selectKey resultClass="String" keyProperty="goodsid">
+   select last_insert_id() as id
+  </selectKey>
+ </insert>
+ 
+ <!-- 删除用户对象 -->
+ <delete id="iBatisDeleteGoods" parameterClass="java.util.HashMap">
+  delete from Goods where goodsId=#goodsid#
+ </delete>
+
+ <!-- 更新用户对象 -->
+
+ <update id="iBatisUpdateGoods" parameterClass="goods">
+ update Goods set waybillId=#waybillid#,goodsType=#goodstype#,goodsName=#goodsname#,spec=#spec#,model=#model#,num=#num#,factNum=#factnum#,
+		packageName=#packagename#,weight=#weight#,factWeight=#factweight#,volume=#volume#,factVolume=#factvolume#,claimValue=#claimvalue#,
+		measureType=#measuretype#,unitWeight=#unitweight#,unitVolume=#unitvolume#
+where goodsId=#goodsid#
+ </update> 
+ <!-- 更新用户对象 结算时修改保存 -->
+ <update id="iBatisUpdateGoodsWhenSettleBill" parameterClass="goods">
+ update Goods set factNum=#factnum#,factWeight=#factweight#,factVolume=#factvolume#
+where goodsId=#goodsid#
+ </update> 
+<!-- 装车核定数据修改 -->
+<update id="iBatisFactGoods" parameterClass="goods">
+ update Goods set goodsType=#goodstype#,goodsName=#goodsname#,spec=#spec#,model=#model#,factNum=#factnum#,packageName=#packagename#,
+ 	claimValue=#claimvalue#,measureType=#measuretype#,unitWeight=#unitweight#,unitVolume=#unitvolume#,
+ 	factWeight=#factweight#,factVolume=#factvolume#
+where goodsId=#goodsid#
+ </update> 
+
+
+ <!-- 根据id获得用户对象, 返回bean -->
+ <select id="iBatisSelectGoodsById" parameterClass="java.util.HashMap" resultClass="goods">
+  select * from Goods where goodsId=#goodsid# limit 20
+ </select> 
+
+ <!-- 获取多条记录查询列表 返回List -->
+ <select id="iBatisSelectGoodsList" parameterClass="java.util.HashMap" resultClass="goods">
+  select * from Goods order by goodsId desc limit 20
+ </select>
+ <!-- 获取多条记录查询列表 返回List 根据WaybillId-->
+ <select id="iBatisSelectGoodsListByWaybillId" parameterClass="java.util.HashMap" resultClass="goods">
+  select * from Goods where waybillId = #waybillid#
+ </select>
+ <!-- [验证是否存在] 
+ <select id="iBatisSelectCount" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+  select count(*) from Goods where goodsId=#goodsid#
+ </select> 
+ -->
+ <!-- add by lianggui.zhou-->
+ <!--<select id="iBatisSelectGoodsOfWaybill">
+ 	select 
+  </select>
+-->
+ 
+ <!-- 根据运单id找货物总数   author:yao.xia 2013-12-03 -->
+<select id="selectGoodsNumSumByWaybillId" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	select w.backBillType,sum(g.factNum) as numSum from Waybill w left JOIN Goods g on w.waybillId=g.waybillId 
+	 where w.waybillId=#waybillid# GROUP BY w.waybillId,w.backBillType
+</select>
+</sqlMap>

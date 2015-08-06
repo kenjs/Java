@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+   <typeAlias alias="UserDriverAssessInfo" type="com.cy.dcts.common.bo.UserDriverAssessInfo"/><!-- 货主对司机评价表 -->
+   <typeAlias alias="UserDriverAssessInfoDomain" type="com.cy.dcts.common.domain.UserDriverAssessInfoDomain"/><!-- 货主对司机评价表 Domain-->
+   <resultMap class="UserDriverAssessInfo" id="user_driver_assess_info_result">
+     <result property="id" column="ID"/>
+     <result property="driverId" column="DRIVER_ID"/>
+     <result property="cargoId" column="CARGO_ID"/>
+     <result property="transactionId" column="TRANSACTION_ID"/><!-- 交易订单Id 20140704-->
+     <result property="userId" column="USER_ID"/>
+     <result property="arriverEvaluateScore" column="ARRIVER_EVALUATE_SCORE"/>
+     <result property="serveEvaluateScore" column="SERVE_EVALUATE_SCORE"/>
+     <result property="tradeEvaluateScore" column="TRADE_EVALUATE_SCORE"/>
+     <result property="assess" column="ASSESS"/>
+     <result property="createTime" column="CREATE_TIME"/>
+     <result property="modifyTime" column="MODIFY_TIME"/>
+   </resultMap>
+   
+   <resultMap class="UserDriverAssessInfoDomain" id="user_driver_assess_info_domain_result">
+     <result property="id" column="ID"/>
+     <result property="driverId" column="DRIVER_ID"/>
+     <result property="cargoId" column="CARGO_ID"/>
+     <result property="userId" column="USER_ID"/>
+     <result property="companyName" column="COMPANY_NAME"/>
+     <result property="tradeEvaluateScore" column="TRADE_EVALUATE_SCORE"/>
+     <result property="assess" column="ASSESS"/>
+     <result property="createTime" column="CREATE_TIME"/>
+     <result property="modifyTime" column="MODIFY_TIME"/>
+   </resultMap>
+   
+    <resultMap class="UserDriverAssessInfoDomain" id="user_driver_assess_info_result_domain">
+     <result property="id" column="ID"/>
+     <result property="driverId" column="DRIVER_ID"/>
+     <result property="cargoId" column="CARGO_ID"/>
+     <result property="transactionId" column="TRANSACTION_ID"/><!-- 交易订单Id 20140704-->
+     <result property="userId" column="USER_ID"/>
+     <result property="arriverEvaluateScore" column="ARRIVER_EVALUATE_SCORE"/>
+     <result property="serveEvaluateScore" column="SERVE_EVALUATE_SCORE"/>
+     <result property="tradeEvaluateScore" column="TRADE_EVALUATE_SCORE"/>
+     <result property="assess" column="ASSESS"/>
+     <result property="createTime" column="CREATE_TIME"/>
+     <result property="modifyTime" column="MODIFY_TIME"/>
+     
+   </resultMap>
+   
+   <!-- 根据司机Id查询评价信息 分页-->
+   <select id="query_userdriver_assess_info_domain_Page" parameterClass="java.util.HashMap" resultMap="user_driver_assess_info_domain_result">
+   		select 
+		t.id,
+		t.DRIVER_ID,
+		t.CARGO_ID,
+		t.USER_ID,
+		t.TRADE_EVALUATE_SCORE,
+		t.ASSESS,
+		date_format(t.CREATE_TIME,'%Y-%m-%d') as CREATE_TIME,
+		date_format(t.MODIFY_TIME,'%Y-%m-%d') as MODIFY_TIME,
+		(select t1.COMPANY_NAME from t_company_info t1 where t1.id = (select t2.COMPANY_ID from t_web_user_info t2 where t2.id = t.USER_ID)) as COMPANY_NAME
+	 	 from t_user_driver_assess_info t
+		<dynamic prepend="where ">
+	     	<isNotEmpty prepend="AND " property="driverId"> t.DRIVER_ID = $driverId$ </isNotEmpty>
+	  	</dynamic>
+		order by t.CREATE_TIME DESC LIMIT $curPage$,$pageSize$
+   </select>
+   
+    <!-- 根据司机Id查询评价信息总数-->
+   <select id="query_userdriver_assess_info_domain_Page_count" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+   		select count(*) from t_user_driver_assess_info t
+		<dynamic prepend="where ">
+	     	<isNotEmpty prepend="AND " property="driverId"> t.DRIVER_ID = #driverId# </isNotEmpty>
+	  	</dynamic>
+   </select>
+    <!-- 根据司机Id,评价状态查询评价数量 3好评6中评9差评 -->
+   <select id="query_userdriver_assess_info_domain_count" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+		select count(*) from t_user_driver_assess_info t
+		<dynamic prepend="where ">
+	     	<isNotEmpty prepend="AND " property="driverId"> t.DRIVER_ID = #driverId# </isNotEmpty>
+	     	<isNotEmpty prepend="AND " property="tradeEvaluateScore"> t.TRADE_EVALUATE_SCORE = #tradeEvaluateScore# </isNotEmpty>
+	  	</dynamic>
+   </select>
+   <!-- 根据交易Id查询货主对司机评价返回bo -->
+   <select id="query_user_driver_assess_info_by_trandeId" parameterClass="String" resultMap="user_driver_assess_info_result">
+   	SELECT id,
+	driver_id,
+	cargo_id,
+	transaction_id,
+	user_id,
+	arriver_evaluate_score,
+	serve_evaluate_score,
+	trade_evaluate_score,
+	assess,
+	create_time,
+	modify_time 
+	FROM t_user_driver_assess_info 
+	WHERE transaction_id = #transactionId# limit 1 
+   </select> 
+   
+   <!-- 根据交易Id查询货主对司机评价返回domain -->
+   <select id="query_user_driver_assess_by_transactionId" parameterClass="String" resultMap="user_driver_assess_info_result_domain">
+   	SELECT id,
+	driver_id,
+	cargo_id,
+	transaction_id,
+	user_id,
+	arriver_evaluate_score,
+	serve_evaluate_score,
+	trade_evaluate_score,
+	assess,
+	create_time,
+	modify_time 
+	FROM t_user_driver_assess_info 
+	WHERE transaction_id = #transactionId# limit 1 
+   </select> 
+   <!-- 给他人的评价(货主对司机评价) -不分页-->
+   <select id="query_user_driver_assess_info" parameterClass="map" resultClass="com.cy.dcts.common.domain.UserDriverAssessInfoDomain">
+   	select 
+		info.DRIVER_ID as driverId,
+		(select t.`NAME` from t_driver_user_info t where t.ID=info.DRIVER_ID) as name,
+		info.CARGO_ID,
+		orderInfo.CARGO_TYPE as cargoType,
+		orderInfo.CARGO_NAME as cargoName,
+		orderInfo.START_PROVINCE as startProvince,
+		orderInfo.START_CITY as startCity,
+		orderInfo.END_PROVINCE as endProvince,
+		orderInfo.END_CITY as endCity,
+		info.USER_ID,
+		info.ARRIVER_EVALUATE_SCORE as arriverEvaluateScore,
+		info.SERVE_EVALUATE_SCORE as serveEvaluateScore,
+		info.TRADE_EVALUATE_SCORE as tradeEvaluateScore,
+		info.TRANSACTION_ID as transactionId,
+		info.ASSESS as assess
+	 from t_user_driver_assess_info info ,t_order_cargo_info orderInfo
+	where orderInfo.ID=info.CARGO_ID
+	and info.USER_ID = #userId# 
+	<dynamic prepend="AND">
+     <isNotEmpty prepend="AND" property="tradeEvaluateScore"> info.TRADE_EVALUATE_SCORE = #tradeEvaluateScore# </isNotEmpty>
+  </dynamic>
+	order by info.CREATE_TIME desc 
+	
+   </select>
+   <!-- 给他人的评价（货主对司机评价） -分页-->
+   <select id="query_user_driver_assess_info_byPage" parameterClass="map" resultClass="com.cy.dcts.common.domain.UserDriverAssessInfoDomain">
+   	select 
+		info.DRIVER_ID as driverId,
+		(select t.`NAME` from t_driver_user_info t where t.ID=info.DRIVER_ID) as name,
+		info.CARGO_ID,
+		orderInfo.CARGO_TYPE as cargoType,
+		orderInfo.CARGO_NAME as cargoName,
+		orderInfo.START_PROVINCE as startProvince,
+		orderInfo.START_CITY as startCity,
+		orderInfo.END_PROVINCE as endProvince,
+		orderInfo.END_CITY as endCity,
+		info.USER_ID,
+		info.ARRIVER_EVALUATE_SCORE as arriverEvaluateScore,
+		info.SERVE_EVALUATE_SCORE as serveEvaluateScore,
+		info.TRADE_EVALUATE_SCORE as tradeEvaluateScore,
+		info.TRANSACTION_ID as transactionId,
+		info.ASSESS as assess
+	 from t_user_driver_assess_info info ,t_order_cargo_info orderInfo
+	where orderInfo.ID=info.CARGO_ID and info.USER_ID = #userId# 
+	<dynamic prepend="AND">
+     <isNotEmpty prepend="AND" property="tradeEvaluateScore"> info.TRADE_EVALUATE_SCORE = #tradeEvaluateScore# </isNotEmpty>
+  </dynamic> 
+	order by info.CREATE_TIME desc 
+    LIMIT #beginNum#,#endNum# 
+   </select>
+   <!-- 给他人的评价（货主对司机评价） 总记录数-->
+    <select id="query_user_driver_assess_info_count" parameterClass="map" resultClass="java.lang.Integer">
+   	select  COUNT(*) 
+	 from t_user_driver_assess_info info ,t_order_cargo_info orderInfo
+	where orderInfo.ID=info.CARGO_ID
+	and info.USER_ID = #userId# 
+	<dynamic prepend="AND">
+     <isNotEmpty prepend="AND" property="tradeEvaluateScore"> info.TRADE_EVALUATE_SCORE = #tradeEvaluateScore# </isNotEmpty>
+  </dynamic>
+	order by info.CREATE_TIME desc 
+   </select>
+   
+   
+   <!-- 货主对司机评价 -->
+   <insert id="insert_user_driver_assess_info" parameterClass="UserDriverAssessInfo"> 
+    INSERT INTO t_user_driver_assess_info(
+    driver_id,
+	cargo_id,
+	transaction_id,
+	user_id,
+	arriver_evaluate_score,
+	serve_evaluate_score,
+	trade_evaluate_score,
+	assess,
+	create_time,
+	modify_time )
+  VALUES(#driverId#,#cargoId#,#transactionId#,
+	#userId#,#arriverEvaluateScore#,
+	#serveEvaluateScore#,#tradeEvaluateScore#,#assess#,
+	sysdate(),sysdate()) 
+	<selectKey resultClass="String" keyProperty="id">
+	   SELECT last_insert_id() as id
+	</selectKey>
+   </insert>
+</sqlMap>

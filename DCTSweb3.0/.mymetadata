@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="DCTSweb3.0"
+  id="myeclipse.1397631387348"
+  context-root="/DCTSweb"
+  j2ee-spec="5.0"
+  archive="DCTSweb3.0.war">
+  <attributes>
+    <attribute name="webrootdir" value="DCTSweb" />
+  </attributes>
+</project-module>
+

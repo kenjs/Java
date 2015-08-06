@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	version="2.5">
+	<display-name>Archetype Created Web Application</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+
+    <servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/reviceWaybillsTestcs/*</url-pattern>
+	</servlet-mapping>
+	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/reviceWaybillsTestcs/*</url-pattern>
+	</filter-mapping>
+	
+	<!-- Filter 防止用户非法访问页面-->
+	<filter>   
+  		<filter-name>filterServlet</filter-name> 
+    	<filter-class>tf56.contract.util.HttpFilterServlet</filter-class>   
+    	<init-param>   
+  			<param-name>freePages</param-name>   
+  			<param-value>/pactcs/doUpload;/subcontractorcs/doUpload;/consignorcs/consignor_upload;/index.html;/logincs/login;/logincs/getInit;/logincs/authImage;/logincs/login_validate.json;/regcs/reg;/regcs/reg_success;/tradecs/tulipSendStatusToTrade;/goodssourcecs/index_goodssource_onscreen;/logincs/getMainIp;/contractstatisticcs/selectStatistic_Contract;/contractstatisticcs/selectStatistic_Consignor;/contractstatisticcs/selectStatistic_Waybill;/waybillamountcs/selectWaybillById;/waybillcs/waybillListForFhf;/waybillcs/selectWaybillNumber;/waybillcs/selectMouthCount;/waybillcs/selectYestodayCount;/waybillcs/exportExcel;/outwaybillcs/saveOutWaybill;/reviceWaybillsTestcs/reviceWaybills;</param-value>   
+    	</init-param>  
+    	<init-param>   
+      		<param-name>toPage</param-name>    
+     		<param-value>/logincs/login</param-value>   
+    	</init-param>   
+ 	</filter>
+	
+	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/views/*</url-pattern>
+	</filter-mapping>
+
+	<servlet>
+		<servlet-name>RestServlet</servlet-name>
+		<servlet-class>net.sf.serfj.RestServlet</servlet-class>
+		<load-on-startup>5</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/testcs/*</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 运单信息-->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/waybillcs/*</url-pattern>
+	</servlet-mapping>
+	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/waybillcs/*</url-pattern>
+	</filter-mapping>
+	
+	<!-- 订单信息-->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/outwaybillcs/*</url-pattern>
+	</servlet-mapping>
+	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/outwaybillcs/*</url-pattern>
+	</filter-mapping>
+	<!-- 运单配载 -->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/waybillstowagecs/*</url-pattern>
+	</servlet-mapping>
+	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/waybillstowagecs/*</url-pattern>
+	</filter-mapping>
+	<!-- 运单签收 -->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/waybillsigncs/*</url-pattern>
+	</servlet-mapping>
+	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/waybillsigncs/*</url-pattern>
+	</filter-mapping>
+	<!-- party信息-->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/partycs/*</url-pattern>
+	</servlet-mapping>
+	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/partycs/*</url-pattern>
+	</filter-mapping>
+	<!-- 结算设置-->
+	<servlet-mapping> 
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/settlecs/*</url-pattern>
+	</servlet-mapping>
+	<filter-mapping>
+ 		<filter-name>filterServlet</filter-name>
+		<url-pattern>/settlecs/*</url-pattern>
+ 	</filter-mapping>	
+	<!-- 登录 -->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/logincs/*</url-pattern>
+	</servlet-mapping>
+	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/logincs/*</url-pattern>
+	</filter-mapping>
+	<!-- 地址管理 -->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/consignorconsigneecs/*</url-pattern>
+	</servlet-mapping>
+	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/consignorconsigneecs/*</url-pattern>
+	</filter-mapping>
+
+	<!-- 账号管理-->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/operatorcs/*</url-pattern>
+	</servlet-mapping>
+	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/operatorcs/*</url-pattern>
+	</filter-mapping>
+	<!--企业信息-->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/organizationcs/*</url-pattern>
+	</servlet-mapping>
+	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/organizationcs/*</url-pattern>
+	</filter-mapping>
+	<filter>
+		<filter-name>EncodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+        <filter-name>EncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+	<!-- 分包商管理 -->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/subcontractorcs/*</url-pattern>
+	</servlet-mapping>
+	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/subcontractorcs/*</url-pattern>
+	</filter-mapping>
+	<!-- 合同管理 -->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/pactcs/*</url-pattern>
+	</servlet-mapping>
+	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/pactcs/*</url-pattern>
+	</filter-mapping>
+	<!-- 缓存字典 -->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/tradememcachedcs/*</url-pattern>
+	</servlet-mapping>
+	<!-- 字典类管理 -->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/contractdictionarycs/*</url-pattern>
+	</servlet-mapping>
+	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/contractdictionarycs/*</url-pattern>
+	</filter-mapping>
+
+	<!--发货方管理  wei.huang -->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/consignorcs/*</url-pattern>
+	</servlet-mapping>
+	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/consignorcs/*</url-pattern>
+	</filter-mapping>
+
+	<!--总包收发货地址  wei.huang -->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/consigneeconsignoraddresscs/*</url-pattern>
+	</servlet-mapping>
+
+	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/consigneeconsignoraddresscs/*</url-pattern>
+	</filter-mapping>
+
+	<!-- 总包货物类型 wei.huang -->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/goodstypecs/*</url-pattern>
+	</servlet-mapping>
+	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/goodstypecs/*</url-pattern>
+	</filter-mapping>
+	<!--总包附件表  -->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/contractappendixcs/*</url-pattern>
+ 	</servlet-mapping>
+ 	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/contractappendixcs/*</url-pattern>
+	</filter-mapping>
+ 	 
+ 	<!--总包城区距离start-->
+	 <servlet-mapping> 
+	  <servlet-name>RestServlet</servlet-name>
+	  <url-pattern>/citydistancecs/*</url-pattern>
+	 </servlet-mapping>
+	 <filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/citydistancecs/*</url-pattern>
+	</filter-mapping>
+	
+ 	<!--应收应付核销  -->
+     <servlet-mapping> 
+	  	<servlet-name>RestServlet</servlet-name>
+	  	<url-pattern>/settlebillcs/*</url-pattern>
+	 </servlet-mapping>
+ 	 <filter-mapping>
+ 		<filter-name>filterServlet</filter-name>
+		<url-pattern>/settlebillcs/*</url-pattern>
+ 	 </filter-mapping>
+ 	 <!-- 发票核销 -->
+	 <servlet-mapping> 
+	  	<servlet-name>RestServlet</servlet-name>
+	 	<url-pattern>/settlebillverificationcs/*</url-pattern>
+	 </servlet-mapping>
+ 	 <filter-mapping>
+ 		<filter-name>filterServlet</filter-name>
+		<url-pattern>/settlebillverificationcs/*</url-pattern>
+ 	 </filter-mapping>
+ 	
+	<!-- 手机前端未登录控制器 -->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/mfrontcs/*</url-pattern>
+	</servlet-mapping>
+	<!--关联分包商 -->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/shipperrelasubontractorcs/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/contractattributecs/*</url-pattern>
+	</servlet-mapping>
+	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/shipperrelasubontractorcs/*</url-pattern>
+	</filter-mapping>
+
+	<!-- 运单分派 -->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/waybilldistributioncs/*</url-pattern>
+	</servlet-mapping>
+	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/waybilldistributioncs/*</url-pattern>
+	</filter-mapping>
+	
+	<!-- 运单费用 -->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/waybillamountcs/*</url-pattern>
+	</servlet-mapping>
+	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/waybillamountcs/*</url-pattern>
+	</filter-mapping>
+	<!-- 运单操作日志 -->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/waybilllogcs/*</url-pattern>
+	</servlet-mapping>
+	<!-- 运单子表 -->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/goodscs/*</url-pattern>
+	</servlet-mapping>
+	<!--报表查询  author:wei.huang-->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/reportquerycs/*</url-pattern>
+	</servlet-mapping>
+	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/reportquerycs/*</url-pattern>
+	</filter-mapping>
+	
+	<!-- 调度跟踪 -->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/dispatchtrackcs/*</url-pattern>
+	</servlet-mapping>
+	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/dispatchtrackcs/*</url-pattern>
+	</filter-mapping>
+	
+	<!-- 总包业务统计 -->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/contractstatisticcs/*</url-pattern>
+	</servlet-mapping>
+	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/contractstatisticcs/*</url-pattern>
+	</filter-mapping>
+	
+	<!--地图显示 author:wei.huang  -->
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/lbsdevicecs/*</url-pattern>
+	</servlet-mapping>
+	<filter-mapping>
+		<filter-name>filterServlet</filter-name>
+		<url-pattern>/lbsdevicecs/*</url-pattern>
+	</filter-mapping>
+	 
+	 <!--银行保理  -->
+	 <servlet-mapping> 
+	  <servlet-name>RestServlet</servlet-name>
+	  <url-pattern>/bankfactoringcs/*</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet-mapping> 
+	  <servlet-name>RestServlet</servlet-name>
+	  <url-pattern>/reviceWaybillsTestcs/*</url-pattern>
+	 </servlet-mapping>
+	 
+	<!--如果不设，默认为web.root,但最好设置，以免项目间冲突-->
+	<context-param>
+		<param-name>webAppRootKey</param-name>
+		<param-value>myappfuse.root.contract</param-value>
+	</context-param>
+	<context-param>
+		<param-name>log4jConfigLocation</param-name>
+		<param-value>/WEB-INF/classes/config/log4j.properties</param-value>
+	</context-param>
+	<listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	</listener>
+
+	<!--错误跳转-->
+	<error-page>
+		<error-code>401</error-code>
+		<location>/error.html</location>
+	</error-page>
+	<error-page>
+		<error-code>403</error-code>
+		<location>/error.html</location>
+	</error-page>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/error.html</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/error.html</location>
+	</error-page>
+	<error-page>
+		<exception-type>java.lang.Exception</exception-type>
+		<location>/error.html</location>
+	</error-page>
+	<!-- 配置session过期间隔 8小时-->
+	<session-config>
+		<session-timeout>480</session-timeout>
+	</session-config>
+	<!--
+		<filter> <display-name>SessionFilter</display-name>
+		<filter-name>SessionFilter</filter-name>
+		<filter-class>org.sessioncontainer.client.componet.HttpSessionFilter</filter-class>
+		</filter> <filter-mapping> <filter-name>SessionFilter</filter-name>
+		<url-pattern>*</url-pattern> </filter-mapping> <listener>
+		<listener-class>org.sessioncontainer.client.componet.SessionListener</listener-class>
+		</listener>
+	-->
+</web-app>

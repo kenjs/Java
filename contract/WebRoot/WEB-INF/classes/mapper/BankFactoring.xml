@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<!--  -->
+<sqlMap >
+ <typeAlias type="tf56.contract.domain.BankFactoring" alias="bankFactoring"/>
+ 
+ <!-- 新增记录 -->
+ <insert id="iBatisInsertBankFactoring" parameterClass="bankFactoring">
+  insert into BankFactoring (fromPartyId,partyId,toPartyId,isEnabled,businessDays,inputDate,inputMan,updateMan,updateDate)
+  values (#frompartyid:VARCHAR#,#partyid:VARCHAR#,#topartyid:VARCHAR#,#isenabled:VARCHAR#,#businessdays:VARCHAR#,
+ 		  #inputdate:VARCHAR#,#inputman:VARCHAR#,#updateman:VARCHAR#,#updatedate:VARCHAR#)
+  <selectKey resultClass="String" keyProperty="bankfactoringid">
+   select last_insert_id() as id
+  </selectKey>
+ </insert>
+
+ <!-- 更新用户对象 -->
+ <update id="iBatisUpdateBankFactoring" parameterClass="bankFactoring">
+  update BankFactoring 
+     set isEnabled=#isenabled:VARCHAR#,
+         businessDays=#businessdays:VARCHAR#,inputDate=#inputdate:VARCHAR#,inputMan=#inputman:VARCHAR#,
+         updateDate=#updatedate:VARCHAR#,updateMan=#updateman:VARCHAR#
+   where fromPartyId=#frompartyid# and partyId=#partyid# and toPartyId=#topartyid#
+ </update>
+
+ <!-- 获取多条记录查询列表 返回List -->
+ <select id="iBatisSelectBankFactoringList" parameterClass="java.util.HashMap" resultClass="bankFactoring">
+  SELECT b.bankFactoringId,b.partyId,b.fromPartyId,b.toPartyId,b.isEnabled,b.businessDays
+	FROM BankFactoring b
+   WHERE partyId=#partyid# and toPartyId=#topartyid#
+	UNION
+  SELECT NULL,s.partyId,s.fromPartyId,s.toPartyId,0,NULL
+	FROM  ShipperRelaSubContractor s
+   WHERE partyId=#partyid# and toPartyId=#topartyid#
+	 AND s.fromPartyId IS NOT NULL
+	 AND NOT EXISTS ( SELECT 1
+						FROM BankFactoring c
+					   WHERE s.partyId = c.partyId
+						 AND s.toPartyId = c.toPartyId
+						 AND s.fromPartyId = c.fromPartyId)
+ </select>
+
+<!-- 获取有分包商的账期  author：wei.huang -->
+<select id="iBatisSelectConsigneeBusinessDays" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	SELECT BankFactoring.businessDays as businessdays,BankFactoring.isEnabled as isenabled FROM BankFactoring,
+	(SELECT partyId,inOutPartyId,inOutPartyIdSec,inOrOut from SettleBill where settleBillId=#settlebillid:VARCHAR#) as temp
+	WHERE BankFactoring.partyId=temp.partyId and BankFactoring.toPartyId=temp.inOutPartyId and BankFactoring.fromPartyId=temp.inOutPartyIdSec
+</select>
+ 
+</sqlMap>

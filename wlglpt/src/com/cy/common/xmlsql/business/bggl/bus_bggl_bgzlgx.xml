@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.bggl.dao.BusBgzlgxMapper">
+	<select id="selectBgZlgxPage" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgZlgxDomain">
+		SELECT A.ZLGX_DJXH AS zlgxDjxh,
+		       A.JGBM AS jgbm,
+		       B.JC AS jgmc,
+		       A.ZLMC AS zlmc,
+		       A.XJGXBZ AS xjgxbz,
+		       A.BCZT_DM AS bcztDm,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM BG_ZLGX A ,QY_ZZJG B
+		  WHERE A.JGBM=B.JGBM 
+		  	AND A.YXBZ='Y'  
+		  <dynamic> 
+			<isNotEmpty property="cjrCzyDjxh" prepend="and">
+				A.CJR_CZY_DJXH = #cjrCzyDjxh#
+			</isNotEmpty>
+			<isNotEmpty property="zlmc" prepend="and">
+				A.ZLMC LIKE #zlmc#
+			</isNotEmpty>
+			<isNotEmpty property="rqQ" prepend="AND">
+		  		A.CJRQ >= TO_DATE(#rqQ#,'yyyy-MM-dd')
+		  	</isNotEmpty>
+		  	<isNotEmpty property="rqZ" prepend="AND">
+		  		A.CJRQ &lt; TO_DATE(#rqZ#,'yyyy-MM-dd')+1
+		  	</isNotEmpty>
+		  </dynamic>
+		  $orderStr$
+    </select>
+    
+    <select id="selectBgZlgxAll" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgZlgxDomain">
+		SELECT A.ZLGX_DJXH AS zlgxDjxh,
+		       A.JGBM AS jgbm,
+		        B.JC AS jgmc,
+		       A.ZLMC AS zlmc,
+		       A.XJGXBZ AS xjgxbz,
+		       A.BCZT_DM AS bcztDm,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM BG_ZLGX A,QY_ZZJG B
+		  WHERE A.JGBM=B.JGBM 
+		  	AND A.YXBZ='Y'  
+		  <dynamic> 
+			<isNotEmpty property="cjrCzyDjxh" prepend="and">
+				A.CJR_CZY_DJXH = #cjrCzyDjxh#
+			</isNotEmpty>
+			<isNotEmpty property="zlmc" prepend="and">
+				A.ZLMC LIKE #zlmc#
+			</isNotEmpty>
+			<isNotEmpty property="rqQ" prepend="AND">
+		  		A.CJRQ >= TO_DATE(#rqQ#,'yyyy-MM-dd')
+		  	</isNotEmpty>
+		  	<isNotEmpty property="rqZ" prepend="AND">
+		  		A.CJRQ &lt; TO_DATE(#rqZ#,'yyyy-MM-dd')+1
+		  	</isNotEmpty>
+		  </dynamic>
+		  ORDER by A.ZLGX_DJXH ASC
+    </select>
+
+	<select id="getBgZlgxRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.ZLGX_DJXH) 
+		  FROM BG_ZLGX A 
+		  WHERE A.YXBZ='Y' 
+		  <dynamic> 
+		  	<isNotEmpty property="cjrCzyDjxh" prepend="and">
+				A.CJR_CZY_DJXH = #cjrCzyDjxh#
+			</isNotEmpty>
+			<isNotEmpty property="zlmc" prepend="and">
+				A.ZLMC LIKE #zlmc#
+			</isNotEmpty>
+			<isNotEmpty property="rqQ" prepend="AND">
+		  		A.CJRQ >= TO_DATE(#rqQ#,'yyyy-MM-dd')
+		  	</isNotEmpty>
+		  	<isNotEmpty property="rqZ" prepend="AND">
+		  		A.CJRQ &lt; TO_DATE(#rqZ#,'yyyy-MM-dd')+1
+		  	</isNotEmpty>
+		  </dynamic>
+    </select>
+    
+   <select id="selectBgZlgxFjList" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgZlgxDomain">
+		SELECT A.ZLGX_DJXH AS zlgxDjxh,
+		       A.XH AS xh,
+		       A.FJMC AS fjmc,
+		       A.YXBZ AS yxbz
+		  FROM BG_ZLGX_FJ A 
+		  WHERE A.YXBZ='Y' 
+		  AND ZLGX_DJXH=#zlgxDjxh#
+    </select>
+    
+   <select id="getMaxFjxhByZlgxDjXh" parameterClass="java.util.Map" resultClass="Integer"> 
+     	SELECT NVL(MAX(XH),0) FROM BG_ZLGX_FJ WHERE ZLGX_DJXH=#zlgxDjxh#
+   </select>
+</sqlMap>

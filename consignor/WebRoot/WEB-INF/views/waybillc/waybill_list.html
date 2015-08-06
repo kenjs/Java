@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+ 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="pragma" content="no-cache"/>
+    <meta http-equiv="Cache-Control" content="no-cache,must-revalidate"/>
+    
+    <title>我的运单</title>
+	
+	<link href="../css/webui/main.css" rel="stylesheet" />
+    <script src="../js/jquery/jquery-1.8.3.min.js" type=text/javascript></script>
+    <script src="../js/sys/webui/hgrid.js"></script>
+    <link href="../css/webui/hgrid.css" rel="stylesheet" />
+    
+    <script src="../js/sys/webui/header.js"></script>    	
+    <script src="../js/sys/webui/logo.js"></script>   	 
+    <script src="../js/sys/webui/left.js"></script> 
+   
+   
+    <script type="text/javascript" src="../js/sys/ymPrompt/ymPrompt.js"></script>
+	<link href="../js/sys/ymPrompt/skin/ch/ymPrompt.css" rel="stylesheet" />
+	<script type="text/javascript" src="../js/sys/DatePicker/WdatePicker.js"></script>
+	<script src="../js/themes/waybillc/waybill_list.js"  type="text/javascript"></script>
+	<script type="text/javascript" src="../js/sys/webui/SelectSimu.js"></script>
+	
+	<link href="../css/webui/commonPage.css" rel="stylesheet" />
+	<style type="text/css">
+	.tdleft{
+	text-overflow:ellipsis; 
+	white-space:nowrap; 
+	overflow:hidden; 
+	}
+	</style>
+	<script type="text/javascript">
+		$(function(){
+			f_hgrid_ini();
+			$("#pagecode").val("1");
+			$('.status').SelectSimu({
+				width : 110,
+				zIndex : 1,
+				listNum : 7,
+				listValue : ['0','1','2','3','4','5','6',],
+				listOption : ['全部','待配载','已配载','已装车','已发车','已到车','已签收'],
+				imgSrc : '../imgs/sys/icon_down.png'
+			});
+			var waybillnumber = trim($("#waybillnumber").val());
+			var consigneelinkman = trim($("#consigneelinkman").val());
+ 			var consigneemobilenumber = trim($("#consigneemobilenumber").val());
+ 			var khh = trim($("#khh").val());
+ 			var status = $('.status div span').text();
+ 			if(status == '全部'){
+ 				status = '';
+ 			}
+ 			var fromdate= $("#fromdate").val();
+		    var todate= $("#todate").val();
+			var params="&waybillnumber="+waybillnumber+"&consigneelinkman="+consigneelinkman+"&consigneemobilenumber="+consigneemobilenumber+
+						"&status="+status+"&fromdate="+fromdate+"&todate="+todate+"&fromQuery="+"waybillListFhf"+"&clientnumber="+khh+
+						"&dateSort=ASC";
+			f_hgrid_json(params);
+			});
+	</script>
+ </head>
+  
+  <body>
+    	<!-- 顶部 --开始  此处须由js动态加入-->
+		<div id="header" class="c-header" >
+	
+		</div>
+		<!-- 顶部 --结束-->
+	
+		<!-- LOGON --开始   此处须由js动态加入-->
+		<div id="logo" class="c-logo" >
+		
+		</div>
+	<!-- LOGON --结束-->
+
+	<div id="main" class="c-main">
+		
+  		<!-- 左侧菜单 --开始  此处须由js动态加入-->
+  		<div id="left" class="c-left"> 
+		</div>
+		
+		<!-- 左侧菜单 --结束-->
+			
+		<!-- 右侧工作区 --开始-->
+		<div id="right" class="c-right">
+  				<div class="crumbs fn-mt10 fn-cGray3">
+						<span class="house"></span>
+						<span class="links"><a href="../logincs/index_main" class="fn-cBlue">首页</a>
+						<span class="fn-ml5 fn-mr5">&gt;</span><b>我的运单</b></span>
+				</div>
+				<div class="fgxDiv"></div>
+				<table class="formTable" style="width:820px;">
+					<tr>
+						<td class="rightTd" width="60px">运单号</td>
+						<td width="120px"><input id="waybillnumber" type="text" class="com_input"/></td>
+						<td class="rightTd" width="60px">客户单号</td>
+						<td width="120px"><input id="khh" type="text" class="com_input"/></td>
+						<td class="rightTd" width="60px">托运日期</td>
+						<td colspan="3" width="300px">
+							<input type="text" name="fromdate" id="fromdate" class="Wdate comDate" onFocus="WdatePicker({firstDayOfWeek:1})"style="width: 100px;"/>
+							-
+							<input type="text" name="todate" id="todate"style="width: 100px;" class="Wdate comDate" onFocus="WdatePicker({firstDayOfWeek:1})"/>
+						</td>
+						<td width="100px"></td>
+					</tr>
+					<tr>
+						<td class="rightTd">收货联系人</td>
+						<td ><input id="consigneelinkman" type="text" class="com_input"/></td>
+						<td class="rightTd">收货人手机</td>
+						<td ><input id="consigneemobilenumber" type="text" class="com_input"/></td>
+						<td class="rightTd" >运单状态</td>
+						<td width="120px"><div class="status"></div></td>
+						<td colspan="3">	
+							<button id="search" class="btn-white fn-noborder" style="margin-left: 20px;" onclick="searchBtn()">查询</button>
+							<button class="btn-orange-small fn-noborder fn-cWhite ft-blod" onclick="exportExcel(this)" style="margin:0 5px; 0 5px;">导出</button>
+						</td>
+					</tr>					
+				</table>
+	        	<div id="hgrid_div">
+		        	<div id="hgridDiv" style="float: left;overflow-x:scroll;width:700px;min-height:60px;">
+		  					<table id="hgrid"  style="width:1860px;" cellspacing="0"></table>
+		  			</div>
+		  			<div style="width: 120px;float: left;min-height:60px;">
+		  					<table id="operation"  style="width:120px;" cellspacing="0"></table>
+		  			</div>
+	  			</div>
+       		</div>
+  		<!-- 右侧工作区 --结束-->
+		
+	</div>
+	<!-- 工作区 --结束-->
+	
+	<!-- 底部 --开始  此处须由js动态加入-->
+	<div id="footer" class="c-footer">
+		
+	</div>
+	<!-- 底部 --结束-->
+	
+  </body>
+</html>

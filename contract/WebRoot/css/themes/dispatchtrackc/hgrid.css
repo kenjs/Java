@@ -1,0 +1,25 @@
+
+p{margin:2px;}
+/***/
+
+#hgrid {width: auto;padding: 0;margin: 0;table-layout: fixed; border-collapse:collapse;}
+
+table{width:1500px;}
+th {height:55px;font-family:"微软雅黑","宋体",Arial;,Arial;color:#1c1c1c;
+ letter-spacing: 2px;text-transform: uppercase;margin:auto;text-align: center;padding: 6px 3px 6px 3px;background-color:#e8e8e8;);
+}
+td {height:55px;font-size:11px;padding:6px 6px 6px 6px;color:#1c1c1c;text-align:center;}
+.tdright{text-align:right;}
+.tdleft{text-align:left;}
+.tdcenter{text-align:center;}
+
+
+/*---------for IE 5.x bug*/
+html>body td{ font-size:12px;}
+body,td,th {font-family: "微软雅黑","宋体",Arial;font-size: 12px;}
+.page_nav{clear:both; padding:15px 0; color:#666; font:normal 12px/24px Arial; text-align:right;}
+.page_nav a{outline:none;display:inline-block;height:24px; margin:0 0px; border:none; padding:0 4px; background:#fff;    color:#333; line-height:24px; text-decoration:none;}
+.page_nav strong {height:24px; margin:0 0px; border:none; padding:0 4px; background:#07519a; color:#fff; line-height:24px; text-decoration:none; }
+.page_nav a:hover{height:24px; margin:0 0px; border:solid 0px #dbe5ee; padding:0 4px; background:#07519a; color:#fff; line-height:24px; text-decoration:none;}
+.page_nav a.select{cursor:default;}
+a {color: #1560EA;text-decoration:none;}

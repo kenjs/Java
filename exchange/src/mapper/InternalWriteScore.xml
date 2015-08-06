@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<!-- 会员积分明细表 -->
+<sqlMap >
+	<typeAlias type="tf56.exchange.domain.CusPartyScores" alias="cusPartyScores"/>
+	<resultMap id="cusPartyScoresFieldMap" class="cusPartyScores">
+		<result column="ID" property="id" jdbcType="VARCHAR" />			<!-- 编码 -->
+		<result column="dDate" property="ddate" jdbcType="VARCHAR" />			<!-- 日期 -->
+		<result column="iPartyID" property="ipartyid" jdbcType="VARCHAR" />			<!-- 会员ID -->
+		<result column="cSource" property="csource" jdbcType="VARCHAR" />			<!-- 来源 -->
+		<result column="cID" property="cid" jdbcType="VARCHAR" />			<!-- 流水号 -->
+		<result column="nIn" property="nin" jdbcType="VARCHAR" />			<!-- 收入 -->
+		<result column="nOut" property="nout" jdbcType="VARCHAR" />			<!-- 支出 -->
+		<result column="nLeft" property="nleft" jdbcType="VARCHAR" />			<!-- 剩余积分 -->
+		<result column="cMemo" property="cmemo" jdbcType="VARCHAR" />			<!-- 备注 -->
+		<result column="cRole" property="crole" jdbcType="VARCHAR" />			<!-- 操作员 -->
+	</resultMap>
+	<resultMap  id="getScoreMap" class="java.util.HashMap" >
+		<result column="ID" property="id" jdbcType="VARCHAR" />			<!-- 编码 -->
+		<result column="nScore" property="nscore" jdbcType="VARCHAR" />			<!-- 当前积分 -->
+	</resultMap>
+	<!-- 新增记录 TLP -->
+	<insert id="iBatisInsertCusPartyScores" parameterClass="cusPartyScores">
+		insert into TCusPartyScores (dDate,iPartyID,cSource,cID,nIn,nOut,nLeft,cMemo,cRole)
+			values (#ddate:VARCHAR#,#ipartyid:VARCHAR#,#csource:VARCHAR#,#cid:VARCHAR#,#nin:VARCHAR#,#nout:VARCHAR#,#nleft:VARCHAR#,#cmemo:VARCHAR#,#crole:VARCHAR#)
+		<selectKey resultClass="String" keyProperty="id">
+			select @@identity as id
+		</selectKey>
+	</insert>
+	<!-- 验证该用户是否存在 	TLP-->
+	<select id="iBatisSelectInternalIpartyIdByCparty" parameterClass="java.util.HashMap" resultClass="java.lang.String">
+		select  iPartyID from Tparty where cParty=#cpartyname#
+	</select> 
+	<!-- 验证该条记录是否存在 TLP-->
+	<select id="iBatisSelectTCusPartyScoreByPartyID" parameterClass="java.util.HashMap" resultMap="getScoreMap">
+		select ID,nScore from TCusPartyScore where iPartyId=#ipartyid#
+	</select> 
+	<!-- 插入积分总表 TLP -->
+	<insert id="iBatisInsertCusPartyScorebyNotInsert" parameterClass="java.util.HashMap">
+		insert into TCusPartyScore (iPartyID,nScore)
+			values (#ipartyid:VARCHAR#,#nscore:VARCHAR#)
+		<selectKey resultClass="String" keyProperty="id">
+			select @@identity as id
+		</selectKey>
+	</insert>
+	<!-- 更新积分总表 TLP -->
+	<update id="iBatisUpdateCusPartyScores" parameterClass="java.util.HashMap">
+		update TCusPartyScore set nScore=#nscore:VARCHAR# where ID=#id#
+	</update>
+
+	 
+
+	<!-- 获取多条记录查询列表 返回List -->
+	<select id="iBatisSelectCusPartyScoresList" parameterClass="java.util.HashMap" resultClass="cusPartyScores">
+		select 
+			ID,convert(varchar(19),dDate,121) as dDate,iPartyID, cSource, cID, nIn, nOut, nLeft, cMemo, cRole
+		   from TCusPartyScores 
+		    <dynamic prepend="WHERE">
+		 		 		<isNotEmpty property="ipartyid" prepend="AND">
+		 		 			iPartyID =#ipartyid:VARCHAR# 
+		 		 		</isNotEmpty>
+
+		 		 		<isNotEmpty property="startdata" prepend="AND">
+		 		 			dDate  <![CDATA[   >=  ]]>  #startdate#
+		 		 		</isNotEmpty>
+		 		 		<isNotEmpty property="enddata" prepend="AND">
+		 		 			dDate  <![CDATA[   =>  ]]>  #enddate#
+		 		 		</isNotEmpty>
+		 	 </dynamic>
+		   order by ID desc 
+	</select>
+
+	
+
+
+</sqlMap>

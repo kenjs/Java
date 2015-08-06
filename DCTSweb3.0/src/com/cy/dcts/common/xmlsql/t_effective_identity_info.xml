@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="EffectiveIdentityInfo" type="com.cy.dcts.common.bo.EffectiveIdentityInfo"/>
+	
+	<!-- 增 -->
+	<insert id="iBatisInsertEffectiveIdentityInfo" parameterClass="EffectiveIdentityInfo">
+		insert into t_effective_identity_info (id_number,name,remark,create_time)
+		values (#IDNumber#,#name#,#remark#,sysdate())
+		<selectKey keyProperty="id" resultClass="Integer">
+			select last_insert_id() as id
+		</selectKey>
+	</insert>
+	
+	<!-- 查 -->
+	<select id="iBatisSelectEffectiveIdentityInfo" parameterClass="map" resultClass="com.cy.dcts.common.domain.EffectiveIdentityInfoDomain">
+		select id_number as IDNumber,
+				name as name,
+				remark as remark,
+				create_time as createTime
+		from t_effective_identity_info where id_number = #IDNumber# and name = #name#
+	</select>
+</sqlMap>

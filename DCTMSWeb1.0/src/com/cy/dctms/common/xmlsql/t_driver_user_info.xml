@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="driverUserInfoDomain" type="com.cy.dctms.common.domain.DriverUserInfoDomain"/>
+	
+	
+	<resultMap class="driverUserInfoDomain" id="driverUser_info_domain_result">
+		<result property="id" column="ID"/>
+		<result property="code" column="code"/>
+		<result property="name" column="name"/>
+		<result property="carNumber" column="car_number"/>
+		<result property="createTime" column="create_time" />
+		<result property="modifyTime" column="modify_time" />
+		<result property="submitType" column="submit_type" />
+		<result property="location" column="location" />
+		<result property="lastTime" column="last_time" />
+		<result property="deleteReason" column="delete_reason" />
+		<result property="identityLicenseNum" column="identity_license_num" />
+	</resultMap>
+	
+	<resultMap class="driverUserInfoDomain" id="driverUser_mx_info_domain_result">
+		<result property="id" column="ID"/>
+		<result property="code" column="code"/>
+		<result property="name" column="name"/>
+		<result property="carNumber" column="car_number"/>
+		<result property="submitType" column="submit_type" />
+		<result property="deleteReason" column="delete_reason" />
+		<result property="identityLicenseNum" column="identity_license_num" />
+		<result property="identityLicenseNumFront" column="identity_license_num_front" />
+		<result property="identityLicenseNumContrary" column="identity_license_num_contrary" />
+		<result property="driversLicense" column="drivers_license" />
+		<result property="drivingLicense" column="driving_license" />
+		<result property="baiduUserId" column="baidu_user_id" />
+		<result property="baiduChannelId" column="baidu_channel_id" />
+	</resultMap>
+	
+	<resultMap class="driverUserInfoDomain" id="audit_driverUser_info_domain_result">
+		<result property="id" column="ID"/>
+		<result property="code" column="code"/>
+		<result property="name" column="name"/>
+		<result property="carNumber" column="car_number"/>
+		<result property="modifyTime" column="modify_time" />
+		<result property="submitType" column="submit_type" />
+		<result property="location" column="location" />
+		<result property="lastTime" column="last_time" />
+		<result property="baiduUserId" column="baidu_user_id" />
+		<result property="baiduChannelId" column="baidu_channel_id" />
+	</resultMap>
+	
+	<resultMap class="driverUserInfoDomain" id="driverUser_info_domain_transaction_result">
+		<result property="code" column="code"/>
+		<result property="name" column="name"/>
+		<result property="carNumber" column="car_number"/>
+		<result property="submitType" column="submit_type" />
+		<result property="location" column="location" />
+		<result property="lastTime" column="last_time" />
+		<result property="accumulateTransactionCount" column="accumulate_transaction_count"/>
+		<result property="todayTransactionCount" column="today_transaction_count"/>
+		<result property="driverLine" column="driver_line"/>
+		<result property="driverBusinessLine" column="driver_business_line"/>
+	</resultMap>
+	
+	<resultMap class="driverUserInfoDomain" id="driverUser_total_data_result">
+		<result property="name" column="name"/>
+		<result property="code" column="code"/>
+		<result property="carNumber" column="car_number"/>
+		<result property="createTime" column="create_time" />
+		<result property="passOrderCount" column="pass_order_count" />
+		<result property="orderingCount" column="ordering_count" />
+		<result property="goodFindNum" column="good_find_num" />
+		<result property="phoneCallNum" column="phone_call_num" />
+		<result property="quoteCount" column="quote_count" />
+	</resultMap>
+	
+	<select id="query_driverUser_info_count"  resultClass="Integer">
+		select count(t.id)
+		  from t_driver_user_info t
+		  where  delete_flag = 0
+		  <isNotEmpty prepend="and" property="code">   
+                t.code like concat('%', #code# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="name">   
+                t.name like concat('%', #name# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="carNumber">   
+                t.car_number like concat('%', #carNumber# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="freezeFlag">   
+                t.freeze_flag = #freezeFlag#  
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="registerTimeQ">   
+                <![CDATA[t.create_time >= #registerTimeQ#  ]]>   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="registerTimeZ">   
+                 <![CDATA[t.create_time <= date_sub(#registerTimeZ#,interval -1 day) ]]>  
+         </isNotEmpty>	
+	</select>
+	
+	<select id="query_driverUser_info_by_page" parameterClass="java.util.Map" resultMap="driverUser_info_domain_result">
+		select t.id,
+		       t.code,
+		       t.name,
+		       t.car_number,
+		       t.create_time,
+		       t.modify_time,
+		       t.submit_type,
+		       t.identity_license_num,
+				(select location from t_location_collect_last_info where DRIVER_ID = t.id) as location,
+				(select LAST_TIME from t_location_collect_last_info where DRIVER_ID = t.id) as last_time,
+				(select reason from t_manager_reason_info where type =1 and driver_user_id = t.id order by id desc limit 1) as delete_reason
+		  from t_driver_user_info t
+		  where  delete_flag = 0
+		  <isNotEmpty prepend="and" property="code">   
+                t.code like concat('%', #code# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="name">   
+                t.name like concat('%', #name# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="carNumber">   
+                t.car_number like concat('%', #carNumber# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="freezeFlag">   
+                t.freeze_flag = #freezeFlag#  
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="registerTimeQ">   
+                <![CDATA[t.create_time >= #registerTimeQ#  ]]>   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="registerTimeZ">   
+                 <![CDATA[t.create_time <= date_sub(#registerTimeZ#,interval -1 day) ]]>  
+         </isNotEmpty>	
+         order by t.id desc
+          <isNotEmpty  property="pageSize">   
+                  limit  #start#,#pageSize#
+         </isNotEmpty>	
+	</select>
+	
+	<select id="audit_driverUser_info_count"  resultClass="Integer">
+		select count(t.id)
+		  from t_driver_user_info t
+		  where  delete_flag = 0
+		  and t.freeze_flag = 0
+         <isNotEmpty prepend="and" property="submitType">   
+                t.submit_type = #submitType#    
+         </isNotEmpty>
+		  <isNotEmpty prepend="and" property="code">   
+                t.code like concat('%', #code# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="name">   
+                t.name like concat('%', #name# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="carNumber">   
+                t.car_number like concat('%', #carNumber# ,'%')   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="commitAuditTimeQ">   
+                <![CDATA[t.modify_time >= #commitAuditTimeQ#  ]]>   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="commitAuditTimeZ">  
+           		 <![CDATA[t.modify_time <= date_sub(#commitAuditTimeZ#,interval -1 day) ]]>  
+         </isNotEmpty>	
+	</select>
+	
+	<select id="audit_driverUser_info_by_page" parameterClass="java.util.Map" resultMap="audit_driverUser_info_domain_result">
+		select t.id,
+		       t.code,
+		       t.name,
+		       t.car_number,
+		       t.modify_time,
+		       t.submit_type,
+		       t.baidu_user_id,
+		       t.baidu_channel_id,
+				(select location from t_location_collect_last_info where DRIVER_ID = t.id) as location,
+				(select LAST_TIME from t_location_collect_last_info where DRIVER_ID = t.id) as last_time
+		  from t_driver_user_info t
+		  where  delete_flag = 0
+		  and t.freeze_flag = 0
+         <isNotEmpty prepend="and" property="submitType">   
+                t.submit_type = #submitType#    
+         </isNotEmpty>
+		  <isNotEmpty prepend="and" property="code">   
+                t.code like concat('%', #code# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="name">   
+                t.name like concat('%', #name# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="carNumber">   
+                t.car_number like concat('%', #carNumber# ,'%')   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="commitAuditTimeQ">   
+                <![CDATA[t.modify_time >= #commitAuditTimeQ#  ]]>   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="commitAuditTimeZ">   
+                 <![CDATA[t.modify_time <= date_sub(#commitAuditTimeZ#,interval -1 day) ]]>  
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="isPushAll">   
+                   t.id in (
+	                  <iterate property="idList" conjunction=",">
+	                  		#idList[]#
+	         			</iterate>
+                   )
+         </isNotEmpty>
+         order by t.id desc
+          <isNotEmpty  property="pageSize">   
+                  limit  #start#,#pageSize#
+         </isNotEmpty>	
+	</select>
+	
+	<select id="query_driverUser_transaction_info_count"  resultClass="Integer">
+		select count(t.id)
+		  from t_driver_user_info t
+		  where  delete_flag = 0
+		  and t.freeze_flag = 0
+		 <isNotEmpty prepend="and" property="code">   
+                t.code like concat('%', #code# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="name">   
+                t.name like concat('%', #name# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="carNumber">   
+                t.car_number like concat('%', #carNumber# ,'%')   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="registerTimeQ">   
+                <![CDATA[t.create_time >= #registerTimeQ#  ]]>   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="registerTimeZ">   
+                 <![CDATA[t.create_time <= date_sub(#registerTimeZ#,interval -1 day) ]]>  
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="currentLocationTimeQ">   
+                <![CDATA[(select LAST_TIME from t_location_collect_last_info where DRIVER_ID = t.id) >= #currentLocationTimeQ#  ]]>   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="currentLocationTimeZ">   
+                 <![CDATA[(select LAST_TIME from t_location_collect_last_info where DRIVER_ID = t.id) <= date_sub(#currentLocationTimeZ#,interval -1 day) ]]>  
+         </isNotEmpty>	
+	</select>
+	
+	<select id="query_driverUser_transaction_info_by_page" parameterClass="java.util.Map" resultMap="driverUser_info_domain_transaction_result">
+		select 
+		       t.code,
+		       t.name,
+		       t.car_number,
+		       t.submit_type,
+			  (select location from t_location_collect_last_info where DRIVER_ID = t.id) as location,
+			   (select LAST_TIME from t_location_collect_last_info where DRIVER_ID = t.id) as last_time,
+			   (select count(id) from t_transaction_info where driver_id = t.id) as accumulate_transaction_count,
+			   (select count(id) from t_transaction_info where driver_id = t.id and datediff(now(),create_time)=0) as today_transaction_count,
+			   (select group_concat(concat(start_province,start_city,start_county,'--',end_province,end_city,end_county)) from t_driver_line_info where driver_id = t.id and delete_flag = 0) as driver_line,
+			   (select group_concat(concat(start_province,start_city,start_county,'--',end_province,end_city,end_county)) from t_driver_business_line_info where driver_id = t.id and delete_flag = 0) as driver_business_line
+		  from t_driver_user_info t
+		  where  delete_flag = 0
+		 and t.freeze_flag = 0
+		  <isNotEmpty prepend="and" property="code">   
+                t.code like concat('%', #code# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="name">   
+                t.name like concat('%', #name# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="carNumber">   
+                t.car_number like concat('%', #carNumber# ,'%')   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="registerTimeQ">   
+                <![CDATA[t.create_time >= #registerTimeQ#  ]]>   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="registerTimeZ">   
+                 <![CDATA[t.create_time <= date_sub(#registerTimeZ#,interval -1 day) ]]>  
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="currentLocationTimeQ">   
+                <![CDATA[(select last_time from t_location_collect_last_info where DRIVER_ID = t.id) >= #currentLocationTimeQ#  ]]>   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="currentLocationTimeZ">   
+                 <![CDATA[(select last_time from t_location_collect_last_info where DRIVER_ID = t.id) <= date_sub(#currentLocationTimeZ#,interval -1 day) ]]>  
+         </isNotEmpty>	
+         order by t.id desc
+          <isNotEmpty  property="pageSize">   
+                  limit  #start#,#pageSize#
+         </isNotEmpty>	
+	</select>
+	
+	<select id="query_driverUser_total_data" parameterClass="java.util.Map" resultMap="driverUser_total_data_result">
+	select
+		       t.code,
+		       t.name,
+		       t.car_number,
+		       t.create_time,
+				t0.good_find_num,
+				(select count(id) from t_quote_info where driver_id = t.id ) as quote_count,
+				(select count(id) from t_transaction_info where driver_id = t.id ) as ordering_count,
+				(select count(id) from t_transaction_info where driver_id = t.id and trade_start = 5) as pass_order_count,
+				(select count(id) from t_driver_cargo_assess_info where driver_id = t.id ) as phone_call_num
+		  from t_driver_user_info t  LEFT OUTER JOIN 
+			(select   d.id ,count(*) as good_find_num from    t_driver_user_info d  , t_operation_log_info  t
+			where  d.id = t.USER_DRIVER_ID and    t.operation_type = '29' and t.type =1  and d.DELETE_FLAG = 0 and d.freeze_flag = 0 GROUP BY d.id) t0
+			on t.id = t0.id
+		  where  t.delete_flag = 0 and t.freeze_flag = 0
+		   <isNotEmpty prepend="and" property="registerTimeQ">   
+                <![CDATA[t.create_time >= #registerTimeQ#  ]]>   
+         </isNotEmpty>	
+          <isNotEmpty prepend="and" property="registerTimeZ">   
+                 <![CDATA[t.create_time <= date_sub(#registerTimeZ#,interval -1 day) ]]>  
+         </isNotEmpty>	
+         order by create_time desc
+	</select>
+	
+	<select id="query_driverUser_info_by_id" parameterClass="String" resultMap="driverUser_mx_info_domain_result">
+		select t.id,
+		       t.code,
+		       t.name,
+		       t.car_number,
+		       t.create_time,
+		       t.submit_type,
+		       t.identity_license_num,
+				t.identity_license_num_front,
+				t.identity_license_num_contrary,
+				t.drivers_license,
+				t.driving_license,
+				t.baidu_user_id,
+				t.baidu_channel_id,
+				(select reason from t_manager_reason_info where type =1 and driver_user_id = t.id order by id desc limit 1) as delete_reason
+		  from t_driver_user_info t
+		  where id = #id# and delete_flag = 0 and t.freeze_flag = 0
+	</select>
+	
+	<select id="query_driverUser_info_by_code" parameterClass="String" resultMap="driverUser_info_domain_result">
+		select t.id,
+		       t.code,
+		       t.password,
+		       t.name,
+		       t.car_number,
+		       t.freeze_flag,
+		       t.audit_flag,
+		       t.telephone,
+		       t.identity_license_num,
+		       t.operating_license,
+		       t.drivers_license,
+		       t.driving_license,
+		       t.car_length,
+		       t.car_weight,
+		       t.car_cubage,
+		       t.car_plate_type,
+		       t.car_bar_type,
+		       t.car_types,
+		       t.remark,
+		       t.car_state_type,
+		       t.head_portrait,
+		       t.identity_license_num_front,
+		       t.identity_license_num_contrary,
+		       t.new_or_old_app_user,
+		       t.baidu_channel_id,
+		       t.baidu_user_id,
+		       t.create_time,
+		       t.modify_time,
+		       t.delete_flag,
+		       t.submit_type,
+				(select location from t_location_collect_last_info where DRIVER_ID = t.id) as location,
+				(select LAST_TIME from t_location_collect_last_info where DRIVER_ID = t.id) as last_time
+		  from t_driver_user_info t
+		  where code = #code# and delete_flag = 0 and t.freeze_flag = 0
+	</select>
+	
+	<!-- 保存司机评论信息 -->
+	<update id="modify_driverUser_info" parameterClass="com.cy.dctms.common.bo.DriverUserInfo">
+		update t_driver_user_info t
+		   set 
+		   	t.name = #name#,
+		   	t.car_number = #carNumber#,
+		   	t.identity_license_num = #identityLicenseNum#
+		 where t.id = #id# 
+	</update>	
+	
+	<update id="delete_driverUser_info_by_id" parameterClass="String">
+		update t_driver_user_info t
+		   set
+		   	t.freeze_flag = 1,
+			t.modify_time = now()
+		 where t.id = #id#
+	</update>
+	
+	<update id="unfreeze_driverUser_info_by_id" parameterClass="String">
+		update t_driver_user_info t
+		   set
+		   	t.freeze_flag = 0,
+			t.modify_time = now()
+		 where t.id = #id#
+	</update>
+	
+	<!-- 审核司机信息 -->
+	<update id="audit_driverUser_info" parameterClass="com.cy.dctms.common.bo.DriverUserInfo">
+		update t_driver_user_info t
+		   set 
+		    t.submit_type =#submitType#,
+		   	t.audit_flag = #auditFlag#
+		 where t.id = #id# 
+	</update>	
+</sqlMap>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="applyInfoDomain" type="com.cy.dctms.common.domain.ApplyInfoDomain"/>
+	
+	
+	<resultMap class="applyInfoDomain" id="applyInfo_info_domain_result">
+		<result property="id" column="ID"/>
+		<result property="userId" column="user_id"/>
+		<result property="companyId" column="company_id"/>
+		<result property="applyType" column="apply_type"/>
+		<result property="applyTime" column="apply_time"/>
+		<result property="contactName" column="contact_name"/>
+		<result property="contactTelephone" column="contact_telephone"/>
+		<result property="applyComment" column="apply_comment"/>
+		<result property="verifyTime" column="verify_time"/>
+		<result property="verifyStart" column="verify_start"/>
+		<result property="verifyComment" column="verify_comment"/>
+		<result property="operatorId" column="operator_id"/>
+	</resultMap>
+	
+	<select id="query_applyInfo_info_count"  resultClass="Integer">
+		select count(t.id)
+		  from t_apply_info t
+		  where  1=1
+		  <isNotEmpty prepend="and" property="companyId">   
+               (select company_name from t_company_info where id = t.company_id) like concat('%', #companyId# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="applyType">   
+                t.apply_type like concat('%', #applyType# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="applyTime">   
+                t.apply_time like concat('%', #applyTime# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="contactName">   
+                t.contact_name like concat('%', #contactName# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="verifyStart">   
+                t.verify_start like concat('%', #verifyStart# ,'%')   
+         </isNotEmpty>	
+	</select>
+	
+	<select id="query_applyInfo_info_by_page" parameterClass="java.util.Map" resultMap="applyInfo_info_domain_result">
+		select t.id,
+		       t.user_id,
+		       (select company_name from t_company_info where id = t.company_id) as company_id,
+		       t.apply_type,
+		       t.apply_time,
+		       t.contact_name,
+		       t.contact_telephone,
+		       t.apply_comment,
+		       t.verify_time,
+		       t.verify_start,
+		       t.verify_comment,
+		       t.operator_id
+		  from t_apply_info t
+		  where  1=1
+		    <isNotEmpty prepend="and" property="companyId">   
+                (select company_name from t_company_info where id = t.company_id) like concat('%', #companyId# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="applyType">   
+                t.apply_type = #applyType# 
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="applyTimeQ">   
+                t.apply_time > #applyTimeQ# 
+         </isNotEmpty>	
+         <isNotEmpty prepend="and" property="applyTimeZ">   
+                <![CDATA[t.apply_time < date_sub(#applyTimeZ#,interval -1 day) ]]> 
+         </isNotEmpty>
+		  <isNotEmpty prepend="and" property="contactName">   
+                t.contact_name like concat('%', #contactName# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="verifyStart">   
+                t.verify_start = #verifyStart#    
+         </isNotEmpty>	
+		    order by t.id desc
+		  limit  #start#,#pageSize#
+	</select>
+	
+	<select id="query_applyInfo_info_by_id" parameterClass="String" resultMap="applyInfo_info_domain_result">
+		select t.id,
+		       t.user_id,
+		       (select company_name from t_company_info where id = t.company_id) as company_id,
+		       t.apply_type,
+		       t.apply_time,
+		       t.contact_name,
+		       t.contact_telephone,
+		       t.apply_comment,
+		       t.verify_time,
+		       t.verify_start,
+		       t.verify_comment,
+		       t.operator_id
+		  from t_apply_info t
+		  where id = #id# 
+	</select>
+	
+	<!-- 保存司机评论信息 -->
+	<update id="modify_applyInfo_info" parameterClass="com.cy.dctms.common.bo.ApplyInfo">
+		update t_apply_info t
+		   set 
+		   	t.verify_time = now(),
+		   	t.verify_start = #verifyStart#,
+		   	t.verify_comment = #verifyComment#,
+		   	t.operator_id = #operatorId#
+		 where t.id = #id#
+	</update>	
+	
+</sqlMap>

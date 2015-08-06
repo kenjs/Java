@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="UserRechargeInfo" type="com.cy.dcts.common.bo.UserRechargeInfo"/>
+	
+	<!-- 增 -->
+	<insert id="iBatisInsertUserRechargeInfo" parameterClass="UserRechargeInfo">
+		insert into t_user_recharge_info(user_id,operator_id,recharge_type,recharge_amount,remark,create_time) 
+		values (#userId#,#operatorId#,#rechargeType#,#rechargeAmount#,#remark#,sysdate())
+		<selectKey keyProperty="id" resultClass="Integer">
+			select last_insert_id() as id
+		</selectKey>
+	</insert>
+	
+	<!-- 查 -->
+	<select id="iBatisSelectUserRechargeInfo" parameterClass="string" resultClass="com.cy.dcts.common.domain.UserRechargeInfoDomain">
+		select recharge_type as rechargeType,
+				recharge_amount as rechargeAmount,
+				remark as remark,
+				create_time as createTime
+		from t_user_recharge_info where user_id = #userId#
+	</select>
+</sqlMap>

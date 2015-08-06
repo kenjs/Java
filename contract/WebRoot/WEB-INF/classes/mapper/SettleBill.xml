@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap>
+<typeAlias type="tf56.contract.domain.SettleBill" alias="settleBill"/>
+	<!-- 结算单导出 -->
+	<select id="iBatisSelectExportBillList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select wb.clientnumber,ws.systemDispatchNumber,wb.waybillnumber,DATE_FORMAT(wb.consigndate,'%Y.%m.%d') as consigndate,wb.consigneetown,
+			   wb.consigneeprovince,wb.consigneecity,wb.consigneeregion,wb.distance,
+			   wb.settletype,gd.goodsName,sum(gd.factNum) as factnum,sum(gd.factWeight) as factweight,sum(gd.factVolume) as factvolume,
+			   (select sum(amount) from WaybillAmount where waybillId=wb.waybillId and amountItem='运费' and inOrOut=se.inOrOut) as freight,
+			   (select sum(amount) from WaybillAmount where waybillId=wb.waybillId and amountItem='提货费' and inOrOut=se.inOrOut) as delivery,
+			   (select sum(amount) from WaybillAmount where waybillId=wb.waybillId and amountItem='送货费' and inOrOut=se.inOrOut) as charge,
+			   (select sum(amount) from WaybillAmount where waybillId=wb.waybillId and amountItem='包装费' and inOrOut=se.inOrOut) as pack,
+			   (select sum(amount) from WaybillAmount where waybillId=wb.waybillId and amountItem='其他费用' and inOrOut=se.inOrOut) as other,
+			   (select sum(amount) from WaybillAmount where waybillId=wb.waybillId and inOrOut=se.inOrOut) as total
+		from SettleBill se  
+		LEFT JOIN Waybill wb on se.settleBillId=wb.inSettleBillId or se.settleBillId=wb.outsettlebillid
+		LEFT JOIN Goods gd on wb.waybillId=gd.waybillId
+		LEFT JOIN WaybillStowage ws on wb.waybillStowageId=ws.waybillStowageId
+	        where se.inOrOut=#inorout:VARCHAR# and se.settleBillId=#settlebillid:VARCHAR# and se.partyId=#partyid:VARCHAR#
+	     group by wb.waybillId
+	</select>
+	<!--结算单列表  -->
+	<select id="iBatisSelectSettleBillList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select a.settleBillId as settlebillid,a.settleBillNumber as settlebillnumber,date_format(a.inputDate, '%Y-%m-%d %k:%i:%s') as inputdate,
+		a.status,b.billNumber as billnumber,DATE_FORMAT(a.startDate,'%Y.%m.%d') as startdate,a.inOutPartyIdSec as inoutpartyidsec,
+		DATE_FORMAT(a.endDate,'%Y.%m.%d') as enddate,
+		a.inOutPartyId as inoutpartyid,a.needInOutAllAmount as needinoutallamount,
+		a.factAmount as factamount,a.needInOutRemainAmount as needinoutremainamount
+ 		from SettleBill a LEFT JOIN 
+		(select * from (select settleBillVerificationId,settleBillId,billNumber from SettleBillVerification ORDER BY billDate DESC) as temp GROUP BY temp.settleBillId) b 
+		on a.settleBillId=b.settleBillId 
+		where a.inOrOut=#inorout:VARCHAR# and a.partyId=#partyid:VARCHAR#
+		<dynamic>
+			<isNotEmpty prepend="and" property="settlebillnumber">
+				a.settleBillNumber like '%$settlebillnumber$%'
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="clientnumber">
+				<isEqual property="inorout" compareValue="1">
+					a.settleBillId in (SELECT b.inSettleBillId FROM Waybill b WHERE b.clientNumber 
+					LIKE concat('%',#clientnumber:VARCHAR#, '%') and b.partyId = #partyid:VARCHAR#)
+				</isEqual>
+				<isEqual property="inorout" compareValue="0">
+					a.settleBillId in (SELECT b.outSettleBillId FROM Waybill b WHERE b.clientNumber 
+					LIKE concat('%',#clientnumber:VARCHAR#, '%') and b.partyId = #partyid:VARCHAR#)
+				</isEqual>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="status">
+				a.status=#status:VARCHAR#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="startdate">
+				<![CDATA[a.startDate>=#startdate:VARCHAR#]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="enddate">
+				<![CDATA[ a.endDate<=#enddate:VARCHAR#]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="inoutpartyid">
+				a.inOutPartyId in ($inoutpartyid$)
+			</isNotEmpty>
+			<isNotEmpty  property="conIdList" prepend="and">
+				a.inOutPartyIdSec in ($conIdList$)	
+			</isNotEmpty>
+			<isNotEmpty  property="idList" prepend="and"><!--
+				<iterate prepend="and" property="idList" conjunction="or" open="(" close=")">
+					a.inOutPartyId = #idList[]# 
+				</iterate>
+			-->
+					a.inOutPartyId in($idList$)
+			</isNotEmpty>
+		</dynamic>
+		order by a.settleBillId desc limit $skipCount$,$pageSize$
+	</select>
+	<!--结算单列表记录条数  -->
+	<select id="iBatisSelectSettleBillCount" parameterClass="java.util.HashMap" resultClass="java.lang.String">
+		select count(*) from SettleBill a LEFT JOIN 
+		(select * from (select settleBillVerificationId,settleBillId,billNumber from SettleBillVerification ORDER BY billDate DESC) as temp GROUP BY temp.settleBillId) b 
+		on a.settleBillId=b.settleBillId 
+		where a.inOrOut=#inorout:VARCHAR# and a.partyId=#partyid:VARCHAR#
+		<dynamic>
+			<isNotEmpty prepend="and" property="settlebillnumber">
+				a.settleBillNumber like '%$settlebillnumber$%'
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="clientnumber">
+				<isEqual property="inorout" compareValue="1">
+					a.settleBillId in (SELECT b.inSettleBillId FROM Waybill b WHERE b.clientNumber 
+					LIKE concat('%',#clientnumber:VARCHAR#, '%') and b.partyId = #partyid:VARCHAR#)
+				</isEqual>
+				<isEqual property="inorout" compareValue="0">
+					a.settleBillId in (SELECT b.outSettleBillId FROM Waybill b WHERE b.clientNumber 
+					LIKE concat('%',#clientnumber:VARCHAR#, '%') and b.partyId = #partyid:VARCHAR#)
+				</isEqual>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="status">
+				a.status=#status:VARCHAR#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="startdate">
+				<![CDATA[a.startDate>=#startdate:VARCHAR#]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="enddate">
+				<![CDATA[ a.endDate<=#enddate:VARCHAR#]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="inoutpartyid">
+				a.inOutPartyId in ($inoutpartyid$)
+			</isNotEmpty>
+			<isNotEmpty  property="conIdList" prepend="and">
+				a.inOutPartyIdSec in ($conIdList$)	
+			</isNotEmpty>
+			<isNotEmpty  property="idList" prepend="and"><!--
+				<iterate prepend="and" property="idList" conjunction="or" open="(" close=")">
+					a.inOutPartyId = #idList[]# 
+				</iterate>
+			-->
+				a.inOutPartyId in($idList$)
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<!-- 获取收/发货方的partyid -->
+	<select id="iBatisSelectInOutPartyIdList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select distinct inOutPartyId as inoutpartyid from SettleBill where inOrOut=#inorout:VARCHAR# and partyId=#partyid:VARCHAR#
+	</select>
+	<!-- 审核结算单 -->
+	<update id="iBatisUpdateStatusBySettleBillId" parameterClass="java.util.HashMap">
+		update SettleBill set status=#status#,checkDate=now() where settleBillId=#settlebillid:VARCHAR#
+	</update>
+	<!-- 更新实收未收金额 -->
+	<update id="iBatisUpdateAmountBySettleBillId" parameterClass="java.util.HashMap">
+		update SettleBill set factAmount=factAmount+#billamount#,needInOutRemainAmount=needInOutRemainAmount-#billamount#,status=#status# where settleBillId=#settlebillid#
+	</update>
+   <select id="iBatisSelectLastSettleBillNumber" resultClass="java.lang.String">
+   		SELECT settleBillNumber as settlebillnumber FROM SettleBill  ORDER BY settleBillId DESC LIMIT 1;
+   </select>
+  <insert id="iBatisInsert" parameterClass="settleBill">
+	  insert into SettleBill (settleBillNumber,status,startDate,endDate,inOrOut,inOutPartyId,inOutPartyIdSec,needInOutAllAmount,factAmount,needInOutRemainAmount,inputDate,inputMan,partyId)
+	   values (#settlebillnumber:VARCHAR#,#status:VARCHAR#,#startdate:VARCHAR#,#enddate:VARCHAR#,#inorout:VARCHAR#,#inoutpartyid:VARCHAR#,#inoutpartyidsec:VARCHAR#,#needinoutallamount:VARCHAR#,#factamount:VARCHAR#,#needinoutremainamount:VARCHAR#,#inputdate:VARCHAR#,#inputman:VARCHAR#,#partyid:VARCHAR#)
+	  <selectKey resultClass="String" keyProperty="settlebillid">
+	   		select last_insert_id() as id
+	  </selectKey>
+ </insert>  
+ <update id="iBatisUpdate">
+ 	update SettleBill set startDate=#startdate#,endDate=#enddate#,needInOutAllAmount=#needinoutallamount#,needInOutRemainAmount=#needinoutallamount#,inputDate=Now()
+ 		where settleBillId=#settlebillid#
+ </update>
+ <delete id="iBatisDelete" parameterClass="java.util.HashMap">
+ 	delete from SettleBill where settleBillId=#settlebillid# and status='未审核'
+ </delete><!-- add by lianggui.zhou
+ <select id="iBatisExportData" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+ 	SELECT DATE_FORMAT(startDate,'%Y-%m-%d') AS startdate, DATE_FORMAT(endDate,'%Y-%m-%d')  AS enddate,inOutPartyId AS partyid from 
+ 	SettleBill WHERE settleBillId=#settlebillid:VARCHAR# AND inOrOut=#inorout:VARCHAR#
+ </select>
+--></sqlMap>
+

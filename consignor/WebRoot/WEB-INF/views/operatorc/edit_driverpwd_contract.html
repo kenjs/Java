@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="pragma" content="no-cache"/>
+    <meta http-equiv="Cache-Control" content="no-cache,must-revalidate"/>
+    <title>传化物流-会员中心</title>
+
+	<link href="../css/webui/main.css" rel="stylesheet" />	
+    <script src="../js/jquery/jquery-1.8.3.min.js" type=text/javascript></script>
+    <script src="../js/sys/webui/header.js"></script>    	
+    <script src="../js/sys/webui/logo.js"></script>   	 
+    <script src="../js/sys/webui/left.js"></script>
+	<link href="../js/sys/ymPrompt/skin/ch/ymPrompt.css" rel="stylesheet">
+	<link href="../css/webui/hgrid.css" rel="stylesheet" />
+	<link href="../css/themes/subcontractorc/subcontractorList.css" rel="stylesheet">
+    <script type="text/javascript" src="../js/sys/DatePicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="../js/sys/ymPrompt/ymPrompt.js"></script>
+	<script type="text/javascript" src="../js/sys/webui/hgrid.js"></script>
+	<!-- <link href="../css/webui/commonPage.css" rel="stylesheet" /> -->
+	<style>
+		body{
+			height:500px;
+		}
+		#right {
+			font-family:inherit;
+		    font-family:"宋体",Arial,sans-serif;
+		    font-size: 12px;
+		}
+		#main{width:998px;border:0px solid black;padding:0px;margin:0 auto;}
+	</style>
+<script type="text/javascript">  
+javascript:window.history.forward(1);
+	$(function (){ 
+		$("#btnSearch").click(function(){
+							var oldpassword=$('#oldpassword').val();
+                        	var newpwd=$('#password').val();
+                        	var pwd=$('#pwd').val();  	
+                        	if(oldpassword==newpwd){
+                        	   alert('新设置的密码跟原密码重复，请重新设置');
+                        	   return false;
+                        	}
+                        	//密码确认验证
+                        	if(newpwd!=pwd){
+                        	  alert('输入的新密码与密码确认不匹配');
+                        	  return false;
+                        	}
+                        var parms="oldpassword="+oldpassword+"&password="+newpwd;
+				$.ajax( {
+							type : "POST",
+							url : "../operatorcs/update?random="+ Math.random(),
+							data: parms,
+							dataType : "json",
+							error : function() {
+								alert("加载错误")
+							},
+							success : function(data) {
+							    
+							      if("ok"==data.msg){
+								   			alert('密码修改成功!');
+								   	
+								       	}else{
+								       		alert('输入的原密码不匹配');
+								       	}
+							}
+						});
+				
+		});
+
+});
+	
+</script>
+
+</head>
+ 
+<body>
+	<!-- 顶部 --开始  此处须由js动态加入-->
+	<div id="header" class="c-header" >
+	
+	</div>
+	<!-- 顶部 --结束-->
+	
+	<!-- LOGON --开始   此处须由js动态加入-->
+	<div id="logo" class="c-logo" >
+		
+	</div>
+	<!-- LOGON --结束-->
+	
+	<!-- 工作区 --开始-->
+	<div id="main">
+		<!-- 左侧菜单 --开始  此处须由js动态加入-->
+  		<div id="left" class="c-left"> 
+		</div>
+		<!-- 左侧菜单 --结束-->
+			
+		<!-- 右侧工作区 --开始-->
+  		<div id="right" class="c-right" >
+  			<div style="border: 1px solid white;height: 200px;">
+  			<div style="font-size: 16px;font-family: '微软雅黑','宋体',Arial;font-weight: bold;height: 30px;">修改密码</div>
+  			<div style="height: 1px;width: 998px;background-color: #e4e4e4;width: 820px;"></div>
+  				<div style="padding-left: 114px;padding-top: 30px;"><span style="font-size: 14px;font-family: '微软雅黑','宋体',Arial;">原密码：</span><input type="password" class="com_input" style="width: 150px;" id="oldpassword" name="oldpassword"/></div>
+  				<div style="padding-left: 114px;padding-top: 10px;"><span style="font-size: 14px;font-family: '微软雅黑','宋体',Arial;">新密码：</span><input type="password" class="com_input" style="width: 150px;" id="password" name="password"/></div>
+  				<div style="padding-left: 100px;padding-top: 10px;"><span style="font-size: 14px;font-family: '微软雅黑','宋体',Arial;">确认密码：</span><input type="password" class="com_input" style="width: 150px;" id="pwd" name="pwd"/></div>
+  			<div style="padding-left: 170px;padding-top: 30px;">
+  				<div><button id="btnSearch" class="btn-orange-big fn-noborder fn-cWhite ft-blod"  style="margin:0 5px; 0 5px;">确定</button></div>
+  			</div>
+  			      
+  			
+       		</div>
+  		</div>
+  		<!-- 右侧工作区 --开始-->
+	</div>
+	<!-- 工作区 --结束-->
+	
+	<!-- 底部 --开始  此处须由js动态加入-->
+	<div id="footer" class="c-footer">
+		
+	</div>
+	<!-- 底部 --结束-->
+	
+
+</body>
+</html>
+ 
+ 
+

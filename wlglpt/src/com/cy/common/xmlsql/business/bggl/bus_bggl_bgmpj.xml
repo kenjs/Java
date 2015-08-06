@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.bggl.dao.BusBgMpjMapper">
+	<select id="selectBgMpjPage" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgMpjDomain">
+		SELECT A.BG_DJXH AS bgDjxh,
+		       A.CZY_DJXH AS czyDjxh,
+		       A.XM AS xm,
+		       A.ZW AS zw,
+		       A.GS AS gs,
+		       A.DZ AS dz,
+		       A.DH AS dh,
+		       A.CZ AS cz,
+		       A.SJ AS sj,
+		       A.WZ AS wz,
+		       A.YB AS yb,
+		       A.DY AS dy,
+		       A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM BG_MPJ A 
+		  WHERE A.YXBZ='Y' and A.CZY_DJXH=#czyDjxh#
+		 <dynamic>
+		  		<isNotEmpty prepend="and" property="gs">
+		  			A.GS like #gs#
+		  		</isNotEmpty>
+		  </dynamic>
+		  <dynamic>
+		   		<isNotEmpty prepend="and" property="xm">
+		  			A.XM like #xm#
+		  		</isNotEmpty>
+		  </dynamic>
+		  <dynamic>
+		  		<isNotEmpty prepend="and" property="dz">
+		  			A.DZ like #dz#
+		  		</isNotEmpty>
+		  </dynamic>
+		  $orderStr$
+    </select>
+    
+    <select id="selectBgMpjAll" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgMpjDomain">
+		SELECT A.BG_DJXH AS bgDjxh,
+		       A.CZY_DJXH AS czyDjxh,
+		       A.XM AS xm,
+		       A.ZW AS zw,
+		       A.GS AS gs,
+		       A.DZ AS dz,
+		       A.DH AS dh,
+		       A.CZ AS cz,
+		       A.SJ AS sj,
+		       A.WZ AS wz,
+		       A.YB AS yb,
+		       A.DY AS dy,
+		       A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM BG_MPJ A 
+		  WHERE A.YXBZ='Y' and A.CZY_DJXH=#czyDjxh#
+		  <dynamic>
+		  		<isNotEmpty prepend="and" property="gs">
+		  			A.GS like #gs#
+		  		</isNotEmpty>
+		  </dynamic>
+		  <dynamic>
+		   		<isNotEmpty prepend="and" property="xm">
+		  			A.XM like #xm#
+		  		</isNotEmpty>
+		  </dynamic>
+		  <dynamic>
+		  		<isNotEmpty prepend="and" property="dz">
+		  			A.DZ like #dz#
+		  		</isNotEmpty>
+		  </dynamic>
+		  ORDER by A.BG_DJXH ASC
+    </select>
+
+	<select id="getBgMpjRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.BG_DJXH) 
+		  FROM BG_MPJ A 
+		  WHERE A.YXBZ='Y' and A.CZY_DJXH=#czyDjxh#
+		  <dynamic>
+		  		<isNotEmpty prepend="and" property="gs">
+		  			A.gs like #gs#
+		  		</isNotEmpty>
+		  </dynamic>
+		  <dynamic>
+		   		<isNotEmpty prepend="and" property="xm">
+		  			A.xm like #xm#
+		  		</isNotEmpty>
+		  </dynamic>
+		  <dynamic>
+		  		<isNotEmpty prepend="and" property="dz">
+		  			A.dz like #dz#
+		  		</isNotEmpty>
+		  </dynamic>
+    </select>
+</sqlMap>

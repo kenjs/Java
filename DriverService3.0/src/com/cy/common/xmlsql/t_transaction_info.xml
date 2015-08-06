@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<resultMap class="com.cy.driver.transaction.domain.TransactionInfoDomain" id="TransactionInfoDomain">
+		<result property="id" column="ID"/>
+		<result property="cargoId" column="CARGO_ID"/>
+		<result property="orderNumber" column="ORDER_NUMBER"/>
+		<result property="cargoType" column="CARGO_TYPE"/>
+		<result property="cargoName" column="CARGO_NAME"/>
+		<result property="cargoWeight" column="CARGO_WEIGHT"/>
+		<result property="cargoCubage" column="CARGO_CUBAGE"/>
+		<result property="contactName" column="CONTACT_NAME"/>
+		<result property="contactMobilephone" column="CONTACT_MOBILEPHONE"/>
+		<result property="contactTelephone" column="CONTACT_TELEPHONE"/>
+		<result property="requestCarBarType" column="REQUEST_CAR_BAR_TYPE"/>
+		<result property="requestCarLength" column="REQUEST_CAR_LENGTH"/>
+		<result property="requestCarPlateType" column="REQUEST_CAR_PLATE_TYPE"/>
+		<result property="startProvince" column="START_PROVINCE"/>
+		<result property="startCity" column="START_CITY"/>
+		<result property="endProvince" column="END_PROVINCE"/>
+		<result property="endCity" column="END_CITY"/>
+		<result property="requestStartTime" column="REQUEST_START_TIME"/>
+		<result property="requestEndTime" column="REQUEST_END_TIME"/>
+		<result property="freight" column="FREIGHT"/>
+	</resultMap>
+
+	<!-- 查询司机订单数量 -->
+	<select id="iBatisSelectDriverOrderNumber" parameterClass="String" resultClass="Integer">
+		select count(id) from t_transaction_info where COMPANY_ID is not null 
+		and ORDER_START = 0 and DRIVER_ID = #driverId# and TRADE_START = 1
+		and RECEIVER_ORDER_NO IS NULL
+	</select>
+	
+	<!-- (我的订单)订单数量 -->
+	<select id="iBatisSelectMyOrderNumber" parameterClass="String" resultClass="Integer">
+		select count(id) from t_transaction_info where ORDER_START = 0 and DRIVER_ID = #driverId# and RECEIVER_ORDER_NO IS NULL
+	</select>
+	
+	<!-- 查询司机订单集合 -->
+	<select id="iBatisSelectDriverOrderList" parameterClass="map" resultClass="com.cy.driver.transaction.domain.TransactionInfoDomain">
+		SELECT
+			rt.CARGO_TYPE as cargoType,
+			rt.REQUEST_START_TIME as requestStartTime,
+			rt.REQUEST_END_TIME as requestEndTime,
+			rt.START_PROVINCE as startProvince,
+			rt.START_CITY as startCity,
+			rt.START_COUNTY as startCounty,
+			rt.START_TOWN as startTown,
+			rt.END_PROVINCE as endProvince,
+			rt.END_CITY as endCity,
+			rt.END_COUNTY as endCounty,
+			rt.END_TOWN as endTown,
+			rt.CARGO_NAME cargoName,
+			rt.CONTACT_MOBILEPHONE as contactMobilephone,
+			rt.CONTACT_TELEPHONE as contactTelephone,
+			rt.CONTACT_NAME as contactName,
+			rt.CARGO_WEIGHT as cargoWeight,
+			rt.CARGO_CUBAGE as cargoCubage,
+			lt.ID as id,
+			lt.ORDER_NUMBER as orderNumber,
+			lt.CARGO_ID as cargoId,
+			lt.DEPLOY_USERID as deployUserid,
+			lt.COMPANY_ID as companyId,
+			lt.TRADE_START as tradeStart,
+			lt.TRADE_CANCEL_ORIGIN as tradeCancelOrigin,
+			(SELECT c.COMPANY_NAME FROM t_company_info c WHERE c.ID = lt.COMPANY_ID) companyName
+		FROM
+			t_transaction_info lt,
+			t_order_cargo_info rt
+		WHERE lt.CARGO_ID = rt.ID
+		AND	lt.COMPANY_ID IS NOT NULL
+		AND lt.ORDER_START = 0
+		AND lt.TRADE_START = 1
+		AND lt.DRIVER_ID = #driverId#
+		AND lt.RECEIVER_ORDER_NO IS NULL
+		order by requestStartTime desc
+		limit $fromSize$,$listSize$
+	</select>
+	
+	<!-- 查询司机订单详情 -->
+	<select id="iBatisSelectDriverOrderById" parameterClass="String" resultClass="com.cy.driver.transaction.domain.TransactionInfoDomain">
+		SELECT
+			rt.CARGO_TYPE as cargoType,
+			rt.REQUEST_START_TIME as requestStartTime,
+			rt.REQUEST_END_TIME as requestEndTime,
+			rt.START_PROVINCE as startProvince,
+			rt.START_CITY as startCity,
+			rt.START_COUNTY as startCounty,
+			rt.START_TOWN as startTown,
+			rt.END_PROVINCE as endProvince,
+			rt.END_CITY as endCity,
+			rt.END_COUNTY as endCounty,
+			rt.END_TOWN as endTown,
+			rt.CARGO_NAME cargoName,
+			rt.CONTACT_MOBILEPHONE as contactMobilephone,
+			rt.CONTACT_TELEPHONE as contactTelephone,
+			rt.CONTACT_NAME as contactName,
+			rt.CARGO_WEIGHT as cargoWeight,
+			rt.CARGO_CUBAGE as cargoCubage,
+			lt.ID as id,
+			lt.ORDER_NUMBER as orderNumber,
+			lt.DRIVER_ID as driverId,
+			lt.CARGO_ID as cargoId,
+			lt.DEPLOY_USERID as deployUserid,
+			lt.COMPANY_ID as companyId,
+			lt.TRADE_START as tradeStart,	
+			lt.TRADE_CANCEL_ORIGIN as tradeCancelOrigin,
+			lt.SHIPPER_CODE as shipperCode,
+			lt.SHIPPER_ORDER_NO as shipperOrderNo,
+			lt.DELIVERY_TIME as deliveryTime,
+			lt.ARRIVAL_TIME as arrivalTime,
+			lt.RECEIVE_TIME as receiveTime,
+			lt.RECEIVER_CODE as receiverCode,
+			lt.RECEIVER_ORDER_NO as receiverOrderNo,
+			lt.SHIPPER_COMPANY_CODE as shipperCompanyCode,
+			lt.SHIPPER_COMPANY_ID as shipperCompanyId, 		
+			(SELECT c.COMPANY_NAME FROM t_company_info c WHERE c.ID = lt.COMPANY_ID) companyName,
+			(SELECT c.COMPANY_NAME FROM t_company_info c WHERE c.ID = lt.SHIPPER_COMPANY_ID) shipperCompanyName,
+			lt.SHIPPER_CODE_ID as shipperCodeId,
+			lt.RECEIVER_CODE_ID as receiverCodeId,
+			(select i.NAME from t_web_user_info i where i.ID = lt.SHIPPER_CODE_ID) shipperCodeName,
+			(select i.NAME from t_web_user_info i where i.ID = lt.RECEIVER_CODE_ID) receiverCodeName
+		FROM
+			t_transaction_info lt,
+			t_order_cargo_info rt
+		WHERE lt.CARGO_ID = rt.ID
+		AND lt.ID = #id#
+	</select>
+	
+	<!-- 根据交易状态查询 -->
+	<select id="iBatisSelectTransactionListByStat" parameterClass="map" resultClass="com.cy.driver.transaction.domain.TransactionInfoDomain">
+		SELECT
+			t.ID as id,
+			t.CARGO_ID as cargoId,
+			t.COMPANY_ID as companyId,
+			t.CREATE_TIME as createTime,
+			t.DEPLOY_USERID as deployUserid, 
+			t.DRIVER_ID as driverId,
+			t.MODIFY_TIME as modifyTime,
+			t.ORDER_NUMBER as orderNumber,
+			t.REMARK as remark,
+			t.TRADE_FAIR as tradeFair,
+			t.TRADE_START as tradeStart,
+			t.TRADE_CANCEL_ORIGIN as tradeCancelOrigin,
+			t2.CARGO_TYPE as cargoType,
+			t2.CARGO_NAME as cargoName,
+			t2.CARGO_WEIGHT as cargoWeight,
+			t2.CARGO_CUBAGE as cargoCubage,
+			t2.CONTACT_NAME as contactName,
+			t2.CONTACT_MOBILEPHONE as contactMobilephone,
+			t2.CONTACT_TELEPHONE as contactTelephone,
+			t2.REQUEST_CAR_BAR_TYPE as requestCarBarType,
+			t2.REQUEST_CAR_LENGTH as requestCarLength,
+			t2.REQUEST_CAR_PLATE_TYPE as requestCarPlateType,
+			t2.START_PROVINCE as startProvince,
+			t2.START_CITY as startCity,
+			t2.START_COUNTY as startCounty,
+			t2.START_TOWN as startTown,
+			t2.END_PROVINCE as endProvince,
+			t2.END_CITY as endCity,
+			t2.END_COUNTY as endCounty,
+			t2.END_TOWN as endTown,
+			t2.REQUEST_START_TIME as requestStartTime,
+			t2.REQUEST_END_TIME as requestEndTime,
+			t2.FREIGHT as freight,
+			t.TRADE_START_TIME as tradeStartTime,
+			(SELECT c.COMPANY_NAME FROM t_company_info c WHERE c.ID = t.COMPANY_ID) companyName
+		FROM
+			t_transaction_info t,
+			t_order_cargo_info t2
+		WHERE
+			t.DRIVER_ID = #driverId#
+		AND t.TRADE_START = #tradeStart#
+		AND t.ORDER_START = 0
+		AND t.CARGO_ID = t2.ID
+		AND t.TRADE_CANCEL_ORIGIN = 0
+		AND t.RECEIVER_ORDER_NO IS NULL
+		order by t.ORDER_NUMBER desc
+		limit $fromSize$,$listSize$
+	</select>
+	
+	<!-- 我的记录（已经成交的订单） -->
+	<select id="iBatisSelectTransactionListInMyLog" parameterClass="map" resultClass="com.cy.driver.transaction.domain.TransactionInfoDomain">
+		SELECT
+			t.ID as id,
+			t.CARGO_ID as cargoId,
+			t.COMPANY_ID as companyId,
+			t.CREATE_TIME as createTime,
+			t.DEPLOY_USERID as deployUserid, 
+			t.DRIVER_ID as driverId,
+			t.MODIFY_TIME as modifyTime,
+			t.ORDER_NUMBER as orderNumber,
+			t.REMARK as remark,
+			t.TRADE_FAIR as tradeFair,
+			t.TRADE_CANCEL_ORIGIN as tradeCancelOrigin,
+			t.TRADE_START as tradeStart,
+			t2.CARGO_TYPE as cargoType,
+			t2.CARGO_NAME as cargoName,
+			t2.CARGO_WEIGHT as cargoWeight,
+			t2.CARGO_CUBAGE as cargoCubage,
+			t2.CONTACT_NAME as contactName,
+			t2.CONTACT_MOBILEPHONE as contactMobilephone,
+			t2.CONTACT_TELEPHONE as contactTelephone,
+			t2.REQUEST_CAR_BAR_TYPE as requestCarBarType,
+			t2.REQUEST_CAR_LENGTH as requestCarLength,
+			t2.REQUEST_CAR_PLATE_TYPE as requestCarPlateType,
+			t2.START_PROVINCE as startProvince,
+			t2.START_CITY as startCity,
+			t2.START_COUNTY as startCounty,
+			t2.START_TOWN as startTown,
+			t2.END_PROVINCE as endProvince,
+			t2.END_CITY as endCity,
+			t2.END_COUNTY as endCounty,
+			t2.END_TOWN as endTown,
+			t2.REQUEST_START_TIME as requestStartTime,
+			t2.REQUEST_END_TIME as requestEndTime,
+			t2.FREIGHT as freight,
+			t.TRADE_START_TIME as tradeStartTime,
+			(SELECT c.COMPANY_NAME FROM t_company_info c WHERE c.ID = t.COMPANY_ID) companyName
+		FROM
+			t_transaction_info t,
+			t_order_cargo_info t2
+		WHERE
+			t.DRIVER_ID = #driverId#
+		AND (t.TRADE_START in (5,6,7) or t.TRADE_CANCEL_ORIGIN in (1,2))
+		AND t.ORDER_START = 0
+		AND t.CARGO_ID = t2.ID
+		AND t.RECEIVER_ORDER_NO IS NULL
+		order by t.ORDER_NUMBER desc
+		limit $fromSize$,$listSize$
+	</select>	
+	
+	<!-- 待评价订单 -->
+	<select id="iBatisSelectWaitTransList" parameterClass="map" resultClass="com.cy.driver.transaction.domain.TransactionInfoDomain">
+		SELECT
+			t.ID as id,
+			t.CARGO_ID as cargoId,
+			t.COMPANY_ID as companyId,
+			t.CREATE_TIME as createTime,
+			t.DEPLOY_USERID as deployUserid, 
+			t.DRIVER_ID as driverId,
+			t.MODIFY_TIME as modifyTime,
+			t.ORDER_NUMBER as orderNumber,
+			t.REMARK as remark,
+			t.TRADE_FAIR as tradeFair,
+			t.TRADE_CANCEL_ORIGIN as tradeCancelOrigin,
+			t.TRADE_START_TIME as tradeStartTime,
+			t.TRADE_START as tradeStart,
+			t2.CARGO_TYPE as cargoType,
+			t2.CARGO_NAME as cargoName,
+			t2.CARGO_WEIGHT as cargoWeight,
+			t2.CARGO_CUBAGE as cargoCubage,
+			t2.CONTACT_NAME as contactName,
+			t2.CONTACT_MOBILEPHONE as contactMobilephone,
+			t2.CONTACT_TELEPHONE as contactTelephone,
+			t2.REQUEST_CAR_BAR_TYPE as requestCarBarType,
+			t2.REQUEST_CAR_LENGTH as requestCarLength,
+			t2.REQUEST_CAR_PLATE_TYPE as requestCarPlateType,
+			t2.START_PROVINCE as startProvince,
+			t2.START_CITY as startCity,
+			t2.START_COUNTY as startCounty,
+			t2.START_TOWN as startTown,
+			t2.END_PROVINCE as endProvince,
+			t2.END_CITY as endCity,
+			t2.END_COUNTY as endCounty,
+			t2.END_TOWN as endTown,
+			t2.REQUEST_START_TIME as requestStartTime,
+			t2.REQUEST_END_TIME as requestEndTime,
+			t2.FREIGHT as freight,
+			(SELECT c.COMPANY_NAME FROM t_company_info c WHERE c.ID = t.COMPANY_ID) companyName
+		FROM
+			t_transaction_info t,
+			t_order_cargo_info t2
+		WHERE
+			t.DRIVER_ID = #driverId#
+		AND t.CARGO_ID = t2.ID
+		AND t.ORDER_START = 0
+		AND t.TRADE_START in (4,5,7)
+		AND t.RECEIVER_ORDER_NO IS NULL
+		AND NOT EXISTS (
+			SELECT
+				1
+			FROM
+				t_driver_user_assess_info a
+			WHERE
+				a.CARGO_ID = t.CARGO_ID
+			AND a.DRIVER_ID = t.DRIVER_ID
+		)
+		order by t.ORDER_NUMBER desc
+		limit $fromSize$,$listSize$
+	</select>
+	
+	<!-- 更改订单状态 -->
+	<update id="iBatisUpdateTransactionInfoById" parameterClass="map">
+		update t_transaction_info set 
+		<dynamic>
+			<isNotEmpty property="tradeStart">
+				TRADE_START = #tradeStart#,
+			</isNotEmpty>
+			<isNotEmpty property="tradeFair">
+				TRADE_FAIR = #tradeFair#,
+			</isNotEmpty>
+			<isNotEmpty property="orderStart">
+				ORDER_START = #orderStart#,
+			</isNotEmpty>
+			<isNotEmpty property="remark">
+				REMARK = #remark#,
+			</isNotEmpty>
+			<isNotEmpty property="tradeCancelOrigin">
+				TRADE_CANCEL_ORIGIN = #tradeCancelOrigin#,
+			</isNotEmpty>
+			<isNotEmpty property="shipperCompanyCode">
+				SHIPPER_COMPANY_CODE = #shipperCompanyCode#,
+			</isNotEmpty>
+			<isNotEmpty property="driverId">
+				DRIVER_ID = #driverId#,
+			</isNotEmpty>
+			<isNotEmpty property="shipperCompanyId">
+				SHIPPER_COMPANY_ID = #shipperCompanyId#,
+			</isNotEmpty>
+		</dynamic>
+		TRADE_START_TIME = sysdate(),MODIFY_TIME = sysdate() 
+		where ID = #id# and ORDER_START = 0
+	</update>
+	
+	<!-- 已经成交的货源 -->
+	<select id="iBatisSelectDoneCargoList" parameterClass="map" resultMap="TransactionInfoDomain">
+		SELECT
+			t1.ID,
+			t1.CARGO_ID,
+			t1.ORDER_NUMBER,			
+			t2.CARGO_TYPE,
+			t2.CARGO_NAME,
+			t2.CARGO_WEIGHT,
+			t2.CARGO_CUBAGE,
+			t2.CONTACT_NAME,
+			t2.CONTACT_MOBILEPHONE,
+			t2.CONTACT_TELEPHONE,
+			t2.REQUEST_CAR_BAR_TYPE,
+			t2.REQUEST_CAR_LENGTH,
+			t2.REQUEST_CAR_PLATE_TYPE,
+			t2.START_PROVINCE,
+			t2.START_CITY,
+			t2.START_COUNTY as startCounty,
+			t2.START_TOWN as startTown,
+			t2.END_PROVINCE,
+			t2.END_CITY,
+			t2.END_COUNTY as endCounty,
+			t2.END_TOWN as endTown,
+			t2.REQUEST_START_TIME,
+			t2.REQUEST_END_TIME,
+			t2.FREIGHT
+		FROM
+			t_transaction_info t1,
+			t_order_cargo_info t2
+		WHERE
+			t1.CARGO_ID = t2.ID
+		AND t1.TRADE_START = 5
+		AND t1.DRIVER_ID = #driverId#
+		AND t2.DELETED_FLAG = 0
+		AND t1.RECEIVER_ORDER_NO IS NULL
+		order by t2.REQUEST_START_TIME desc
+		limit $fromSize$,$listSize$
+	</select>
+	
+	<!-- 根据id查找订单状态 -->
+	<select id="iBatisSelectTransactionStartById" parameterClass="String" resultClass="java.util.HashMap">
+		select IFNULL(t.TRADE_START,-1) tradeStart,IFNULL(t.TRADE_CANCEL_ORIGIN,-1) tradeCancelOrigin from t_transaction_info t where t.ID = #id#
+	</select>
+	
+	<!--                    查询导入的订单信息                                                -->
+	
+	<!-- 根据 ‘发货单号’查询订单信息 -->
+	<select id="iBatisSelectTransactionByShipperOrderNo" parameterClass="map" resultClass="com.cy.driver.transaction.domain.TransactionInfoDomain">
+		select 
+			t.ID as id,
+			t.ORDER_NUMBER as orderNumber,
+			t.DRIVER_ID as driverId,
+			(select d.`NAME` from t_driver_user_info d where d.ID = t.DRIVER_ID) driverName,
+			t.DEPLOY_USERID as deployUserid,
+			(select w.`NAME` from t_web_user_info w where w.ID = t.DEPLOY_USERID) deployUserName,
+			t.COMPANY_ID as companyId,
+			(select p.COMPANY_NAME from t_company_info p where p.ID = t.COMPANY_ID) companyName,
+			t.TRADE_START as tradeStart,
+			t.REMARK as remark,
+			t.SHIPPER_CODE as shipperCode,
+			t.SHIPPER_ORDER_NO as shipperOrderNo,
+			t.DELIVERY_TIME as deliveryTime,
+			t.ARRIVAL_TIME as arrivalTime,
+			t.RECEIVE_TIME as receiveTime,
+			t.RECEIVER_CODE as receiverCode,
+			t.RECEIVER_ORDER_NO as receiverOrderNo,
+			t.SHIPPER_COMPANY_CODE as shipperCompanyCode,
+			c.START_PROVINCE as startProvince,
+			c.START_CITY as startCity,
+			c.END_PROVINCE as endProvince,
+			c.END_CITY as endCity
+		from t_transaction_info t,t_order_cargo_info c
+		where t.CARGO_ID = c.ID  and t.ORDER_START = 0
+		and t.TRADE_START = 0
+		and t.RECEIVER_ORDER_NO IS NOT NULL
+		and t.SHIPPER_ORDER_NO = #shipperOrderNo#
+		ORDER BY t.ORDER_NUMBER ASC limit $fromSize$,$listSize$
+	</select>
+	
+	<!-- 根据交易状态查询导入订单信息 -->
+	<select id="iBatisSelectImportTransactionListByStat" parameterClass="map" resultClass="com.cy.driver.transaction.domain.TransactionInfoDomain">
+		SELECT
+			t.ID as id,
+			t.CARGO_ID as cargoId,
+			t.COMPANY_ID as companyId,
+			t.CREATE_TIME as createTime,
+			t.DEPLOY_USERID as deployUserid, 
+			t.DRIVER_ID as driverId,
+			t.MODIFY_TIME as modifyTime,
+			t.ORDER_NUMBER as orderNumber,
+			t.REMARK as remark,
+			t.TRADE_FAIR as tradeFair,
+			t.TRADE_START as tradeStart,
+			t.TRADE_CANCEL_ORIGIN as tradeCancelOrigin,
+			t2.CARGO_TYPE as cargoType,
+			t2.CARGO_NAME as cargoName,
+			t2.CARGO_WEIGHT as cargoWeight,
+			t2.CARGO_CUBAGE as cargoCubage,
+			t2.CONTACT_NAME as contactName,
+			t2.CONTACT_MOBILEPHONE as contactMobilephone,
+			t2.CONTACT_TELEPHONE as contactTelephone,
+			t2.REQUEST_CAR_BAR_TYPE as requestCarBarType,
+			t2.REQUEST_CAR_LENGTH as requestCarLength,
+			t2.REQUEST_CAR_PLATE_TYPE as requestCarPlateType,
+			t2.START_PROVINCE as startProvince,
+			t2.START_CITY as startCity,
+			t2.START_COUNTY as startCounty,
+			t2.START_TOWN as startTown,
+			t2.END_PROVINCE as endProvince,
+			t2.END_CITY as endCity,
+			t2.END_COUNTY as endCounty,
+			t2.END_TOWN as endTown,
+			t2.REQUEST_START_TIME as requestStartTime,
+			t2.REQUEST_END_TIME as requestEndTime,
+			t2.FREIGHT as freight,
+			t.TRADE_START_TIME as tradeStartTime,
+			(SELECT c.COMPANY_NAME FROM t_company_info c WHERE c.ID = t.COMPANY_ID) companyName
+		FROM
+			t_transaction_info t,
+			t_order_cargo_info t2
+		WHERE
+			t.DRIVER_ID = #driverId#
+		AND t.TRADE_START = #tradeStart#
+		AND t.ORDER_START = 0
+		AND t.CARGO_ID = t2.ID
+		AND t.TRADE_CANCEL_ORIGIN = 0
+		AND t.RECEIVER_ORDER_NO IS NOT NULL
+		order by t.ORDER_NUMBER desc
+		limit $fromSize$,$listSize$
+	</select>
+	
+	<!-- 我的记录（已经成交的订单） -->
+	<select id="iBatisSelectImportTransactionListInMyLog" parameterClass="map" resultClass="com.cy.driver.transaction.domain.TransactionInfoDomain">
+		SELECT
+			t.ID as id,
+			t.CARGO_ID as cargoId,
+			t.COMPANY_ID as companyId,
+			t.CREATE_TIME as createTime,
+			t.DEPLOY_USERID as deployUserid, 
+			t.DRIVER_ID as driverId,
+			t.MODIFY_TIME as modifyTime,
+			t.ORDER_NUMBER as orderNumber,
+			t.REMARK as remark,
+			t.TRADE_FAIR as tradeFair,
+			t.TRADE_CANCEL_ORIGIN as tradeCancelOrigin,
+			t.TRADE_START as tradeStart,
+			t2.CARGO_TYPE as cargoType,
+			t2.CARGO_NAME as cargoName,
+			t2.CARGO_WEIGHT as cargoWeight,
+			t2.CARGO_CUBAGE as cargoCubage,
+			t2.CONTACT_NAME as contactName,
+			t2.CONTACT_MOBILEPHONE as contactMobilephone,
+			t2.CONTACT_TELEPHONE as contactTelephone,
+			t2.REQUEST_CAR_BAR_TYPE as requestCarBarType,
+			t2.REQUEST_CAR_LENGTH as requestCarLength,
+			t2.REQUEST_CAR_PLATE_TYPE as requestCarPlateType,
+			t2.START_PROVINCE as startProvince,
+			t2.START_CITY as startCity,
+			t2.START_COUNTY as startCounty,
+			t2.START_TOWN as startTown,
+			t2.END_PROVINCE as endProvince,
+			t2.END_CITY as endCity,
+			t2.END_COUNTY as endCounty,
+			t2.END_TOWN as endTown,
+			t2.REQUEST_START_TIME as requestStartTime,
+			t2.REQUEST_END_TIME as requestEndTime,
+			t2.FREIGHT as freight,
+			t.TRADE_START_TIME as tradeStartTime,
+			(SELECT c.COMPANY_NAME FROM t_company_info c WHERE c.ID = t.COMPANY_ID) companyName
+		FROM
+			t_transaction_info t,
+			t_order_cargo_info t2
+		WHERE
+			t.DRIVER_ID = #driverId#
+		AND (t.TRADE_START in (5,6,7) or t.TRADE_CANCEL_ORIGIN in (1,2))
+		AND t.ORDER_START = 0
+		AND t.CARGO_ID = t2.ID
+		AND t.RECEIVER_ORDER_NO IS NOT NULL
+		order by t.ORDER_NUMBER desc
+		limit $fromSize$,$listSize$
+	</select>	
+</sqlMap>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.hygl.dao.HyPzHwxxMapper">
+
+	<!--根据主键取DOMAIN-->
+	<select id="selectHyPzHwxxByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyPzHwxxDomain">
+		select a.PZ_DJXH as pzDjxh,a.WFH_DJXH as wfhDjxh,a.DD_DJXH as ddDjxh,a.XH as xh,a.HW_SL as hwSl,
+		a.HW_ZL as hwZl,a.HW_TJ as hwTj,a.SR as sr,a.YJ_PSF as yjPsf,a.bz as bz 
+		from HY_PZ_HWXX a  where a.PZ_DJXH=#pzDjxh# and a.WFH_DJXH=#wfhDjxh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertHyPzHwxx"  parameterClass="com.cy.common.bo.HyPzHwxx">
+		insert into HY_PZ_HWXX(PZ_DJXH,WFH_DJXH,DD_DJXH,XH,HW_SL,
+			HW_ZL,HW_TJ,SR,BZ)
+		SELECT #pzDjxh:NUMERIC#,#wfhDjxh:NUMERIC#,B.DD_DJXH,B.XH,#hwSl:NUMERIC#,
+		    #hwZl:NUMERIC#,#hwTj:NUMERIC#,
+		    CASE WHEN B.HW_SL = 0 THEN 0 ELSE B.SR_HJ*#hwSl:NUMERIC#/B.HW_SL END,
+		    #bz:VARCHAR#
+	    FROM HY_DD_WFHXX A, HY_DD_HWMX B
+	    WHERE A.DD_DJXH = B.DD_DJXH
+	    AND A.XH = B.XH
+	    AND A.WFH_DJXH = #wfhDjxh#
+	</insert>
+	
+	<update id="updateWfhxx4Pz" parameterClass="com.cy.hygl.domain.HyPzHwxxDomain">
+		update HY_PC_HWXX_TMP set HW_SL = #hwSl#,HW_ZL = #hwZl#,HW_TJ = #hwTj#
+	    where PCHW_LSXH=#pchwLsxh# and WFH_DJXH=#wfhDjxh#
+	</update>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateHyPzHwxxByKey" parameterClass="com.cy.common.bo.HyPzHwxx">
+        update HY_PZ_HWXX set (HW_SL,HW_ZL,HW_TJ,SR,BZ) = 
+		    (SELECT #hwSl#,#hwZl#,#hwTj#,
+		    CASE WHEN B.HW_SL = 0 THEN 0 ELSE B.SR_HJ*#hwSl:NUMERIC#/B.HW_SL END,
+		    #bz#
+		    FROM HY_DD_WFHXX A, HY_DD_HWMX B
+		    WHERE A.DD_DJXH = B.DD_DJXH
+		    AND A.XH = B.XH
+		    AND A.WFH_DJXH = #wfhDjxh#)
+	    where PZ_DJXH=#pzDjxh# and WFH_DJXH=#wfhDjxh#
+    </update>
+    
+    <insert id="savePcHwxxTmp" parameterClass="com.cy.hygl.domain.HyPzHwxxDomain">
+    	INSERT INTO HY_PC_HWXX_TMP T(T.PCHW_LSXH, T.WFH_DJXH, T.HW_SL, T.HW_ZL, T.HW_TJ,T.JS_SL,PCHW_CLFS_DM,
+	       T.ZRBM_DM,T.ZRBM_DJXH,T.ZRBM_DZ,T.ZRBM_LXR,T.ZRBM_LXDH,T.ZRBM_XZQH_DM,RQ,BBH,HDBH,
+	       T.ZC_HDF,T.ZC_THF,T.YF_SJS)
+	       SELECT #pchwLsxh#, #wfhDjxh#, #hwSl#, #hwZl#, #hwTj#,
+	       CASE WHEN NVL(B.HW_SL,0) = 0 THEN 0 ELSE #hwSl#/B.HW_SL*B.JS_SL END,'22',
+	       #zrbmDm:VARCHAR#, #zrbmDjxh:NUMERIC#,#zrbmDz:VARCHAR#,#zrbmLxr:VARCHAR#,#zrbmLxdh:VARCHAR#,#zrbmXzqhDm:VARCHAR#,
+	       SYSDATE,C.BBH,B.HDBH,
+	       CASE WHEN B.SHFS_DM = '2' 
+                THEN B.SR_HDF - NVL((SELECT SUM(NVL(PC.ZC_HDF+PC.YF_SJS,0)) FROM HY_PC_HWXX PC WHERE PC.YXBZ = 'Y' AND PC.DD_DJXH = B.DD_DJXH AND PC.XH = B.XH),0)
+                ELSE 0 END,
+              CASE WHEN B.SHFS_DM = '1'  
+                THEN B.SR_THF - NVL((SELECT SUM(NVL(PC.ZC_THF+PC.YF_SJS,0)) FROM HY_PC_HWXX PC WHERE PC.YXBZ = 'Y' AND PC.DD_DJXH = B.DD_DJXH AND PC.XH = B.XH),0)
+                ELSE 0 END, 0
+	        FROM HY_DD_WFHXX C,HY_DD_HWMX B
+	          WHERE B.DD_DJXH = C.DD_DJXH
+	          AND B.XH = C.XH
+	          AND C.WFH_DJXH = #wfhDjxh#
+    </insert>
+    
+    <insert id="savePcHwxxTmpFromSavedPz" parameterClass="com.cy.hygl.domain.HyPzHwxxDomain">
+    	INSERT INTO HY_PC_HWXX_TMP T(T.PCHW_LSXH, T.WFH_DJXH, T.HW_SL, T.HW_ZL, T.HW_TJ,T.JS_SL,PCHW_CLFS_DM,
+	       T.ZRBM_DM,T.ZRBM_DJXH,T.ZRBM_DZ,T.ZRBM_LXR,T.ZRBM_LXDH,T.ZRBM_XZQH_DM,RQ,BBH,HDBH,
+	       T.ZC_HDF,T.ZC_THF,T.YF_SJS)
+	       SELECT #pchwLsxh#, PZHW.WFH_DJXH, PZHW.HW_SL, PZHW.HW_ZL, PZHW.HW_TJ,
+         CASE WHEN NVL(B.HW_SL,0) = 0 THEN 0 ELSE PZHW.HW_SL/B.HW_SL*B.JS_SL END,'22',
+         #zrbmDm:VARCHAR#, #zrbmDjxh:NUMERIC#,#zrbmDz:VARCHAR#,#zrbmLxr:VARCHAR#,#zrbmLxdh:VARCHAR#,#zrbmXzqhDm:VARCHAR#,
+         SYSDATE,C.BBH,B.HDBH,
+         CASE WHEN B.SHFS_DM = '2' 
+                THEN B.SR_HDF - NVL((SELECT SUM(NVL(PC.ZC_HDF+PC.YF_SJS,0)) FROM HY_PC_HWXX PC WHERE PC.YXBZ = 'Y' AND PC.DD_DJXH = B.DD_DJXH AND PC.XH = B.XH),0)
+                ELSE 0 END,
+              CASE WHEN B.SHFS_DM = '1'  
+                THEN B.SR_THF - NVL((SELECT SUM(NVL(PC.ZC_THF+PC.YF_SJS,0)) FROM HY_PC_HWXX PC WHERE PC.YXBZ = 'Y' AND PC.DD_DJXH = B.DD_DJXH AND PC.XH = B.XH),0)
+                ELSE 0 END, 0
+          FROM HY_DD_WFHXX C,HY_DD_HWMX B,HY_PZ_HWXX PZHW
+            WHERE B.DD_DJXH = C.DD_DJXH
+            AND B.XH = C.XH
+            AND PZHW.WFH_DJXH = C.WFH_DJXH
+            AND PZHW.PZ_DJXH = #pzDjxh#
+    </insert>
+    
+	<!--根据主键删除表数据：软删除-->
+	<delete id="deleteHyPzHwxxByKey" parameterClass="java.util.Map">
+		delete from HY_PZ_HWXX where PZ_DJXH=#pzDjxh# and WFH_DJXH=#wfhDjxh#
+    </delete>
+    
+    <delete id="deleteWfhxxTmp4Pz" parameterClass="java.util.Map">
+    	DELETE FROM HY_PC_HWXX_TMP TMP 
+			WHERE $xhsIn$
+			AND TMP.PCHW_LSXH = #lsxh#
+    </delete>
+    
+</sqlMap>

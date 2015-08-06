@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.4"
+	xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+	<display-name>wlglpt</display-name>
+
+	<listener>
+		<listener-class>com.cy.framework.listener.OnlineListener</listener-class>
+	</listener>
+		
+	<filter>
+		<filter-name>FwkzFilter</filter-name>
+		<filter-class>com.cy.common.filter.FwkzFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>FwkzFilter</filter-name>
+		<url-pattern>*.action</url-pattern>
+	</filter-mapping>
+	
+	<filter-mapping>
+		<filter-name>FwkzFilter</filter-name>
+		<url-pattern>*.jsp</url-pattern>
+	</filter-mapping>
+	
+	<servlet>
+		<servlet-name>webconstants-init</servlet-name>
+		<servlet-class>
+			com.cy.common.util.SysInitUtil
+		</servlet-class>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+
+	<listener>
+		<listener-class>
+			org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+	</listener>
+
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			classpath:spring-application-*.xml
+		</param-value>
+	</context-param>
+
+	<filter>
+		<filter-name>struts2</filter-name>
+		<filter-class>
+			org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter
+		</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>struts2</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+
+	<welcome-file-list>
+		<welcome-file>/work/xtgl/login.jsp</welcome-file>
+	</welcome-file-list>
+
+	<error-page>
+		<exception-type>java.lang.Throwable</exception-type>
+		<location>/common/error.jsp</location>
+	</error-page>
+</web-app>

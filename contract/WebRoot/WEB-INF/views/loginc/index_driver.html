@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="pragma" content="no-cache"/>
+    <meta http-equiv="Cache-Control" content="no-cache,must-revalidate"/>
+    <title>传化物流-会员中心</title>
+    <link href="../css/webui/main.css" rel="stylesheet" />	
+    <link href="../js/sys/ymPrompt/skin/ch/ymPrompt.css" rel="stylesheet" /> 		
+	<script src="../js/jquery/jquery-1.8.3.min.js" type=text/javascript></script>
+	<script src="../js/sys/webui/header.js"></script>    	
+	<script src="../js/sys/webui/logo.js"></script>   	  
+	<script src="../js/sys/webui/left.js"></script> 
+	<script src="../js/themes/tradec/trade.js"></script>
+ 	<script src="../js/sys/webui/hgrid.js"></script>  
+ 	<script src="../js/sys/ymPrompt/ymPrompt.js" type=text/javascript></script>
+
+<style>
+#main{width:998px;border:0px solid black;padding:0px;margin:0 auto;}
+.tdcenter2{width: 100px;border: 0px solid red;}
+</style>
+<script type="text/javascript">  
+javascript:window.history.forward(1);
+	$(function (){ 
+		grid_ini();	
+	//edit初始化开始
+				$.ajax( {
+							type : "POST",
+							url : "../tradecs/selectDriverCountMsg?random="+ Math.random(),
+							dataType : "json",
+							error : function() {
+								alert("加载错误")
+							},
+							success : function(data) {
+								if (data != "" && data.length != 0) {	
+								   if(data.email!=''){
+									   $("#email").html(data.email);
+								   }
+									$("#unconfrimedcount").html(data.unconfrimedcount);
+									$("#tradecount").html(data.tradecount);
+									$("#drivername").html(data.realname);
+									$("#mobilenumber").html(data.mobilenumber);
+
+								}
+							}
+						});
+				//初始化结束
+				
+				//添加修改手机号码窗口
+		
+			$("#updatemobilenumber").bind("click", function() {
+			   // $("#oldmobilnumber").text(oldmobile);
+		       
+		        ymPrompt.win({message:'../operatorcs/editmobilenumber',width:360,height:220,fixPosition:true,dragOut:false,title:'修改手机号码',iframe:true});				
+			});
+	
+});
+	
+</script>
+
+</head>
+ 
+<body>
+	<!-- 顶部 --开始  此处须由js动态加入-->
+	<div id="header" class="c-header" >
+	
+	</div>
+	<!-- 顶部 --结束-->
+	
+	<!-- LOGON --开始   此处须由js动态加入-->
+	<div id="logo" class="c-logo" >
+		
+	</div>
+	<!-- LOGON --结束-->
+	
+	<!-- 工作区 --开始-->
+	<div id="main">
+		<!-- 左侧菜单 --开始  此处须由js动态加入-->
+  		<div id="left" class="c-left"> 
+		</div>
+		<div stye="clear:both;"></div>
+		<!-- 左侧菜单 --结束-->
+			
+		<!-- 右侧工作区 --开始-->
+  		<div id="right" class="c-right" >
+  			<div style="border: 1px solid white;height: 1000px;">
+  			<div>
+  			  <div style="border: 0px solid blue;width: 135px;float: left;margin-top: 20px;">
+  			  <img src="../imgs/login/wel/sj-menber-icon.png" alt="司机" />
+  			  </div>
+  			  <div style="border: 0px solid red;float: right;margin: 0px;width: 675px;margin-top: 20px;">
+	  			  <div style="height: 25px;padding-top: 2px;">
+	  			   	<span style="font-family:'微软雅黑','宋体',Arial;color: #ec6110;font-size: 14px;" id="drivername"></span><span style="color: #999999;font-family:'微软雅黑','宋体',Arial;">，欢迎你！</span>
+	  			  </div>
+	  			  <div style="height:1px;background-color: #e4e4e4;"></div>
+	  			  <div style="padding-top: 8px;height: 25px;">
+	  			   	<img src="../imgs/login/wel/mail.png" alt="" /><span style="padding-left: 10px; font-family:'微软雅黑','宋体',Arial;" id="email">尚无邮箱信息</span><img src="../imgs/login/wel/tel.png" alt="" style="padding-left: 10px;"/>
+	  			   	<span style="padding-left: 5px; font-family:'微软雅黑','宋体',Arial;" id="mobilenumber"></span><a href="#" style="padding-left: 5px; font-family:'微软雅黑','宋体',Arial;" id="updatemobilenumber">修改</a>
+	  			  </div>
+	  			  <div style="height: 1px;background-color: #e4e4e4;"></div>
+	  			  <div style="padding-top: 5px;height: 23px;">
+	  			  <a href="../operatorcs/edit_driverpwd" style="padding-left: 10px; font-family:'微软雅黑','宋体',Arial;text-decoration:none;">修改密码</a>
+	  			  <a href="../goodssourcecs/driver_goodssource_search" style="padding-left: 10px; font-family:'微软雅黑','宋体',Arial;text-decoration:none;">找货源</a>
+	  			  <a href="../accountcs/account_driverlist" style="padding-left: 10px; font-family:'微软雅黑','宋体',Arial;text-decoration:none;">查看账户信息</a>
+	  			  </div>
+	  			  <div style="height: 1px;background-color: #e4e4e4;"></div>
+	  			  
+  			  </div>
+  			</div>
+  			
+  			<div style="border: 1px solid #e4e4e4;margin-top: 140px;">
+  				<div style="height: 60px;background-color: #f2f2f2;"><div style="font-size: 18px;font-family:'微软雅黑','宋体',Arial;font-weight: bold;color: black;padding-left: 20px;padding-top: 15px;text-align: center;">货源交易提醒</div></div>
+  			    <div style="height: 1px;background-color: #e4e4e4;"></div>
+  			    
+  			    <div style="border: 0px solid red;padding-left: 35px;padding-top: 20px;"><span style="font-size:14px;font-family:'微软雅黑','宋体',Arial;">待确认成交</span><span style="color: red">【</span><a style="color: red" id="unconfrimedcount" href="../tradecs/driver_unconfirmedtrade_list">0</a><span style="color: red">】</span>
+  			    
+  			    <span style="font-size:14px;font-family:'微软雅黑','宋体',Arial;padding-left: 90px;">成交信息</span><span style="color: red">【</span><a style="color: red" id="tradecount" href="../tradecs/driver_trade_list">0</a><span style="color: red">】</span>
+  			    
+  			    
+  			    </div>
+  			    <div style="margin-top: 25px;border: 0px solid red;margin-left: 35px;margin-bottom: 20px;">
+  			    
+  			      <table id="grid1" style="border:0px solid #DDDDDD;width:750px;" >
+  			      	
+  			     
+  			      
+  			      </table>
+  			    
+  			    </div>
+  			</div>
+  			
+	        	
+       		</div>
+  		</div>
+  		<!-- 右侧工作区 --开始-->
+	</div>
+	<!-- 工作区 --结束-->
+	
+	<!-- 底部 --开始  此处须由js动态加入-->
+	<div id="footer" class="c-footer">
+		
+	</div>
+	<!-- 底部 --结束-->
+	
+
+</body>
+</html>
+ 
+ 
+

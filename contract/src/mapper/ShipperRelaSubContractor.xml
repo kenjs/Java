@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap >
+   <typeAlias type="tf56.contract.domain.ShipperRelaSubContractor" alias="shipperRelaSubContractor"/>
+   <select id="iBatisCheckRealtionExsit" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+   	select count(*) from ShipperRelaSubContractor
+   		<dynamic prepend="where">
+   			<isNotEmpty prepend="and" property="partyid">
+   				partyId=#partyid#
+   			</isNotEmpty>
+   			<isNotEmpty prepend="and" property="frompartyid">
+   				fromPartyId=#frompartyid#
+   			</isNotEmpty>	
+   			<isNotEmpty prepend="and" property="topartyid">
+   				toPartyId=#topartyid#
+   			</isNotEmpty>
+   		</dynamic>
+   </select>
+   <!--关联分包商  -->
+ <insert id="iBatisInsertShipperRelaSubContractor" parameterClass="java.util.HashMap">
+   insert into ShipperRelaSubContractor 
+  <![CDATA[
+     (
+    ]]>
+    <dynamic prepend=" ">
+    <isNotEmpty property="partyid" prepend=",">partyId</isNotEmpty>
+    <isNotEmpty property="frompartyid" prepend=",">fromPartyId</isNotEmpty>
+    <isNotEmpty  property="topartyid"  prepend=",">toPartyId</isNotEmpty>
+    </dynamic>
+    <![CDATA[
+    ) VALUES (
+    ]]>
+    <dynamic prepend=" "> 
+   				<isNotEmpty prepend="," property="partyid">
+   					#partyid#
+   				</isNotEmpty>
+   				<isNotEmpty prepend="," property="frompartyid">
+   					#frompartyid#
+   				</isNotEmpty>
+   				<isNotEmpty prepend="," property="topartyid">
+   					#topartyid#
+   				</isNotEmpty>   				
+	</dynamic>
+    <![CDATA[
+      )
+    ]]>
+   			  <selectKey resultClass="String" keyProperty="shipperrelasubcontractorid">
+			  	 select last_insert_id() as shipperrelasubcontractorid
+			  </selectKey>
+   </insert>
+   <select id="iBatisContractAndSubcontractList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+   		select d.* 
+   		from (select a.partyId as partyid,a.toPartyId as topartyid,a.fromPartyId as frompartyid,
+   				c1.attributeValue tbje,c2.attributeValue nyye,c3.attributeValue nysl,c4.attributeValue syxt,
+   				c5.attributeValue yshy,c6.attributeValue jyfw,c7.attributeValue clsl,c8.attributeValue wdsl,c9.attributeValue khh
+   	      from ShipperRelaSubContractor a
+  				LEFT JOIN (SELECT  b.fromPartyId,b.toPartyId,b.attributeName,b.attributeValue from ContractAttribute b where b.attributeName = '投保金额' and b.fromPartyId = #partyid#) c1 ON a.toPartyId = c1.toPartyId
+				LEFT JOIN (SELECT  b.fromPartyId,b.toPartyId,b.attributeName,b.attributeValue from ContractAttribute b where b.attributeName = '年营业额' and b.fromPartyId = #partyid#) c2 ON a.toPartyId = c2.toPartyId
+				LEFT JOIN (SELECT  b.fromPartyId,b.toPartyId,b.attributeName,b.attributeValue from ContractAttribute b where b.attributeName = '年运输量' and b.fromPartyId = #partyid#) c3 ON a.toPartyId = c3.toPartyId
+				LEFT JOIN (SELECT  b.fromPartyId,b.toPartyId,b.attributeName,b.attributeValue from ContractAttribute b where b.attributeName = '是否使用系统' and b.fromPartyId = #partyid#) c4 ON a.toPartyId = c4.toPartyId
+				LEFT JOIN (SELECT  b.fromPartyId,b.toPartyId,b.attributeName,b.attributeValue from ContractAttribute b where b.attributeName = '优势行业' and b.fromPartyId = #partyid#) c5 ON a.toPartyId = c5.toPartyId
+				LEFT JOIN (SELECT  b.fromPartyId,b.toPartyId,b.attributeName,b.attributeValue from ContractAttribute b where b.attributeName = '经营范围' and b.fromPartyId = #partyid#) c6 ON a.toPartyId = c6.toPartyId
+				LEFT JOIN (SELECT  b.fromPartyId,b.toPartyId,b.attributeName,b.attributeValue from ContractAttribute b where b.attributeName = '车辆数量' and b.fromPartyId = #partyid#) c7 ON a.toPartyId = c7.toPartyId
+				LEFT JOIN (SELECT  b.fromPartyId,b.toPartyId,b.attributeName,b.attributeValue from ContractAttribute b where b.attributeName = '网点数量' and b.fromPartyId = #partyid#) c8 ON a.toPartyId = c8.toPartyId
+				LEFT JOIN (SELECT  b.fromPartyId,b.toPartyId,b.attributeName,b.attributeValue from ContractAttribute b where b.attributeName = '客户号' and b.fromPartyId = #partyid#) c9 ON a.fromPartyId = c9.toPartyId
+   	      where a.partyId=#partyid# 
+   			   <dynamic prepend="and">
+   				<isEqual prepend="and" property="partytype" compareValue="分包">
+   					a.toPartyId is not null
+   				</isEqual>
+   				<isEqual prepend="and" property="partytype" compareValue="发货方">
+   					a.fromPartyId is not null
+   				</isEqual>
+   				<isEqual prepend="and" property="partytype" compareValue="总分发">
+	   			   	 (a.fromPartyId!=#frompartyid# OR a.fromPartyId is NULL)
+   					  and (a.toPartyId not in(select toPartyId from ShipperRelaSubContractor where  partyId = #partyid# and fromPartyId = #frompartyid# and toPartyId IS NOT NULL))
+					  and a.toPartyId IS NOT NULL
+   				</isEqual>   
+   				<isEqual prepend="and" property="partytype" compareValue="linked">
+	   			   	 a.fromPartyId=#frompartyid# and
+   					 a.fromPartyId is not null and a.toPartyId is not null
+   				</isEqual>   								   			
+   			</dynamic>
+   			group by a.partyId
+   			<dynamic prepend=",">
+   				<isEqual prepend="," property="partytype" compareValue="分包">
+   					a.toPartyId
+   				</isEqual>
+   				<isEqual prepend="," property="partytype" compareValue="发货方">
+   					 a.fromPartyId
+   				</isEqual> 
+   				<isEqual prepend="," property="partytype" compareValue="总分发">
+   					 a.toPartyId 
+   				</isEqual>  
+   				<isEqual prepend="and" property="partytype" compareValue="linked">
+   					 a.fromPartyId , a.toPartyId
+   				</isEqual>   				   				  			
+   			</dynamic>
+   			) d
+   			<dynamic prepend="where">
+   				<isNotEmpty property="yshy" prepend="and">
+					d.yshy LIKE #yshy#
+				</isNotEmpty>
+				<isNotEmpty property="jyfw" prepend="and">
+					d.jyfw LIKE #jyfw#
+				</isNotEmpty>
+				<isNotEmpty property="clslq" prepend="and">
+					CONVERT(d.clsl,SIGNED) <![CDATA[>=]]> #clslq#
+				</isNotEmpty>
+				<isNotEmpty property="clslz" prepend="and">
+					CONVERT(d.clsl,SIGNED) <![CDATA[<=]]> #clslz#
+				</isNotEmpty>			   				  			
+   			</dynamic>
+   </select>
+   <select id="iBatisSubcontractList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+   		SELECT toPartyId as topartyid from ShipperRelaSubContractor where fromPartyId =#frompartyid# and toPartyId IS NOT NULL group by toPartyId
+   </select>
+   <update id="iBatisUpdateShipperRelaSubContractor" parameterClass="java.util.HashMap">
+   		update ShipperRelaSubContractor set toPartyId=#topartyid#
+   			where fromPartyId=#frompartyid# and PartyId=#partyid#
+   				and toPartyId is null
+   </update>
+   <delete id="iBatisDeleteShipperRelaSubContractor" parameterClass="java.util.HashMap">
+   		delete from ShipperRelaSubContractor where PartyId=#partyid# and toPartyId=#topartyid#
+   			and fromPartyId is null
+   </delete>
+   <!-- 解除总包与发货方的关系 -->
+   <update id="iBatisDeleteConsigner" parameterClass="java.util.HashMap">
+   		update ShipperRelaSubContractor set fromPartyId = null where fromPartyId = #frompartyid# and partyId = #partyid#
+   </update>
+   
+   <!-- 解除总包与分包商的关系 -->
+   <update id="iBatisDeleteSubContract" parameterClass="java.util.HashMap">
+   		update ShipperRelaSubContractor set toPartyId = null where toPartyId = #topartyid# and partyId = #partyid#
+   			<isNotEmpty property="frompartyid">
+   				and fromPartyId = #frompartyid#
+   			</isNotEmpty>
+   </update>
+   
+   <!-- 查询总包下的分包的发货方是否存在 -->
+   <select id="iBatisIsSubContractContainsSender" parameterClass="java.util.HashMap" resultClass="java.lang.Integer" >
+   		select count(*) from ShipperRelaSubContractor where partyId = #partyid# and toPartyId = #topartyid# and fromPartyId is not null
+   </select>
+   <!--发货方关联总包下的一个分包数  -->
+   <select id="iBatisContractLinkSubContractorCount" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+   		select count(*) from ShipperRelaSubContractor where partyId = #partyid# and toPartyId is null and fromPartyId=#frompartyid#
+   </select>
+   <select id="iBatisShipperRelaSubContractorList"  parameterClass="java.lang.String" resultClass="java.util.HashMap" >
+   		select  partyId as partyid,toPartyId as topartyid,fromPartyId as frompartyid from ShipperRelaSubContractor 
+   			where partyId=#partyid#
+   			and (toPartyId is not null or toPartyId !="") and (fromPartyId is not null or fromPartyId !="")
+   </select>
+   
+   <select id="iBatisFactoringList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+	   select d.* 
+	   from (select a.partyId as partyid,a.toPartyId as topartyid,a.fromPartyId as frompartyid,c1.attributeValue yhjgzh,c2.attributeValue zzjgdmz,c3.attributeValue status
+	   	       from ShipperRelaSubContractor a,(SELECT  b.fromPartyId,b.toPartyId,b.attributeName,b.attributeValue from ContractAttribute b where b.attributeName = '银行监管账号' and b.fromPartyId = #partyid#) c1,
+				    (SELECT  b.fromPartyId,b.toPartyId,b.attributeName,b.attributeValue from ContractAttribute b where b.attributeName = '组织机构代码证' and b.fromPartyId = #partyid#) c2,
+				    (SELECT  b.fromPartyId,b.toPartyId,b.attributeName,b.attributeValue from ContractAttribute b where b.attributeName = '银行保理状态' and b.fromPartyId = #partyid#) c3
+	          where a.toPartyId is not null AND a.partyId=#partyid# 
+	            AND a.toPartyId = c1.toPartyId AND a.toPartyId = c2.toPartyId AND a.toPartyId = c3.toPartyId 
+	          group by a.partyId,a.toPartyId) d
+	    <dynamic prepend="where">
+			<isNotEmpty property="status" prepend="and">
+			 	d.status LIKE #status#
+		    </isNotEmpty>		  			
+	  	</dynamic>
+   </select>
+    <select id="iBatisFactoringDetail"  parameterClass="java.util.HashMap" resultClass="java.util.HashMap" >
+   		SELECT c1.fromPartyId,c1.toPartyId,c1.attributeValue status,c2.attributeValue yhjgzh,c3.attributeValue zzjgdmz FROM
+		(SELECT * FROM ContractAttribute c WHERE c.fromPartyId =  #partyid# AND c.attributeName = '银行保理状态' AND c.shipperOrSubContractor = 0) c1,
+		(SELECT * FROM ContractAttribute c WHERE c.fromPartyId =  #partyid# AND c.attributeName = '银行监管账号' AND c.shipperOrSubContractor = 0) c2,
+		(SELECT * FROM ContractAttribute c WHERE c.fromPartyId =  #partyid# AND c.attributeName = '组织机构代码证' AND c.shipperOrSubContractor = 0) c3
+		WHERE c1.toPartyId = c2.toPartyId AND c1.toPartyId = c3.toPartyId AND c1.toPartyId = #topartyid#
+   </select>
+   <select id="iBatisFactoringDetailFhf"  parameterClass="java.util.HashMap" resultClass="shipperRelaSubContractor" >
+   		SELECT * FROM ShipperRelaSubContractor s 
+   		 where s.partyId = #partyid# AND s.toPartyId = #topartyid# AND s.fromPartyId IS NOT NULL
+   </select>
+    <select id="iBatisSelectPartyIdForOutWaybill"  parameterClass="java.util.HashMap" resultClass="java.lang.Integer" >
+   		   SELECT partyId FROM ShipperRelaSubContractor 
+			WHERE fromPartyId = #frompartyid# 
+			ORDER BY shipperRelaSubContractorId ASC
+			LIMIT 1 
+   </select>
+
+</sqlMap>
+
+

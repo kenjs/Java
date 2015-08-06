@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.dzgl.dao.QyWsSpZbMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectQyWsSpZbByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.dzgl.domain.QyWsSpZbDomain">
+		select a.WS_SPXH as wsSpxh,a.SPXH as spxh,a.FSTHBZ as fsthbz,a.FSR_CZY_DJXH as fsrCzyDjxh,a.FSRQ as fsrq,
+		a.JDXH as jdxh,a.SP_JGBM as spJgbm,a.GW_DJXH as gwDjxh,a.SPYJL as spyjl,a.SPQM as spqm,
+		a.YXZS_BZ as yxzsBz,a.ZSTJ as zstj,a.QZXS as qzxs,a.SPJZSJ as spjzsj,
+		a.SPR_CZY_DJXH as sprCzyDjxh,(SELECT MC FROM QY_RYDJ DM WHERE DM.CZY_DJXH = A.SPR_CZY_DJXH) sprmc,
+		a.SPRQ as sprq,a.SPJG as spjg,a.SPYJ as spyj,a.CQBZ as cqbz,a.SPBZ as spbz,
+		a.FSBZ as fsbz from QY_WS_SP_ZB a  where a.WS_SPXH=#wsSpxh# and a.SPXH=#spxh#
+    </select>
+
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateQyWsSpZbByKey" parameterClass="com.cy.common.bo.QyWsSpZb">
+        update QY_WS_SP_ZB set SPR_CZY_DJXH=#sprCzyDjxh#,
+		SPRQ=SYSDATE,SPJG=#spjg#,SPYJ=#spyj# 
+		where WS_SPXH=#wsSpxh# and SPXH=#spxh#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteQyWsSpZbByKey" parameterClass="java.util.Map">
+		delete from QY_WS_SP_ZB where WS_SPXH=#wsSpxh# and SPXH=#spxh#
+    </delete>
+</sqlMap>

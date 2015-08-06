@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.zygl.dao.BusQyfbslxdjMapper">
+	<select id="selectQyFbsLxdjPage" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyFbsLxdjDomain">
+		SELECT A.LXMC AS lxmc,
+		       A.LXJC AS lxjc,
+		       (SELECT XZQH_QC FROM DM_XZQH WHERE YXBZ='Y' AND A.SFD_XZQH_DM=XZQH_DM) AS sfdXzqhMc,
+		       (SELECT XZQH_QC FROM DM_XZQH WHERE YXBZ='Y' AND A.MDD_XZQH_DM=XZQH_DM) AS mddXzqhMc,
+		       A.BZ AS bz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc,
+		       A.LX_DJXH AS lxDjxh
+		  FROM QY_FBS_LXDJ A 
+		  WHERE A.YXBZ='Y' 
+		  <dynamic>
+		  	<isNotEmpty property="fbsDjxh" prepend="AND" >
+		  		A.FBS_DJXH=#fbsDjxh#	
+		  	</isNotEmpty>
+		  </dynamic>	
+		  $orderStr$
+    </select>
+    
+    <select id="selectQyFbsLxdjAll" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyFbsLxdjDomain">
+		SELECT A.LXMC AS lxmc,
+		       A.LXJC AS lxjc,
+		       (SELECT XZQH_QC FROM DM_XZQH WHERE YXBZ='Y' AND A.SFD_XZQH_DM=XZQH_DM) AS sfdXzqhMc,
+		       (SELECT XZQH_QC FROM DM_XZQH WHERE YXBZ='Y' AND A.MDD_XZQH_DM=XZQH_DM) AS mddXzqhMc,
+		       A.BZ AS bz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM QY_FBS_LXDJ A 
+		  WHERE A.YXBZ='Y' 
+		  <dynamic>
+		  	<isNotEmpty property="fbsDjxh" prepend="AND" >
+		  		A.FBS_DJXH=#fbsDjxh#	
+		  	</isNotEmpty>
+		  </dynamic>
+		  ORDER by A.LX_DJXH ASC
+    </select>
+
+	<select id="getQyFbsLxdjRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.LX_DJXH) 
+		  FROM QY_FBS_LXDJ A 
+		  WHERE A.YXBZ='Y' 
+		  <dynamic>
+		  	<isNotEmpty property="fbsDjxh" prepend="AND" >
+		  		A.FBS_DJXH=#fbsDjxh#	
+		  	</isNotEmpty>
+		  </dynamic>
+    </select>
+    
+    <select id="getQyFbsLxdjLxmc" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+    	SELECT COUNT(A.LXMC) FROM QY_FBS_LXDJ A 
+    		WHERE A.YXBZ='Y' AND A.SS_JGBM=#ssJgbm# AND A.FBS_DJXH=#fbsDjxh# AND A.LXMC = #lxmc#	
+    	<dynamic>
+    		<isNotEmpty property="lxDjxh" prepend="AND">
+    			A.LX_DJXH &lt;&gt;#lxDjxh#
+    		</isNotEmpty>
+    	</dynamic>
+    </select>
+</sqlMap>

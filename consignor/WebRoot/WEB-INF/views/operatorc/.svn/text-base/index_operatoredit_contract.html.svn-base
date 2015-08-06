@@ -1,0 +1,313 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="pragma" content="no-cache"/>
+    <meta http-equiv="Cache-Control" content="no-cache,must-revalidate"/>
+    <title>传化物流-会员中心</title>
+    
+    <link href="../css/webui/main.css" rel="stylesheet" />	
+    <script src="../js/jquery/jquery-1.8.3.min.js" type=text/javascript></script>
+    <script src="../js/sys/webui/header.js"></script>    	
+    <script src="../js/sys/webui/logo.js"></script>   	 
+    <script src="../js/sys/webui/left.js"></script>
+    <script type="text/javascript" src="../js/sys/DatePicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="../js/sys/ymPrompt/ymPrompt.js"></script>
+	<script type="text/javascript" src="../js/sys/webui/hgrid.js"></script>
+	<style>
+		#right {
+			font-family:inherit;
+		    font-family:"宋体",Arial,sans-serif;
+		    font-size: 12px;
+		}
+		#main{width:998px;border:0px solid black;padding:0px;margin:0 auto;}
+	</style>
+    
+	<link href="../css/kendo/examples-offline.css" rel="stylesheet" />
+	<link href="../css/kendo/kendo.common.min.css" rel="stylesheet" />
+	<link href="../css/kendo/kendo.default.min.css" rel="stylesheet" /> 
+	<script src="../js/sys/city.js"></script>
+	<script src="../js/kendo/kendo.web.min.js"></script>
+	<script src="../js/kendo/console.js"></script>
+	<script src="../js/sys/sys.js"></script>  
+  	  
+</head>
+ 
+<body>
+	<!-- 顶部 --开始  此处须由js动态加入-->
+	<div id="header" class="c-header" >
+	
+	</div>
+	<!-- 顶部 --结束-->
+	
+	<!-- LOGON --开始   此处须由js动态加入-->
+	<div id="logo" class="c-logo" >
+		
+	</div>
+	<!-- LOGON --结束-->
+	
+	<!-- 工作区 --开始-->
+	<div id="main">
+		<!-- 左侧菜单 --开始  此处须由js动态加入-->
+  		<div id="left" class="c-left"> 
+		</div>
+		<div stye="clear:both;"></div>
+		<!-- 左侧菜单 --结束-->
+			
+		<!-- 右侧工作区 --开始-->
+  		<div id="right" class="c-right" >
+  			<div id="example1">
+			<form name="form" id="form" >
+				<div id="tickets" style="height: 1100px">
+				<h3 style="border:0px solid red;height: 30px;padding-top: 10px;border-bottom: 1px solid #dddddd;">
+				     
+				     <span style="font-size: 14px;font-weight: bold;border:0px solid blue;">
+				                  修改操作员信息
+				      </span>
+				</h3>
+				  <ul>
+						<li>
+							<label for="operator" class="required"
+								style="font-weight: normal;">
+								账号名
+							</label>
+							<span type="text" id=operator name="operator"></span>
+						</li>
+						<li>
+							<label for="realname" class="required"
+								style="font-weight: normal;">
+								姓名
+							</label>
+							<input type="text" id=realname name="realname"
+								 validationMessage="请输入操作员姓名" />
+						</li>
+						<li>
+							<label for="mobilenumber">
+								手机号码
+							</label>
+							<input type="tel" id="mobilenumber" name="mobilenumber"
+								 pattern="\d{11}"  validationMessage="必填项，请输入11位有效手机号码" />
+
+						</li>
+						<li>
+							<label for="telephonenumber">
+								电话号码
+							</label>
+							<input type="text" id="telephonenumber" name="telephonenumber" validationMessage="必填项，请输入有效的电话号码"/>
+
+						</li>
+
+						<li class="accept">
+							<input type="button" id="btnsub" onclick="btnsubclick();" name="btnsub" value="提交" class="k-button"style="height: 25px; width: 100px;">
+							<input type="button" id="btnback" onclick="reback();" name="btnback" value="返回" class="k-button"style="height: 25px; width: 100px;">
+						</li>
+						<li class="status">
+						</li>
+
+					</ul>
+
+				</div>
+
+
+			</form>
+
+			<style scoped>
+.long-textbox {
+	width: 500px;
+}
+
+.k-textbox {
+	width: 12.2em;
+}
+
+#tickets {
+	width: 800px;
+	height: 490px;
+	margin: 0px;
+	padding: 0px 0px 0px 15px;
+		transparent no-repeat 0 0;
+}
+
+#tickets h3 {
+	font-weight: bold;
+	font-size: 14px;
+	border-bottom: 1px solid #dddddd;
+}
+
+#tickets ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+#tickets li {
+	margin: 20px 20px; 0 0;
+}
+
+label {
+	display: inline-block;
+	width: 110px;
+	text-align: right;
+}
+
+.required {
+	font-weight: bold;
+}
+
+.accept,.status {
+	padding-left: 90px;
+}
+
+.valid {
+	color: green;
+}
+
+.invalid {
+	color: red;
+}
+
+span.k-tooltip {
+	margin-left: 6px;
+}
+</style>
+
+			
+		</div>
+  		</div>
+  		<!-- 右侧工作区 --开始-->
+	</div>
+	<!-- 工作区 --结束-->
+	
+	<!-- 底部 --开始  此处须由js动态加入-->
+	<div id="footer" class="c-footer">
+		
+	</div>
+	<!-- 底部 --结束-->
+<script>
+			javascript:window.history.forward(1);
+	var validator;
+	var mypwd="";
+	var opid="";
+	var oper="";
+	
+function getid2() {
+	var idUrl = document.URL;
+	var num = idUrl.indexOf("?")
+	idUrl = idUrl.substr(num + 1);
+	return idUrl;
+
+}
+function getidvalue() {
+	var idUrl = document.URL;
+	var num = idUrl.indexOf("=")
+	idUrl = idUrl.substr(num + 1);
+	return idUrl;
+
+}
+				//验证
+				validator = $("#tickets").kendoValidator().data("kendoValidator"), status = $(".status");
+				//edit初始化开始
+				var paras = getid2();
+				$.ajax( {
+							type : "get",
+							url : "list_query_detail_json",
+							dataType : "json",
+							data : paras,
+							error : function() {
+								alert("加载错误")
+							},
+							success : function(data) {
+								if (data != "" && data.length != 0) {
+								
+									$("#operator").text(data.operator);
+									$("#realname").attr("value", data.realname);
+									$("#mobilenumber").attr("value", data.mobilenumber);
+									$("#telephonenumber").attr("value",data.telephonenumber);
+									//alert(data.permission=="");
+									if(data.securitypermission!=""){
+									//alert("xxxs");
+									$("#permission").attr("checked",true);
+									}
+									
+									
+									oper=data.operator;
+								}
+							}
+						});
+			function reback(){
+				 window.location="../operatorcs/index_list_contract?order=21&random="+ Math.random();
+			}
+			
+			function btnsubclick(){
+				if($("#permission").attr("checked")){
+							       $("#permission").attr("value","移动客户端登录权限")
+							    }else{
+							       $("#permission").attr("value","")
+							    }	   	
+							if (validator.validate()) {
+								var parms = "realname="+$("#realname").val()+"&mobilenumber="+$("#mobilenumber").val()+"&telephonenumber="+$("#telephonenumber").val()+ "&random="+ Math.random()+"&operator="+oper+"&securitypermission="+$("#permission").val();
+								//alert(parms);
+								$.ajax( {
+									type : "POST",
+									url : "../operatorcs/updateoperatormsg",
+									data : parms,
+									dataType : "json",
+									error : function() {
+										alert("加载错误");
+									},
+									success : function(data) {
+										if ("ok" == $.trim(data.msg)) {
+											alert("修改成功");
+                							window.location="../operatorcs/index_list_contract?order=21&random="+ Math.random();
+
+										}else{
+								       alert("请刷新页面");
+								       }
+							     }
+								});
+							} else {
+								status.text("对不起，你还有验证没有完成").addClass("invalid");
+								return false;
+							}
+			}
+</script>
+
+  <script type="text/javascript"> 
+
+    function checkpremission(preimission)
+	{
+	  $.ajax({
+			   type : "post",
+			   url : "../partycs/checkPermission?random="+Math.random()+"&premission="+encodeURIComponent(encodeURIComponent(preimission)),
+			   dataType: "json",
+			   error : function(){alert("操作失败")},
+			   success : function(data) {
+			   		if(data.msg=='ok'){
+			   			//刷新页面
+			   			if(preimission=='3pl'){
+			   				window.location="../logincs/main_3pl";
+			   			}
+			   			if(preimission=='配送'){
+			   				window.location="../todispermissioncs/ordermanage";
+			   			}
+			   			if(preimission=='发布货源'){
+			   				window.location="../goodssourcecs/fastpub";
+			   			}
+			   			
+			   		
+			       	}else{
+			       	alert("你还没有使用这个功能的权限，请申请！！");
+			       	}
+			   }
+	  		});
+	}
+        
+    
+    
+	</script>
+</body>
+</html>
+ 
+ 
+

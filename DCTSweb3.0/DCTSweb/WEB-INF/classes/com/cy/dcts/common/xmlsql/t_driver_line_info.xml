@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+<typeAlias alias="DriverLineInfo" type="com.cy.dcts.common.bo.DriverLineInfo"/><!-- 司机路线表 -->
+<resultMap class="DriverLineInfo" id="driver_line_info_result">
+  <result property="id" column="ID"/>
+  <result property="startProvince" column="START_PROVINCE"/>
+  <result property="startCity" column="START_CITY"/>
+  <result property="startCounty" column="START_COUNTY"/>
+  <result property="endProvince" column="END_PROVINCE"/>
+  <result property="endCity" column="END_CITY"/>
+  <result property="endCounty" column="END_COUNTY"/>
+  <result property="driverId" column="DRIVER_ID"/>
+  <result property="start" column="START"/>
+  <result property="lineType" column="LINE_TYPE"/>
+  <result property="createTime" column="CREATE_TIME"/>
+  <result property="modifyTime" column="MODIFY_TIME"/>
+</resultMap>
+
+<resultMap class="DriverLineInfo" id="driver_line_info_list_result">
+  <result property="id" column="ID"/>
+  <result property="startProvince" column="START_PROVINCE"/>
+  <result property="startCity" column="START_CITY"/>
+  <result property="startCounty" column="START_COUNTY"/>
+  <result property="endProvince" column="END_PROVINCE"/>
+  <result property="endCity" column="END_CITY"/>
+  <result property="endCounty" column="END_COUNTY"/>
+  <result property="driverId" column="DRIVER_ID"/>
+  <result property="start" column="START"/>
+  <result property="lineType" column="LINE_TYPE"/>
+</resultMap>
+
+<!-- 查询首页有效的预约车源 -->
+	<select id="query_driver_line_info_domain_by_driverId" parameterClass="String" resultMap="driver_line_info_list_result">
+		select 
+		t.id,
+		t.START_PROVINCE,
+		t.START_CITY,
+		t.START_COUNTY,
+		t.END_PROVINCE,
+		t.END_CITY,
+		t.END_COUNTY,
+		t.DRIVER_ID,
+		t.LINE_TYPE,
+		t.START
+		from 
+		t_driver_line_info t
+		where 
+		t.DRIVER_ID = #driverId#
+		and 
+		t.START = 0 
+		order by t.MODIFY_TIME DESC
+	</select>
+</sqlMap>

@@ -1,0 +1,18 @@
+
+/*footer ----开始*/
+
+.footer{height:135px;width:1000px;margin:0 auto;text-align:center;} 
+.footer_info{ width:970px; margin:0 auto; position:relative; padding:10px 10px 23px 15px;border-left:0px ;border-right:0px ; border-bottom:1px #ccc solid; border-top:0px #EE6A1B solid;}
+.footer img{position:absolute;right:15px;top:10px;}
+.footer dl{float:left; margin-right:80px; display:inline-block; line-height:20px;}
+.footer dt{color:#3f3f3f; font-size:12px; font-weight:bold;text-align: left;}
+.footer dd{color:#666666; font-size:12px; text-align: left;}
+.footer dl a{color:#666666; text-decoration:none;}
+.footer dl a:hover { color: #EB620F;text-decoration:none;}
+.foot_bottom {border:0px; width:970px; margin:0 auto 0; padding-top:10px;}
+.foot_bottom ul{display:inline; }
+.foot_bottom li{display:inline; margin:0 12px;}
+.foot_bottom li a{color:#666666;text-decoration:none;}
+.foot_bottom p{color:#666666;padding-top:5px;padding-bottom:20px;}
+.foot_bottom  a:hover { color: #EB620F;text-decoration:none;}
+/*footer ----结束*/

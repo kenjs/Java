@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:flex="http://www.springframework.org/schema/flex"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context   
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+	http://www.springframework.org/schema/flex	http://www.springframework.org/schema/flex/spring-flex-1.0.xsd
+   http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
+
+    <!-- database     -->
+     <!--<context:property-placeholder location="classpath:database.properties" ignore-unresolvable="true"/>
+     <context:property-placeholder location="classpath:config.properties" ignore-unresolvable="true"/>
+    -->
+
+    <bean id="propertyConfigurer1" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"> 
+	    <property name="ignoreUnresolvablePlaceholders" value="true" /> 
+	    <property name="location"> 
+	       <value>classpath:database.properties</value> 
+	    </property> 
+	</bean> 
+	
+	<bean id="propertyConfigurer2" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"> 
+	    <property name="ignoreUnresolvablePlaceholders" value="true" /> 
+	    <property name="location"> 
+	       <value>classpath:config.properties</value> 
+	    </property> 
+	    <property name="fileEncoding"> 
+	       <value>GBK</value> 
+	     </property> 
+	</bean> 
+
+	<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
+		
+	<!-- <tx:annotation-driven>这项配置告诉spring去检查容器中所有不管在类层面还是方法层面配置了
+		注解@Transactional的bean,找到后<tx:annotation-driven>会为它们执行事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">  
+    	<property name="dataSource" ref="dataSource" />  
+	</bean>  
+		
+    <!-- action begin -->
+ 
+	<!-- 管理员登陆 -->
+   <bean name="managerLogin" scope="request" class="com.cy.dctms.manager.action.ManagerLoginAction">
+		<property name="managerInfoService" ref="managerInfoService"></property>
+   </bean>
+   <!-- 管理员退出 -->
+   <bean name="managerLogout" class="com.cy.dctms.manager.action.ManagerExitAction" scope="prototype">
+   </bean>
+   <!-- 修改管理员密码 -->
+   <bean name="updateManagerPassword" scope="request" class="com.cy.dctms.manager.action.UpdateManagerPasswordAction" >
+		<property name="managerInfoService" ref="managerInfoService"></property>
+   </bean>
+   <!-- 查询管理员信息列表 -->
+   <bean name="queryManagerInfo"  class="com.cy.dctms.manager.action.QueryManagerInfoAction" scope="prototype">
+		<property name="managerInfoService" ref="managerInfoService"></property>
+   </bean>
+     <!-- 查询管理员信息明细 -->
+   <bean name="queryManagerInfoMx"  class="com.cy.dctms.manager.action.QueryManagerInfoMxAction" scope="prototype">
+		<property name="managerInfoService" ref="managerInfoService"></property>
+   </bean>
+    <!-- 保存管理员信息 -->
+   <bean name="saveManagerInfo"  class="com.cy.dctms.manager.action.SaveManagerInfoAction" scope="prototype">
+		<property name="managerInfoService" ref="managerInfoService"></property>
+   </bean>
+    <!-- 删除管理员信息 -->
+   <bean name="deleteManagerInfo"  class="com.cy.dctms.manager.action.DeleteManagerInfoAction" scope="prototype">
+		<property name="managerInfoService" ref="managerInfoService"></property>
+   </bean>
+   <!-- 导出管理员信息 -->
+   <bean name="exportManagerInfo"  class="com.cy.dctms.manager.action.ExportManagerInfoAction" scope="prototype">
+		<property name="managerInfoService" ref="managerInfoService"></property>
+   </bean>
+
+    <!-- 查询用户拥有的功能菜单权限 -->
+   <bean name="queryFunction" class="com.cy.dctms.function.action.GainFunctionInfoAction" scope="prototype">
+   		<property name="functionInfoService" ref="functionInfoService"></property>
+   </bean>
+   <!-- 查询系统功能信息列表 -->
+	<bean name="queryFunctionInfo"  class="com.cy.dctms.function.action.QueryFunctionInfoListAction" scope="prototype">
+			<property name="functionInfoService" ref="functionInfoService"></property>
+	</bean>
+	  <!-- 查询系统功能信息明细 -->
+	<bean name="queryFunctionInfoMx"  class="com.cy.dctms.function.action.QueryFunctionInfoMxAction" scope="prototype">
+			<property name="functionInfoService" ref="functionInfoService"></property>
+	</bean>
+	 <!-- 保存系统功能信息 -->
+	<bean name="saveFunctionInfo"  class="com.cy.dctms.function.action.SaveFunctionInfoAction" scope="prototype">
+			<property name="functionInfoService" ref="functionInfoService"></property>
+	</bean>
+	 <!-- 删除系统功能信息 -->
+	<bean name="deleteFunctionInfo"  class="com.cy.dctms.function.action.DeleteFunctionInfoAction" scope="prototype">
+			<property name="functionInfoService" ref="functionInfoService"></property>
+	</bean>
+	
+	
+	<!-- 查询赋权信息列表 -->
+	<bean name="queryFunRealationInfo"  class="com.cy.dctms.funRelation.action.QueryFunRealationInfoListAction" scope="prototype">
+			<property name="funRealationInfoService" ref="funRealationInfoService"></property>
+	</bean>
+	 <!-- 保存赋权信息 -->
+	<bean name="saveFunRealationInfo"  class="com.cy.dctms.funRelation.action.SaveFunRealationInfoAction" scope="prototype">
+			<property name="funRealationInfoService" ref="funRealationInfoService"></property>
+	</bean>
+
+	
+	<!-- 查询管理员操作日志信息列表 -->
+	<bean name="queryManagerWorkLogInfo"  class="com.cy.dctms.workLog.action.QueryManagerWorkLogInfoListAction" scope="prototype">
+			<property name="managerWorkLogInfoService" ref="managerWorkLogInfoService"></property>
+	</bean>
+	 <!-- 导出工作日志 -->
+	<bean name="exportManagerWorkLogInfo"  class="com.cy.dctms.workLog.action.ExportManagerWorkLogInfoAction" scope="prototype">
+			<property name="managerWorkLogInfoService" ref="managerWorkLogInfoService"></property>
+	</bean>
+
+
+	<!-- 查询司机用户列表 -->
+	<bean name="queryDriverUserTransactionInfo"  class="com.cy.dctms.driverUser.action.QueryDriverUserInfoTransactionListAction" scope="prototype">
+			<property name="driverUserInfoService" ref="driverUserInfoService"></property>
+	</bean>
+	<!-- 查询司机用户列表 -->
+	<bean name="auditDriverUserInfoList"  class="com.cy.dctms.driverUser.action.AuditDriverUserInfoListAction" scope="prototype">
+			<property name="driverUserInfoService" ref="driverUserInfoService"></property>
+	</bean>
+	<!-- 查询司机交易信息列表 -->
+	<bean name="queryDriverUserInfo"  class="com.cy.dctms.driverUser.action.QueryDriverUserInfoListAction" scope="prototype">
+			<property name="driverUserInfoService" ref="driverUserInfoService"></property>
+	</bean>
+	<!-- 查询司机存活率列表 -->
+	<bean name="driverUserTotalData"  class="com.cy.dctms.driverUser.action.DriverUserTotalDataListAction" scope="prototype">
+			<property name="driverUserInfoService" ref="driverUserInfoService"></property>
+	</bean>
+	  <!-- 查询司机用户明细 -->
+	<bean name="queryDriverUserInfoMx"  class="com.cy.dctms.driverUser.action.QueryDriverUserInfoMxAction" scope="prototype">
+			<property name="driverUserInfoService" ref="driverUserInfoService"></property>
+	</bean>
+	 <!-- 保存司机用户 -->
+	<bean name="saveDriverUserInfo"  class="com.cy.dctms.driverUser.action.SaveDriverUserInfoAction" scope="prototype">
+			<property name="driverUserInfoService" ref="driverUserInfoService"></property>
+	</bean>
+	 <!-- 冻结和解冻司机用户 -->
+	<bean name="deleteDriverUserInfo"  class="com.cy.dctms.driverUser.action.DeleteDriverUserInfoAction" scope="prototype">
+			<property name="driverUserInfoService" ref="driverUserInfoService"></property>
+	</bean>
+	<!-- 审核司机用户 -->
+	<bean name="auditDriverUserInfo"  class="com.cy.dctms.driverUser.action.AuditDriverUserInfoAction" scope="prototype">
+			<property name="driverUserInfoService" ref="driverUserInfoService"></property>
+			<property name="sendMessagerLogService" ref="sendMessagerLogService"></property>
+	</bean>
+	 <!-- 导出司机 -->
+	<bean name="exportDriverUserInfo"  class="com.cy.dctms.driverUser.action.ExportDriverUserInfoAction" scope="prototype">
+			<property name="driverUserInfoService" ref="driverUserInfoService"></property>
+	</bean>
+	 <!-- 推送消息初始化，待确认 -->
+	<bean name="pushMessagerInit"  class="com.cy.dctms.driverUser.action.PushMessagerInitAction" scope="prototype">
+			<property name="driverUserInfoService" ref="driverUserInfoService"></property>
+	</bean>
+	 <!-- 推送消息 -->
+	<bean name="pushDriverMessager"  class="com.cy.dctms.driverUser.action.PushDriverMessagerAction" scope="prototype">
+		<property name="sendMessagerLogService" ref="sendMessagerLogService"></property>
+		<property name="driverUserInfoService" ref="driverUserInfoService"></property>
+	</bean>
+	<!-- 查询企业列表 -->
+	<bean name="queryWebUserInfo"  class="com.cy.dctms.webUser.action.QueryWebUserInfoListAction" scope="prototype">
+			<property name="webUserInfoService" ref="webUserInfoService"></property>
+	</bean>
+	<!-- 查询审核企业列表 -->
+	<bean name="auditWebUserInfoList"  class="com.cy.dctms.webUser.action.AuditWebUserInfoListAction" scope="prototype">
+			<property name="webUserInfoService" ref="webUserInfoService"></property>
+	</bean>
+	<!-- 查询统计列表 -->
+	<bean name="webUserTotalData"  class="com.cy.dctms.webUser.action.WebUserTotalDataListAction" scope="prototype">
+			<property name="webUserInfoService" ref="webUserInfoService"></property>
+	</bean>
+	<!-- 查询企业交易记录 -->
+	<bean name="queryWebUserTransactionInfo"  class="com.cy.dctms.webUser.action.QueryWebUserTransactionInfoListAction" scope="prototype">
+			<property name="webUserInfoService" ref="webUserInfoService"></property>
+	</bean>
+	  <!-- 查询企业明细 -->
+	<bean name="queryWebUserInfoMx"  class="com.cy.dctms.webUser.action.QueryWebUserInfoMxAction" scope="prototype">
+			<property name="webUserInfoService" ref="webUserInfoService"></property>
+	</bean>
+	 <!-- 保存企业 -->
+	<bean name="saveWebUserInfo"  class="com.cy.dctms.webUser.action.SaveWebUserInfoAction" scope="prototype">
+			<property name="webUserInfoService" ref="webUserInfoService"></property>
+	</bean>
+	 <!-- 删除企业 -->
+	<bean name="deleteWebUserInfo"  class="com.cy.dctms.webUser.action.DeleteWebUserInfoAction" scope="prototype">
+			<property name="webUserInfoService" ref="webUserInfoService"></property>
+	</bean>
+	<!-- 审核企业 -->
+	<bean name="auditWebUserInfo"  class="com.cy.dctms.webUser.action.AuditWebUserInfoAction" scope="prototype">
+			<property name="webUserInfoService" ref="webUserInfoService"></property>
+			<property name="sentMail" ref="sentMail"></property>
+			<property name="noteService" ref="noteService"></property>
+			<property name="sendMessagerLogService" ref="sendMessagerLogService"></property>
+	</bean>
+	 <!-- 导出企业 -->
+	<bean name="exportWebUserInfo"  class="com.cy.dctms.webUser.action.ExportWebUserInfoAction" scope="prototype">
+			<property name="webUserInfoService" ref="webUserInfoService"></property>
+	</bean>
+	 <!-- 发送消息初始化 -->
+	<bean name="sendWebMessagerInit"  class="com.cy.dctms.webUser.action.SendWebMessagerInitAction" scope="prototype">
+			<property name="webUserInfoService" ref="webUserInfoService"></property>
+	</bean>
+	 <!-- 发送消息 -->
+	<bean name="sendWebMessager"  class="com.cy.dctms.webUser.action.SendWebMessagerAction" scope="prototype">
+		<property name="sendMessagerLogService" ref="sendMessagerLogService"></property>
+		<property name="noteService" ref="noteService"></property>
+		<property name="sentMail" ref="sentMail"></property>
+	</bean>
+	
+	
+	
+	<!-- 查询操作日志列表 -->
+	<bean name="queryOperationLog"  class="com.cy.dctms.operationLog.action.QueryOperationLogListAction" scope="prototype">
+			<property name="operationLogService" ref="operationLogService"></property>
+	</bean>
+	 <!-- 导出操作日志 -->
+	<bean name="exportOperationLog"  class="com.cy.dctms.operationLog.action.ExportOperationLogAction" scope="prototype">
+			<property name="operationLogService" ref="operationLogService"></property>
+	</bean>
+	
+	
+	 <!-- 百度推送 -->
+	<bean name="baiduPush"  class="com.cy.dctms.baiduPush.action.BaiduPushAction" scope="prototype">
+			<property name="driverUserInfoService" ref="driverUserInfoService"></property>
+	</bean>
+	
+	<!-- 查询司机对企业评价列表 -->
+	<bean name="queryDriverUserAssessInfo"  class="com.cy.dctms.driverUserAssess.action.QueryDriverUserAssessInfoListAction" scope="prototype">
+			<property name="driverUserAssessInfoService" ref="driverUserAssessInfoService"></property>
+	</bean>
+	  <!-- 查询司机对企业评价明细 -->
+	<bean name="queryDriverUserAssessInfoMx"  class="com.cy.dctms.driverUserAssess.action.QueryDriverUserAssessInfoMxAction" scope="prototype">
+			<property name="driverUserAssessInfoService" ref="driverUserAssessInfoService"></property>
+	</bean>
+	 <!-- 保存司机对企业评价 -->
+	<bean name="saveDriverUserAssessInfo"  class="com.cy.dctms.driverUserAssess.action.SaveDriverUserAssessInfoAction" scope="prototype">
+			<property name="driverUserAssessInfoService" ref="driverUserAssessInfoService"></property>
+	</bean>
+	 <!-- 删除司机对企业评价 -->
+	<bean name="deleteDriverUserAssessInfo"  class="com.cy.dctms.driverUserAssess.action.DeleteDriverUserAssessInfoAction" scope="prototype">
+			<property name="driverUserAssessInfoService" ref="driverUserAssessInfoService"></property>
+	</bean>
+	 <!-- 导出司机对企业评价 -->
+	<bean name="exportDriverUserAssessInfo"  class="com.cy.dctms.driverUserAssess.action.ExportDriverUserAssessInfoAction" scope="prototype">
+			<property name="driverUserAssessInfoService" ref="driverUserAssessInfoService"></property>
+	</bean>
+	
+	<!-- 查询企业对司机评价列表 -->
+	<bean name="queryUserDriverAssessInfo"  class="com.cy.dctms.userDirverAssess.action.QueryUserDriverAssessInfoListAction" scope="prototype">
+			<property name="userDriverAssessInfoService" ref="userDriverAssessInfoService"></property>
+	</bean>
+	  <!-- 查询企业对司机评价明细 -->
+	<bean name="queryUserDriverAssessInfoMx"  class="com.cy.dctms.userDirverAssess.action.QueryUserDriverAssessInfoMxAction" scope="prototype">
+			<property name="userDriverAssessInfoService" ref="userDriverAssessInfoService"></property>
+	</bean>
+	 <!-- 保存企业对司机评价 -->
+	<bean name="saveUserDriverAssessInfo"  class="com.cy.dctms.userDirverAssess.action.SaveUserDriverAssessInfoAction" scope="prototype">
+			<property name="userDriverAssessInfoService" ref="userDriverAssessInfoService"></property>
+	</bean>
+	 <!-- 删除企业对司机评价 -->
+	<bean name="deleteUserDriverAssessInfo"  class="com.cy.dctms.userDirverAssess.action.DeleteUserDriverAssessInfoAction" scope="prototype">
+			<property name="userDriverAssessInfoService" ref="userDriverAssessInfoService"></property>
+	</bean>
+	 <!-- 导出企业对司机评价 -->
+	<bean name="exportUserDriverAssessInfo"  class="com.cy.dctms.userDirverAssess.action.ExportUserDriverAssessInfoAction" scope="prototype">
+			<property name="userDriverAssessInfoService" ref="userDriverAssessInfoService"></property>
+	</bean>
+	
+	<!-- 查询交易信息列表 -->
+	<bean name="queryTransactionInfo"  class="com.cy.dctms.transaction.action.QueryTransactionInfoListAction" scope="prototype">
+			<property name="transactionInfoService" ref="transactionInfoService"></property>
+	</bean>
+	  <!-- 查询交易信息明细 -->
+	<bean name="queryTransactionInfoMx"  class="com.cy.dctms.transaction.action.QueryTransactionInfoMxAction" scope="prototype">
+			<property name="transactionInfoService" ref="transactionInfoService"></property>
+	</bean>
+	 <!-- 保存交易信息 -->
+	<bean name="saveTransactionInfo"  class="com.cy.dctms.transaction.action.SaveTransactionInfoAction" scope="prototype">
+			<property name="transactionInfoService" ref="transactionInfoService"></property>
+	</bean>
+	 <!-- 删除交易信息 -->
+	<bean name="deleteTransactionInfo"  class="com.cy.dctms.transaction.action.DeleteTransactionInfoAction" scope="prototype">
+			<property name="transactionInfoService" ref="transactionInfoService"></property>
+	</bean>
+	 <!-- 导出交易信息 -->
+	<bean name="exportTransactionInfo"  class="com.cy.dctms.transaction.action.ExportTransactionInfoAction" scope="prototype">
+			<property name="transactionInfoService" ref="transactionInfoService"></property>
+	</bean>
+	<!-- 查询货物信息列表 -->
+	<bean name="queryOrderCargoInfo"  class="com.cy.dctms.orderCargo.action.QueryOrderCargoInfoListAction" scope="prototype">
+			<property name="orderCargoInfoService" ref="orderCargoInfoService"></property>
+	</bean>
+	  <!-- 查询货物信息明细 -->
+	<bean name="queryOrderCargoInfoMx"  class="com.cy.dctms.orderCargo.action.QueryOrderCargoInfoMxAction" scope="prototype">
+			<property name="orderCargoInfoService" ref="orderCargoInfoService"></property>
+	</bean>
+	 <!-- 保存货物信息 -->
+	<bean name="saveOrderCargoInfo"  class="com.cy.dctms.orderCargo.action.SaveOrderCargoInfoAction" scope="prototype">
+			<property name="orderCargoInfoService" ref="orderCargoInfoService"></property>
+	</bean>
+	 <!-- 删除货物信息 -->
+	<bean name="deleteOrderCargoInfo"  class="com.cy.dctms.orderCargo.action.DeleteOrderCargoInfoAction" scope="prototype">
+			<property name="orderCargoInfoService" ref="orderCargoInfoService"></property>
+	</bean>
+	 <!-- 导出货物信息 -->
+	<bean name="exportOrderCargoInfo"  class="com.cy.dctms.orderCargo.action.ExportOrderCargoInfoAction" scope="prototype">
+			<property name="orderCargoInfoService" ref="orderCargoInfoService"></property>
+	</bean>
+	<!-- 查询货源历史状态列表 -->
+	<bean name="queryOrderCargoLastInfo"  class="com.cy.dctms.orderCargoLast.action.QueryOrderCargoLastInfoListAction" scope="prototype">
+			<property name="orderCargoLastInfoService" ref="orderCargoLastInfoService"></property>
+	</bean>
+	 <!-- 导出货源历史状态 -->
+	<bean name="exportOrderCargoLastInfo"  class="com.cy.dctms.orderCargoLast.action.ExportOrderCargoLastInfoAction" scope="prototype">
+			<property name="orderCargoLastInfoService" ref="orderCargoLastInfoService"></property>
+	</bean>
+	<!-- 查询订单历史状态列表 -->
+	<bean name="queryTransactionLastInfo"  class="com.cy.dctms.transactionLast.action.QueryTransactionLastInfoListAction" scope="prototype">
+			<property name="transactionLastInfoService" ref="transactionLastInfoService"></property>
+	</bean>
+	 <!-- 导出订单历史状态 -->
+	<bean name="exportTransactionLastInfo"  class="com.cy.dctms.transactionLast.action.ExportTransactionLastInfoAction" scope="prototype">
+			<property name="transactionLastInfoService" ref="transactionLastInfoService"></property>
+	</bean>
+	<!-- 查询查询存活率列表 -->
+	<bean name="queryDriverSurviveRate"  class="com.cy.dctms.driverSurviveRate.action.QueryDriverSurviveRateListAction">
+			<property name="driverSurviveRateService" ref="driverSurviveRateService"></property>
+	</bean>
+	 <!-- 导出查询存活率 -->
+	<bean name="exportDriverSurviveRate"  class="com.cy.dctms.driverSurviveRate.action.ExportDriverSurviveRateAction" scope="prototype">
+			<property name="driverSurviveRateService" ref="driverSurviveRateService"></property>
+	</bean>
+	<!-- 查询身份证验证申请列表 -->
+	<bean name="queryApplyInfo"  class="com.cy.dctms.applyInfo.action.QueryApplyInfoListAction">
+			<property name="applyInfoService" ref="applyInfoService"></property>
+	</bean>
+	  <!-- 查询身份证验证申请明细 -->
+	<bean name="queryApplyInfoMx"  class="com.cy.dctms.applyInfo.action.QueryApplyInfoMxAction">
+			<property name="applyInfoService" ref="applyInfoService"></property>
+	</bean>
+	 <!-- 保存身份证验证申请 -->
+	<bean name="saveApplyInfo"  class="com.cy.dctms.applyInfo.action.SaveApplyInfoAction">
+			<property name="applyInfoService" ref="applyInfoService"></property>
+	</bean>
+
+   <!-- action end -->
+</beans>

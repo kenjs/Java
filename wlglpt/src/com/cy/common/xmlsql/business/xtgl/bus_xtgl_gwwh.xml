@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.xtgl.dao.BusXtglGwwhMapper">
+	<select id="selectQyGwPage" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.QyGwDomain">
+		SELECT A.GW_DJXH AS gwDjxh,
+         A.GW_MC   AS gwMc,
+         A.GW_JC   AS gwJc,
+         A.BZSM    AS bzsm,
+         A.LYBZ    AS lybz,
+         A.GW_DM   AS gwDm,
+         A.QYBZ    AS qybz,
+         A.CJRQ    AS cjrq,
+         A.XGRQ    AS xgrq,
+         (SELECT RY.MC FROM QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) AS cjrMc,
+         (SELECT RY.MC FROM QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) AS xgrMc,
+         (select QZ.MC from Qy_Zzjg QZ where QZ.JGBM=A.SS_JGBM) as bmMc
+      FROM QY_GW A,QY_ZZJG DM
+      WHERE A.YXBZ='Y'
+        AND A.SS_JGBM = DM.JGBM
+        AND (DM.JGBM = #ssJgbm# OR (DM.SJ_JGBM = #ssJgbm# AND DM.JGLB_DM = '4'))
+      order by GW_DM
+
+ 
+    </select>
+    
+    <select id="selectQyGwAll" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.QyGwDomain">
+		SELECT A.GW_DJXH AS gwDjxh,
+	       A.GW_MC   AS gwMc,
+	       A.GW_JC   AS gwJc,
+	       A.BZSM    AS bzsm,
+	       A.LYBZ    AS lybz,
+	       A.GW_DM   AS gwDm,
+	       A.QYBZ    AS qybz,
+	       A.CJRQ    AS czrq,
+	       A.XGRQ    AS xgrq,
+	       (SELECT RY.MC FROM QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) AS cjrMc,
+	       (SELECT RY.MC FROM QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) AS xgrMc
+  		 FROM QY_GW A,QY_ZZJG DM
+      WHERE A.YXBZ='Y'
+        AND A.SS_JGBM = DM.JGBM
+        AND (DM.JGBM = #ssJgbm# OR (DM.SJ_JGBM = #ssJgbm# AND DM.JGLB_DM = '4'))
+      order by GW_DM
+
+    </select>
+    
+     <select id="selectXtGw" parameterClass="java.util.Map"
+		resultClass="com.cy.xtgl.domain.QyGwDomain">
+		SELECT DM.GW_DM AS gwDm,
+       		DM.GW_MC AS gwMc,
+       		DM.GW_JC AS gwJc,
+      		DM.BZSM AS bzsm,
+      		(CASE WHEN GW.GW_DM IS NULL THEN 'N' ELSE 'Y' END) AS xybz
+  		FROM DM_GW DM,
+       		(SELECT GW_DM
+          	FROM QY_GW
+         WHERE YXBZ = 'Y'
+           AND SS_JGBM =#ssJgbm#) GW
+ 		WHERE DM.YXBZ = 'Y'
+   			AND DM.GW_DM = GW.GW_DM(+)
+   			
+    </select>
+    
+    <select id="selectAllQyGw" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT COUNT(A.GW_DJXH) 
+		  FROM QY_GW A,QY_ZZJG DM
+	      WHERE A.YXBZ='Y'
+	        AND A.SS_JGBM = DM.JGBM
+	        AND (DM.JGBM = #ssJgbm# OR (DM.SJ_JGBM = #ssJgbm# AND DM.JGLB_DM = '4'))
+    </select>
+    
+    <select id="checkGwSfCf" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		select count(GW_DJXH) from QY_GW where GW_DM=#gwDm# and SS_JGBM=#ssJgbm#	
+    </select>
+    
+    <select id="checkGwSfCz" parameterClass="java.util.Map"
+		resultClass="java.lang.String">
+		select YXBZ from QY_GW where GW_DM=#gwDm# and SS_JGBM=#ssJgbm#	
+    </select>
+    
+    <select id="getBmMc" parameterClass="java.util.Map"
+		resultClass="java.lang.String">
+		SELECT JG.MC FROM QY_ZZJG JG WHERE JG.JGLB_DM = 4 AND JG.JGBM = #jgbm# AND JG.YXBZ = 'Y' AND JG.QYBZ = 'Y'	
+    </select>
+	
+	<update id="updateQyGwByGwDmAndSsJgbm" parameterClass="java.util.Map">
+		update Qy_Gw set YXBZ = 'Y',cjr_czy_djxh=#cjrCzyDjxh#,cjrq=to_date(#cjrq#, 'YYYY-MM-DD'),xgr_czy_djxh=#xgrCzyDjxh#,xgrq=to_date(#xgrq#, 'YYYY-MM-DD') where SS_JGBM = #ssJgbm# and GW_DM = #gwDm#
+    </update>
+    
+    <update id="stopOrStartUse" parameterClass="java.util.Map">
+		update Qy_Gw set QYBZ = #qybz# where GW_DJXH = #gwDjxh#
+    </update>
+</sqlMap>

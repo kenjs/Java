@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="DriverCargoAssessInfoBo" type="com.cy.common.bo.DriverCargoAssessInfoBo"/>
+	<!-- 新增货源点评 -->
+	<insert id="iBatisInsertDriverCargoAssessInfo" parameterClass="DriverCargoAssessInfoBo">
+		insert into t_driver_cargo_assess_info
+			(DRIVER_ID,CARGO_ID,TYPE,ASSESS_INFO,CREATE_TIME)
+		values
+			(#driverId#,#cargoId#,#type#,#assessInfo#,sysdate())
+		<selectKey keyProperty="id" resultClass="Integer">
+			select last_insert_id() as id
+		</selectKey>
+	</insert>
+	
+	<!-- 修改评价 -->
+	<update id="iBatisUpdateAssess" parameterClass="DriverCargoAssessInfoBo">
+		update t_driver_cargo_assess_info
+		<dynamic prepend="set">
+			<isNotEmpty property="type" prepend=",">
+				TYPE = #type#
+			</isNotEmpty>
+			<isNotEmpty property="assessInfo" prepend=",">
+				ASSESS_INFO = #assessInfo#
+			</isNotEmpty>
+		</dynamic>
+		where DRIVER_ID = #driverId# and CARGO_ID = #cargoId#
+	</update>
+	
+	<!-- 校验货源是否已经评价 -->
+	<select id="iBatisSelectByDriverAndCargoId" parameterClass="map" resultClass="Integer">
+		select count(ID) from t_driver_cargo_assess_info where DRIVER_ID = #driverId# and CARGO_ID = #cargoId#
+	</select>
+	
+	<!-- 某条货源被多少次标注为货已走 -->
+	<select id="iBatisSelectNumByCargoId" parameterClass="String" resultClass="Integer">
+		select count(ID) from t_driver_cargo_assess_info where TYPE = 0 and CARGO_ID = #cargoId#
+	</select>
+</sqlMap>

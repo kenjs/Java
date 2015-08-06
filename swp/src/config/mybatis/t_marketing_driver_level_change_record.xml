@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.swp.dao.MarketingDriverLevelChangeRecordDao">
+
+    <resultMap type="MarketingDriverLevelChangeRecord" id="marketing_driver_level_change_record_result">
+        <!-- 主键 -->
+        <result property="id" column="ID"/>
+        <!-- 客户司机ID -->
+        <result property="customerId" column="customer_id"/>
+        <!-- 变更前客户等级(ABCD) -->
+        <result property="beforeChangeLevel" column="before_change_level"/>
+        <!-- 变更后客户等级(ABCD) -->
+        <result property="afterChangeLevel" column="after_change_level"/>
+        <!-- 变更时间 -->
+        <result property="changeDate" column="change_date"/>
+        <!-- 变更前该客户所属专员id -->
+        <result property="beforeChangeAssisterId" column="before_change_assister_id"/>
+    </resultMap>
+
+
+
+    <!-- 保存客户司机等级变更记录表 -->
+    <!--
+    <insert id="addMarketingDriverLevelChangeRecord" parameterType="MarketingDriverLevelChangeRecord" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_marketing_driver_level_change_record (
+        customer_id,
+        before_change_level,
+        after_change_level,
+        change_date)
+        VALUES (#{customerId},#{beforeChangeLevel},#{afterChangeLevel},sysdate())
+    </insert>
+    -->
+
+</mapper>

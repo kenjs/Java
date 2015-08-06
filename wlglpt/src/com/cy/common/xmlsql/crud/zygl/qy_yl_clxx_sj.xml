@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.dzgl.dao.QyYlClxxSjMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectQyYlClxxSjByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyYlClxxDomain">
+		select a.CL_DJXH as clDjxh,a.XH as xh,a.SJ_XM as sjXm,a.SJ_ZJHM as sjZjhm,a.SJ_SJHM as sjSjhm,
+		a.SJ_LXDH as sjLxdh,a.JSZHM as jszhm,a.WHBZ as whbz,a.BZ as bz,a.YXBZ as yxbz from QY_YL_CLXX_SJ a  where a.CL_DJXH=#clDjxh# and a.XH=#xh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertQyYlClxxSj"  parameterClass="com.cy.common.bo.QyYlClxxSj">
+		<selectKey keyProperty="clDjxh" resultClass="String" type="pre"> 
+			select SEQ_ZY_DJXH.CURRVAL as clDjxh from dual
+		</selectKey> 
+		insert into QY_YL_CLXX_SJ(CL_DJXH,XH,SJ_XM,SJ_ZJHM,SJ_SJHM,
+		SJ_LXDH,JSZHM,WHBZ,BZ,YXBZ)
+		values(#clDjxh:NUMERIC#,#xh:NUMERIC#,#sjXm:VARCHAR#,#sjZjhm:VARCHAR#,#sjSjhm:VARCHAR#,
+		#sjLxdh:VARCHAR#,#jszhm:VARCHAR#,#whbz:VARCHAR#,#bz:VARCHAR#,#yxbz:VARCHAR#)
+	</insert>
+	
+	<insert id="insertQyYlClxxSj2"  parameterClass="com.cy.common.bo.QyYlClxxSj">
+		insert into QY_YL_CLXX_SJ(CL_DJXH,XH,SJ_XM,SJ_ZJHM,SJ_SJHM,
+		SJ_LXDH,JSZHM,WHBZ,BZ,YXBZ)
+		values(#clDjxh:NUMERIC#,#xh:NUMERIC#,#sjXm:VARCHAR#,#sjZjhm:VARCHAR#,#sjSjhm:VARCHAR#,
+		#sjLxdh:VARCHAR#,#jszhm:VARCHAR#,#whbz:VARCHAR#,#bz:VARCHAR#,#yxbz:VARCHAR#)
+	</insert>
+	
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateQyYlClxxSjByKey" parameterClass="com.cy.common.bo.QyYlClxxSj">
+        update QY_YL_CLXX_SJ set CL_DJXH=#clDjxh#,XH=#xh#,SJ_XM=#sjXm#,SJ_ZJHM=#sjZjhm#,SJ_SJHM=#sjSjhm#,
+		SJ_LXDH=#sjLxdh#,JSZHM=#jszhm#,WHBZ=#whbz#,BZ=#bz#,YXBZ=#yxbz# where CL_DJXH=#clDjxh# and XH=#xh#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteQyYlClxxSjByKey" parameterClass="java.util.Map">
+		delete from QY_YL_CLXX_SJ where CL_DJXH=#clDjxh# and XH=#xh#
+    </delete>
+</sqlMap>

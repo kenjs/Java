@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.hygl.dao.HyPcHddjMapper">
+
+	<!--根据主键取DOMAIN-->
+	<select id="selectHyPcHddjByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyPcHddjDomain">
+		select a.HD_DJXH hdDjxh,a.PC_DJXH as pcDjxh,a.WFH_DJXH as wfhDjxh,a.DD_DJXH as ddDjxh,a.XH as xh,
+		a.SZ_HW_SL as szHwSl,a.SZ_HW_ZL as szHwZl,a.SZ_HW_TJ as szHwTj,
+		a.YQ_DDRQ as yqDdrq,a.SHFS_DM as shfsDm,a.SZ_JS_SL as szJsSl,
+		a.HDBH as hdbh,a.HDJSRQ as hdjsrq,a.BZ as bz,a.WSSPZT_DM wsspztDm,a.WS_SPXH wsSpxh,a.spbz
+		from HY_PC_HWXX_HDDJ a  
+		where A.HD_DJXH = #hdDjxh#
+    </select>
+    
+    <select id="queryJsPcHwxxByPcWfhXh" parameterClass="java.util.Map"
+    	resultClass="com.cy.hygl.domain.HyPcHwxxDomain">
+    	select a.PC_DJXH as pcDjxh,a.DD_DJXH as ddDjxh,a.XH as xh,
+			a.HWMC as hwmc,a.HW_DJXH as hwDjxh,
+			a.HWXH_DJXH as hwxhDjxh,a.HW_BZ_HLDW_DM as hwBzHldwDm,
+			A.JS_SL jsSl,
+			a.HW_SL as hwSl,a.HW_SL_JLDW_DM as hwSlJldwDm,(SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '01' AND DM.JLDW_DM = A.HW_SL_JLDW_DM) hwSlJldwMc,
+			a.HW_ZL as hwZl,a.HW_ZL_JLDW_DM as hwZlJldwDm,(SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '02' AND DM.JLDW_DM = A.HW_ZL_JLDW_DM) hwZlJldwMc,
+			a.HW_TJ as hwTj,a.HW_TJ_JLDW_DM as hwTjJldwDm,(SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '03' AND DM.JLDW_DM = A.HW_TJ_JLDW_DM) hwTjJldwMc,
+			(SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = A.JS_JLDW_FL_DM AND DM.JLDW_DM = A.JS_JLDW_DM) jsJldwMc,
+			a.WFH_DJXH as wfhDjxh,a.HDBH,b.YQ_DDRQ yqDdrq, b.SHFS_DM shfsDm
+		from js_pc_hwxx a, HY_PC_HWXX b
+		where A.PC_DJXH = B.PC_DJXH
+   		AND A.WFH_DJXH = B.WFH_DJXH
+		AND A.YXBZ = 'Y'
+		AND B.YXBZ = 'Y'
+		AND a.PC_DJXH=#pcDjxh# and a.WFH_DJXH = #wfhDjxh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertHyPcHddj"  parameterClass="com.cy.common.bo.HyPcHddj">
+		<selectKey keyProperty="hdDjxh" resultClass="java.lang.String" type="pre">
+			SELECT SEQ_HD_DJXH.NEXTVAL AS hdDjxh FROM DUAL
+		</selectKey>
+		insert into HY_PC_HWXX_HDDJ(HD_DJXH,PC_DJXH,WFH_DJXH,DD_DJXH,XH,SZ_HW_SL,
+		SZ_HW_ZL,SZ_HW_TJ,YQ_DDRQ,SHFS_DM,SZ_JS_SL,
+		HDBH,HDJSRQ,BZ,SPBZ,YXBZ,SS_JGBM,DJR_CZY_DJXH,DJRQ)
+		values(#hdDjxh:NUMERIC#,#pcDjxh:NUMERIC#,#wfhDjxh:NUMERIC#,#ddDjxh:NUMERIC#,#xh:NUMERIC#,
+		#szHwSl:NUMERIC#,#szHwZl:NUMERIC#,#szHwTj:NUMERIC#,#yqDdrq:DATE#,#shfsDm:NUMERIC#,#szJsSl:NUMERIC#,
+		#hdbh:VARCHAR#,#hdjsrq:TIMESTAMP#,#bz:VARCHAR#,#spbz:VARCHAR#,#yxbz:VARCHAR#,#ssJgbm:VARCHAR#,#djrCzyDjxh:VARCHAR#,to_date(#djrq:DATE#,'yyyy-MM-dd'))
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateHyPcHddjByKey" parameterClass="com.cy.common.bo.HyPcHddj">
+        update HY_PC_HWXX_HDDJ set PC_DJXH=#pcDjxh#,WFH_DJXH=#wfhDjxh#,DD_DJXH=#ddDjxh#,XH=#xh#,SZ_HW_SL=#szHwSl#,
+		SZ_HW_ZL=#szHwZl#,SZ_HW_TJ=#szHwTj#,YQ_DDRQ=#yqDdrq#,SHFS_DM=#shfsDm#,SZ_JS_SL=#szJsSl#,
+		HDBH=#hdbh#,BZ=#bz# ,HDJSRQ=#hdjsrq#,SS_JGBM=#ssJgbm#,DJR_CZY_DJXH=#djrCzyDjxh#,DJRQ=to_date(#djrq#,'yyyy-MM-dd')
+		where HD_DJXH = #hdDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：软删除-->
+	<delete id="deleteHyPcHddjByKey" parameterClass="java.util.Map">
+		update HY_PC_HWXX_HDDJ SET YXBZ = 'N' WHERE HD_DJXH = #hdDjxh#
+    </delete>
+    
+    <!--根据PcDjxh,WfhDjxh取wlssHwSl-->
+	<select id="selectHyWlss" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyPcHddjDomain">
+        select sum(a.WLSS_HW_SL) as wlssHwSl,
+		       sum(a.WLSS_HW_ZL) as wlssHwZl,
+		       sum(a.WLSS_HW_TJ) as wlssHwTj,
+		       sum(a.WLSS_DJXH)  as wlssDjxh
+		  from HY_WLSSDJ a 
+		 where yxbz='Y' and  a.PC_DJXH=#pcDjxh# and a.WFH_DJXH = #wfhDjxh#
+    </select>
+	<!--根据PcDjxh,WfhDjxh取zHwSl-->
+	<select id="selectZHwSl" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyPcHddjDomain">
+		SELECT DECODE(HWXY.SZ_HW_SL,NULL,rtrim(TO_CHAR(PCHW.HW_SL,'fm99999999999990.99'),'.'),rtrim(TO_CHAR(HWXY.SZ_HW_SL,'fm99999999999990.99'),'.')) as zhwSl,
+		DECODE(HWXY.SZ_HW_ZL,NULL,rtrim(TO_CHAR(PCHW.HW_Zl,'fm99999999999990.99'),'.'),rtrim(TO_CHAR(HWXY.SZ_HW_Zl,'fm99999999999990.99'),'.')) as zhwZl,
+		DECODE(HWXY.SZ_HW_TJ,NULL,rtrim(TO_CHAR(PCHW.HW_Tj,'fm99999999999990.99'),'.'),rtrim(TO_CHAR(HWXY.SZ_HW_Tj,'fm99999999999990.99'),'.')) as zhwTj
+		FROM HY_PC_HWXX PCHW, HY_PC_HWXX_XYDJ HWXY
+		WHERE PCHW.WFH_DJXH = HWXY.WFH_DJXH(+)
+		AND PCHW.PC_DJXH = HWXY.PC_DJXH(+)
+		AND PCHW.PC_DJXH = #pcDjxh#
+		AND PCHW.WFH_DJXH = #wfhDjxh#
+    </select>
+    
+    <update id="deleteWlssDjByDjxh" parameterClass="java.util.Map">
+    	update HY_WLSSDJ a set a.yxbz='N' where a.PC_DJXH=#pcDjxh# and a.WFH_DJXH = #wfhDjxh# and a.wlss_lybz=1
+    </update>
+</sqlMap>

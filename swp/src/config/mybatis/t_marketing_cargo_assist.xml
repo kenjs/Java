@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.swp.dao.MarketingCargoAssistDao"><!--货源专员协助表 -->
+
+	<!-- 导入货源时向货源专员协助表 -->
+	<insert id="addCargoAssist" parameterType="MarketingCargoAssist" useGeneratedKeys="true" keyProperty="id">
+	INSERT INTO t_marketing_cargo_assist(
+        cargo_id,
+		reg_company_id,
+		market_user_id,
+		cargo_info_from,
+		is_match_success,
+		has_transaction 
+        ) VALUES(
+        #{cargoId},#{regCompanyId}, #{marketUserId},#{cargoInfoFrom},#{isMatchSuccess},#{hasTransaction})
+	</insert>
+	
+	<!-- 修改 货源专员协助表部分信息（1.是否匹配成功:未联络过司机、匹配成功、失败,2.反馈结果）-->
+	<update id="updateMarketingCargoAssist" parameterType="MarketingCargoAssist" >
+		UPDATE t_marketing_cargo_assist 
+		<set>
+			<if test="cargoResult !='' and cargoResult != null" >
+			cargo_result = #{cargoResult},
+			</if>
+			<if test="isMatchSuccess !='' and isMatchSuccess != null">
+			is_match_success = #{isMatchSuccess} 
+			</if>
+		</set> 
+		WHERE id = #{id} 
+	</update>
+	
+</mapper>

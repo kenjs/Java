@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/settlebillc
+END
+inAdd.html
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/settlebillc/inAdd.html
+END
+outAdd.html
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/settlebillc/outAdd.html
+END
+verificationPayable.html
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/settlebillc/verificationPayable.html
+END
+inList.html
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/settlebillc/inList.html
+END
+inAddWayBill.html
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/settlebillc/inAddWayBill.html
+END
+outList.html
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/settlebillc/outList.html
+END
+outAddWayBill.html
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/settlebillc/outAddWayBill.html
+END
+payableSettlebillDetail.html
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/settlebillc/payableSettlebillDetail.html
+END
+verificationReceivable.html
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/settlebillc/verificationReceivable.html
+END
+receivableSettlebillDetail.html
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/settlebillc/receivableSettlebillDetail.html
+END
+inUpdate.html
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/settlebillc/inUpdate.html
+END
+outUpdate.html
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/Project/!svn/ver/10736/contract/branches/contractV2.3.0-ryp/WebRoot/WEB-INF/views/settlebillc/outUpdate.html
+END

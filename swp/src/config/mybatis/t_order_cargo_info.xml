@@ -1,0 +1,493 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.swp.dao.OrderCargoInfoDao">
+
+	<resultMap type="OrderCargoInfo" id="order_cargo_info_result">
+		<result property="id" column="ID"/>
+		<result property="cargoName" column="CARGO_NAME"/>
+        <result property="cargoType" column="CARGO_TYPE"/>
+        <result property="cargoWeight" column="CARGO_WEIGHT"/>
+        <result property="cargoCubage" column="CARGO_CUBAGE"/>
+        <result property="requestCarLength" column="REQUEST_CAR_LENGTH"/>
+        <result property="requestCarBarType" column="REQUEST_CAR_BAR_TYPE"/>
+        <result property="requestCarPlateType" column="REQUEST_CAR_PLATE_TYPE"/>
+        <result property="freight" column="FREIGHT"/>
+        <result property="requestStartTime" column="REQUEST_START_TIME"/>
+        <result property="requestEndTime" column="REQUEST_END_TIME"/>
+        <result property="startProvince" column="START_PROVINCE"/>
+        <result property="startCity" column="START_CITY"/>
+        <result property="startCounty" column="START_COUNTY"/>
+        <result property="startTown" column="START_TOWN"/>
+        <result property="endProvince" column="END_PROVINCE"/>
+        <result property="endCity" column="END_CITY"/>
+        <result property="endCounty" column="END_COUNTY"/>
+        <result property="endTown" column="END_TOWN"/>
+        <result property="contactName" column="CONTACT_NAME"/>
+        <result property="contactMobilephone" column="CONTACT_MOBILEPHONE"/>
+        <result property="contactTelephone" column="CONTACT_TELEPHONE"/>
+        <result property="remark" column="REMARK"/>
+        <result property="deployUserid" column="DEPLOY_USERID"/>
+        <result property="modifyUserid" column="MODIFY_USERID"/>
+        <result property="companyId" column="COMPANY_ID"/>
+        <result property="cargoFlag" column="CARGO_FLAG"/>
+        <result property="deletedFlag" column="DELETED_FLAG"/>
+        <result property="cargoFlagTime" column="CARGO_FLAG_TIME"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="modifyTime" column="MODIFY_TIME"/>
+        <!--20140808(货主版新增字段1个 )  插入标识（0发布货源、1导入订单货源）-->
+        <result property="cargoOrigin" column="CARGO_ORIGIN"/>
+        <!-- 企业名称 -->
+        <result property="companyName" column="COMPANY_NAME"/>
+	</resultMap>
+	
+	<resultMap type="OrderCargoInfoDomain" id="order_cargo_info_domain_result">
+		<result property="id" column="ID"/>
+		<result property="cargoName" column="CARGO_NAME"/>
+        <result property="cargoType" column="CARGO_TYPE"/>
+        <result property="cargoWeight" column="CARGO_WEIGHT"/>
+        <result property="cargoCubage" column="CARGO_CUBAGE"/>
+        <result property="requestCarLength" column="REQUEST_CAR_LENGTH"/>
+        <result property="requestCarBarType" column="REQUEST_CAR_BAR_TYPE"/>
+        <result property="requestCarPlateType" column="REQUEST_CAR_PLATE_TYPE"/>
+        <result property="freight" column="FREIGHT"/>
+        <result property="requestStartTime" column="REQUEST_START_TIME"/>
+        <result property="requestEndTime" column="REQUEST_END_TIME"/>
+        <result property="startProvince" column="START_PROVINCE"/>
+        <result property="startCity" column="START_CITY"/>
+        <result property="startCounty" column="START_COUNTY"/>
+        <result property="startTown" column="START_TOWN"/>
+        <result property="endProvince" column="END_PROVINCE"/>
+        <result property="endCity" column="END_CITY"/>
+        <result property="endCounty" column="END_COUNTY"/>
+        <result property="endTown" column="END_TOWN"/>
+        <result property="contactName" column="CONTACT_NAME"/>
+        <result property="contactMobilephone" column="CONTACT_MOBILEPHONE"/>
+        <result property="contactTelephone" column="CONTACT_TELEPHONE"/>
+        <result property="remark" column="REMARK"/>
+        <result property="deployUserid" column="DEPLOY_USERID"/>
+        <result property="modifyUserid" column="MODIFY_USERID"/>
+        <result property="companyId" column="COMPANY_ID"/>
+        <result property="cargoFlag" column="CARGO_FLAG"/>
+        <result property="deletedFlag" column="DELETED_FLAG"/>
+        <result property="cargoFlagTime" column="CARGO_FLAG_TIME"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="modifyTime" column="MODIFY_TIME"/>
+        <!--20140808(货主版新增字段1个 )  插入标识（0发布货源、1导入订单货源）-->
+        <result property="cargoOrigin" column="CARGO_ORIGIN"/>
+        <!-- 企业名称 -->
+        <result property="companyName" column="COMPANY_NAME"/>
+        
+        <result property="endProCityCounty" column="endProCityCounty"/>
+        <result property="startProCityCounty" column="startProCityCounty"/>
+        
+        <result property="assistId" column="ASSIST_ID"/>
+        <result property="cargoResult" column="CARGO_RESULT"/>
+        <result property="regCompanyId" column="REG_COMPANY_ID"/>
+        <result property="marketUserId" column="MARKET_USER_ID"/>
+        <result property="cargoInfoFrom" column="CARGO_INFO_FROM"/>
+        <result property="isMatchSuccess" column="IS_MATCH_SUCCESS"/>
+        <result property="hasTransaction" column="HAS_TRANSACTION"/>
+        
+        <result property="contactDriverCount" column="CONTACT_DRIVER_COUNT"/><!-- 针对某天货源联系过的司机次数 -->
+        
+	</resultMap>
+	
+	
+	<resultMap type="OrderCargoInfoDomain" id="today_order_cargo_info_domain_result">
+		<result property="id" column="ID"/>
+	    <result property="contactName" column="CONTACT_NAME"/>
+        <result property="contactMobilephone" column="CONTACT_MOBILEPHONE"/>
+        <result property="contactTelephone" column="CONTACT_TELEPHONE"/>
+        <!-- 企业名称 -->
+        <result property="companyName" column="COMPANY_NAME"/>
+        
+         <result property="regCompanyId" column="REG_COMPANY_ID"/>
+        <result property="importCount" column="IMPORT_COUNT"/>
+        <result property="contactCargoCount" column="contact_cargo_Count"/><!--针对某个公司下的货源联系了多少条 -->
+        <result property="firstDate" column="firstDate"/><!--首次联系时间 -->
+		<result property="cargoResultVal" column="cargoResultVal"/><!--最近联系状态 -->
+         
+	</resultMap>
+
+
+	<!-- 车辆匹配货源开始 -->
+	<resultMap type="OrderCargoInfoDomain" id="order_cargo_info_domain_deriver_result">
+		<!-- 主键 -->
+		<result property="id" column="ID"/>
+		<!-- 货物名 -->
+		<result property="cargoName" column="CARGO_NAME"/>
+		<!-- 货物类型 -->
+		<result property="cargoType" column="CARGO_TYPE"/>
+		<!-- 货物重量 -->
+		<result property="cargoWeight" column="CARGO_WEIGHT"/>
+		<!-- 货物体积 -->
+		<result property="cargoCubage" column="CARGO_CUBAGE"/>
+		<!-- 要求车辆类型长 -->
+		<result property="requestCarLength" column="REQUEST_CAR_LENGTH"/>
+		<!-- 要求车辆类型板 -->
+		<result property="requestCarBarType" column="REQUEST_CAR_BAR_TYPE"/>
+		<!-- 要求车辆类型栏 -->
+		<result property="requestCarPlateType" column="REQUEST_CAR_PLATE_TYPE"/>
+		<!-- 发货时间 -->
+		<result property="requestStartTime" column="REQUEST_START_TIME"/>
+		<!-- 到货时间 -->
+		<result property="requestEndTime" column="REQUEST_END_TIME"/>
+		<result property="startProvince" column="START_PROVINCE"/>
+		<result property="startCity" column="START_CITY"/>
+		<result property="startCounty" column="START_COUNTY"/>
+		<result property="startTown" column="START_TOWN"/>
+		<result property="endProvince" column="END_PROVINCE"/>
+		<result property="endCity" column="END_CITY"/>
+		<result property="endCounty" column="END_COUNTY"/>
+		<result property="endTown" column="END_TOWN"/>
+		<!-- 联系人 -->
+		<result property="contactName" column="CONTACT_NAME"/>
+		<!-- 联系电话 -->
+		<result property="contactMobilephone" column="CONTACT_MOBILEPHONE"/>
+		<!-- 联系手机 -->
+		<result property="contactTelephone" column="CONTACT_TELEPHONE"/>
+		<!-- 备注，但是这里用于匹配类型 -->
+		<result property="remark" column="REMARK"/>
+		<!-- 企业名称 -->
+		<result property="companyName" column="COMPANY_NAME"/>
+	</resultMap>
+	<select id="queryOrderCargoInfoDomainDriverInfoHsql" parameterType="map" resultMap="order_cargo_info_domain_deriver_result" statementType="STATEMENT">
+		<![CDATA[${hsql}]]>
+	</select>
+	<!-- 车辆匹配货源结束 -->
+
+
+	<!-- 根据Id查询我的货源 -->
+    <!-- query_orderCargo_info_byId -->
+    <select id="queryOrderCargoInfoById" parameterType="string" resultMap="order_cargo_info_result">
+        SELECT id,
+        cargo_name,
+        cargo_type,
+        cargo_weight,
+        cargo_cubage,
+        request_car_length,
+        request_car_bar_type,
+        request_car_plate_type,
+        freight,
+        request_start_time,
+        request_end_time,
+        start_province,
+        start_city,
+        start_county,
+        start_town,
+        end_province,
+        end_city,
+        end_county,
+        end_town,
+        contact_name,
+        contact_mobilephone,
+        contact_telephone,
+        remark,
+        deploy_userid,
+        modify_userid,
+        company_id,
+        cargo_flag,
+        deleted_flag,
+        cargo_flag_time,
+        cargo_origin,
+        create_time,
+        modify_time
+        FROM t_order_cargo_info
+        WHERE id = #{id} 
+    </select>
+    
+    <!-- 根据营销专员的Id查询今天导入的总货源数(包含无效货源) -->
+    <select id="queryTodayImportCargoCount" parameterType="map" resultType="Integer">
+       SELECT COUNT(*) 
+		 FROM t_order_cargo_info b,t_marketing_cargo_assist c  
+		WHERE b.id = c.cargo_id AND c.market_user_id = #{marketUserId}  AND b.cargo_origin = #{cargoOrigin} 
+		<if test="null != deletedFlag and '' != deletedFlag">
+		 and 
+		 (b.DELETED_FLAG = #{deletedFlag}
+		 or
+		 (c.cargo_result = #{cargoResult} and c.is_match_success ${isMatchSuccess})
+		 )
+		</if>  
+		and UNIX_TIMESTAMP(DATE_FORMAT(b.create_time,'%Y-%m-%d')) = UNIX_TIMESTAMP(date_format(SYSDATE(),'%Y-%m-%d')) 
+    </select>
+    
+	<!-- 根据导入的联系人号码查询：mark=0该人今天的货源，mark=1 该人历史的货源-->
+	<select id="queryTodayImportCargoInfoByPhone" parameterType="map" resultMap="order_cargo_info_domain_result">
+		SELECT b.id,
+		b.cargo_name,
+		b.cargo_type,
+		b.cargo_weight,
+		b.cargo_cubage,
+		b.request_car_length,
+		b.request_car_bar_type,
+		b.request_car_plate_type,
+		b.freight,
+		date_format(b.request_start_time,'%Y-%c-%d') request_start_time,
+		b.request_end_time,
+		b.start_province,
+		b.start_city,
+		b.start_county,
+		b.start_town,
+		b.end_province,
+		b.end_city,
+		b.end_county,
+		b.end_town,
+		b.contact_name,
+		b.contact_mobilephone,
+		b.contact_telephone,
+		b.remark,
+		b.deploy_userid,
+		b.modify_userid,
+		b.company_id,
+		b.cargo_flag,
+		b.deleted_flag,
+		b.cargo_flag_time,
+		b.create_time,
+		b.modify_time,b.CARGO_ORIGIN,b.COMPANY_NAME,
+		(CASE WHEN start_county is NOT NULL THEN
+        CONCAT(start_province,start_city,start_county)
+        WHEN start_city IS NOT NULL THEN CONCAT(start_province,start_city)
+        ELSE start_province 
+        END) startProCityCounty,
+        (CASE WHEN end_county is NOT NULL THEN CONCAT(end_province,end_city,end_county)
+        WHEN end_city IS NOT NULL THEN CONCAT(end_province,end_city)
+        ELSE end_province
+        END) endProCityCounty,
+		c.id assist_id,
+		c.cargo_result,
+		c.reg_company_id,
+		c.market_user_id,
+		c.cargo_info_from,
+		c.is_match_success,
+		c.has_transaction,
+		(SELECT COUNT(*) FROM t_marketing_cargo_driver_contacts a where a.assist_id = c.id) contact_driver_count 
+		 FROM t_order_cargo_info b,t_marketing_cargo_assist c  
+		WHERE b.id = c.cargo_id AND c.market_user_id = #{marketUserId} 
+		 AND b.cargo_origin = #{cargoOrigin}  AND b.contact_mobilephone = #{contactMobilephone}  
+		 <!-- 0表示今天导入的货源 --> 
+		<if test="mark == 0 ">
+		AND UNIX_TIMESTAMP(DATE_FORMAT(b.create_time,'%Y-%m-%d')) = UNIX_TIMESTAMP(date_format(SYSDATE(),'%Y-%m-%d')) 
+		</if>
+		<!-- 1历史导入的未配成功的有效货源 -->
+		 <if test="mark == 1 ">
+		 AND UNIX_TIMESTAMP(DATE_FORMAT(b.create_time,'%Y-%m-%d')) != UNIX_TIMESTAMP(date_format(SYSDATE(),'%Y-%m-%d'))
+		 AND UNIX_TIMESTAMP(date_format(b.request_start_time,'%Y-%c-%d')) <![CDATA[=]]> UNIX_TIMESTAMP(CURRENT_DATE())
+		</if> 
+		ORDER BY b.request_start_time DESC 
+	</select>
+	
+	<!-- 0今天导入的货源 or 1历史导入的未配成功的有效货源-不分页（导入的货源手机号相同，但公司名不同时取最先导入的那条公司信息） -->
+	<select id="queryTodayImportInfo" parameterType="map" resultMap="today_order_cargo_info_domain_result">
+	 SELECT a.id,
+	 a.contact_name,
+	 a.contact_mobilephone,
+	 (select DATE_FORMAT(t.create_time,'%Y-%m-%d') from t_marketing_cargo_company_contacts t 
+	  where t.CONTACT_MOBILEPHONE = a.contact_mobilephone
+		ORDER BY t.id asc LIMIT 1) as firstDate,
+	(select t.reply_result  from t_marketing_cargo_company_contacts t
+		where t.CONTACT_MOBILEPHONE = a.contact_mobilephone
+		ORDER BY t.id DESC LIMIT 1) as cargoResultVal,
+	 a.contact_telephone,
+	 a.COMPANY_NAME,
+	 m.reg_company_id,
+	 (SELECT count(*) FROM t_order_cargo_info b,t_marketing_cargo_assist c  
+		WHERE b.id = c.cargo_id AND c.market_user_id = #{marketUserId} AND 
+		 b.cargo_origin = #{cargoOrigin}  
+		 AND b.contact_mobilephone = a.contact_mobilephone AND c.cargo_result IS NOT NULL 
+		 
+		   <!-- 0表示今天导入的货源 --> 
+		<if test="mark == 0 ">
+		 AND UNIX_TIMESTAMP(DATE_FORMAT(b.create_time,'%Y-%m-%d')) = UNIX_TIMESTAMP(date_format(SYSDATE(),'%Y-%m-%d')) 
+		</if>
+		   <!-- 1历史导入的未配成功的有效货源 -->
+		 <if test="mark == 1 ">
+		 AND UNIX_TIMESTAMP(DATE_FORMAT(b.create_time,'%Y-%m-%d')) != UNIX_TIMESTAMP(date_format(SYSDATE(),'%Y-%m-%d')) 
+		<!--AND c.is_match_success != #{isMatchSuccess}  -->
+		 <!--and b.DELETED_FLAG = #{deletedFlag}-->
+		 AND UNIX_TIMESTAMP(date_format(b.request_start_time,'%Y-%c-%d')) <![CDATA[=]]> UNIX_TIMESTAMP(CURRENT_DATE())
+	</if> ) contact_cargo_Count,
+	(SELECT count(*) FROM t_order_cargo_info b,t_marketing_cargo_assist c  
+		WHERE b.id = c.cargo_id AND c.market_user_id = #{marketUserId} AND 
+		 b.cargo_origin = #{cargoOrigin}  AND b.contact_mobilephone = a.contact_mobilephone 
+		 
+		   <!-- 0表示今天导入的货源 --> 
+		<if test="mark == 0 ">
+		 AND UNIX_TIMESTAMP(DATE_FORMAT(b.create_time,'%Y-%m-%d')) = UNIX_TIMESTAMP(date_format(SYSDATE(),'%Y-%m-%d')) 
+		</if>
+		   <!-- 1历史导入的未配成功的有效货源 -->
+		 <if test="mark == 1 ">
+		 AND UNIX_TIMESTAMP(DATE_FORMAT(b.create_time,'%Y-%m-%d')) != UNIX_TIMESTAMP(date_format(SYSDATE(),'%Y-%m-%d')) 
+		 <!-- AND c.is_match_success != #{isMatchSuccess}  -->
+		 <!--and b.DELETED_FLAG = #{deletedFlag} -->
+		 AND UNIX_TIMESTAMP(date_format(b.request_start_time,'%Y-%c-%d')) <![CDATA[=]]> UNIX_TIMESTAMP(CURRENT_DATE())
+	</if> )importCount 
+	FROM t_order_cargo_info a,t_marketing_cargo_assist m 
+	WHERE a.id = m.cargo_id AND m.market_user_id = #{marketUserId} 
+	AND a.cargo_origin = #{cargoOrigin}
+	   <!-- 0表示今天导入的货源 --> 
+	<if test="mark == 0 ">
+	AND UNIX_TIMESTAMP(DATE_FORMAT(a.create_time,'%Y-%m-%d')) = UNIX_TIMESTAMP(date_format(SYSDATE(),'%Y-%m-%d')) 
+	</if>
+	   <!-- 1历史导入的未配成功的有效货源 -->
+	 <if test="mark == 1 ">
+	AND UNIX_TIMESTAMP(DATE_FORMAT(a.create_time,'%Y-%m-%d')) != UNIX_TIMESTAMP(date_format(SYSDATE(),'%Y-%m-%d')) 
+	<!-- AND m.is_match_success != #{isMatchSuccess}  -->
+	 <!--and a.DELETED_FLAG = #{deletedFlag} -->
+	 AND UNIX_TIMESTAMP(date_format(a.request_start_time,'%Y-%c-%d')) <![CDATA[=]]> UNIX_TIMESTAMP(CURRENT_DATE())
+	</if>
+	<!-- 根据手机号码查询 -->
+	<if test="null != contactMobilephone  and '' != contactMobilephone">
+		and a.contact_mobilephone = #{contactMobilephone}
+	</if> 
+		GROUP BY a.contact_mobilephone HAVING MIN(a.create_time) 
+		ORDER BY a.create_time DESC 
+	</select> 
+	
+	
+	
+	<!-- 0今天导入的货源 or 1历史导入的未配成功的有效货源-分页（导入的货源手机号相同，但公司名不同时取最先导入的那条公司信息） -->
+	<select id="queryTodayImportInfoByPage" parameterType="map" resultMap="today_order_cargo_info_domain_result">
+	 SELECT a.id,
+	 a.contact_name,
+	 a.contact_mobilephone,
+	 (select DATE_FORMAT(t.create_time,'%Y-%m-%d') from t_marketing_cargo_company_contacts t 
+	  where t.CONTACT_MOBILEPHONE = a.contact_mobilephone
+		ORDER BY t.id asc LIMIT 1) as firstDate,
+	 a.contact_telephone,
+	 a.COMPANY_NAME,
+	 m.reg_company_id,
+	 (SELECT count(*) FROM t_order_cargo_info b,t_marketing_cargo_assist c  
+		WHERE b.id = c.cargo_id AND c.market_user_id = #{marketUserId} AND 
+		 b.cargo_origin = #{cargoOrigin}  
+		 AND b.contact_mobilephone = a.contact_mobilephone AND c.cargo_result IS NOT NULL    
+		 
+		   <!-- 0表示今天导入的货源 --> 
+		<if test="mark == 0 ">
+		 AND UNIX_TIMESTAMP(DATE_FORMAT(b.create_time,'%Y-%m-%d')) = UNIX_TIMESTAMP(date_format(SYSDATE(),'%Y-%m-%d')) 
+		</if>
+		   <!-- 1历史导入的未配成功的有效货源 -->
+		 <if test="mark == 1 ">
+		 AND UNIX_TIMESTAMP(DATE_FORMAT(b.create_time,'%Y-%m-%d')) != UNIX_TIMESTAMP(date_format(SYSDATE(),'%Y-%m-%d')) 
+		 AND c.is_match_success != #{isMatchSuccess} 
+		 AND b.DELETED_FLAG = #{deletedFlag} 
+		 AND UNIX_TIMESTAMP(date_format(b.request_start_time,'%Y-%c-%d')) <![CDATA[=]]> UNIX_TIMESTAMP(CURRENT_DATE())
+	</if> ) contact_cargo_Count,
+	(SELECT count(*) FROM t_order_cargo_info b,t_marketing_cargo_assist c  
+		WHERE b.id = c.cargo_id AND c.market_user_id = #{marketUserId} AND 
+		 b.cargo_origin = #{cargoOrigin}  AND b.contact_mobilephone = a.contact_mobilephone  
+		 
+		<!-- 0表示今天导入的货源 --> 
+		<if test="mark == 0 ">
+		AND UNIX_TIMESTAMP(DATE_FORMAT(b.create_time,'%Y-%m-%d')) = UNIX_TIMESTAMP(date_format(SYSDATE(),'%Y-%m-%d')) 
+		</if>
+		<!-- 1历史导入的未配成功的有效货源 -->
+		 <if test="mark == 1 ">
+		AND UNIX_TIMESTAMP(DATE_FORMAT(b.create_time,'%Y-%m-%d')) != UNIX_TIMESTAMP(date_format(SYSDATE(),'%Y-%m-%d')) 
+		 AND c.is_match_success != #{isMatchSuccess} 
+		 AND b.DELETED_FLAG = #{deletedFlag}  
+		 AND UNIX_TIMESTAMP(date_format(b.request_start_time,'%Y-%c-%d')) <![CDATA[=]]> UNIX_TIMESTAMP(CURRENT_DATE())
+		</if> )importCount 
+	FROM t_order_cargo_info a,t_marketing_cargo_assist m 
+	WHERE a.id = m.cargo_id AND m.market_user_id = #{marketUserId}  
+	AND a.cargo_origin = #{cargoOrigin}  
+	   <!-- 0表示今天导入的货源 --> 
+	<if test="mark == 0 ">
+	AND UNIX_TIMESTAMP(DATE_FORMAT(a.create_time,'%Y-%m-%d')) = UNIX_TIMESTAMP(date_format(SYSDATE(),'%Y-%m-%d')) 
+	</if>
+	   <!-- 1表示历史导入的未配成功的有效货源 -->
+	 <if test="mark == 1 ">
+	AND UNIX_TIMESTAMP(DATE_FORMAT(a.create_time,'%Y-%m-%d')) != UNIX_TIMESTAMP(date_format(SYSDATE(),'%Y-%m-%d')) 
+	 AND m.is_match_success != #{isMatchSuccess}
+	 AND a.DELETED_FLAG = #{deletedFlag}   
+	 AND UNIX_TIMESTAMP(date_format(a.request_start_time,'%Y-%c-%d')) <![CDATA[=]]> UNIX_TIMESTAMP(CURRENT_DATE())
+	</if>
+		GROUP BY a.contact_mobilephone HAVING MIN(a.create_time) 
+		ORDER BY a.create_time DESC LIMIT #{beginNum},#{endNum}
+	</select>
+	
+	
+	<!-- 0今天导入的货源 or 1历史导入的未配成功的有效货源-总记录数-->
+	<select id="queryTodayImportInfoCount" parameterType="map" resultType="Integer">
+	 SELECT COUNT(DISTINCT a.contact_mobilephone) 
+	FROM t_order_cargo_info a,t_marketing_cargo_assist m 
+	WHERE a.id = m.cargo_id AND m.market_user_id = #{marketUserId} 
+	AND a.cargo_origin = #{cargoOrigin} 
+	   <!-- 0表示今天导入的货源 --> 
+	<if test="mark == 0 ">
+	AND UNIX_TIMESTAMP(DATE_FORMAT(a.create_time,'%Y-%m-%d')) = UNIX_TIMESTAMP(date_format(SYSDATE(),'%Y-%m-%d')) 
+	</if>
+	   <!-- 1表示历史导入的未配成功的有效货源 -->
+	 <if test="mark == 1 ">
+		AND UNIX_TIMESTAMP(DATE_FORMAT(a.create_time,'%Y-%m-%d')) != UNIX_TIMESTAMP(date_format(SYSDATE(),'%Y-%m-%d')) 
+	 	AND m.is_match_success != #{isMatchSuccess}
+	 	AND a.DELETED_FLAG = #{deletedFlag}  
+	 	AND UNIX_TIMESTAMP(date_format(a.request_start_time,'%Y-%c-%d')) <![CDATA[=]]> UNIX_TIMESTAMP(CURRENT_DATE())
+	</if> 
+	</select>
+	
+	
+    <!-- 添加货源 -->
+    <insert id="addOrderCargoInfo" parameterType="OrderCargoInfo" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO t_order_cargo_info (
+   		cargo_name,
+		cargo_type,
+		cargo_weight,
+		cargo_cubage,
+		request_car_length,
+		request_car_bar_type,
+		request_car_plate_type,
+		freight,
+		request_start_time,
+		request_end_time,
+		start_province,
+		start_city,
+		start_county,
+		start_town,
+		end_province,
+		end_city,
+		end_county,
+		end_town,
+		contact_name,
+		contact_mobilephone,
+		contact_telephone,
+		remark,
+		deploy_userid,
+		modify_userid,
+		company_id,
+		cargo_flag,
+		deleted_flag,
+		cargo_flag_time,
+		create_time,
+		modify_time,CARGO_ORIGIN,COMPANY_NAME) VALUES (
+		#{cargoName},#{cargoType},#{cargoWeight},#{cargoCubage},#{requestCarLength},
+		#{requestCarBarType},#{requestCarPlateType},#{freight},#{requestStartTime},#{requestEndTime},
+		#{startProvince},#{startCity},#{startCounty},#{startTown},#{endProvince},#{endCity},
+		#{endCounty},#{endTown},#{contactName},#{contactMobilephone},#{contactTelephone},
+		#{remark},#{deployUserid},#{modifyUserid},
+		#{companyId},#{cargoFlag},#{deletedFlag},sysdate(),sysdate(),sysdate(),#{cargoOrigin},#{companyName})
+    </insert>
+    <!-- 根据公司联系人的号码删除导入的货源（即修改状态） -->
+    <update id="modifyDeletedFlagByPhone" parameterType="map">
+      UPDATE t_order_cargo_info t,t_marketing_cargo_assist t1 SET
+        t.deleted_flag = #{deletedFlag},
+        t.modify_userid = #{modifyUserid},
+        t.modify_time = sysdate(),
+        t1.cargo_result=#{cargoResultthree}
+        where t.id = t1.cargo_id 
+        and t1.market_user_id = #{modifyUserid}
+        and t.contact_mobilephone=#{contactMobilephone}
+        and DATE_FORMAT(t.CREATE_TIME,'%Y-%m-%d')=DATE_FORMAT(sysdate(),'%Y-%m-%d')
+        and (t1.cargo_result ${cargoResultisnull} or t1.cargo_result= #{cargoResultone})
+		and t1.is_match_success = ${isMatchSuccess}
+    </update>
+    
+    <!-- 根据货源Id修改货源删除状态 -->
+    <update id="modifyOrderDeleteFlagById" parameterType="map">
+        UPDATE t_order_cargo_info SET
+        deleted_flag = #{deletedFlag},modify_userid = #{modifyUserid},
+        modify_time = sysdate()
+        where id=#{id} 
+    </update>
+    
+</mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+
+	<typeHandler jdbcType="CLOB" javaType="java.lang.String" callback="org.springframework.orm.ibatis.support.ClobStringTypeHandler" />
+	<typeHandler jdbcType="BLOB" javaType="[B" callback="org.springframework.orm.ibatis.support.BlobByteArrayTypeHandler" />
+
+    <sqlMap resource="com/cy/common/xmlsql/crud/frame/xt_log_action.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/crud/frame/xt_log_exception.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/crud/frame/xt_log_login.xml"/>
+	
+	<sqlMap resource="com/cy/common/xmlsql/business/frame/bus_xterrmsg.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/frame/bus_xtxtcs.xml"/>
+	
+</sqlMapConfig>

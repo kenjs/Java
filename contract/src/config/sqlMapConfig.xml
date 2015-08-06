@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig 
+PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN" 
+"http://www.ibatis.com/dtd/sql-map-config-2.dtd"> 
+<sqlMapConfig> 
+ 	<sqlMap resource="mapper/CityDistance.xml" /> 
+	<sqlMap resource="mapper/ContractAppendix.xml" /> 
+	<sqlMap resource="mapper/Pact.xml" /> 
+	<sqlMap resource="mapper/ContractDictionary.xml" /> 
+	<sqlMap resource="mapper/ShipperRelaSubContractor.xml" /> 
+	<sqlMap resource="mapper/ContractAttribute.xml" /> 
+	<sqlMap resource="mapper/ConsigneeConsignorAddress.xml" /> 
+	<sqlMap resource="mapper/GoodsType.xml" /> 
+	<sqlMap resource="mapper/SettleBill.xml" />
+	<sqlMap resource="mapper/SettleSet.xml" /> 
+	<sqlMap resource="mapper/Waybill.xml" /> 
+	<sqlMap resource="mapper/WaybillAmount.xml" />
+	<sqlMap resource="mapper/WaybillLog.xml" />
+	<sqlMap resource="mapper/Goods.xml" />
+	<sqlMap resource="mapper/WaybillSign.xml" />
+	<sqlMap resource="mapper/WaybillStowage.xml" />
+	<sqlMap resource="mapper/BankFactoring.xml" />
+	<sqlMap resource="mapper/SettleStepSet.xml" /> 
+	<!-- 发票核销 -->
+	<sqlMap resource="mapper/SettleBillVerification.xml" />
+	<!-- 订单 -->
+	<sqlMap resource="mapper/OutWaybill.xml" />
+	<sqlMap resource="mapper/OutGoods.xml" />
+</sqlMapConfig>
+

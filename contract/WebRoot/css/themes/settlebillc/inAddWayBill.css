@@ -1,0 +1,95 @@
+@CHARSET "UTF-8";
+		input[type="text"]{
+			width: 110px;
+			height: 25px;
+			padding-left: 5px;
+			line-height: 24px;
+			padding-left: 5px;
+			color: #444444;
+			}
+		input[type="text"]:HOVER{
+			padding-left: 5px;
+			line-height: 24px;
+			border: 1px solid #a0cfe0;
+		}
+		#hgrid_title {
+			background-color: #EEEEEE;
+			padding: 0;
+			margin: 0;
+			table-layout: fixed; 
+			border-collapse:collapse;
+		}
+		#hgrid_title th{
+			background-color: #EEEEEE;
+			text-align: left;
+			} 
+		#topquery{
+			margin-top: 30px;
+		}
+		 .btn{
+		  	display: inline-block;
+		 	  position: relative;
+		 	  margin: 10px;
+		 	  padding: 0 20px;
+			  text-align: center;
+		  	  text-decoration: none;
+		     font: bold 12px/25px Arial, sans-serif;
+		     text-shadow: 1px 1px 1px rgba(255,255,255, .22);
+		     -webkit-border-radius: 2px;
+		     -moz-border-radius: 2px;
+		     border-radius: 2px;
+		}
+		#btnquery{
+			background-color:#fcfcfc ;
+			border: 1px solid #999999;
+			cursor: pointer;
+			height: 25px;
+			margin-left: 10px;
+			padding: 0;
+			width: 60px;
+		}
+		#btnquery:hover{
+			background-color: #f9f9f9;
+		}	
+		#save,#reback{
+			width: 86px;
+			height: 34px;
+			line-height: 32px;
+			cursor: pointer;
+			background-color: #ef6d21;color:#ffffff;
+			font-weight: bold;border: none;
+			margin-left:15px; 
+			border-right-width: 0px;
+			font-weight: bold;
+		}	
+		#save:hover,#reback:hover{
+			background-color: #dc5708;color:#ffffff;
+		}	
+		input[type='checkbox']{
+			margin-left: 20px;
+		}
+		.waybillnumber,.clientcode,.inputdate,.clientcode,.inoroutamount{
+			height: 30px;
+			width: 100px;
+		}	
+		 .checkstatus{
+			height: 30px;
+			width: 40px;
+		}
+		.consignor{
+			height: 30px;
+			width: 150px;
+		}
+		#hgrid{
+			padding: 0;
+			margin: 0;
+			table-layout: fixed; 
+			border-collapse:collapse;
+		}
+		#hgrid tr:hover{
+			background-color: #FFFEDB;
+		}
+		#hgrid td{
+			border-bottom: 1px solid #E7e7e7;
+		}
+		label{font-size: 12px;font-weight: normal;color: black;}

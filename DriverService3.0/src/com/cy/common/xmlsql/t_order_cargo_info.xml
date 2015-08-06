@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<resultMap class="com.cy.driver.cargo.domain.OrderCargoInfoDomain" id="OrderCargoInfoDomain">
+		<result property="id" column="ID"/>
+		<result property="startProvince" column="START_PROVINCE"/>
+		<result property="startCity" column="START_CITY"/>
+		<result property="startCounty" column="START_COUNTY"/>
+		<result property="startTown" column="START_TOWN"/>
+		<result property="endProvince" column="END_PROVINCE"/>
+		<result property="endCity" column="END_CITY"/>
+		<result property="endCounty" column="END_COUNTY"/>
+		<result property="endTown" column="END_TOWN"/>
+		<result property="cargoType" column="CARGO_TYPE"/>
+		<result property="cargoName" column="CARGO_NAME"/>
+		<result property="cargoCubage" column="CARGO_CUBAGE"/>
+		<result property="cargoWeight" column="CARGO_WEIGHT"/>
+		<result property="requestCarPlateType" column="REQUEST_CAR_PLATE_TYPE"/>
+		<result property="requestCarLength" column="REQUEST_CAR_LENGTH"/>
+		<result property="requestStartTime" column="REQUEST_START_TIME"/>
+		<result property="contactMobilephone" column="CONTACT_MOBILEPHONE"/>
+		<result property="contactTelephone" column="CONTACT_TELEPHONE"/>
+	</resultMap>
+	
+	<resultMap class="com.cy.driver.cargo.domain.OrderCargoInfoDomain" id="OrderCargoInfoDomainOther">
+		<result property="id" column="ID"/>
+		<result property="startProvince" column="START_PROVINCE"/>
+		<result property="startCity" column="START_CITY"/>
+		<result property="startCounty" column="START_COUNTY"/>
+		<result property="startTown" column="START_TOWN"/>
+		<result property="endProvince" column="END_PROVINCE"/>
+		<result property="endCity" column="END_CITY"/>
+		<result property="endCounty" column="END_COUNTY"/>
+		<result property="endTown" column="END_TOWN"/>
+		<result property="cargoType" column="CARGO_TYPE"/>
+		<result property="cargoName" column="CARGO_NAME"/>
+		<result property="cargoCubage" column="CARGO_CUBAGE"/>
+		<result property="cargoWeight" column="CARGO_WEIGHT"/>
+		<result property="requestCarPlateType" column="REQUEST_CAR_PLATE_TYPE"/>
+		<result property="requestCarLength" column="REQUEST_CAR_LENGTH"/>
+		<result property="requestStartTime" column="REQUEST_START_TIME"/>
+		<result property="contactMobilephone" column="CONTACT_MOBILEPHONE"/>
+		<result property="contactTelephone" column="CONTACT_TELEPHONE"/>
+	</resultMap>
+	
+	<resultMap class="com.cy.driver.cargo.domain.OrderCargoInfoDomain" id="OrderCargoInfoDomainDetail">
+		<result property="id" column="ID"/>
+		<result property="startProvince" column="START_PROVINCE"/>
+		<result property="startCity" column="START_CITY"/>
+		<result property="startCounty" column="START_COUNTY"/>
+		<result property="startTown" column="START_TOWN"/>
+		<result property="endProvince" column="END_PROVINCE"/>
+		<result property="endCity" column="END_CITY"/>
+		<result property="endCounty" column="END_COUNTY"/>
+		<result property="endTown" column="END_TOWN"/>
+		<result property="requestStartTime" column="REQUEST_START_TIME"/>
+		<result property="requestEndTime" column="REQUEST_END_TIME"/>		
+		<result property="cargoName" column="CARGO_NAME"/>
+		<result property="cargoType" column="CARGO_TYPE"/>
+		<result property="cargoWeight" column="CARGO_WEIGHT"/>
+		<result property="cargoCubage" column="CARGO_CUBAGE"/>
+		<result property="remark" column="REMARK"/>
+		<result property="contactName" column="CONTACT_NAME"/>
+		<result property="companyId" column="COMPANY_ID"/>
+		<result property="companyName" column="COMPANY_NAME"/>		
+		<result property="contactMobilephone" column="CONTACT_MOBILEPHONE"/>
+		<result property="contactTelephone" column="CONTACT_TELEPHONE"/>
+	</resultMap>
+	<!-- 附近货源 -->
+	<select id="iBatisSelectNearByCargoList" parameterClass="map" resultMap="OrderCargoInfoDomain">
+		SELECT
+			ID,
+			START_PROVINCE,
+			START_CITY,
+			START_COUNTY,
+			START_TOWN,
+			END_PROVINCE,
+			END_CITY,
+			END_COUNTY,
+			END_TOWN,
+			CARGO_TYPE,
+			CARGO_NAME,
+			CARGO_WEIGHT,
+			CARGO_CUBAGE,
+			REQUEST_CAR_PLATE_TYPE,
+			REQUEST_CAR_LENGTH,
+			REQUEST_START_TIME,
+			CONTACT_MOBILEPHONE,
+			CONTACT_TELEPHONE
+		FROM
+			t_order_cargo_info
+		WHERE
+			START_PROVINCE = #startProvince#
+		AND
+			START_CITY = #startCity#
+		AND DELETED_FLAG = 0
+		AND CARGO_FLAG = 0	
+		AND REQUEST_START_TIME <![CDATA[>=]]> DATE_FORMAT(SYSDATE(),'%Y-%m-%d')
+		ORDER BY REQUEST_START_TIME ASC,CREATE_TIME DESC
+		LIMIT $fromSize$,$listSize$			
+	</select>
+	<!-- 符合预约的货源 -->
+	<select id="iBatisSelectCargoSuitOrderList" parameterClass="map" resultMap="OrderCargoInfoDomainOther">
+		SELECT
+			t.ID,t.START_PROVINCE,t.START_CITY,t.START_COUNTY,t.START_TOWN,t.END_PROVINCE,t.END_CITY,
+			t.END_COUNTY,t.END_TOWN,t.CARGO_TYPE,t.CARGO_NAME,
+			t.REQUEST_CAR_PLATE_TYPE,t.REQUEST_CAR_LENGTH,t.REQUEST_START_TIME,t.CONTACT_MOBILEPHONE,
+			t.CARGO_CUBAGE,t.CARGO_WEIGHT,t.CONTACT_TELEPHONE
+		FROM t_order_cargo_info t where
+		((t.START_PROVINCE = #startProvice1# and t.START_CITY = #startCity1# and t.END_PROVINCE = #endProvince1#
+			and t.END_CITY = #endCity1# and t.REQUEST_START_TIME <![CDATA[<=]]> DATE_FORMAT(#startTime1#,'%Y-%m-%d')) 
+		OR
+	  		(t.START_PROVINCE = #startProvice2# and t.START_CITY = #startCity2# and t.END_PROVINCE = #endProvince2#
+			and t.END_CITY = #endCity2# and t.REQUEST_START_TIME <![CDATA[<=]]> DATE_FORMAT(#startTime2#,'%Y-%m-%d')) 
+		OR
+			(t.START_PROVINCE = #startProvice3# and t.START_CITY = #startCity3# and t.END_PROVINCE = #endProvince3#
+			and t.END_CITY = #endCity3# and t.REQUEST_START_TIME <![CDATA[<=]]> DATE_FORMAT(#startTime3#,'%Y-%m-%d')) )
+		AND t.CARGO_FLAG = 0	
+		AND t.DELETED_FLAG = 0	
+		AND t.REQUEST_START_TIME <![CDATA[>=]]> DATE_FORMAT(SYSDATE(),'%Y-%m-%d')	
+		ORDER BY t.REQUEST_START_TIME ASC,t.CREATE_TIME DESC
+		limit $fromSize$,$listSize$			
+	</select>
+	
+	<!-- 根据司机线路查找货源 -->
+	<select id="iBatisSelectCargoByDriverLineList" parameterClass="map" resultMap="OrderCargoInfoDomainOther">
+			SELECT
+				cargo.ID,cargo.START_PROVINCE,cargo.START_CITY,cargo.START_COUNTY,cargo.START_TOWN,cargo.END_PROVINCE,cargo.END_CITY,
+				cargo.END_COUNTY,cargo.END_TOWN,cargo.CARGO_TYPE,
+				cargo.CARGO_NAME,cargo.CARGO_WEIGHT,cargo.CARGO_CUBAGE,cargo.REQUEST_CAR_PLATE_TYPE,cargo.REQUEST_CAR_LENGTH,
+				cargo.REQUEST_START_TIME,cargo.CONTACT_MOBILEPHONE,cargo.CONTACT_TELEPHONE
+			FROM t_order_cargo_info cargo where
+				((cargo.START_PROVINCE = #startProvice1# 
+				and cargo.START_CITY = #startCity1# 
+				and cargo.END_PROVINCE = #endProvince1#
+				and cargo.END_CITY = #endCity1#) 
+			OR
+		  		(cargo.START_PROVINCE = #startProvice2# 
+		  		and cargo.START_CITY = #startCity2# 
+				and cargo.END_PROVINCE = #endProvince2#
+				and cargo.END_CITY = #endCity2#) 
+			OR
+				(cargo.START_PROVINCE = #startProvice3# 
+				and cargo.START_CITY = #startCity3# 
+				and cargo.END_PROVINCE = #endProvince3#
+				and cargo.END_CITY = #endCity3#) )
+			AND cargo.CARGO_FLAG = 0
+			AND cargo.DELETED_FLAG = 0		
+			AND cargo.REQUEST_START_TIME <![CDATA[>=]]> DATE_FORMAT(SYSDATE(),'%Y-%m-%d')
+			ORDER BY
+			cargo.REQUEST_START_TIME ASC,cargo.CREATE_TIME DESC
+			limit $fromSize$,$listSize$
+	</select>
+	
+	<!-- 查找货源 -->
+	<select id="iBatisSelectCargoList" parameterClass="map" resultMap="OrderCargoInfoDomain">
+		SELECT
+			cargo.ID,				
+			cargo.START_PROVINCE,
+			cargo.START_CITY,
+			cargo.START_COUNTY,
+			cargo.START_TOWN,
+			cargo.END_PROVINCE,
+			cargo.END_CITY,
+			cargo.END_COUNTY,
+			cargo.END_TOWN,
+			cargo.CARGO_TYPE,
+			cargo.CARGO_NAME,
+			cargo.CARGO_WEIGHT,
+			cargo.CARGO_CUBAGE,
+			cargo.REQUEST_CAR_PLATE_TYPE,
+			cargo.REQUEST_CAR_LENGTH,
+			cargo.REQUEST_START_TIME,
+			cargo.CONTACT_MOBILEPHONE,
+			cargo.CONTACT_TELEPHONE
+		FROM
+			t_order_cargo_info cargo	
+		WHERE 
+			cargo.DELETED_FLAG = 0
+		AND cargo.CARGO_FLAG = 0	
+		AND cargo.REQUEST_START_TIME <![CDATA[>=]]> DATE_FORMAT(SYSDATE(),'%Y-%m-%d')
+		<dynamic>
+			<isNotEmpty property="startTime" prepend="and">
+				cargo.REQUEST_START_TIME <![CDATA[>=]]> DATE_FORMAT(#startTime#, '%Y-%m-%d')
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="endTime">
+				cargo.REQUEST_START_TIME <![CDATA[<=]]> DATE_FORMAT(#endTime#, '%Y-%m-%d')
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="startProvince">
+				cargo.START_PROVINCE = #startProvince#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="endProvince">
+				cargo.END_PROVINCE = #endProvince#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="startCity">
+				cargo.START_CITY = #startCity#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="endCity">
+				cargo.END_CITY = #endCity#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="carType">
+				cargo.REQUEST_CAR_BAR_TYPE = #carType#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="carLength">
+				REPLACE (cargo.REQUEST_CAR_LENGTH,' ','') = #carLength#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="companyName">
+				cargo.COMPANY_ID IN 
+				(select ID from t_company_info where COMPANY_NAME LIKE CONCAT('%',#companyName#,'%'))
+			</isNotEmpty>
+		</dynamic>		
+		ORDER BY cargo.REQUEST_START_TIME ASC,cargo.CREATE_TIME DESC
+		LIMIT $fromSize$,$listSize$
+	</select>
+	<!-- 根据司机线路查找符合条件的货物数量 -->
+	<select id="iBatisSelectCargoNumByDriverLine" parameterClass="map" resultClass="Integer">
+		SELECT
+				count(cargo.ID)			
+		FROM t_order_cargo_info cargo where
+			((cargo.START_PROVINCE = #startProvice1# 
+			and cargo.START_CITY = #startCity1# 
+			and cargo.END_PROVINCE = #endProvince1#
+			and cargo.END_CITY = #endCity1#) 
+		OR
+	  		(cargo.START_PROVINCE = #startProvice2# 
+	  		and cargo.START_CITY = #startCity2# 
+			and cargo.END_PROVINCE = #endProvince2#
+			and cargo.END_CITY = #endCity2#) 
+		OR
+			(cargo.START_PROVINCE = #startProvice3# 
+			and cargo.START_CITY = #startCity3# 
+			and cargo.END_PROVINCE = #endProvince3#
+			and cargo.END_CITY = #endCity3#) )
+		AND cargo.CARGO_FLAG = 0
+		AND cargo.REQUEST_START_TIME <![CDATA[>=]]> DATE_FORMAT(SYSDATE(),'%Y-%m-%d')
+		AND cargo.DELETED_FLAG = 0				
+	</select>
+	<!-- 货源详情 -->
+	<select id="iBatisSelectCargoById" parameterClass="String" resultMap="OrderCargoInfoDomainDetail">
+		SELECT
+			cargo.ID,
+			cargo.START_PROVINCE,
+			cargo.START_CITY,
+			cargo.START_COUNTY,
+			cargo.START_TOWN,
+			cargo.END_PROVINCE,
+			cargo.END_CITY,
+			cargo.END_COUNTY,
+			cargo.END_TOWN,
+			cargo.REQUEST_START_TIME,	
+			cargo.REQUEST_END_TIME,
+			cargo.CARGO_NAME,
+			cargo.CARGO_TYPE,
+			cargo.CARGO_WEIGHT,
+			cargo.CARGO_CUBAGE,
+			cargo.REMARK,
+			cargo.CONTACT_NAME,
+			cargo.COMPANY_ID,
+			(select c.COMPANY_NAME from t_company_info c where c.ID = cargo.COMPANY_ID) COMPANY_NAME,
+			cargo.CONTACT_MOBILEPHONE,
+			cargo.CONTACT_TELEPHONE
+		FROM
+			t_order_cargo_info cargo
+		WHERE
+			cargo.ID = #id#
+	</select>
+	
+	<!-- 修改货源 -->
+	<update id="iBatsiUpdateCargoInfo" parameterClass="map">
+		update t_order_cargo_info set MODIFY_TIME = sysdate()
+			<dynamic>
+				<isNotEmpty prepend="," property="cargoFlag">
+					CARGO_FLAG = #cargoFlag#
+				</isNotEmpty>
+				<isNotEmpty prepend="," property="contactName">
+					CONTACT_NAME = #contactName#
+				</isNotEmpty>
+				<isNotEmpty prepend="," property="contactTelephone">
+					CONTACT_MOBILEPHONE = #contactTelephone#
+				</isNotEmpty>
+				<isNotEmpty prepend="," property="requestStartTime">
+					REQUEST_START_TIME = DATE_FORMAT(#requestStartTime#,'%Y-%m-%d %H:%i:%s')
+				</isNotEmpty>
+			</dynamic> 
+		where ID = 
+		(select CARGO_ID from t_transaction_info where ID = #id#)
+	</update>
+	
+	<!-- 附近货源提醒 -->
+	<select id="iBatisSelectNearByCargoRemid" parameterClass="map" resultClass="java.util.HashMap">
+		SELECT count(ID) nearByNum,DATE_FORMAT(max(MODIFY_TIME),'%Y-%m-%d %H:%i:%s') nearByTime
+		FROM
+			t_order_cargo_info
+		WHERE
+			START_PROVINCE = #startProvince#
+		AND
+			START_CITY = #startCity#
+		AND DELETED_FLAG = 0
+		AND CARGO_FLAG = 0	
+		<dynamic>
+			<isNotEmpty prepend="AND" property="nearByModifyTime">
+				MODIFY_TIME <![CDATA[>]]> DATE_FORMAT(#nearByModifyTime#,'%Y-%m-%d %H:%i:%s')
+			</isNotEmpty>
+		</dynamic>		
+		AND REQUEST_START_TIME <![CDATA[>=]]> DATE_FORMAT(SYSDATE(),'%Y-%m-%d')
+	</select>
+	
+	<!-- 预约货源提醒 -->
+	<select id="iBatisSelecBusinesslineCargoRemid" parameterClass="map" resultClass="java.util.HashMap">
+		SELECT count(t.ID) businesslineNum,DATE_FORMAT(max(t.MODIFY_TIME),'%Y-%m-%d %H:%i:%s') businesslineTime
+		FROM 
+			t_order_cargo_info t 
+		WHERE
+			((t.START_PROVINCE = #startProvice1# and t.START_CITY = #startCity1# and t.END_PROVINCE = #endProvince1#
+				and t.END_CITY = #endCity1# and t.REQUEST_START_TIME <![CDATA[<=]]> DATE_FORMAT(#startTime1#,'%Y-%m-%d')  
+				and t.REQUEST_END_TIME<![CDATA[>=]]> DATE_FORMAT(#endTime1#,'%Y-%m-%d')) 
+			OR
+		  		(t.START_PROVINCE = #startProvice2# and t.START_CITY = #startCity2# and t.END_PROVINCE = #endProvince2#
+				and t.END_CITY = #endCity2# and t.REQUEST_START_TIME <![CDATA[<=]]> DATE_FORMAT(#startTime2#,'%Y-%m-%d')  
+				and t.REQUEST_END_TIME<![CDATA[>=]]> DATE_FORMAT(#endTime2#,'%Y-%m-%d')) 
+			OR
+				(t.START_PROVINCE = #startProvice3# and t.START_CITY = #startCity3# and t.END_PROVINCE = #endProvince3#
+				and t.END_CITY = #endCity3# and t.REQUEST_START_TIME <![CDATA[<=]]> DATE_FORMAT(#startTime3#,'%Y-%m-%d')  
+				and t.REQUEST_END_TIME<![CDATA[>=]]> DATE_FORMAT(#endTime3#,'%Y-%m-%d')) )
+			AND t.MODIFY_TIME <![CDATA[>]]> DATE_FORMAT(#businesslineModifyTime#,'%Y-%m-%d %H:%i:%s')	
+			AND t.CARGO_FLAG = 0	
+			AND t.DELETED_FLAG = 0
+			AND t.REQUEST_START_TIME <![CDATA[>=]]> DATE_FORMAT(SYSDATE(),'%Y-%m-%d')
+	</select>
+	
+	<!-- 需要货源提醒 -->
+	<select id="iBatisSelectNeededCargoRemid" parameterClass="map" resultClass="java.util.HashMap">		
+		SELECT
+			count(cargo.ID) driverLineNum,DATE_FORMAT(max(cargo.MODIFY_TIME),'%Y-%m-%d %H:%i:%s') driverLineTime
+		FROM  t_order_cargo_info cargo		
+		WHERE
+			((cargo.START_PROVINCE = #startProvice1# 
+			and cargo.START_CITY = #startCity1# 
+			and cargo.END_PROVINCE = #endProvince1#
+			and cargo.END_CITY = #endCity1#) 
+		OR
+	  		(cargo.START_PROVINCE = #startProvice2# 
+	  		and cargo.START_CITY = #startCity2# 
+			and cargo.END_PROVINCE = #endProvince2#
+			and cargo.END_CITY = #endCity2#) 
+		OR
+			(cargo.START_PROVINCE = #startProvice3# 
+			and cargo.START_CITY = #startCity3# 
+			and cargo.END_PROVINCE = #endProvince3#
+			and cargo.END_CITY = #endCity3#) )
+		AND cargo.MODIFY_TIME <![CDATA[>]]> DATE_FORMAT(#driverLineModifyTime#,'%Y-%m-%d %H:%i:%s')	
+		AND cargo.CARGO_FLAG = 0
+		AND cargo.DELETED_FLAG = 0
+		AND cargo.REQUEST_START_TIME <![CDATA[>=]]> DATE_FORMAT(SYSDATE(),'%Y-%m-%d')					
+	</select>
+
+</sqlMap>

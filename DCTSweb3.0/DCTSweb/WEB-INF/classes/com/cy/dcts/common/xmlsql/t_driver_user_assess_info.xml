@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+<typeAlias alias="DriverUserAssessInfo" type="com.cy.dcts.common.bo.DriverUserAssessInfo"/><!-- 司机对货主（公司）评价 -->
+<resultMap class="DriverUserAssessInfo" id="driver_user_assess_info_result">
+  <result property="id" column="ID"/>
+  <result property="cargoId" column="CARGO_ID"/>
+  <result property="driverId" column="DRIVER_ID"/>
+  <result property="transactionId" column="TRANSACTION_ID"/><!-- 交易订单Id 20140704-->
+  <result property="userId" column="USER_ID"/>
+  <result property="assessEvaluateScore" column="ASSESS_EVALUATE_SCORE"/>
+  <result property="assess" column="ASSESS"/>
+  <result property="createTime" column="CREATE_TIME"/>
+  <result property="modifyTime" column="MODIFY_TIME"/>
+</resultMap>
+<!-- 查询司机对货主评价-不分页 -->
+<select id="query_driver_user_assess_info" parameterClass="map" resultClass="com.cy.dcts.common.domain.DriverUserAssessInfoDomain">
+	select 
+		info.DRIVER_ID as driverId,
+		(select t.`NAME` from t_driver_user_info t where t.ID=info.DRIVER_ID) as name,
+		info.CARGO_ID,
+		orderInfo.CARGO_TYPE as cargoType,
+		orderInfo.CARGO_NAME as cargoName,
+		orderInfo.START_PROVINCE as startProvince,
+		orderInfo.START_CITY as startCity,
+		orderInfo.END_PROVINCE as endProvince,
+		orderInfo.END_CITY as endCity,
+		info.USER_ID,
+		info.ASSESS_EVALUATE_SCORE as assessEvaluateScore,
+		info.TRANSACTION_ID as transactionId,
+		info.ASSESS as assess
+	 from t_driver_user_assess_info info ,t_order_cargo_info orderInfo 
+	where orderInfo.ID=info.CARGO_ID and info.USER_ID = #userId# 
+	<dynamic prepend="AND">
+     <isNotEmpty prepend="AND" property="assessEvaluateScore"> info.ASSESS_EVALUATE_SCORE = #assessEvaluateScore# </isNotEmpty>
+  </dynamic> 
+	order by info.CREATE_TIME desc 
+</select>
+
+<!-- 查询司机对货主评价-分页 -->
+<select id="query_driver_user_assess_info_byPage" parameterClass="map" resultClass="com.cy.dcts.common.domain.DriverUserAssessInfoDomain">
+	SELECT 
+		info.DRIVER_ID as driverId,
+		(select t.`NAME` from t_driver_user_info t where t.ID=info.DRIVER_ID) as name,
+		info.CARGO_ID,
+		orderInfo.CARGO_TYPE as cargoType,
+		orderInfo.CARGO_NAME as cargoName,
+		orderInfo.START_PROVINCE as startProvince,
+		orderInfo.START_CITY as startCity,
+		orderInfo.END_PROVINCE as endProvince,
+		orderInfo.END_CITY as endCity,
+		info.USER_ID,
+		info.ASSESS_EVALUATE_SCORE as assessEvaluateScore,
+		info.TRANSACTION_ID as transactionId,
+		info.ASSESS as assess
+	 FROM t_driver_user_assess_info info ,t_order_cargo_info orderInfo 
+	WHERE orderInfo.ID = info.CARGO_ID  and info.USER_ID = #userId# 
+	<dynamic prepend="AND">
+     <isNotEmpty prepend="AND" property="assessEvaluateScore"> info.ASSESS_EVALUATE_SCORE = #assessEvaluateScore# </isNotEmpty>
+  </dynamic> 
+	order by info.CREATE_TIME DESC 
+	LIMIT #beginNum#,#endNum# 
+</select>
+
+<!-- 查询司机对货主评价  总记录数 -->
+<select id="query_driver_user_assess_info_count" parameterClass="map" resultClass="java.lang.Integer">
+	SELECT COUNT(*) 
+	 FROM t_driver_user_assess_info info ,t_order_cargo_info orderInfo 
+	WHERE orderInfo.ID = info.CARGO_ID  and info.USER_ID = #userId# 
+	<dynamic prepend="AND">
+     <isNotEmpty prepend="AND" property="assessEvaluateScore"> info.ASSESS_EVALUATE_SCORE = #assessEvaluateScore# </isNotEmpty>
+  </dynamic> 
+</select>
+
+<!-- 根据货主Id（userId）查询司机对货主评价数(好评价，中评价，差评价)-->
+<select id="query_driver_user_assess_count_byAssessScore" parameterClass="String" resultClass="com.cy.dcts.common.domain.DriverUserAssessInfoDomain">
+ SELECT (select COMPANY_NAME from t_company_info  where id in (select COMPANY_ID from t_web_user_info where id = #userId#) ) as cargoName,
+ 	 sum(if(t.assess_evaluate_score=3,1,0)) AS satisfactory,
+     sum(if(t.assess_evaluate_score=6,1,0)) AS arial,
+     sum(if(t.assess_evaluate_score=9,1,0)) AS noSatisfactory 
+ FROM  
+   t_driver_user_assess_info t  
+ WHERE user_id = #userId#  
+</select>
+</sqlMap>

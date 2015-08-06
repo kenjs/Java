@@ -1,0 +1,229 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-3.1.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd"
+	default-lazy-init="true" default-autowire="byName">
+
+	<!-- 附件表-->
+	<bean id="contractAppendixDao" class="tf56.contract.services.impl.ContractAppendixDaoImpl">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<property name="sqlMapClient">
+			<ref bean="sqlMapClient" />
+		</property>
+	</bean>
+	<bean id="pactDao" class="tf56.contract.services.impl.PactDaoImpl">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<property name="sqlMapClient">
+			<ref bean="sqlMapClient" />
+		</property>
+	</bean>
+	<bean id="shipperRelaSubContractorDao"
+		class="tf56.contract.services.impl.ShipperRelaSubContractorDaoImpl">
+		<property name="dataSource">
+			<ref bean="dataSource" />     <!-- 注入数据库连接-->
+		</property>
+		<property name="sqlMapClient">
+			<ref bean="sqlMapClient" />   <!-- 注入iBatis-->
+		</property>
+	</bean>
+	<!--合同字典类管理  wei.huang-->
+	<bean id="contractDictionaryDao" class="tf56.contract.services.impl.ContractDictionaryDaoImpl">
+		<property name="dataSource">
+			<ref bean="dataSource" />     <!-- 注入数据库连接-->
+		</property>
+		<property name="sqlMapClient">
+			<ref bean="sqlMapClient" />   <!-- 注入iBatis-->
+		</property>
+	</bean>
+	<!--收发货地址  wei.huang-->
+	<bean id="consigneeConsignorAddressDao"
+		class="tf56.contract.services.impl.ConsigneeConsignorAddressDaoImpl">
+		<property name="dataSource">
+			<ref bean="dataSource" />     <!-- 注入数据库连接-->
+		</property>
+		<property name="sqlMapClient">
+			<ref bean="sqlMapClient" />   <!-- 注入iBatis-->
+		</property>
+	</bean>
+
+	<!--货物类型   wei.huang-->
+	<bean id="goodsTypeDao" class="tf56.contract.services.impl.GoodsTypeDaoImpl">
+		<property name="dataSource">
+			<ref bean="dataSource" />     <!-- 注入数据库连接-->
+		</property>
+		<property name="sqlMapClient">
+			<ref bean="sqlMapClient" />   <!-- 注入iBatis-->
+		</property>
+	</bean>
+	<!--ContractAttribute 总包扩展表-->
+	<bean id="contractAttributeDao" class="tf56.contract.services.impl.ContractAttributeDaoImpl">
+		<property name="dataSource">
+			<ref bean="dataSource" />     <!-- 注入数据库连接-->
+		</property>
+		<property name="sqlMapClient">
+			<ref bean="sqlMapClient" />   <!-- 注入iBatis-->
+		</property>
+	</bean>
+	<!-- 会员号表 -->
+	<bean id="partyService" class="tf56.contract.services.impl.PartyServiceImpl">
+	</bean>
+
+	<!-- 企业信息表 -->
+	<bean id="organizationService" class="tf56.contract.services.impl.OrganizationServiceImpl">
+	</bean>
+
+	<bean id="operatorService" class="tf56.contract.services.impl.OperatorServiceImpl">
+	</bean>
+	<bean id="areaCityService" class="tf56.contract.services.impl.AreaCityServiceImpl">
+	</bean>
+
+	<bean id="waybillStowageService" class="tf56.contract.services.impl.WaybillStowageServiceImpl">
+	</bean>
+
+	<!-- 城区距离dao -->
+	<bean id="cityDistanceDao" class="tf56.contract.services.impl.CityDistanceDaoImpl">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<property name="sqlMapClient">
+			<ref bean="sqlMapClient" />
+		</property>
+	</bean>
+
+	<!-- 运单 -->
+	<bean id="waybillDao" class="tf56.contract.services.impl.WaybillDaoImpl">
+		<property name="dataSource">
+			<ref bean="dataSource" />     <!-- 注入数据库连接-->
+		</property>
+		<property name="sqlMapClient">
+			<ref bean="sqlMapClient" />   <!-- 注入iBatis-->
+		</property>
+	</bean>
+	<bean id="waybillService" class="tf56.contract.services.impl.WaybillServiceImpl">
+	</bean>
+	<!-- 订单 -->
+	<bean id="outWaybillDao" class="tf56.contract.services.impl.OutWaybillDaoImpl">
+		<property name="dataSource">
+			<ref bean="dataSource" />     <!-- 注入数据库连接-->
+		</property>
+		<property name="sqlMapClient">
+			<ref bean="sqlMapClient" />   <!-- 注入iBatis-->
+		</property>
+	</bean>
+	<bean id="outWaybillService" class="tf56.contract.services.impl.OutWaybillServiceImpl">
+	</bean>
+	<!-- 运单配载 -->
+	<bean id="waybillStowageDao" class="tf56.contract.services.impl.WaybillStowageDaoImpl">
+		<property name="dataSource">
+			<ref bean="dataSource" />     <!-- 注入数据库连接-->
+		</property>
+		<property name="sqlMapClient">
+			<ref bean="sqlMapClient" />   <!-- 注入iBatis-->
+		</property>
+	</bean>
+	<!-- 运单签收 -->
+	<bean id="waybillSignDao" class="tf56.contract.services.impl.WaybillSignDaoImpl">
+		<property name="dataSource">
+			<ref bean="dataSource" />     <!-- 注入数据库连接-->
+		</property>
+		<property name="sqlMapClient">
+			<ref bean="sqlMapClient" />   <!-- 注入iBatis-->
+		</property>
+	</bean>
+	<!-- 运单费用 -->
+	<bean id="waybillAmountDao" class="tf56.contract.services.impl.WaybillAmountDaoImpl">
+		<property name="dataSource">
+			<ref bean="dataSource" />     <!-- 注入数据库连接-->
+		</property>
+		<property name="sqlMapClient">
+			<ref bean="sqlMapClient" />   <!-- 注入iBatis-->
+		</property>
+	</bean>
+	<!-- 运单子表 -->
+	<bean id="goodsDao" class="tf56.contract.services.impl.GoodsDaoImpl">
+		<property name="dataSource">
+			<ref bean="dataSource" />     <!-- 注入数据库连接-->
+		</property>
+		<property name="sqlMapClient">
+			<ref bean="sqlMapClient" />   <!-- 注入iBatis-->
+		</property>
+	</bean>
+	<!-- 运单操作日志 -->
+	<bean id="waybillLogDao" class="tf56.contract.services.impl.WaybillLogDaoImpl">
+		<property name="dataSource">
+			<ref bean="dataSource" />     <!-- 注入数据库连接-->
+		</property>
+		<property name="sqlMapClient">
+			<ref bean="sqlMapClient" />   <!-- 注入iBatis-->
+		</property>
+	</bean>
+ 	<!-- 结算单 -->
+	<bean id="settleBillDao" class="tf56.contract.services.impl.SettleBillDaoImpl">
+	  	<property name="dataSource">
+	   		<ref bean="dataSource"/>
+	  	</property>
+	  	<property name="sqlMapClient">
+	   		<ref bean="sqlMapClient"/>
+	  	</property>
+ 	</bean>
+ 	<bean id="settleBillService" class="tf56.contract.services.impl.SettleBillServiceImpl"></bean>
+ 	<!-- 结算核销 -->
+	<bean id="settleBillVerificationDao" class="tf56.contract.services.impl.SettleBillVerificationDaoImpl">
+	  <property name="dataSource">
+	   	<ref bean="dataSource"/>     <!-- 注入数据库连接-->
+	  </property>
+	  <property name="sqlMapClient">
+	   	<ref bean="sqlMapClient"/>   <!-- 注入iBatis-->
+	  </property>
+	</bean>
+     	<!-- 结算 -->
+	<bean id="settleDao" class="tf56.contract.services.impl.SettleDaoImpl">
+		<property name="dataSource">
+			<ref bean="dataSource" />     <!-- 注入数据库连接-->
+		</property>
+		<property name="sqlMapClient">
+			<ref bean="sqlMapClient" />   <!-- 注入iBatis-->
+		</property>
+	</bean>
+	<!-- 报表查询 -->
+	<bean id="reportQueryService" class="tf56.contract.services.impl.ReportQueryServiceImpl">
+		<property name="dataSource">
+			<ref bean="dataSource" />     <!-- 注入数据库连接-->
+		</property>
+		<property name="sqlMapClient">
+			<ref bean="sqlMapClient" />   <!-- 注入iBatis-->
+		</property>
+	</bean>
+	<!-- lbs跟踪回放 -->
+	<bean id="lbsDeviceService" class="tf56.contract.services.impl.LbsDeviceServiceImpl">
+	</bean>
+	<!-- 银行保理 -->
+	<bean id="bankFactoringDao" class="tf56.contract.services.impl.BankFactoringDaoImpl">
+	  <property name="dataSource">
+	   <ref bean="dataSource"/>     <!-- 注入数据库连接-->
+	  </property>
+	  <property name="sqlMapClient">
+	   <ref bean="sqlMapClient"/>   <!-- 注入iBatis-->
+	  </property>
+ 	</bean>
+ 	 <!-- 结算设置 子表  -->
+	 <bean id="settleStepSetDao" class="tf56.contract.services.impl.SettleStepSetDaoImpl">
+	  <property name="dataSource">
+	   <ref bean="dataSource"/>     <!-- 注入数据库连接-->
+	  </property>
+	  <property name="sqlMapClient">
+	   <ref bean="sqlMapClient"/>   <!-- 注入iBatis-->
+	  </property>
+	 </bean>
+</beans>

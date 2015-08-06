@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.bggl.dao.BgGzlx2Mapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectBgGzlx2ByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgglJstxDomain">
+		select a.JSTX_XH as jstxXh,a.NR as nr,a.FSR_CZY_DJXH as fsrCzyDjxh,a.FSRQ as fsrq,a.CZY_DJXH as czyDjxh,
+		a.XTYHFL_DM as xtyhflDm,a.JSBZ as jsbz,a.JSRQ as jsrq from BG_GZLX2 a  where a.JSTX_XH=#jstxXh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertBgGzlx2"  parameterClass="com.cy.common.bo.BgGzlx2">
+		<selectKey keyProperty="jstxXh" resultClass="long" type="pre"> 
+			select SEQ_GZLX_XH.nextval as jstxXh from dual 
+		</selectKey> 
+		insert into BG_GZLX2(JSTX_XH,NR,FSR_CZY_DJXH,FSRQ,CZY_DJXH,
+		XTYHFL_DM,JSBZ,JSRQ)
+		values(#jstxXh:NUMERIC#,#nr:VARCHAR#,#fsrCzyDjxh:NUMERIC#,#fsrq:TIMESTAMP#,#czyDjxh:NUMERIC#,
+		#xtyhflDm:NUMERIC#,#jsbz:VARCHAR#,#jsrq:TIMESTAMP#)
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateBgGzlx2ByKey" parameterClass="com.cy.common.bo.BgGzlx2">
+        update BG_GZLX2 set JSTX_XH=#jstxXh#,NR=#nr#,FSR_CZY_DJXH=#fsrCzyDjxh#,FSRQ=#fsrq#,CZY_DJXH=#czyDjxh#,
+		XTYHFL_DM=#xtyhflDm#,JSBZ=#jsbz#,JSRQ=#jsrq# where JSTX_XH=#jstxXh#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteBgGzlx2ByKey" parameterClass="java.util.Map">
+		delete from BG_GZLX2 where JSTX_XH=#jstxXh#
+    </delete>
+</sqlMap>

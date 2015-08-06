@@ -1,0 +1,18 @@
+@CHARSET "UTF-8";
+.sub_title{font-size: 14px;margin-left: 15px;font-weight: bold; border-bottom: 1px solid #d3d7d4;width: 900px;padding-bottom: 5px;}
+.basic_info{margin-left: 25px;width: 875px;margin-top: 20px;}
+.info .t_span{color: red;margin-right:5px; }
+.info td{padding: 6px 2px 6px 3px;font-size: 12px;color: #444444;}
+.line{
+	border-bottom: 1px solid #d3d7d4;width: 820px;margin-left: 67px;margin-top: -10px;
+}
+.info input{height: 24px;line-height: 22px;width: 200px;color: #444444;}
+#btnimport{cursor: pointer;margin-left: 10px; }
+.t_left{text-align: right;width: 120px;}
+#import{ margin-left: 10px;}
+#description{width: 500px;height: 100px;font-size: 12px;color: #444444;}
+#files input {width:63px;}
+#detailaddress{width: 270px;}
+.basic_info input[type=text]{
+	padding-left: 5px;
+}

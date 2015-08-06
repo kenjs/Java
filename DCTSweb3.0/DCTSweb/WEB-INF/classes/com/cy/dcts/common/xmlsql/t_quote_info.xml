@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="QuoteInfo" type="com.cy.dcts.common.bo.QuoteInfo"/><!-- 货源报价表 -->
+	<typeAlias alias="QuoteInfoDomain" type="com.cy.dcts.common.domain.QuoteInfoDomain"/><!-- 货源报价表 -->
+	<resultMap class="QuoteInfo" id="quote_info_result">
+	   <result property="id" column="ID"/>
+	   <result property="cargoId" column="CARGO_ID"/>
+	   <result property="driverId" column="DRIVER_ID"/>
+	   <result property="quoteFair" column="QUOTE_FAIR"/>
+	   <result property="cashAdvance" column="CASH_ADVANCE"/>
+	   <result property="prepaidOilCard" column="PREPAID_OIL_CARD"/>
+	   <result property="quoteType" column="QUOTE_TYPE"/>
+	   <result property="remark" column="REMARK"/>
+	   <result property="start" column="START"/>
+	   <result property="createTime" column="CREATE_TIME"/>
+	   <result property="modifyTime" column="MODIFY_TIME"/>
+	</resultMap>
+	
+	<resultMap class="QuoteInfoDomain" id="quote_info_domain_result">
+	   <result property="id" column="ID"/>
+	   <result property="cargoId" column="CARGO_ID"/>
+	   <result property="driverId" column="DRIVER_ID"/>
+	   <result property="quoteFair" column="QUOTE_FAIR"/>
+	   <result property="cashAdvance" column="CASH_ADVANCE"/>
+	   <result property="prepaidOilCard" column="PREPAID_OIL_CARD"/>
+	   <result property="quoteType" column="QUOTE_TYPE"/>
+	   <result property="remark" column="REMARK"/>
+	   <result property="start" column="START"/>
+	   <result property="createTime" column="CREATE_TIME"/>
+	   <result property="modifyTime" column="MODIFY_TIME"/>
+	   <result property="code" column="CODE"/>
+	   <result property="name" column="NAME"/>
+	   <result property="carNumber" column="CAR_NUMBER"/>
+	   <result property="carLength" column="CAR_LENGTH"/>
+	   <result property="carWeight" column="CAR_WEIGHT"/>
+	   <result property="carCubage" column="CAR_CUBAGE"/>
+	   <result property="carPlateType" column="CAR_PLATE_TYPE"/>
+	   <result property="carBarType" column="CAR_BAR_TYPE"/>
+	   <result property="carTypes" column="CAR_TYPES"/>
+	   <result property="lastLocation" column="LASTLOCATION"/>
+	</resultMap>
+
+	<select id="query_quote_domain_list" parameterClass="java.util.HashMap" resultMap="quote_info_domain_result">
+		select 
+		t.ID,t.CARGO_ID,t.DRIVER_ID,t.QUOTE_FAIR,t.CASH_ADVANCE,t.PREPAID_OIL_CARD,
+		replace(replace(replace(t.QUOTE_TYPE,3,#quoteTypePressSquareValue#),2,#quoteTypeByTonValue#),1,#quoteTypeVehiclesValue#) as QUOTE_TYPE,
+		t.REMARK,t.START,
+		DATE_FORMAT(t.CREATE_TIME,'%Y-%m-%d') as CREATE_TIME,
+		DATE_FORMAT(t.MODIFY_TIME,'%Y-%m-%d') as MODIFY_TIME,
+		t1.CODE,t1.NAME,t1.CAR_NUMBER,t1.CAR_LENGTH,t1.CAR_LENGTH,t1.CAR_WEIGHT,t1.CAR_CUBAGE,t1.CAR_PLATE_TYPE,t1.CAR_BAR_TYPE,t1.CAR_TYPES,
+		(select b.LOCATION from t_location_collect_last_info b where b.DRIVER_ID=t.DRIVER_ID) as LASTLOCATION
+		from 
+		t_quote_info t 
+		LEFT JOIN 
+		t_driver_user_info t1 
+		ON 
+		t.DRIVER_ID = t1.ID
+		<dynamic prepend="where ">
+		  <isNotEmpty property="cargoId" prepend="AND "> t.CARGO_ID = #cargoId# </isNotEmpty>
+		  <isNotEmpty property="start" prepend="AND "> t.START = #start# </isNotEmpty>
+		</dynamic> 
+	</select>
+
+</sqlMap>

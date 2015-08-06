@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.common.dao.BusXtglCommonMapper">
+
+	<!--根据企业注册序号获取企业机构list-->
+	<select id="queryQyjgList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.RyxzCommonDomain">
+		select A.JBDM jbdm,A.JC as jgjc,(SELECT c.JBDM FROM QY_ZZJG c WHERE c.jgbm=a.sj_jgbm) as sjJbdm
+		from QY_ZZJG A
+		WHERE A.JBDM LIKE (SELECT B.JBDM FROM QY_ZZJG B WHERE B.QY_ZCXH=#qyzcXh#) || '%'
+		AND A.YXBZ='Y'
+		ORDER BY jbdm ASC
+    </select>
+    
+    <!--根据企业注册序号获取企业人员-->
+	<select id="queryQyryList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.RyxzCommonDomain">
+		select A.JBDM jbdm,A.JC as jgjc,
+	    B.CZY_DJXH as czyDjxh,
+	    B.MC as czyMc
+		from QY_ZZJG A, QY_RYDJ B, QY_RY_GW C
+		WHERE A.JGBM=C.SS_JGBM
+		AND B.CZY_DJXH=C.CZY_DJXH
+		AND A.JBDM LIKE (SELECT B.JBDM FROM QY_ZZJG B WHERE B.QY_ZCXH=#qyzcXh#) || '%'
+		AND A.YXBZ='Y'
+		AND B.YXBZ='Y'
+		AND B.QYBZ='Y'
+		AND C.ZJBZ='Y'
+		ORDER BY jbdm ASC, czyDjxh ASC
+    </select>
+        <!--根据企业注册序号获取组织机构和企业人员tree-->
+	<select id="queryQyryAndZzjgList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.RyxzCommonDomain">
+		select A.JBDM jbdm,A.JC as jgjc
+		from QY_ZZJG A
+		WHERE A.JBDM LIKE (SELECT B.JBDM FROM QY_ZZJG B WHERE B.QY_ZCXH=#qyzcXh#) || '%'
+		AND A.YXBZ='Y'
+		UNION ALL
+		select A.JBDM jbdm,A.JC as jgjc,
+	    B.CZY_DJXH  czyDjxh,
+	    B.MC  czyMc
+		from QY_ZZJG A, QY_RYDJ B, QY_RY_GW C
+		WHERE A.JGBM=C.SS_JGBM
+		AND B.CZY_DJXH=C.CZY_DJXH
+		AND A.JBDM LIKE (SELECT B.JBDM FROM QY_ZZJG B WHERE B.QY_ZCXH=#qyzcXh#) || '%'
+		AND A.YXBZ='Y'
+		AND B.YXBZ='Y'
+		AND B.QYBZ='Y'
+		AND C.ZJBZ='Y'
+		ORDER BY jbdm ASC, czyDjxh ASC
+    </select>
+    
+     <!--根据企业注册序号获取分包商组织机构-->
+	<select id="queryFbsZzjgList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.RyxzCommonDomain">
+		select A.JBDM jbdm,0 as fbsDjxh,A.JC as jgjc,(SELECT c.JBDM FROM QY_ZZJG c WHERE c.jgbm=a.sj_jgbm) as sjJbdm
+		from QY_ZZJG A
+		WHERE A.JBDM LIKE (SELECT B.JBDM FROM QY_ZZJG B WHERE B.QY_ZCXH=#qyzcXh#) || '%'
+		AND A.YXBZ='Y'
+		AND (A.JGLB_DM='1' OR A.jglb_dm='2')
+		UNION ALL
+		select A.JBDM jbdm, B.FBS_DJXH as fbsDjxh,B.FBSJC as jgjc,(SELECT c.JBDM FROM QY_ZZJG c WHERE c.jgbm=a.sj_jgbm) as sjJbdm
+		from QY_ZZJG A, QY_FBS_DJXX B
+		WHERE A.JGBM=B.SS_JGBM
+		AND A.YXBZ='Y'
+		AND B.YXBZ='Y'
+		AND A.JBDM LIKE (SELECT B.JBDM FROM QY_ZZJG B WHERE B.QY_ZCXH=#qyzcXh#) || '%'
+		ORDER BY jbdm ASC
+    </select>
+    
+    <!--根据企业注册序号获取分包商人员-->
+	<select id="queryFbsryList" parameterClass="java.util.Map"
+		resultClass="com.cy.common.domain.RyxzCommonDomain">
+		select A.JBDM jbdm,A.JC as jgjc,B.FBS_DJXH as fbsDjxh,
+        C.YH_DJXH czyDjxh,C.MC as czyMc
+		from QY_ZZJG A, QY_FBS_DJXX B, QY_FBS_YH C
+		WHERE A.JGBM=B.SS_JGBM
+		AND B.FBS_DJXH=C.FBS_DJXH
+		AND A.YXBZ='Y'
+		AND B.YXBZ='Y'
+		AND C.YXBZ='Y'
+		AND A.JBDM LIKE (SELECT B.JBDM FROM QY_ZZJG B WHERE B.QY_ZCXH=#qyzcXh#) || '%'
+		ORDER BY jbdm ASC,  czyDjxh ASC
+    </select>
+</sqlMap>

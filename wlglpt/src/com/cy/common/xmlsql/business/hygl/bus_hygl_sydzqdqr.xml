@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.hygl.domain.dao.BusHyglSydzqdQrMapper">
+	<select id="selectSydzqdQrPage" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.XyjsSrdzQdDomain">
+		SELECT A.QD_DJXH AS qdDjxh,
+		       A.XY_DJXH AS xyDjxh,
+		       (SELECT JG.JC FROM QY_ZZJG JG WHERE JG.JGBM = A.XY_DJXH) xyMc,
+		       A.QDMC AS qdmc,
+		       A.DZQD_HZFS_DM AS dzqdHzfsDm,
+		       A.HE_JE AS heJe,A.DZ_JE dzJe,A.DZCY_JE dzcyJe,
+		       A.YF_JE AS yfJe,
+		       A.WF_JE AS wfJe,
+		       A.YSQ_KPJE AS ysqKpje,
+		       A.WSQ_KPJE AS wsqKpje,
+		       A.DJR_CZY_DJXH AS djrCzyDjxh,
+		       (SELECT RY.MC FROM QY_RYDJ RY WHERE RY.CZY_DJXH = A.DJR_CZY_DJXH) djrMc,
+		       A.DJRQ AS djrq,
+		       A.DJ_JGBM AS djJgbm,
+		       (SELECT JG.JC FROM QY_ZZJG JG WHERE JG.JGBM = A.DJ_JGBM) djJgmc,
+		       A.SS_JGBM AS ssJgbm,
+		       (SELECT JG.JC FROM QY_ZZJG JG WHERE JG.JGBM = A.SS_JGBM) ssJgmc,
+		       A.YXBZ AS yxbz,
+		       A.ZT AS zt,
+		       A.BZ AS bz
+		  FROM XYJS_SRDZ_QD A 
+		  WHERE A.YXBZ='Y' 
+		  AND A.ZT IN (2,3,4)
+		  AND A.XY_DJXH = #xyDjxh#
+		  <dynamic>
+		  	<isNotEmpty property="rqQ" prepend="AND">
+		  		A.DJRQ &gt;= #rqQ#
+		  	</isNotEmpty>
+		  	<isNotEmpty property="rqZ" prepend="AND">
+		  		A.DJRQ &lt; #rqZ#+1
+		  	</isNotEmpty>
+		  	<isNotEmpty property="fylbDm" prepend="AND">
+		  		A.FYLB_DM = #fylbDm#
+		  	</isNotEmpty>
+		  </dynamic>
+		  $orderStr$
+    </select>
+    
+    <select id="selectSydzqdQrAll" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.XyjsSrdzQdDomain">
+		SELECT A.QD_DJXH AS qdDjxh,
+		       A.XY_DJXH AS xyDjxh,
+		       A.QDMC AS qdmc,
+		       A.DZQD_HZFS_DM AS dzqdHzfsDm,
+		       A.HE_JE AS heJe,A.DZ_JE dzJe,A.DZCY_JE dzcyJe,
+		       A.YF_JE AS yfJe,
+		       A.WF_JE AS wfJe,
+		       A.YSQ_KPJE AS ysqKpje,
+		       A.WSQ_KPJE AS wsqKpje,
+		       A.DJR_CZY_DJXH AS djrCzyDjxh,
+		       (SELECT RY.MC FROM QY_RYDJ RY WHERE RY.CZY_DJXH = A.DJR_CZY_DJXH) djrMc,
+		       A.DJRQ AS djrq,
+		       A.DJ_JGBM AS djJgbm,
+		       (SELECT JG.MC FROM QY_ZZJG JG WHERE JG.JGBM = A.DJ_JGBM) djJgmc,
+		       A.SS_JGBM AS ssJgbm,
+		       (SELECT JG.MC FROM QY_ZZJG JG WHERE JG.JGBM = A.SS_JGBM) ssJgmc,
+		       A.YXBZ AS yxbz,
+		       A.ZT AS zt,
+		       A.BZ AS bz
+		  FROM XYJS_SRDZ_QD A 
+		  WHERE A.YXBZ='Y' 
+		  AND A.ZT IN (2,3,4)
+		  AND A.XY_DJXH = #xyDjxh#
+		  <dynamic>
+		  	<isNotEmpty property="rqQ" prepend="AND">
+		  		A.DJRQ &gt;= #rqQ#
+		  	</isNotEmpty>
+		  	<isNotEmpty property="rqZ" prepend="AND">
+		  		A.DJRQ &lt; #rqZ#+1
+		  	</isNotEmpty>
+		  	<isNotEmpty property="fylbDm" prepend="AND">
+		  		A.FYLB_DM = #fylbDm#
+		  	</isNotEmpty>
+		  </dynamic>
+
+		  ORDER by A.QD_DJXH ASC
+    </select>
+
+	<select id="getSydzqdQrRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.QD_DJXH) 
+		  FROM XYJS_SRDZ_QD A 
+		  WHERE A.YXBZ='Y' 
+		  AND A.ZT IN (2,3,4)
+		  AND A.XY_DJXH = #xyDjxh#
+		  <dynamic>
+		  	<isNotEmpty property="rqQ" prepend="AND">
+		  		A.DJRQ &gt;= #rqQ#
+		  	</isNotEmpty>
+		  	<isNotEmpty property="rqZ" prepend="AND">
+		  		A.DJRQ &lt; #rqZ#+1
+		  	</isNotEmpty>
+		  	<isNotEmpty property="fylbDm" prepend="AND">
+		  		A.FYLB_DM = #fylbDm#
+		  	</isNotEmpty>
+		  </dynamic>
+    </select>
+
+    <update id="updateSyqddzqeByKey" parameterClass="com.cy.common.bo.XyjsSrdzQd">
+    	UPDATE XYJS_SRDZ_QD A SET A.ZT=#zt# ,A.BZ=#bz# WHERE A.QD_DJXH=#qdDjxh#
+    </update>
+    
+    <insert id="qdqrCwInfor" parameterClass="java.util.Map">
+    	INSERT INTO CW_YSYF(YSYF_DJXH,YFJSF_DM,YFJSF_DJXH,KMDL_DM,
+                    KMXL_DM,ZDY_KMZL_DM,YSYFLY_DM,YW_DJXH,
+                    CSRQ,YSYFZT_DM,YSF_JE,YISF_JE,WSF_JE,SM,
+                    YXBZ,DJ_JGBM,SS_JGBM)
+		SELECT SEQ_YSYF_DJXH.NEXTVAL,22,
+		       (CASE WHEN QD.FYLB_DM=1 THEN QD.XY_DJXH WHEN QD.FYLB_DM=2 THEN QD.SS_JGBM WHEN QD.FYLB_DM=3 THEN QD.SS_JGBM END),
+		       2,
+		       (CASE WHEN QD.FYLB_DM=1 THEN 215 WHEN QD.FYLB_DM=2 THEN 314 WHEN QD.FYLB_DM=3 THEN 315 END),
+		       NULL,38,QD.QD_DJXH,SYSDATE,11,QD.HE_JE,QD.YF_JE,QD.WF_JE,
+		       #qdmc# || QD.QDMC || #lb# || (CASE WHEN QD.FYLB_DM=1 THEN #psf# WHEN QD.FYLB_DM=2 THEN #dfk# ELSE #dshk# END)
+		        || #ykp# || QD.YSQ_KPJE || #wkp# || QD.WSQ_KPJE SM,
+		       'Y',QD.DJ_JGBM,
+		       (CASE WHEN QD.FYLB_DM=1 THEN QD.SS_JGBM WHEN QD.FYLB_DM=2 THEN QD.XY_DJXH WHEN QD.FYLB_DM=3 THEN QD.XY_DJXH END) 
+		    FROM XYJS_SRDZ_QD QD
+		    WHERE QD.YXBZ='Y'
+		    AND QD.QD_DJXH=#qdDjxh#    
+		UNION ALL
+		SELECT SEQ_YSYF_DJXH.NEXTVAL,22,
+		       (CASE WHEN QD.FYLB_DM=1 THEN QD.SS_JGBM WHEN QD.FYLB_DM=2 THEN QD.XY_DJXH WHEN QD.FYLB_DM=3 THEN QD.XY_DJXH END),
+		       1,21,
+		       NULL,38,QD.QD_DJXH,SYSDATE,11,QD.HE_JE,QD.YF_JE,QD.WF_JE,
+		       #qdmc# || QD.QDMC || #lb# || (CASE WHEN QD.FYLB_DM=1 THEN #psf# WHEN QD.FYLB_DM=2 THEN #dfk# ELSE #dshk# END)
+		        || #ykp# || QD.YSQ_KPJE || #wkp# || QD.WSQ_KPJE SM,
+		       'Y',QD.DJ_JGBM,
+		       (CASE WHEN QD.FYLB_DM=1 THEN QD.XY_DJXH WHEN QD.FYLB_DM=2 THEN QD.SS_JGBM WHEN QD.FYLB_DM=3 THEN QD.SS_JGBM END) 
+		    FROM XYJS_SRDZ_QD QD
+		    WHERE QD.YXBZ='Y'
+		    AND QD.QD_DJXH=#qdDjxh#
+    </insert>
+</sqlMap>

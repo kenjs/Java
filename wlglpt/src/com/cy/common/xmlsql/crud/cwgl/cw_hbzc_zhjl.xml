@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.cwgl.dao.CwHbzcZhjlMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectCwHbzcZhjlByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.cwgl.domain.CwHbzcZhjlDomain">
+		select a.CW_DJXH as cwDjxh,a.SS_JGBM as ssJgbm,a.OLD_ZCFL_DM as oldZcflDm,a.OLD_YH_CSH_DJXH as oldYhCshDjxh,a.NEW_ZCFL_DM as newZcflDm,
+		a.NEW_YH_CSH_DJXH as newYhCshDjxh,a.ZHJE as zhje,a.PZH as pzh,a.BZSM as bzsm,a.YXBZ as yxbz,
+		a.DJR_CZY_DJXH as djrCzyDjxh,a.DJRQ as djrq,a.DJ_JGBM as djJgbm from CW_HBZC_ZHJL a  where a.CW_DJXH=#cwDjxh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertCwHbzcZhjl"  parameterClass="com.cy.common.bo.CwHbzcZhjl">
+		<selectKey keyProperty="cwDjxh" resultClass="String" type="pre"> 
+			select SEQ_CW_DJXH.nextval as cwDjxh from dual 
+		</selectKey> 
+		insert into CW_HBZC_ZHJL(CW_DJXH,SS_JGBM,OLD_ZCFL_DM,OLD_YH_CSH_DJXH,NEW_ZCFL_DM,
+		NEW_YH_CSH_DJXH,ZHJE,PZH,BZSM,YXBZ,
+		DJR_CZY_DJXH,DJRQ,DJ_JGBM)
+		values(#cwDjxh:NUMERIC#,#ssJgbm:NUMERIC#,#oldZcflDm:NUMERIC#,#oldYhCshDjxh:NUMERIC#,#newZcflDm:NUMERIC#,
+		#newYhCshDjxh:NUMERIC#,#zhje:NUMERIC#,#pzh:VARCHAR#,#bzsm:VARCHAR#,#yxbz:VARCHAR#,
+		#djrCzyDjxh:NUMERIC#,to_date(#djrq:DATE#,'yyyy-MM-dd'),#djJgbm:NUMERIC#)
+	</insert>
+
+	<!--插入数据-->
+	<insert id="insertCwHbzcBdjl"  parameterClass="com.cy.common.bo.CwHbzcye2">
+		<selectKey keyProperty="cwbdDjxh" resultClass="String" type="pre"> 
+			select SEQ_CW_DJXH.nextval as cwbdDjxh from dual 
+		</selectKey> 
+		insert into CW_HBZC_BDJL(CWBD_DJXH,SS_JGBM,ZCFL_DM,YH_CSH_DJXH,JE,
+		SM,JBR_CZY_DJXH,RQ,DJ_JGBM,BZ,YWXH,YXBZ)
+		values(#cwbdDjxh:NUMERIC#,#ssJgbm:NUMERIC#,#zcflDm:NUMERIC#,#yhCshDjxh:NUMERIC#,#je:NUMERIC#,
+		#sm:VARCHAR#,#jbrCzyDjxh:NUMERIC#,to_date(#rq:DATE#,'yyyy-MM-dd'),#djJgbm:NUMERIC#,#bz:VARCHAR#,#ywxh:NUMERIC#,#yxbz:VARCHAR#)
+	</insert>
+	
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateCwHbzcyeByKey" parameterClass="java.util.Map">
+        update CW_HBZCYE set JE=#je# where Yh_Csh_Djxh = #yhCshDjxh#
+    </update>
+    
+	
+    <update id="updateCwHbzcZhjlByKey" parameterClass="com.cy.common.bo.CwHbzcZhjl">
+        update CW_HBZC_ZHJL set CW_DJXH=#cwDjxh#,SS_JGBM=#ssJgbm#,OLD_ZCFL_DM=#oldZcflDm#,OLD_YH_CSH_DJXH=#oldYhCshDjxh#,NEW_ZCFL_DM=#newZcflDm#,
+		NEW_YH_CSH_DJXH=#newYhCshDjxh#,ZHJE=#zhje#,PZH=#pzh#,BZSM=#bzsm#,YXBZ=#yxbz#,
+		DJR_CZY_DJXH=#djrCzyDjxh#,DJRQ=to_date(#djrq#, 'YYYY-MM-DD'),DJ_JGBM=#djJgbm# where CW_DJXH=#cwDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：软删除-->
+	<delete id="deleteCwHbzcZhjlByKey" parameterClass="java.util.Map">
+		update CW_HBZC_ZHJL set yxbz='N' where CW_DJXH=#cwDjxh#
+    </delete>
+    
+    <!--根据业务序号删除表数据：软删除-->
+	<delete id="deleteCwHbzcBdjlByYwxh" parameterClass="java.util.Map">
+		update CW_HBZC_BDJL set yxbz='N' where YWXH=#ywxh#
+    </delete>
+</sqlMap>

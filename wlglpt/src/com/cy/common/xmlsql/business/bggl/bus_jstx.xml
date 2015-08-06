@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.bggl.dao.BusJstxMapper">
+	<select id="selectBgGzlx2Page" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgglJstxDomain">
+		  SELECT A.JSTX_XH jstxXh,
+			       A.NR nr,
+			       A.FSR_CZY_DJXH AS fsrCzyDjxh,
+			       (SELECT RY.MC FROM QY_RYDJ RY WHERE RY.CZY_DJXH = A.FSR_CZY_DJXH) fsrCzyMc,
+			       A.FSRQ AS fsrq,
+			       A.CZY_DJXH AS czyDjxh,
+			       (SELECT RY.MC FROM QY_RYDJ RY WHERE RY.CZY_DJXH = A.CZY_DJXH) czyMc,
+			       A.XTYHFL_DM AS xtyhflDm,
+			       A.JSBZ AS jsbz,
+			       A.JSRQ AS jsrq
+			FROM bg_gzlx2 A
+			WHERE A.FSR_CZY_DJXH=#fsrCzyDjxh#
+			<dynamic>
+				<isNotEmpty property="jsrqQ" prepend="and">
+					A.FSRQ &gt;= to_date(#jsrqQ#, 'yyyy-mm-dd')
+				</isNotEmpty>
+			</dynamic>
+			AND A.CZY_DJXH = #lxrDjxh#
+			UNION ALL
+			SELECT A.JSTX_XH jstxXh,
+			       A.NR nr,
+			       A.FSR_CZY_DJXH AS fsrCzyDjxh,
+			       (SELECT RY.MC FROM QY_RYDJ RY WHERE RY.CZY_DJXH = A.FSR_CZY_DJXH) fsrCzyMc,
+			       A.FSRQ AS fsrq,
+			       A.CZY_DJXH AS czyDjxh,
+			       (SELECT RY.MC FROM QY_RYDJ RY WHERE RY.CZY_DJXH = A.CZY_DJXH) czyMc,
+			       A.XTYHFL_DM AS xtyhflDm,
+			       A.JSBZ AS jsbz,
+			       A.JSRQ AS jsrq
+			FROM bg_gzlx2 A
+			WHERE A.FSR_CZY_DJXH = #lxrDjxh#
+			<dynamic>
+				<isNotEmpty property="jsrqQ" prepend="and">
+					A.FSRQ &gt;= to_date(#jsrqQ#, 'yyyy-mm-dd')
+				</isNotEmpty>
+			</dynamic>
+			AND A.CZY_DJXH = #fsrCzyDjxh#
+
+		  $orderStr$
+    </select>
+    
+    <select id="selectBgGzlx2All" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgglJstxDomain">
+		SELECT A.JSTX_XH jstxXh,
+			       A.NR nr,
+			       A.FSR_CZY_DJXH AS fsrCzyDjxh,
+			       (SELECT RY.MC FROM QY_RYDJ RY WHERE RY.CZY_DJXH = A.FSR_CZY_DJXH) fsrCzyMc,
+			       A.FSRQ AS fsrq,
+			       A.CZY_DJXH AS czyDjxh,
+			       (SELECT RY.MC FROM QY_RYDJ RY WHERE RY.CZY_DJXH = A.CZY_DJXH) czyMc,
+			       A.XTYHFL_DM AS xtyhflDm,
+			       A.JSBZ AS jsbz,
+			       A.JSRQ AS jsrq
+			FROM bg_gzlx2 A
+			WHERE A.FSR_CZY_DJXH=#fsrCzyDjxh#
+			<dynamic>
+				<isNotEmpty property="jsrqQ" prepend="and">
+					A.FSRQ &gt;= to_date(#jsrqQ#, 'yyyy-mm-dd')
+				</isNotEmpty>
+			</dynamic>
+			
+			AND A.CZY_DJXH = #lxrDjxh#
+			UNION ALL
+			SELECT A.JSTX_XH jstxXh,
+			       A.NR nr,
+			       A.FSR_CZY_DJXH AS fsrCzyDjxh,
+			       (SELECT RY.MC FROM QY_RYDJ RY WHERE RY.CZY_DJXH = A.FSR_CZY_DJXH) fsrCzyMc,
+			       A.FSRQ AS fsrq,
+			       A.CZY_DJXH AS czyDjxh,
+			       (SELECT RY.MC FROM QY_RYDJ RY WHERE RY.CZY_DJXH = A.CZY_DJXH) czyMc,
+			       A.XTYHFL_DM AS xtyhflDm,
+			       A.JSBZ AS jsbz,
+			       A.JSRQ AS jsrq
+			FROM bg_gzlx2 A
+			WHERE A.FSR_CZY_DJXH = #lxrDjxh#
+			<dynamic>
+				<isNotEmpty property="jsrqQ" prepend="and">
+					A.FSRQ &gt;= to_date(#jsrqQ#, 'yyyy-mm-dd')
+				</isNotEmpty>
+			</dynamic>
+			AND A.CZY_DJXH = #fsrCzyDjxh# 
+
+		  ORDER by jstxXh ASC
+    </select>
+
+	<select id="getBgGzlx2RowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(*) 
+		  FROM (
+		  SELECT A.JSTX_XH jstxXh
+			FROM bg_gzlx2 A
+			WHERE A.FSR_CZY_DJXH=#fsrCzyDjxh#
+			<dynamic>
+				<isNotEmpty property="jsrqQ" prepend="and">
+					A.FSRQ &gt;= to_date(#jsrqQ#, 'yyyy-mm-dd')
+				</isNotEmpty>
+			</dynamic>
+			AND A.CZY_DJXH = #lxrDjxh#
+			UNION
+			SELECT A.JSTX_XH jstxXh
+			FROM bg_gzlx2 A
+			WHERE A.FSR_CZY_DJXH = #lxrDjxh#
+			<dynamic>
+				<isNotEmpty property="jsrqQ" prepend="and">
+					A.FSRQ &gt;= to_date(#jsrqQ#, 'yyyy-mm-dd')
+				</isNotEmpty>
+			</dynamic>
+			AND A.CZY_DJXH = #fsrCzyDjxh#
+		  )B
+    </select>
+</sqlMap>

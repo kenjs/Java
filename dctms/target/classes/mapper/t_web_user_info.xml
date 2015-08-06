@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cy.dctms.entity.WebUserInfo">
+    <!-- 注册web用户信息 -->
+	<insert id="insertWebUserInfo" parameterType="com.cy.dctms.entity.WebUserInfo" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_web_user_info(
+			CODE,PASSWORD,COMPANY_ID,MOBILEPHONE,DELETED_FLAG,LOGIN_IP,LOGIN_TIME,ENTERPRISE_FLAG,ENTERPRISE_TIME,
+			PANYMENT_FLAG,PANYMENT_TIME,PERSONAGE_FLAG,PERSONAGE_TIME,CREATE_TIME,MODIFY_TIME,USER_ORIGIN
+		)VALUES(
+			#{code},
+			#{password},
+			#{companyId},
+			#{mobilephone},
+			#{deletedFlag},
+			#{loginIp},
+			sysdate(),
+			#{enterpriseFlag},
+			sysdate(),
+			#{panymentFlag},
+			sysdate(),
+			#{personageFlag},
+			sysdate(),
+			sysdate(),
+			sysdate(),
+			#{userOrigin}
+		)		
+	</insert>
+</mapper>

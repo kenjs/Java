@@ -1,0 +1,419 @@
+
+
+body{
+	width:100%;
+    margin:0px auto;
+    padding:0px;
+    font-family:Courier New,"Arial";
+  }
+#todaydiv{
+    clear:both; 
+	width:100%;
+	padding:0px;
+	margin:0px auto;
+	border:0px #0000FF solid;
+}
+#tdnorthdiv{/*导航*/
+	clear:both;
+	width:100%;
+	height:25px;
+	font-size:11px;
+ 	text-align:left;
+ 	background:url(../../imgs/login/todaytiao11.png);
+ 	padding:0px 0px 0px 0px ;
+	margin:0px  0px 0px 0px ; 
+	vertical-align:   middle;
+ 	}
+#tdcenterdiv{/*中间块包含:tdleftdiv,tdrightdiv*/
+	clear:both;
+	width:805px;
+	height:340px;
+	text-align:center;
+     padding:0px 0px 0px 0px ;
+	margin:0px  0px 0px 0px ; 
+	}
+.tdleftclass{/*公告  有效*/
+	float:left;
+	width:462px;height:340px;
+	border:1px solid #DCDCDC;
+	text-align:left;
+	padding:0px 0px 0px 0px ;
+	margin:0px  0px 0px 0px ; 
+	display:inline;
+}
+
+.tdrightclass{/*总体信息  有效*/
+	float:right;
+	width:320px;height:340px;
+	text-align:left;
+	padding:0px 0px 0px 0px ;
+	margin:0px  0px 0px 0px ; 
+	border:1px solid #DCDCDC;
+	 
+}
+.ctitle{
+	font-weight:bold;
+}
+#todaycenter02{
+	clear:both;
+	width:100%;
+ 	text-align:left;
+	padding:0px 0px 0px 0px ;
+	margin:0px  0px 0px 0px ; 
+	}
+#todaycenter0201{
+	clear:both;
+	width:100%;
+	height:28;
+	text-align:left;
+	border:1px solid #D6D4D4;
+	padding:0px 0px 0px 0px ;
+	margin:0px  0px 0px 0px ; 
+	background:url(../../imgs/login/todaytiao1201.png);
+	}
+#todaycenter0202{
+	clear:both;
+	width:100%;
+	height:75;
+	text-align:center;
+	border-left:1px solid #D6D4D4;
+	border-bottom:1px solid #D6D4D4;
+	border-right:1px solid #D6D4D4;
+	 
+	padding:0px 0px 0px 0px ;
+	margin:0px  0px 0px 0px ; 
+	
+	}
+ 
+#todaycenter03{
+	clear:both;
+	width:100%;
+	height:100
+	text-align:left;
+	border:0px solid #F8B857;
+	padding:0px 0px 0px 0px ;
+	margin:0px  0px 0px 0px ; 
+	
+	}
+
+#todaycenter0301{
+	clear:both;
+	width:100%;
+	height:28;
+	text-align:left;
+	border:1px solid #D6D4D4;
+	padding:0px 0px 0px 0px ;
+	margin:0px  0px 0px 0px ; 
+	background:url(../../imgs/login/todaytiao1201.png);
+
+	}
+#todaycenter0302{
+	clear:both;
+	width:100%;
+	height:70;
+	text-align:center;
+	border-left:1px solid #D6D4D4;
+	border-bottom:1px solid #D6D4D4;
+	border-right:1px solid #D6D4D4;
+	 
+	padding:1px;
+	
+	}
+#todaygghmleft{
+	float:left;
+	width:100%;
+	text-align:left;
+	border:0px solid #F8B857;
+	padding:1px;
+	margin-top:2px;
+	
+	}
+#todayright{
+	float:right;
+	width:39%;
+	border:1px solid #D7D5D5;
+	right:0px;
+	text-align:center;
+	padding:2px;
+	background-color:#F8F5F5;
+	
+	}
+#todayleftone{
+	width:100%;
+	text-align:left;
+	border:0px solid #F8B857;
+	padding:1px;
+	
+	}
+#todaylefttwo{
+	width:100%;
+	text-align:left;
+	border:1px solid #F8B857;
+	padding:1px;
+	
+	}
+#todaylefttwo01{
+	width:100%;
+	text-align:left;
+	border:0px solid #F8B857;
+	padding:1px;
+	
+	}
+#todaylefttwo02{
+	width:100%;
+	text-align:left;
+	border:0px solid #F8B857;
+	padding:1px;
+	
+	}
+#todayleftthree{
+	width:100%;
+	text-align:left;
+	border:0px solid #F8B857;
+	padding:1px;
+	
+	}
+#todayleft01{
+	width:100%;
+	text-align:center;
+	border:0px solid #F8B857;
+	padding:0px;
+	
+	}
+#todayleft02{
+	width:100%;
+	text-align:center;
+	border:0px solid #F8B857;
+	padding:1px;
+	
+	}
+#todayleft03{
+	width:100%;
+	text-align:left;
+	border:0px solid #F8B857;
+	padding:0px;
+	
+	}
+#todayleft04{
+	width:100%;
+	text-align:left;
+	border:0px solid #F8B857;
+	padding:1px;
+	
+	}
+
+#todayleft05{
+	width:100%;
+	text-align:right;
+	border:0px solid #F8B857;
+	padding:1px;
+	
+	}
+	
+#tdright01{/*今日关注banner*/
+	width:100%;
+	text-align:center;
+	border:0px solid #F8B857;
+	padding:0px;
+	margin-top:0px;
+	
+	}
+#todayright02{
+	width:100%;
+	text-align:left;
+	border:0px solid #F8B857;
+	padding:2px;
+	margin-top:5px;
+	
+	}
+#todayright03{
+	width:100%;
+	text-align:center;
+	border:0px solid #F8B857;
+	padding:2px;
+	margin-top:5px;
+	
+	}
+#todayright04{
+	width:100%;
+	text-align:center;
+	border:0px solid #F8B857;
+	padding:2px;
+	margin-top:5px;
+	
+	}
+#todayright05{
+	width:100%;
+	text-align:center;
+	border:0px solid #F8B857;
+	padding:2px;
+	margin-top:5px;
+	
+	}
+#todayright06{
+	width:100%;
+	text-align:center;
+	border:0px solid #F8B857;
+	padding:2px;
+	margin-top:5px;
+	
+	}
+	
+#todaybuttom{
+	clear:both;
+	text-align:center;
+	height:30px;
+	background-color: #FEFCF8;
+	padding:2px;
+	border:1px solid #F8B857;
+	}
+#todaybuttom01{
+	float:left;
+	width:60%;
+	text-align:center;
+	border:0px solid #F8B857;
+	padding:2px;
+	
+	}
+#todaybuttom02{
+	float:right;
+	width:60%;
+	text-align:right;
+	border:0px solid #F8B857;
+	padding:2px;
+	
+	}
+
+
+#todayjdgg01{
+	width:100%;
+	text-align:left;
+	padding:1px;
+	}
+#todayjdgg02{
+    clear:both;
+	width:100%;
+	height:40px;
+	text-align:left;
+	border:0px solid #F8B857;
+	padding:1px;
+	background:url(../../imgs/login/todaywuliu1.gif);
+	}
+#todayjdgg03{
+    float:left;
+	width:23%;
+	height:15;	
+	text-align:left;
+	border:0px solid #F8B857;
+	padding:1px;
+	
+	
+	}
+#todayjdgg04{
+    float:right;
+	width:55%;
+	font-size:12px;
+	font-family:Courier New,"Arial";
+	color: #1c1c1c;
+	vertical-align:bottom;
+	text-align:left;
+	border:0px solid #F8B857;
+	padding:1px;
+	
+	}
+#todayjdgg042{
+    float:right;
+	width:20%;
+	text-align:left;
+	border:0px solid #F8B857;
+	padding:1px;
+	
+	}
+
+#todayjdgg05{
+    clear:both;
+	width:100%;
+	font-size:12px;
+	font-family:Courier New,"Arial";
+	color: #1c1c1c;
+	text-align:center;
+	border:0px solid #F8B857;
+	padding:1px;
+    vertical-align: text-top;
+	
+	}
+#todayjdgg06{/**杩欓噷鏄柊闂诲唴瀹规樉绀哄尯*/
+    clear:both;
+	width:100%;
+	height:152px;
+	font-size:12px;
+	font-family:Courier New,"Arial";
+	color: #1c1c1c;
+	border:0px solid #F8B857;
+	padding:1px;
+	overflow:hidden;
+
+	
+	}
+#todayjdgg07{
+    clear:both;
+	width:100%;
+	text-align:right;
+	border:0px solid #F8B857;
+	padding:1px;
+
+	
+	}
+
+
+a {
+	font-size: 12px;
+	color: #1c1c1c;
+}
+a:link {
+	text-decoration: none;
+}
+a:visited {
+	text-decoration: none;
+	color: #1c1c1c;
+}
+a:hover {
+	text-decoration: none;
+}
+a:active {
+	text-decoration: none;
+	color: #F00;
+}
+body,td,th {
+	font-family:Courier New,"Arial";
+	font-size: 12px;
+	color: #1c1c1c;
+}
+
+
+
+
+.ziti {
+	 font-size:12px;
+	 color:#1c1c1c;
+	 font-family:Courier New,"Arial";
+	 }
+.ziti10 {
+	 font-size:10px;
+	 color:#1c1c1c;
+	 font-family:Courier New,"Arial";
+	
+	 }
+.ziti14 {
+	 font-size:12px;
+	 color:#1c1c1c;
+	 font-family:Courier New,"Arial";
+	
+	 }
+.ziti15 {
+	 font-size:12px;
+	 color:#F26528;
+	 font-family:Courier New,"Arial";
+	
+	
+	 }

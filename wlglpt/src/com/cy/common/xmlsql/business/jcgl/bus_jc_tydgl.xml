@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.jcgl.dao.BusJcTydMapper">
+	
+	<parameterMap class="java.util.Map" id="jcTydParMap">
+		<parameter property="djJgbm4Query" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="dwbmBz" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="djrCzyDjxh4Query" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="fhrDjxh4Query" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="fhrMc4Query" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		
+		<parameter property="xdrqQ" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="xdrqZ" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="ddbhQ" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="ddbhZ" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="fhrMc4" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		
+		<parameter property="shrMc4" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="hwMc4" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="hwSl4" javaType="java.lang.Double" jdbcType="FLOAT" mode="IN"/>
+		<parameter property="hwZl4" javaType="java.lang.Double" jdbcType="FLOAT" mode="IN"/>
+		<parameter property="hwTj4" javaType="java.lang.Double" jdbcType="FLOAT" mode="IN"/>
+		
+		<parameter property="zsr4" javaType="java.lang.Double" jdbcType="FLOAT" mode="IN"/>
+		<parameter property="xjBz4" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="dfBz4" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="yjBz4" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="shfsDm4" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="yjWjBz4" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		
+		<parameter property="pageNum" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+		<parameter property="pageSize" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+		<parameter property="pageCount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+		<parameter property="reccount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+		<parameter property="dataList" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" resultMap="jcTydResMap"/>
+	</parameterMap>
+	
+	<resultMap class="com.cy.jcgl.domain.JcTydglDomain" id="jcTydResMap">
+		<result property="pageXh" column="PAGE_XH"/>
+		<result property="ddDjxh" column="DD_DJXH"/>
+		<result property="ddbh" column="DDBH"/>
+		<result property="hwztDm" column="HWZT_DM"/>
+		<result property="hwztMc" column="HWZT_MC"/>
+		<result property="fhrXzqhDm" column="FHR_XZQH_DM"/>
+		<result property="fhrXzqhMc" column="FHR_XZQH_MC"/>
+		<result property="shrXzqhDm" column="SHR_XZQH_DM"/>
+		<result property="shrXzqhMc" column="SHR_XZQH_MC"/>
+		<result property="fhrLxr" column="FHR_LXR"/>
+		<result property="shrLxr" column="SHR_LXR"/>
+		<result property="srHj" column="SR_HJ"/>
+		<result property="srDf" column="SR_DF"/>
+		<result property="srXf" column="SR_XF"/>
+		<result property="srHf" column="SR_HF"/>
+		<result property="srYj" column="SR_YJ"/>
+		
+		<result property="srHk" column="SR_HK"/>
+		<result property="srYsf" column="SR_YSF"/>
+		<result property="srPsf" column="SR_PSF"/>
+		<result property="srBjf" column="SR_BJF"/>
+		<result property="fyDshk" column="FY_DSHK"/>
+		<result property="yjWjBz" column="YJWJBZ"/>
+		
+		<result property="fhrMc" column="KHMC"/>
+		<result property="xdrq" column="XDRQ"/>
+		<result property="yqFhrq" column="YQ_FHRQ"/>
+		<result property="hwmc" column="HWMC"/>
+		<result property="xh" column="XH"/>
+		<result property="hwbz" column="BZ"/>
+		<result property="sl" column="SL"/>
+		<result property="zl" column="ZL"/>
+		<result property="tj" column="TJ"/>
+		<result property="hwSl" column="HW_SL"/>
+		<result property="hwZl" column="HW_ZL"/>
+		<result property="hwTj" column="HW_TJ"/>
+		<result property="jsSl" column="JS_SL"/>
+		<result property="shrMc" column="SHR_MC"/>
+		<result property="yqDdrq" column="YQ_DDRQ"/>
+		<result property="shfsDm" column="SHFS_DM"/>
+		<result property="shfsMc" column="SHFS_MC"/>
+		<result property="djrCzyDjxh" column="DJR_CZY_DJXH"/>
+		<result property="djrMc" column="DJR_MC"/>
+		<result property="djJgbm" column="DJ_JGBM"/>
+		<result property="djJgmc" column="DJ_JGMC"/>
+		<result property="ssJgbm" column="SS_JGBM"/>
+		<result property="ssJgmc" column="SS_JGMC"/>
+	</resultMap>
+	
+	<procedure id="queryJcTydPage" parameterMap="jcTydParMap" resultMap="jcTydResMap">
+		{call P_HYGL_DDGL_TYDGL(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}
+	</procedure>
+	
+	<parameterMap class="java.util.Map" id="jcTydPcxxMap">
+		<parameter property="ddDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="pageNum" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+		<parameter property="pageSize" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+		<parameter property="pageCount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+		<parameter property="reccount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+		<parameter property="dataList" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" resultMap="jcTydPcxxResMap"/>
+	</parameterMap>
+	
+	<resultMap class="com.cy.jcgl.domain.JcPcxxglDomain" id="jcTydPcxxResMap">
+		<result property="pageXh" column="PAGE_XH"/>
+		<result property="pcDjxh" column="PC_DJXH"/>
+		<result property="pcdh" column="PCDH"/>
+		<result property="pcrq" column="PCRQ"/>
+		<result property="pcfsDm" column="PCFS_DM"/>
+		<result property="pcfsMc" column="PCFS_MC"/>
+		<result property="zhuangche" column="ZCFS_DM"/>
+		<result property="zcfxMc" column="ZCFS_MC"/>
+		<result property="cyrClhm" column="CYR_CLHM"/>
+		<result property="cyrGchm" column="CYR_GCHM"/>
+		<result property="cyrSjxm" column="CYR_SJXM"/>
+		<result property="yfHj" column="YF_HJ"/>
+		<result property="yfYfyf" column="YF_YFYF"/>
+		<result property="yfYj" column="YF_YJ"/>
+		<result property="yfXxf" column="YF_XXF"/>
+		<result property="yfSjs" column="YF_SJS"/>
+		<result property="yfHdyf" column="YF_HDYF"/>
+		<result property="yfHdf" column="YF_HDF"/>
+		<result property="yfZjf" column="YF_ZJF"/>
+		<result property="zrbmDm" column="ZRBM_DM"/>
+		<result property="zrbmMc" column="ZRBM_MC"/>
+		<result property="fhrXzqhDm" column="FHR_XZQH_DM"/>
+		<result property="fhrXzqhMc" column="FHR_XZQH_MC"/>
+		<result property="shrXzqhDm" column="SHR_XZQH_DM"/>
+		<result property="shrXzqhMc" column="SHR_XZQH_MC"/>
+		<result property="hwMc" column="HWMC"/>
+		<result property="hwbz" column="BZ"/>
+		<result property="sl" column="SL"/>
+		<result property="zl" column="ZL"/>
+		<result property="tj" column="TJ"/>
+		<result property="jssl" column="JS_SL"/>
+		<result property="fhrMc" column="FHR_MC"/>
+		<result property="sfdMc" column="FHR_DZ"/>
+		<result property="yqFhrq" column="YQ_FHRQ"/>
+		<result property="shrMc" column="SHR_MC"/>
+		<result property="mddMc" column="SHR_DZ"/>
+		<result property="yqDdrq" column="YQ_DDRQ"/>
+		<result property="pcrCzyDjxh" column="PCR_CZY_DJXH"/>
+		<result property="pcrq" column="PCRQ"/>
+		<result property="pcrMc" column="PCR_MC"/>
+		<result property="pcJgbm" column="PC_JGBM"/>
+		<result property="pcJgbmMc" column="PC_JGMC"/>
+		<result property="ssJgbm" column="SS_JGBM"/>
+		<result property="ssJgbmMc" column="SS_JGMC"/>
+		<result property="fhrMc" column="FHR_MC"/>
+		<result property="dingdan" column="DDBH"/>
+		<result property="wsspztMc" column="WSSPZT_MC"/>
+		<result property="wsspztDm" column="WSSPZT_DM"/>
+	</resultMap>
+
+	<procedure id="queryJcglTydcxPcxx" parameterMap="jcTydPcxxMap" resultMap="jcTydPcxxResMap">
+		{call P_JCGL_TYDCX_PCXX(?,?,?,?,?,?)}
+	</procedure>
+	
+	<parameterMap class="java.util.Map" id="jcSjcxClgzxxMap">
+		<parameter property="ddDjxh" javaType="java.lang.Long" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="pcDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="pageNum" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+		<parameter property="pageSize" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+		<parameter property="pageCount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+		<parameter property="reccount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+		<parameter property="dataList" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" resultMap="jcSjcxClgzxxResMap"/>
+	</parameterMap>
+	
+	<resultMap class="com.cy.hygl.domain.HyClgzDomain" id="jcSjcxClgzxxResMap">
+		<result property="pageXh" column="PAGE_XH"/>
+		<result property="pcDjxh" column="PC_DJXH"/>
+		<result property="pcdh" column="PCDH"/>
+		<result property="pcrq" column="PCRQ"/>
+		<result property="pcfsMc" column="PCFS_MC"/>
+		<result property="zcfsMc" column="ZCFS_MC"/>
+		<result property="cyrClhm" column="CYR_CLHM"/>
+		<result property="cyrGchm" column="CYR_GCHM"/>
+		<result property="cyrSjxm" column="CYR_SJXM"/>
+		<result property="rq" column="RQ"/>
+		<result property="sm" column="SM"/>
+		<result property="xxdz" column="XXDZ"/>
+		<result property="yjDdrq" column="YJ_DDRQ"/>
+		<result property="szqyXzqhMc" column="SZQY_XZQH_MC"/>
+		<result property="djJgmc" column="DJ_JG_MC"/>
+		<result property="xgrMc" column="XGR_MC"/>
+		<result property="xgrq" column="XGRQ"/>
+	</resultMap>
+	
+	<procedure id="queryJcSjcxClgzxx" parameterMap="jcSjcxClgzxxMap" resultMap="jcSjcxClgzxxResMap">
+		{call P_JCGL_SJCX_CLGZXX(?,?,?,?,?,?,?)}
+	</procedure>
+	
+	<parameterMap class="java.util.Map" id="jcSjyfzfxxMap">
+		<parameter property="pcDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="ddDjxh" javaType="java.lang.Long" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="pageNum" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+		<parameter property="pageSize" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+		<parameter property="pageCount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+		<parameter property="reccount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+		<parameter property="dataList" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" resultMap="jcSjyfzfResMap"/>
+	</parameterMap>
+	
+	<resultMap class="com.cy.jcgl.domain.JcYfZfxxDomain" id="jcSjyfzfResMap">
+		<result property="pageXh" column="PAGE_XH"/>
+		<result property="yfDjxh" column="YSYF_DJXH"/>
+		<result property="pcdh" column="PCDH"/>
+		<result property="yfztDm" column="YSYFZT_DM"/>
+		<result property="yfztMc" column="YSYFZT_MC"/>
+		<result property="yfjsfDm" column="YFJSF_DM"/>
+		<result property="yfjsfMc" column="YFJSF_MC"/>
+		<result property="yfjsfDjxh" column="YFJSF_DJXH"/>
+		<result property="yfjsfDjMc" column="YFJSF_DJMC"/>
+		<result property="jsfJe" column="YSF_JE"/>
+		<result property="yisfJe" column="YISF_JE"/>
+		<result property="wsfJe" column="WSF_JE"/>
+		<result property="kmdlDm" column="KMDL_DM"/>
+		<result property="kmdlMc" column="KMDL_MC"/>
+		<result property="kmxlDm" column="KMXL_DM"/>
+		<result property="kmxlMc" column="KMXL_MC"/>
+		<result property="ysyflyDm" column="YSYFLY_DM"/>
+		<result property="ysyflyMc" column="YSYFLY_MC"/>
+		<result property="skfMc" column="SKFMC"/>
+		<result property="je" column="JE"/>
+		<result property="zffsDm" column="ZFFS_DM"/>
+		<result property="zffsMc" column="ZFFS_MC"/>
+		<result property="zcflDm" column="ZCFL_DM"/>
+		<result property="zcflMc" column="ZCFL_MC"/>
+		<result property="czyDjxh" column="JBR_CZY_DJXH"/>
+		<result property="jbrMc" column="JBR_MC"/>
+		<result property="rq" column="RQ"/>
+		<result property="yhMc" column="YHMC"/>
+		<result property="zh" column="ZH"/>
+		<result property="bz" column="BZ"/>
+		<result property="csRq" column="CSRQ"/>
+		<result property="sm" column="SM"/>
+		<result property="djJgbm" column="DJ_JGBM"/>
+		<result property="djJgmc" column="DJ_JGMC"/>
+		<result property="ssJgbm" column="SS_JGBM"/>
+		<result property="ssJgmc" column="SS_JGMC"/>
+	</resultMap>
+	
+	<procedure id="queryJcYfZfxx" parameterMap="jcSjyfzfxxMap" resultMap="jcSjyfzfResMap">
+		{call P_JCGL_CJCX_YFZFQKCX(?,?,?,?,?,?,?)}
+	</procedure>
+
+	<!-- 检索订单中的物流损失信息 -->
+	<select id="queryWlssXxByDdDjxh4Dd" parameterClass="java.util.Map" resultClass="com.cy.hygl.domain.HyWlSsDjGlDomain">
+		SELECT DDHW.RN AS pageXh,DDHW.DD_DJXH AS ddDjxh,DDHW.XH AS hwmxxh,DDHW.HWMC AS hwMc,
+           rtrim(TO_CHAR(DDHW.HW_SL,'fm99999999999990.99'),'.') || '' ||
+           (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '01' AND DM.JLDW_DM = DDHW.HW_SL_JLDW_DM) AS SL,
+               rtrim(TO_CHAR(DDHW.HW_ZL,'fm99999999999990.99'),'.') || '' ||
+           (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '02' AND DM.JLDW_DM = DDHW.HW_ZL_JLDW_DM) AS ZL,
+               rtrim(TO_CHAR(DDHW.HW_TJ,'fm99999999999990.99'),'.') || '' ||
+           (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '03' AND DM.JLDW_DM = DDHW.HW_TJ_JLDW_DM)AS TJ,
+           rtrim(TO_CHAR(WLSS.WLSS_HW_SL,'fm99999999999990.99'),'.') || '' ||
+           (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '01' AND DM.JLDW_DM = DDHW.HW_SL_JLDW_DM) AS WLSSSL,
+               rtrim(TO_CHAR(WLSS.WLSS_HW_ZL,'fm99999999999990.99'),'.') || '' || 
+           (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '02' AND DM.JLDW_DM = DDHW.HW_ZL_JLDW_DM)AS WLSSZL,
+               rtrim(TO_CHAR(WLSS.WLSS_HW_TJ,'fm99999999999990.99'),'.') || '' || 
+           (SELECT JLDW_JC FROM DM_JLDW DM WHERE JLDW_FL_DM = '03' AND DM.JLDW_DM = DDHW.HW_TJ_JLDW_DM)AS WLSSTJ,
+           WLSS.JE AS je,(SELECT SPZT.WSSPZT_MC FROM DM_WSSPZT SPZT WHERE SPZT.WSSPZT_DM=WLSS.WSSPZT_DM) AS wsspztMc,
+             (SELECT RYDJ.MC FROM QY_RYDJ RYDJ WHERE RYDJ.CZY_DJXH=WLSS.KH_DJXH) AS khmc,
+             (SELECT ZZ.MC FROM QY_ZZJG ZZ WHERE ZZ.JGBM=WLSS.SS_JGBM) AS ssJgmc,
+             (SELECT ZZ.MC FROM QY_ZZJG ZZ WHERE ZZ.JGBM=WLSS.DJ_JGBM) AS pcJgmc,
+             WLSS.WLSS_LYBZ AS wlssLybz,WLSS.WLSS_DJXH AS wlssDjxh
+		  FROM (SELECT A.*, ROWNUM RN FROM HY_DD_HWMX A WHERE A.DD_DJXH=#ddDjxh# AND A.YXBZ='Y') DDHW,
+		        HY_WLSSDJ WLSS
+		 WHERE DDHW.DD_DJXH = WLSS.DD_DJXH(+)
+		   AND DDHW.XH = WLSS.HWMXXH(+)
+		   AND WLSS.YXBZ = 'Y'
+		   ORDER BY DDHW.RN
+	</select>
+	
+	<!-- 检索物流损失对应的明细 -->
+	<select id="getWlssMxByWlssDjxh" parameterClass="java.util.Map" resultClass="com.cy.hygl.domain.HyWlSsDjGlDomain">
+		SELECT WLSS.WLSS_DJXH AS wlssDjxh,SSMX.JE AS je,SSMX.WLSSCLFS_DM AS wlssclfsDm,
+             (SELECT SSYY.WLSSYY FROM QY_WLSSYY SSYY WHERE SSYY.WH_XH = SSMX.WLSSYY_WH_XH) AS ssyy,
+             (CASE WHEN SSMX.WLSSCLFS_DM = 1 THEN
+                   (SELECT DISTINCT(PC.CYR_CZXM) FROM HY_PC PC WHERE PC.CYR_CL_DJXH=SSMX.PCYG_CZY_DJXH)
+              WHEN SSMX.WLSSCLFS_DM = 3 THEN 
+              (SELECT RY.MC FROM QY_RYDJ RY WHERE RY.CZY_DJXH=SSMX.PCYG_CZY_DJXH) END) AS ssZrr,
+             (SELECT CLSS.WLSSCLFS_MC FROM DM_WLSSCLFS CLSS WHERE CLSS.WLSSCLFS_DM=SSMX.WLSSCLFS_DM) AS wlssclfsMc           
+             FROM HY_WLSSDJ WLSS,HY_WLSSDJ_MX SSMX              
+             WHERE WLSS.WLSS_DJXH=SSMX.WLSS_DJXH(+)
+             AND SSMX.YXBZ='Y'
+             AND WLSS.YXBZ='Y' 
+             AND WLSS.WLSS_DJXH = #wlssDjxh#
+	</select>
+</sqlMap>

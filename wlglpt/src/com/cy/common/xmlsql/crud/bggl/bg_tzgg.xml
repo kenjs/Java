@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.bggl.dao.BgTzggMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectBgTzggByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgTzggDomain">
+		select a.TZGG_XH as tzggXh,a.JGBM as jgbm,a.FBRQ as fbrq,a.BCZT_DM as bcztDm,a.ZT as zt,
+		a.NR as nr,a.XJGXBZ as xjgxbz,a.YXBZ as yxbz,a.CJR_CZY_DJXH as cjrCzyDjxh,a.CJRQ as cjrq,
+		a.XGR_CZY_DJXH as xgrCzyDjxh,a.XGRQ as xgrq from BG_TZGG a  where a.TZGG_XH=#tzggXh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertBgTzgg"  parameterClass="com.cy.common.bo.BgTzgg">
+		<selectKey keyProperty="tzggXh" resultClass="string" type="pre"> 
+			select SEQ_TZGG_XH.nextval as tzggXh from dual 
+		</selectKey> 
+		insert into BG_TZGG(TZGG_XH,JGBM,FBRQ,BCZT_DM,ZT,
+		NR,XJGXBZ,YXBZ,CJR_CZY_DJXH,CJRQ,
+		XGR_CZY_DJXH,XGRQ)
+		values(#tzggXh:NUMERIC#,#jgbm:NUMERIC#,to_date(#fbrq:DATE#,'yyyy-MM-dd'),#bcztDm:VARCHAR#,#zt:VARCHAR#,
+		#nr:CLOB#,#xjgxbz:VARCHAR#,#yxbz:VARCHAR#,#cjrCzyDjxh:NUMERIC#,to_date(#cjrq:DATE#,'yyyy-MM-dd'),
+		#xgrCzyDjxh:NUMERIC#,to_date(#xgrq:DATE#,'yyyy-MM-dd'))
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateBgTzggByKey" parameterClass="com.cy.common.bo.BgTzgg">
+        update BG_TZGG set TZGG_XH=#tzggXh#,JGBM=#jgbm#,FBRQ=to_date(#fbrq#, 'YYYY-MM-DD'),BCZT_DM=#bcztDm#,ZT=#zt#,
+		NR=#nr#,XJGXBZ=#xjgxbz#,YXBZ=#yxbz#,CJR_CZY_DJXH=#cjrCzyDjxh#,CJRQ=to_date(#cjrq#, 'YYYY-MM-DD'),
+		XGR_CZY_DJXH=#xgrCzyDjxh#,XGRQ=to_date(#xgrq#, 'YYYY-MM-DD') where TZGG_XH=#tzggXh#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteBgTzggByKey" parameterClass="java.util.Map">
+		update BG_TZGG set yxbz='N' where TZGG_XH=#tzggXh#
+    </delete>
+    
+    	<!--插入数据-->
+	<insert id="insertBgTzggFj"  parameterClass="com.cy.common.bo.BgTzggFj">
+		insert into BG_TZGG_FJ(TZGG_XH,XH,FJMC,FJNR,YXBZ)
+		values(#tzggXh:NUMERIC#,#xh:NUMERIC#,#fjmc:VARCHAR#,#fjnr:BLOB#,#yxbz:VARCHAR#)
+	</insert>
+	
+		<!--根据主键删除表数据：软删除-->
+	<delete id="deleteBgTzggFjByKey" parameterClass="java.util.Map">
+		update BG_TZGG_FJ set yxbz='N' where TZGG_XH=#tzggXh# and XH=#xh#
+    </delete>
+    
+    
+	<!--根据主键取DOMAIN-->
+	<select id="selectBgTzggFjByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgTzggDomain">
+		select a.TZGG_XH as tzggXh,a.XH as xh,a.FJMC as fjmc,a.FJNR as fjnr,a.YXBZ as yxbz from BG_TZGG_FJ a  where a.TZGG_XH=#tzggXh# and a.XH=#xh#
+    </select>
+    
+    
+	<!--根据主键取DOMAIN-->
+	<select id="selectBgTzggYyjlByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgTzggYyjlDomain">
+		select a.TZGG_XH as tzggXh,a.CZY_DJXH as czyDjxh,a.CKRQ as ckrq from BG_TZGG_YYJL a  where a.TZGG_XH=#tzggXh# and a.CZY_DJXH=#czyDjxh#
+    </select>
+    
+    <!--插入数据-->
+	<insert id="insertBgTzggYyjl"  parameterClass="com.cy.common.bo.BgTzggYyjl">
+		insert into BG_TZGG_YYJL(TZGG_XH,CZY_DJXH,CKRQ)
+		values(#tzggXh:NUMERIC#,#czyDjxh:NUMERIC#,to_date(#ckrq:DATE#,'YYYY-MM-DD HH24:MI:SS'))
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateBgTzggYyjlByKey" parameterClass="com.cy.common.bo.BgTzggYyjl">
+        update BG_TZGG_YYJL set TZGG_XH=#tzggXh#,CZY_DJXH=#czyDjxh#,CKRQ=to_date(#ckrq#,'YYYY-MM-DD HH24:MI:SS') where TZGG_XH=#tzggXh# and CZY_DJXH=#czyDjxh#
+    </update>
+    
+</sqlMap>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.bggl.dao.BgGzsjMapper">
+
+	<!--根据主键取DOMAIN-->
+	<select id="selectBgGzsjByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgGzsjDomain">
+		select a.JGBM as jgbm,a.YXQ_Q as yxqQ,a.YXQ_Z as yxqZ,a.AM_SBSJ_S as amSbsjS,a.AM_SBSJ_F as amSbsjF,
+		a.PM_SBSJ_S as pmSbsjS,a.PM_SBSJ_F as pmSbsjF,a.CJR_CZY_DJXH as cjrCzyDjxh,a.CJRQ as cjrq,a.XGR_CZY_DJXH as xgrCzyDjxh,
+		a.XGRQ as xgrq from BG_GZSJ a  where a.JGBM=#jgbm# and a.YXQ_Q=to_date(#yxqQ#, 'YYYY-MM-DD')
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertBgGzsj"  parameterClass="com.cy.common.bo.BgGzsj">
+		insert into BG_GZSJ(JGBM,YXQ_Q,YXQ_Z,AM_SBSJ_S,AM_SBSJ_F,
+		PM_SBSJ_S,PM_SBSJ_F,CJR_CZY_DJXH,CJRQ,XGR_CZY_DJXH,
+		XGRQ)
+		values(#jgbm:NUMERIC#,to_date(#yxqQ:DATE#,'yyyy-MM-dd'),to_date(#yxqZ:DATE#,'yyyy-MM-dd'),#amSbsjS:NUMERIC#,#amSbsjF:NUMERIC#,
+		#pmSbsjS:NUMERIC#,#pmSbsjF:NUMERIC#,#cjrCzyDjxh:NUMERIC#,to_date(#cjrq:DATE#,'yyyy-MM-dd'),#xgrCzyDjxh:NUMERIC#,
+		to_date(#xgrq:DATE#,'yyyy-MM-dd'))
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateBgGzsjByKey" parameterClass="com.cy.common.bo.BgGzsj">
+        update BG_GZSJ set JGBM=#jgbm#,YXQ_Q=to_date(#yxqQ#, 'YYYY-MM-DD'),YXQ_Z=to_date(#yxqZ#, 'YYYY-MM-DD'),AM_SBSJ_S=#amSbsjS#,AM_SBSJ_F=#amSbsjF#,
+		PM_SBSJ_S=#pmSbsjS#,PM_SBSJ_F=#pmSbsjF#,CJR_CZY_DJXH=#cjrCzyDjxh#,CJRQ=to_date(#cjrq#, 'YYYY-MM-DD'),XGR_CZY_DJXH=#xgrCzyDjxh#,
+		XGRQ=to_date(#xgrq#, 'YYYY-MM-DD') where JGBM=#jgbm# and YXQ_Q=to_date(#yxqQ#, 'YYYY-MM-DD')
+    </update>
+    
+	<!--根据主键删除表数据：软删除-->
+	<delete id="deleteBgGzsjByKey" parameterClass="java.util.Map">
+		delete from BG_GZSJ where JGBM=#jgbm# and YXQ_Q=to_date(#yxqQ#, 'YYYY-MM-DD')
+    </delete>
+    
+    <update id="updateBgGzsjYxq1ByKey" parameterClass="com.cy.common.bo.BgGzsj">
+    	Update BG_GZSJ A set A.YXQ_Z=to_date(#yxqQ#,'yyyy-mm-dd')-1 where A.JGBM =#jgbm# AND A.YXQ_Q &lt;=to_date(#yxqQ#,'yyyy-mm-dd') AND A.YXQ_Z &gt;=to_date(#yxqQ#,'yyyy-mm-dd')
+    </update>
+    
+    <update id="updateBgGzsjYxq2ByKey" parameterClass="com.cy.common.bo.BgGzsj">
+   	 	Update BG_GZSJ A set A.YXQ_Q=(CASE WHEN #yxqZ# = '9999-12-31'  THEN to_date('9999-12-31','yyyy-mm-dd') ELSE  to_date(#yxqZ#,'yyyy-mm-dd')+1 END) where A.JGBM =#jgbm# AND A.YXQ_Q &lt;=to_date(#yxqZ#,'yyyy-mm-dd') AND A.YXQ_Z &gt;=to_date(#yxqZ#,'yyyy-mm-dd')
+    </update>
+    
+    <update id="updateBgGzsjYxq3ByKey" parameterClass="com.cy.common.bo.BgGzsj">
+    	DELETE FROM BG_GZSJ A where A.JGBM =#jgbm# AND A.YXQ_Q &gt;=to_date(#yxqQ#,'yyyy-mm-dd') AND A.YXQ_Z &lt;=to_date(#yxqZ#,'yyyy-mm-dd')
+    </update>
+</sqlMap>

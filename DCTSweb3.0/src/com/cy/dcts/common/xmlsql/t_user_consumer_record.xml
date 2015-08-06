@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="UserConsumerRecord" type="com.cy.dcts.common.bo.UserConsumerRecord"/>
+	
+	<!-- 增 -->
+	<insert id="iBatisInsertUserConsumerRecord" parameterClass="UserConsumerRecord">
+		insert into t_user_consumer_record (user_id,consumer_type,consumer_amount,remark,create_time) 
+		values (#userId#,#consumerType#,#consumerAmount#,#remark#,sysdate())
+		<selectKey keyProperty="id" resultClass="Integer">
+			select last_insert_id() as id
+		</selectKey>
+	</insert>
+	
+	<!-- 查 -->
+	<select id="iBatisSelectUserConsumerRecord" parameterClass="string" resultClass="com.cy.dcts.common.domain.UserConsumerRecordDomain">
+		select consumer_type as consumerType,
+				consumer_amount as consumerAmount,
+				remark as remark,
+				create_time as createTime
+		from t_user_consumer_record where user_id = #userId#
+	</select>
+</sqlMap>

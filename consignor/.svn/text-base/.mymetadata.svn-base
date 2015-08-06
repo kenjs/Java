@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="consignor"
+  id="myeclipse.1349774974560"
+  context-root="/consignor"
+  j2ee-spec="5.0"
+  archive="consignor.war">
+  <attributes>
+    <attribute name="webrootdir" value="/WebRoot" />
+  </attributes>
+</project-module>
+

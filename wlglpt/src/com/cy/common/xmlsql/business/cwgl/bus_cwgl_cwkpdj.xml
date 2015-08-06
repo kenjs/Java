@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.cwgl.dao.BusCwglCwkpdjMapper">
+	<select id="selectCwKpdjPage" parameterClass="java.util.Map"
+		resultClass="com.cy.cwgl.domain.CwKpdjDomain">
+		SELECT A.KP_DJXH AS kpDjxh,
+           A.KPSQ_DJXH AS kpsqDjxh,
+           A.KH_DJXH AS khDjxh,
+           A.FPDM AS fpdm,
+           A.FPHM AS fphm,
+           A.KPR_CZY_DJXH AS kprCzyDjxh,
+           A.KPRQ AS kprq,
+           A.KPJE AS kpje,
+           A.SL AS sl,
+           A.SE AS se,
+           A.ZFBZ AS zfbz,
+           A.HZBZ AS hzbz,
+           A.LZ_FPDM AS lzFpdm,
+           A.LZ_FPHM AS lzFphm,
+           A.DJ_JGBM AS djJgbm,
+           A.SS_JGBM AS ssJgbm,
+           A.CJR_CZY_DJXH AS cjrCzyDjxh,
+           A.CJRQ AS cjrq,
+           A.XGR_CZY_DJXH AS xgrCzyDjxh,
+           A.XGRQ AS xgrq,
+           (SELECT KD.KHMC FROM QY_KH_DJXX KD WHERE KD.KH_DJXH=A.KH_DJXH) AS khmc,
+           (SELECT RY.MC FROM QY_RYDJ RY WHERE RY.CZY_DJXH=A.KPR_CZY_DJXH) AS kprMc,
+           (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+           (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc,
+           (SELECT QZ.MC FROM QY_ZZJG QZ WHERE QZ.JGBM=A.SS_JGBM) AS ssJgmc,
+           (SELECT QZ.MC FROM QY_ZZJG QZ WHERE QZ.JGBM=A.DJ_JGBM) AS djJgmc
+      FROM CW_KPDJ A
+      WHERE A.SS_JGBM=#ssJgbm#     	
+	    AND A.ZFBZ='N'
+	    AND A.KPRQ BETWEEN TO_DATE(#rqQ#,'yyyy-MM-dd') 
+	    AND TO_DATE(#rqZ#,'yyyy-MM-dd')
+      <dynamic>
+      	<isNotEmpty property="khDjxh" prepend="AND">
+      		A.KH_DJXH = #khDjxh#
+      	</isNotEmpty>
+      	<isNotEmpty property="fpdm" prepend="AND">
+      		A.FPDM like #fpdm# 
+      	</isNotEmpty>      	  
+      </dynamic>
+		  $orderStr$
+    </select>
+    
+    <select id="selectCwKpdjAll" parameterClass="java.util.Map"
+		resultClass="com.cy.cwgl.domain.CwKpdjDomain">
+		SELECT A.KP_DJXH AS kpDjxh,
+           A.KPSQ_DJXH AS kpsqDjxh,
+           A.KH_DJXH AS khDjxh,
+           A.FPDM AS fpdm,
+           A.FPHM AS fphm,
+           A.KPR_CZY_DJXH AS kprCzyDjxh,
+           A.KPRQ AS kprq,
+           A.KPJE AS kpje,
+           A.SL AS sl,
+           A.SE AS se,
+           A.ZFBZ AS zfbz,
+           A.HZBZ AS hzbz,
+           A.LZ_FPDM AS lzFpdm,
+           A.LZ_FPHM AS lzFphm,
+           A.DJ_JGBM AS djJgbm,
+           A.SS_JGBM AS ssJgbm,
+           A.CJR_CZY_DJXH AS cjrCzyDjxh,
+           A.CJRQ AS cjrq,
+           A.XGR_CZY_DJXH AS xgrCzyDjxh,
+           A.XGRQ AS xgrq,
+           (SELECT KD.KHMC FROM QY_KH_DJXX KD WHERE KD.KH_DJXH=A.KH_DJXH) AS khmc,
+           (SELECT RY.MC FROM QY_RYDJ RY WHERE RY.CZY_DJXH=A.KPR_CZY_DJXH) AS kprMc,
+           (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+           (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc,
+           (SELECT QZ.MC FROM QY_ZZJG QZ WHERE QZ.JGBM=A.SS_JGBM) AS ssJgmc,
+           (SELECT QZ.MC FROM QY_ZZJG QZ WHERE QZ.JGBM=A.DJ_JGBM) AS djJgmc
+      FROM CW_KPDJ A
+      WHERE A.SS_JGBM=#ssJgbm#     	
+	    AND A.ZFBZ='N'
+	    AND A.KPRQ BETWEEN TO_DATE(#rqQ#,'yyyy-MM-dd') 
+	    AND TO_DATE(#rqZ#,'yyyy-MM-dd')
+      <dynamic>
+      	<isNotEmpty property="khDjxh" prepend="AND">
+      		A.KH_DJXH = #khDjxh#
+      	</isNotEmpty>
+      	<isNotEmpty property="fpdm" prepend="AND">
+      		A.FPDM like #fpdm# OR A.FPDM LIKE #fpdm#
+      	</isNotEmpty>      	
+      </dynamic>
+		  ORDER by A.KP_DJXH ASC
+    </select>
+
+	<select id="getCwKpdjRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.KP_DJXH) 
+		  FROM CW_KPDJ A
+      WHERE A.SS_JGBM=#ssJgbm#     	
+	    AND A.ZFBZ='N'
+	    AND A.KPRQ BETWEEN TO_DATE(#rqQ#,'yyyy-MM-dd') 
+	    AND TO_DATE(#rqZ#,'yyyy-MM-dd')
+      <dynamic>
+      	<isNotEmpty property="khDjxh" prepend="AND">
+      		A.KH_DJXH = #khDjxh#
+      	</isNotEmpty>
+      	<isNotEmpty property="fpdm" prepend="AND">
+      		A.FPDM like #fpdm# OR A.FPDM LIKE #fpdm#
+      	</isNotEmpty>      	
+      </dynamic>
+    </select>
+    
+    <select id="selectFpdmAndFphm" parameterClass="java.util.Map"
+    resultClass="java.lang.Integer">
+    	select count(A.KPSQ_DJXH) from CW_KPDJ A
+    	where A.fpdm = #fpdm# and A.fphm = #fphm# 
+    	and A.ZFBZ = 'N'
+    </select>
+    
+    <!-- 财务开票登记作废后续处理 -->
+    <parameterMap class="java.util.Map" id="cwKpdjParMapAfterZf">
+    	<parameter property="kpDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="kpsqDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="rtnCode" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+    	<parameter property="errMesge" javaType="java.lang.String" jdbcType="VARCHAR" mode="OUT"/>
+    </parameterMap>
+    
+    <procedure id="cwKpdjZfhxcl" parameterMap="cwKpdjParMapAfterZf">
+    	{call P_HYGL_CWGL_KPDJZF_HXCL(?,?,?,?)}
+    </procedure>
+    
+    
+    <parameterMap class="java.util.Map" id="cwKpcxParMapForSelect">
+    	<parameter property="jgbm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="khDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="fpdm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="fphmQ" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="fphmZ" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="kprqQ" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="kprqZ" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	
+    	<parameter property="start" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+    	<parameter property="pagSize" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+    	<parameter property="pageCount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+    	<parameter property="pageCurcount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+    	<parameter property="dataList" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" resultMap="cwKpcxResMap"/>
+    </parameterMap>
+    
+    <resultMap class="com.cy.cwgl.domain.CwKpcxDomain" id="cwKpcxResMap">
+    	<result property="khDjxh" column="KH_DJXH" />
+    	<result property="khmc" column="KHMC"/>
+    	<result property="fpdm" column="FPDM" />
+    	<result property="fphm" column="FPHM" />
+    	<result property="kprMc" column="KPR_MC" />
+    	<result property="kprq" column="KPRQ" />
+    	<result property="kpje" column="KPJE" />
+    	<result property="sl" column="SL" />
+    	<result property="se" column="SE" />
+    	<result property="zfbz" column="ZFBZ" />
+    	<result property="hzbz" column="HZBZ" />
+    	<result property="lzFpdm" column="LZ_FPDM" />
+    	<result property="lzFphm" column="LZ_FPHM" />
+    	<result property="ssJgmc" column="KPDW_MC"/>
+    	<result property="djJgmc" column="DJBM_MC"/>
+    	<result property="cjrMc" column="CJR_MC"/>
+    	<result property="cjrq" column="CJRQ"/>
+    	<result property="xgrMc" column="XGR_MC"/>
+    	<result property="xgrq" column="XGRQ"/>
+    </resultMap>
+    
+    <procedure id="cwKpcx" parameterMap="cwKpcxParMapForSelect" resultMap="cwKpcxResMap">
+    	{call P_HYGL_CWGL_KP_CX(?,?,?,?,?,?,?,?,?,?,?,?)}
+    </procedure>
+</sqlMap>

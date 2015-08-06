@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.driver.dao.DriverUserCargoInfoDao">
+	<resultMap type="DriverUserInfoDomain" id="driverUserInfoDomainMap">
+		<result property="id" column="ID"/>
+		<result property="code" column="CODE"/>
+		<result property="password" column="PASSWORD"/>
+		<result property="name" column="NAME"/>
+		<result property="carNumber" column="CAR_NUMBER"/>
+		<result property="freezeFlag" column="FREEZE_FLAG"/>
+		<result property="auditFlag" column="AUDIT_FLAG"/>
+		<result property="telephone" column="TELEPHONE"/>
+		<result property="identityLicenseNum" column="IDENTITY_LICENSE_NUM"/>
+		<result property="operatingLicense" column="OPERATING_LICENSE"/>
+		<result property="driversLicense" column="DRIVERS_LICENSE"/>
+		<result property="drivingLicense" column="DRIVING_LICENSE"/>
+		<result property="carLength" column="CAR_LENGTH"/>
+		<result property="carWeight" column="CAR_WEIGHT"/>
+		<result property="carCubage" column="CAR_CUBAGE"/>
+		<result property="carPlateType" column="CAR_PLATE_TYPE"/>
+		<result property="carBarType" column="CAR_BAR_TYPE"/>
+		<result property="carTypes" column="CAR_TYPES"/>
+		<result property="remark" column="REMARK"/>
+		<result property="deleteFlag" column="DELETE_FLAG"/>
+		<result property="carStateType" column="CAR_STATE_TYPE"/>
+		<result property="headPortrait" column="HEAD_PORTRAIT"/>
+		<result property="newOrOldAppUser" column="NEW_OR_OLD_APP_USER"/>
+		<result property="submitType" column="SUBMIT_TYPE"/>
+		<result property="createTime" column="CREATE_TIME"/>
+        <result property="noIimei" column="NO_IMEI" />
+	</resultMap>
+	<!-- 验证司机登录名是否存在 -->
+	<select id="checkUserAccountExist" parameterType="string" resultType="integer">
+		select count(id) from t_driver_user_info where code = #{code} and DELETE_FLAG = 0
+	</select>
+	
+	<!-- 验证账户是否被冻结 -->
+	<select id="chkFreezeAccount" parameterType="string" resultType="integer">
+		select count(id) from t_driver_user_info where code = #{code} and DELETE_FLAG = 0 and FREEZE_FLAG = 1
+	</select>
+	
+	<!-- 根据登录名和密码查找用户信息 -->
+	<select id="checkLogin" parameterType="string" resultMap="driverUserInfoDomainMap">
+		select * from t_driver_user_info where code = #{_parameter} and delete_flag = 0 and freeze_flag = 0
+	</select>
+	
+	<!-- 根据id查找用户信息 -->
+	<select id="selectUserBasicInfo" parameterType="string" resultType="DriverUserInfoDomain">
+		select 
+			t.ID as id,
+			t.CODE as code,
+			t.`NAME` as name,
+			t.CAR_NUMBER as carNumber,
+			t.FREEZE_FLAG as freezeFlag,
+			t.AUDIT_FLAG as auditFlag,
+			t.TELEPHONE as telephone,
+			t.IDENTITY_LICENSE_NUM as identityLicenseNum,
+			t.OPERATING_LICENSE as operatingLicense,
+			t.DRIVERS_LICENSE as driversLicense,
+			t.DRIVING_LICENSE as drivingLicense,
+			t.CAR_LENGTH as carLength,
+			t.CAR_WEIGHT as carWeight,
+			t.CAR_CUBAGE as carCubage,
+			t.CAR_PLATE_TYPE as carPlateType,
+			t.CAR_BAR_TYPE as carBarType,
+			t.CAR_TYPES as carTypes,
+			t.REMARK as remark,
+			t.CAR_STATE_TYPE as carStateType,
+			t.NEW_OR_OLD_APP_USER as newOrOldAppUser,
+			t.BAIDU_CHANNEL_ID as baiduChannelId,
+			t.BAIDU_USER_ID as baiduUserId,
+			t.HEAD_PORTRAIT as headPortrait,
+			t.IDENTITY_LICENSE_NUM_FRONT as identityLicenseNumFront,
+			t.IDENTITY_LICENSE_NUM_CONTRARY as identityLicenseNumContrary,
+			t.DELETE_FLAG as deleteFlag,
+			t.SUBMIT_TYPE as submitType,
+            t.app_version as appVersion
+		 from t_driver_user_info t
+		where t.ID = #{driverId}
+		and t.DELETE_FLAG = 0
+		and t.FREEZE_FLAG = 0
+	</select>
+	<!-- 附近货源数目-->
+	<select id="selectNearByCargoCount" parameterType="map" resultType="int">
+		select count(id) from t_order_cargo_info where DELETED_FLAG = 0 and CARGO_FLAG = 0 and START_PROVINCE = #{startProvince}
+		and START_CITY = #{startCity} AND REQUEST_START_TIME <![CDATA[>=]]> DATE_FORMAT(SYSDATE(),'%Y-%m-%d')
+	</select>
+	<!-- 预约线路 -->
+	<select id="selectDriverBusinessLineInfoByDriverId" parameterType="string" resultType="DriverBusinessLineInfoDomain">
+		SELECT
+			ID as id,
+			START_TIME as startTime,
+			END_TIME as endTime,
+			START_PROVINCE as startProvince,
+			START_CITY as startCity,
+			END_PROVINCE as endProvince,
+			END_CITY as endCity
+		FROM
+			t_driver_business_line_info
+		WHERE
+			DRIVER_ID = #{driverId}
+			AND START = 0
+	</select>
+	<!-- 符合预约的货物数目 -->
+	<select id="selectSuitCargoCount" parameterType="map" resultType="integer">
+		SELECT
+			count(t.ID)
+		FROM
+		t_order_cargo_info t
+		WHERE 
+		((t.START_PROVINCE = #{startProvice1} and t.START_CITY = #{startCity1} and t.END_PROVINCE = #{endProvince1}
+			and t.END_CITY = #{endCity1} and t.REQUEST_START_TIME <![CDATA[<=]]> DATE_FORMAT(#{startTime1},'%Y-%m-%d'))
+		OR
+	  		(t.START_PROVINCE = #{startProvice2} and t.START_CITY = #{startCity2} and t.END_PROVINCE = #{endProvince2}
+			and t.END_CITY = #{endCity2} and t.REQUEST_START_TIME <![CDATA[<=]]> DATE_FORMAT(#{startTime2},'%Y-%m-%d'))
+		OR
+			(t.START_PROVINCE = #{startProvice3} and t.START_CITY = #{startCity3} and t.END_PROVINCE = #{endProvince3}
+			and t.END_CITY = #{endCity3} and t.REQUEST_START_TIME <![CDATA[<=]]> DATE_FORMAT(#{startTime3},'%Y-%m-%d')))
+		AND t.CARGO_FLAG = 0
+		AND t.REQUEST_START_TIME <![CDATA[>=]]> DATE_FORMAT(SYSDATE(),'%Y-%m-%d')	
+		AND t.DELETED_FLAG = 0				
+	</select>
+	<!-- 修改Driver信息 -->
+	<update id="updateDriverUserInfo" parameterType="DriverUserInfoBo">
+		update t_driver_user_info set MODIFY_TIME = sysdate()
+        <if test="code != null and code != ''">
+            ,`CODE` = #{code}
+        </if>
+        <if test="carTypes != null and carTypes != ''">
+            ,CAR_TYPES = #{carTypes}
+        </if>
+        <if test="carPlateType != null and carPlateType != ''">
+            ,CAR_PLATE_TYPE = #{carPlateType}
+        </if>
+        <if test="carBarType != null and carBarType != ''">
+            ,CAR_BAR_TYPE = #{carBarType}
+        </if>
+        <if test="carLength != null and carLength != ''">
+            ,CAR_LENGTH = #{carLength}
+        </if>
+        <if test="carWeight != null and carWeight != ''">
+            ,CAR_WEIGHT = #{carWeight}
+        </if>
+        <if test="carCubage != null and carCubage != ''">
+            ,CAR_CUBAGE = #{carCubage}
+        </if>
+        <if test="name != null and name != ''">
+            ,`NAME` = #{name}
+        </if>
+        <if test="carNumber != null and carNumber != ''">
+            ,CAR_NUMBER = #{carNumber}
+        </if>
+        <if test="operatingLicense != null and operatingLicense != ''">
+            ,OPERATING_LICENSE = #{operatingLicense}
+        </if>
+        <if test="drivingLicense != null and drivingLicense != ''">
+            ,DRIVING_LICENSE = #{drivingLicense}
+        </if>
+        <if test="driversLicense != null and driversLicense != ''">
+            ,DRIVERS_LICENSE = #{driversLicense}
+        </if>
+        <if test="telephone != null and telephone != ''">
+            ,TELEPHONE = #{telephone}
+        </if>
+        <if test="identityLicenseNum != null and identityLicenseNum != ''">
+            ,IDENTITY_LICENSE_NUM = #{identityLicenseNum}
+        </if>
+        <if test="remark != null and remark != ''">
+            ,REMARK = #{remark}
+        </if>
+        <if test="headPortrait != null and headPortrait != ''">
+            ,HEAD_PORTRAIT = #{headPortrait}
+        </if>
+        <if test="identityLicenseNumFront != null and identityLicenseNumFront != ''">
+            ,IDENTITY_LICENSE_NUM_FRONT = #{identityLicenseNumFront}
+        </if>
+        <if test="auditFlag != null and auditFlag != ''">
+            ,AUDIT_FLAG = #{auditFlag}
+        </if>
+        <if test="identityLicenseNumContrary != null and identityLicenseNumContrary != ''">
+            ,IDENTITY_LICENSE_NUM_CONTRARY = #{identityLicenseNumContrary}
+        </if>
+        <if test="newOrOldAppUser != null and newOrOldAppUser != ''">
+            ,NEW_OR_OLD_APP_USER = #{newOrOldAppUser}
+        </if>
+        <if test="submitType != null and submitType != ''">
+            ,SUBMIT_TYPE = #{submitType}
+        </if>
+        <if test="mobileBrand != null and mobileBrand != ''">
+            ,MOBILE_BRAND = #{mobileBrand}
+        </if>
+        <if test="operatingSystemVersionNnumber != null and operatingSystemVersionNnumber != ''">
+            ,OPERATING_SYSTEM_VERSION_NUMBER = #{operatingSystemVersionNnumber}
+        </if>
+        <if test="mobilePhoneModel != null and mobilePhoneModel != ''">
+            ,MOBILE_PHONE_MODEL = #{mobilePhoneModel}
+        </if>
+        <if test="noIimei != null and noIimei != ''">
+            ,NO_IMEI = #{noIimei}
+        </if>
+        <if test="appVersion != null and appVersion != ''">
+            ,APP_VERSION = #{appVersion}
+        </if>
+        <if test="submitTime != null and submitTime != ''">
+            ,submit_time = #{submitTime}
+        </if>
+        <if test="registrationId != null and registrationId != ''">
+            ,registration_id = #{registrationId}
+        </if>
+		where ID = #{id}
+	</update>
+	
+	<!-- 注册 -->
+	<insert id="addDriverUserInfo" parameterType="DriverUserInfoBo" useGeneratedKeys="true" keyProperty="id">
+		insert into t_driver_user_info 
+			(reg_from,CODE,DELETE_FLAG,CREATE_TIME,MODIFY_TIME,AUDIT_FLAG,MOBILE_BRAND,OPERATING_SYSTEM_VERSION_NUMBER,
+			MOBILE_PHONE_MODEL,NO_IMEI,registration_id)
+		values 
+			(#{regFrom},#{code},0,sysdate(),sysdate(),0,#{mobileBrand},#{operatingSystemVersionNnumber},#{mobilePhoneModel},#{noIimei},#{registrationId})
+	</insert>
+	
+	<!-- 判断用户有效性 -->
+	<select id="checkUser" parameterType="string" resultType="object">
+		select FREEZE_FLAG freezeFlag from t_driver_user_info where ID = #{id} and DELETE_FLAG = 0
+	</select>
+	
+	<!-- 设置用户百度云推送的id -->
+	<update id="updateBaiduPushId" parameterType="map">
+		update t_driver_user_info
+        <set>
+            <if test="baiduChannelId != null and baiduChannelId != ''">
+                BAIDU_CHANNEL_ID = #{baiduChannelId},
+            </if>
+            <if test="baiduUserId != null and baiduUserId != ''">
+                BAIDU_USER_ID = #{baiduUserId}
+            </if>
+            <if test="registrationId != null and registrationId != ''">
+                registration_id = #{registrationId}
+            </if>
+        </set>
+        where ID = #{id}
+	</update>
+
+    <select id="selectDriverIsCall" parameterType="string" resultType="DriverCallDomain">
+        select driver_id as driverId,call_cargo_num as callCargoNum,call_transaction_num as callTransactionNum from t_count_driver_user_busi
+        where driver_id = #{driverId} limit 1
+    </select>
+
+    <select id="selectDriverDayilyIsCall" parameterType="string" resultType="DriverCallDomain">
+        select driver_id as driverId,call_cargo_num as callCargoNum,call_transaction_num as callTransactionNum from t_daycount_driver_user_busi
+        where driver_id = #{driverId} limit 1
+    </select>
+
+    <update id="updateCountDriverUserBusi" parameterType="map">
+        update t_count_driver_user_busi
+        <set>
+            <if test="callCargoNum != null and callCargoNum != ''">
+                call_cargo_num = #{callCargoNum},
+            </if>
+            <if test="callTransactionNum != null and callTransactionNum != ''">
+                call_transaction_num = #{callTransactionNum}
+            </if>
+        </set>
+        where driver_id = #{driverId}
+    </update>
+
+    <insert id="insertCountDriverUserBusi" parameterType="map" useGeneratedKeys="true" keyProperty="id">
+        insert into t_count_driver_user_busi(driver_id,call_cargo_num,call_transaction_num)
+        values (#{driverId},#{callCargoNum},#{callTransactionNum})
+    </insert>
+
+    <update id="updateDayCountDriverUserBusi" parameterType="map">
+        update t_daycount_driver_user_busi
+        <set>
+            <if test="callCargoNum != null and callCargoNum != ''">
+                call_cargo_num = #{callCargoNum},
+            </if>
+            <if test="callTransactionNum != null and callTransactionNum != ''">
+                call_transaction_num = #{callTransactionNum}
+            </if>
+        </set>
+        where driver_id = #{driverId}
+    </update>
+
+    <insert id="insertDayCountDriverUserBusi" parameterType="map" keyProperty="id" useGeneratedKeys="true">
+        insert into t_daycount_driver_user_busi(driver_id,record_day,call_cargo_num,call_transaction_num)
+        values (#{driverId},sysdate(),#{callCargoNum},#{callTransactionNum})
+    </insert>
+
+    <!-- 查找司机最新地址 -->
+    <select id="selectDriverLastLocation" parameterType="string" resultType="map">
+        select PROVINCE province,CITY city from t_location_collect_last_info where DRIVER_ID = #{driverId}
+    </select>
+
+    <!-- 消息列表查询 -->
+    <select id="queryDriverNotificationInfo" parameterType="map" resultType="DriverNotificationInfoDomain">
+        select
+        ID as id,
+        DRIVER_ID as driverId,
+        CARGO_ID as cagoId,
+        TYPE as type,
+        DESCRIBE_INFO as describeInfo,
+        PUSH_SUCCESS as pushSuccess
+        from
+        t_driver_notification_info
+        where
+        DRIVER_ID = #{driverId}
+        ORDER BY CREATE_TIME DESC
+        LIMIT ${fromSize},${listSize}
+    </select>
+
+    <resultMap type="CompanyInfoDomain" id="companyInfoDomainMap">
+        <result property="companyName" column="COMPANY_NAME"/>
+        <result property="contactTelephone" column="CONTACT_TELEPHONE"/>
+        <result property="mobilephone" column="MOBILEPHONE"/>
+        <result property="userName" column="NAME"/>
+        <result property="flag" column="FLAG"/>
+        <result property="praise" column="PRAISE"/>
+        <result property="average" column="AVERAGE"/>
+        <result property="negativeFeedback" column="NEGATIVEFEEDBACK"/>
+    </resultMap>
+    <!-- 查询公司信息 -->
+    <select id="selectConpanyInfoById" parameterType="string" resultMap="companyInfoDomainMap">
+        SELECT t2.COMPANY_NAME,t2.CONTACT_TELEPHONE,t1.MOBILEPHONE,t1.`NAME`,
+        CASE WHEN t1.COMPANY_ID IS NULL THEN
+        t1.PERSONAGE_FLAG
+        ELSE
+        t1.ENTERPRISE_FLAG
+        END FLAG,
+        (SELECT count(c1.ID) FROM
+        t_driver_user_assess_info c1
+        WHERE  c1.USER_ID = t1.ID
+        AND c1.ASSESS_EVALUATE_SCORE = 3) PRAISE,
+        (SELECT count(c2.ID) FROM
+        t_driver_user_assess_info c2
+        WHERE c2.USER_ID = t1.ID
+        AND c2.ASSESS_EVALUATE_SCORE = 6) AVERAGE,
+        (SELECT count(c3.ID) FROM
+        t_driver_user_assess_info c3
+        WHERE c3.USER_ID = t1.ID
+        AND c3.ASSESS_EVALUATE_SCORE = 9) NEGATIVEFEEDBACK
+        FROM t_web_user_info t1 ,t_company_info t2
+        WHERE t1.DELETED_FLAG = 0
+        AND t1.COMPANY_ID = t2.ID
+        AND t2.DELETED_FLAG = 0
+        AND t1.COMPANY_ID = #{userId}
+    </select>
+
+    <select id="queryPactVipDriverNum" parameterType="string" resultType="int">
+        select count(t.ID) from t_pact_driver_info t where t.PACT_TYPE = 1 and t.PACT_START = 0 and t.DRIVER_ID = #{driverId}
+    </select>
+
+    <!-- 首页回单、发货单数量 -->
+    <select id="queryHomeReceiptNum" parameterType="string" resultType="int">
+        SELECT count(t.ID) FROM t_transaction_info t WHERE t.ORDER_TYPE = 2
+        AND t.TRADE_START IN (3, 5, 7) and t.DRIVER_ID = #{driverId} AND NOT EXISTS
+        (SELECT 1 FROM t_transaction_receipt_path r WHERE r.type IN (0, 1) AND t.ID = r.TRANSACTION_ID)
+    </select>
+
+    <!-- 首页我的货单等待确认数量 -->
+    <select id="queryHomePageUnconfirmedReceiptNum" parameterType="string" resultType="int">
+        SELECT count(t.ID) FROM t_transaction_info t WHERE t.DRIVER_ID = #{driverId} AND t.TRADE_START = 1
+        AND t.ORDER_START = 0 AND t.TRADE_CANCEL_ORIGIN = 0 AND t.ORDER_TYPE = 2
+    </select>
+</mapper>

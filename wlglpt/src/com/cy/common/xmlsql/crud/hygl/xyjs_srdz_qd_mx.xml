@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.hygl.dao.XyjsSrdzQdMxMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectXyjsSrdzQdMxByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.XyjsSrdzQdMxDomain">
+		select a.QD_DJXH as qdDjxh,a.YW_DJXH as ywDjxh,a.YW_MX_XH as ywMxXh,a.YW_LYDM as ywLydm from XYJS_SRDZ_QD_MX a  where a.QD_DJXH=#qdDjxh# and a.YW_DJXH=#ywDjxh# and a.YW_MX_XH=#ywMxXh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertXyjsSrdzQdMx"  parameterClass="com.cy.common.bo.XyjsSrdzQdMx">
+		insert into XYJS_SRDZ_QD_MX(QD_DJXH,YW_DJXH,YW_MX_XH,YW_LYDM)
+		SELECT #qdDjxh:NUMERIC#,#ywDjxh:NUMERIC#,#ywMxXh:NUMERIC#,#ywLydm:NUMERIC# FROM DUAL
+		WHERE NOT EXISTS (
+          SELECT 1 FROM XYJS_SRDZ_QD_MX MX
+          WHERE MX.QD_DJXH = #qdDjxh#
+            AND MX.YW_DJXH = #ywDjxh#
+            AND MX.YW_MX_XH = #ywMxXh#
+    	)
+	</insert>
+	
+	<!--插入临时表数据-->
+	<insert id="insertXyjsSrdzQdMxTemp"  parameterClass="com.cy.common.bo.XyjsSrdzQdMx">
+		insert into XYJS_SRDZ_QD_MX_TEMP(QD_DJXH,YW_DJXH,YW_MX_XH,YW_LYDM,CZRQ)
+		SELECT #qdDjxh:NUMERIC#,#ywDjxh:NUMERIC#,#ywMxXh:NUMERIC#,#ywLydm:NUMERIC#,SYSDATE FROM DUAL
+		WHERE NOT EXISTS (
+          SELECT 1 FROM XYJS_SRDZ_QD_MX_TEMP MX
+          WHERE MX.QD_DJXH = #qdDjxh#
+            AND MX.YW_DJXH = #ywDjxh#
+            AND MX.YW_MX_XH = #ywMxXh#
+    	)
+	</insert>
+	
+	<insert id="saveQdmxTempToFormal" parameterClass="java.util.Map">
+		insert into XYJS_SRDZ_QD_MX(QD_DJXH,YW_DJXH,YW_MX_XH,YW_LYDM)
+			SELECT T.QD_DJXH, T.YW_DJXH, T.YW_MX_XH, T.YW_LYDM FROM XYJS_SRDZ_QD_MX_TEMP T
+			WHERE T.QD_DJXH = #qdDjxh#
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateXyjsSrdzQdMxByKey" parameterClass="com.cy.common.bo.XyjsSrdzQdMx">
+        update XYJS_SRDZ_QD_MX set QD_DJXH=#qdDjxh#,YW_DJXH=#ywDjxh#,YW_MX_XH=#ywMxXh#,YW_LYDM=#ywLydm# where QD_DJXH=#qdDjxh# and YW_DJXH=#ywDjxh# and YW_MX_XH=#ywMxXh#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteXyjsSrdzQdMxByKey" parameterClass="java.util.Map">
+		delete from XYJS_SRDZ_QD_MX where QD_DJXH=#qdDjxh# and YW_DJXH=#ywDjxh# and YW_MX_XH=#ywMxXh#
+    </delete>
+    
+    <delete id="deleteXyjsSrdzQdMxTempByKey" parameterClass="java.util.Map">
+		delete from XYJS_SRDZ_QD_MX_TEMP where QD_DJXH=#qdDjxh# and YW_DJXH=#ywDjxh# and YW_MX_XH=#ywMxXh#
+    </delete>
+    
+    <delete id="deleteQdmxTempByQddjxh" parameterClass="java.util.Map">
+    	delete from XYJS_SRDZ_QD_MX_TEMP where QD_DJXH=#qdDjxh#
+    </delete>
+</sqlMap>

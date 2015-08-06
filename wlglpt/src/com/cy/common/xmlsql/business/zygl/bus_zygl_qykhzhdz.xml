@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.zygl.dao.BusQykhzhdzMapper">
+	<select id="selectQyKhZhdzPage" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyKhZhdzDomain">
+		SELECT A.ZHDZ_DJXH AS zhdzDjxh,
+		       A.SS_JGBM AS ssJgbm,
+		       (SELECT B.JC FROM QY_ZZJG B where A.SS_JGBM=B.JGBM) AS ssJgmc,
+		       A.KH_DJXH AS khDjxh,
+		       A.XZQH_DM AS xzqhDm,
+		       (SELECT XZQH_MC from DM_XZQH WHERE XZQH_DM= A.XZQH_DM) xzqhMc,
+		       A.XXDZ AS xxdz,
+		       A.PYQC AS pyqc,
+		       A.PYJC AS pyjc,
+		       A.YB AS yb,
+		       A.LXR AS lxr,
+		       A.LXR_YDDH AS lxrYddh,
+		       A.LXR_GDDH AS lxrGddh,
+		       A.QTLXDH AS qtlxdh,
+		       A.BZ AS bz,
+		       A.DJ_JGBM AS djJgbm,
+		       (SELECT B.JC FROM QY_ZZJG B where A.DJ_JGBM=B.JGBM) AS djJgmc,
+		       A.DJR_CZY_DJXH AS djrCzyDjxh,
+		       A.DJRQ AS djrq,
+		       A.QYBZ AS qybz,
+		       A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT B.KHMC FROM QY_KH_DJXX B where A.Kh_Djxh=B.KH_DJXH) AS khmc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM QY_KH_ZHDZ A 
+		  WHERE A.YXBZ='Y' 
+		  <dynamic> 
+			<isNotEmpty property="khDjxh" prepend="and">
+				A.KH_DJXH = #khDjxh#
+			</isNotEmpty>
+			<isNotEmpty property="ssJgbm" prepend="and">
+				A.SS_JGBM = #ssJgbm#
+			</isNotEmpty>
+			<isNotEmpty property="djJgbm" prepend="and">
+				A.DJ_JGBM = #djJgbm#
+			</isNotEmpty>
+		  </dynamic>
+		  $orderStr$
+    </select>
+    
+    <select id="selectQyKhZhdzAll" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyKhZhdzDomain">
+		SELECT A.ZHDZ_DJXH AS zhdzDjxh,
+		       A.SS_JGBM AS ssJgbm,
+		       A.KH_DJXH AS khDjxh,
+		       A.XZQH_DM AS xzqhDm,
+		      (SELECT XZQH_MC from DM_XZQH WHERE XZQH_DM= A.XZQH_DM) xzqhMc,
+		       A.XXDZ AS xxdz,
+		       A.PYQC AS pyqc,
+		       A.PYJC AS pyjc,
+		       A.YB AS yb,
+		       A.LXR AS lxr,
+		       A.LXR_YDDH AS lxrYddh,
+		       A.LXR_GDDH AS lxrGddh,
+		       A.QTLXDH AS qtlxdh,
+		       A.BZ AS bz,
+		       A.DJ_JGBM AS djJgbm,
+		       A.DJR_CZY_DJXH AS djrCzyDjxh,
+		       A.DJRQ AS djrq,
+		       A.QYBZ AS qybz,
+		       A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT B.KHMC FROM QY_KH_DJXX B where A.Kh_Djxh=B.KH_DJXH) AS khmc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM QY_KH_ZHDZ A 
+		  WHERE A.YXBZ='Y' 
+		  <dynamic> 
+			<isNotEmpty property="khDjxh" prepend="and">
+				A.KH_DJXH = #khDjxh#
+			</isNotEmpty>
+			<isNotEmpty property="ssJgbm" prepend="and">
+				A.SS_JGBM = #ssJgbm#
+			</isNotEmpty>
+			<isNotEmpty property="djJgbm" prepend="and">
+				A.DJ_JGBM = #djJgbm#
+			</isNotEmpty>
+		  </dynamic>
+		  ORDER by A.ZHDZ_DJXH DESC
+    </select>
+
+	<select id="getQyKhZhdzRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.ZHDZ_DJXH) 
+		  FROM QY_KH_ZHDZ A 
+          WHERE A.YXBZ='Y' 
+		  <dynamic> 
+			<isNotEmpty property="khDjxh" prepend="and">
+				A.KH_DJXH = #khDjxh#
+			</isNotEmpty>
+			<isNotEmpty property="ssJgbm" prepend="and">
+				A.SS_JGBM = #ssJgbm#
+			</isNotEmpty>
+			<isNotEmpty property="djJgbm" prepend="and">
+				A.DJ_JGBM = #djJgbm#
+			</isNotEmpty>
+		  </dynamic>
+    </select>
+    
+    <!--  保存时,校验详细地址是否重复-->
+	<select id="CheckXxdzRe" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		select count(*) 
+		from QY_KH_ZHDZ 
+		where 
+		yxbz='Y'
+		<dynamic> 
+			<isNotEmpty property="khDjxh" prepend="and">
+				KH_DJXH =#khDjxh#
+			</isNotEmpty>
+		  </dynamic>
+		  <dynamic> 
+			<isNotEmpty property="zhdzDjxh" prepend="and">
+				 <![CDATA[ZHDZ_DJXH<>#zhdzDjxh#]]>
+			</isNotEmpty>
+		  </dynamic>
+		  <dynamic> 
+			<isNotEmpty property="xxDz" prepend="and">
+				XXDZ =#xxDz#
+			</isNotEmpty>
+		  </dynamic> 
+
+    </select>
+</sqlMap>

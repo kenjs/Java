@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+	<typeHandler jdbcType="CLOB" javaType="java.lang.String" callback="org.springframework.orm.ibatis.support.ClobStringTypeHandler" />
+	<typeHandler jdbcType="BLOB" javaType="[B" callback="org.springframework.orm.ibatis.support.BlobByteArrayTypeHandler" />
+	<!-- 办公管理模块start -->
+	
+	<sqlMap resource="com/cy/common/xmlsql/business/bggl/bus_bggl_bggzlx.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/bggl/bus_bggl_bgtzgg.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/bggl/bus_bggl_bggzsj.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/bggl/bus_bggl_bgwlryfl.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/bggl/bus_bggl_bgwlry.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/bggl/bus_bggl_bgdddl.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/business/bggl/bus_bggl_bgqdqt.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/business/bggl/bus_bggl_bgmpj.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/business/bggl/bus_bggl_bggzr.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/business/bggl/bus_bggl_bgrcap.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/business/bggl/bus_bggl_bghyxm.xml"/>
+    <sqlMap resource="com/cy/common/xmlsql/business/bggl/bus_bggl_bgzlgx.xml"/>
+
+	<sqlMap resource="com/cy/common/xmlsql/crud/bggl/bg_gzlx.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/bggl/bg_tzgg.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/bggl/bg_gzsj.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/bggl/bg_wlry_fl.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/bggl/bg_wlry.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/bggl/bg_dddl.xml"/>
+
+	<sqlMap resource="com/cy/common/xmlsql/business/bggl/bus_jstx.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/bggl/bg_gzlx2.xml"/>
+
+	<sqlMap resource="com/cy/common/xmlsql/crud/bggl/bg_qdqt.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/bggl/bg_mpj.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/bggl/bg_gzr.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/bggl/bg_rcap.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/bggl/bg_hyxm.xml"/>
+	<sqlMap resource="com/cy/common/xmlsql/crud/bggl/bg_zlgx.xml"/>
+	<!-- 办公管理模块end --> 
+</sqlMapConfig>

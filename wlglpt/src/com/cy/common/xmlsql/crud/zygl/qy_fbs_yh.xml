@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.zygl.dao.QyFbsYhMapper">
+
+	<!--根据主键取DOMAIN-->
+	<select id="selectQyFbsYhByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.zygl.domain.QyFbsYhDomain">
+		select a.YH_DJXH as yhDjxh,a.QYBM as qybm,a.SS_JGBM as ssJgbm,a.FBS_DJXH as fbsDjxh,a.MC as mc,
+		a.ZH as zh,a.PWD as pwd,a.DLYZFS_DM as dlyzfsDm,a.QYBZ as qybz,a.YXBZ as yxbz,
+		a.CJRQ as cjrq,a.CJR_CZY_DJXH as cjrCzyDjxh,a.XGR_CZY_DJXH as xgrCzyDjxh,a.XGRQ as xgrq from QY_FBS_YH a  where a.YH_DJXH=#yhDjxh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertQyFbsYh"  parameterClass="com.cy.common.bo.QyFbsYh">
+		<selectKey keyProperty="yhDjxh" resultClass="string" type="pre"> 
+			select SEQ_ZY_DJXH.nextval as yhDjxh from dual 
+		</selectKey> 
+		insert into QY_FBS_YH(YH_DJXH,QYBM,SS_JGBM,FBS_DJXH,MC,
+		ZH,PWD,DLYZFS_DM,QYBZ,YXBZ,
+		CJRQ,CJR_CZY_DJXH,XGR_CZY_DJXH,XGRQ)
+		values(#yhDjxh:NUMERIC#,#qybm:VARCHAR#,#ssJgbm:NUMERIC#,#fbsDjxh:NUMERIC#,#mc:VARCHAR#,
+		#zh:VARCHAR#,#pwd:VARCHAR#,#dlyzfsDm:NUMERIC#,#qybz:VARCHAR#,#yxbz:VARCHAR#,
+		to_date(#cjrq:DATE#,'yyyy-MM-dd'),#cjrCzyDjxh:NUMERIC#,#xgrCzyDjxh:NUMERIC#,to_date(#xgrq:DATE#,'yyyy-MM-dd'))
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateQyFbsYhByKey" parameterClass="com.cy.common.bo.QyFbsYh">
+        update QY_FBS_YH set YH_DJXH=#yhDjxh#,QYBM=#qybm#,SS_JGBM=#ssJgbm#,FBS_DJXH=#fbsDjxh#,MC=#mc#,
+		ZH=#zh#,PWD=#pwd#,DLYZFS_DM=#dlyzfsDm#,QYBZ=#qybz#,YXBZ=#yxbz#,
+		CJRQ=to_date(#cjrq#, 'YYYY-MM-DD'),CJR_CZY_DJXH=#cjrCzyDjxh#,XGR_CZY_DJXH=#xgrCzyDjxh#,XGRQ=to_date(#xgrq#, 'YYYY-MM-DD') where YH_DJXH=#yhDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：软删除-->
+	<delete id="deleteQyFbsYhByKey" parameterClass="java.util.Map">
+		update QY_FBS_YH set yxbz='N' where YH_DJXH=#yhDjxh#
+    </delete>
+    
+    <!--启用分包商用户-->
+	<update id="startUseQyFbsYhByKey" parameterClass="java.util.Map">
+		update QY_FBS_YH set QYBZ='Y' where YH_DJXH=#yhDjxh#
+    </update>
+    
+    <!--停用分包商用户-->
+	<update id="stopUseQyFbsYhByKey" parameterClass="java.util.Map">
+		update QY_FBS_YH set QYBZ='N' where YH_DJXH=#yhDjxh#
+    </update>
+</sqlMap>

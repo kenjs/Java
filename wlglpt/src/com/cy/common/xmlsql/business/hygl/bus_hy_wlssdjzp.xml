@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.zyegl.dao.HyWlssdjZPMapper">
+<resultMap class="com.cy.common.bo.HyWlssdjZp" id="wlssDjZpResMap">
+		<result property="zpscxh" column="ZPSCXH"/>
+		<result property="zpmc" column="ZPMC"/>
+	</resultMap>
+    
+    	<!--插入照片上传数据-->
+	<insert id="insertHyWlssDjZp"  parameterClass="com.cy.common.bo.HyWlssdjZp">
+		insert into HY_WLSSDJ_ZP(ZPSCXH,WLSS_DJXH,ZPDZ,XGSJ,ZPMC)
+		values(SEQ_ZY_DJXH.nextval,#wlssDjXh:NUMERIC#,#zpdz:VARCHAR#,
+		to_date(#xgsj:DATE#,'yyyy-MM-dd'),#zpmc:VARCHAR#)
+		<selectKey keyProperty="zpscxh" resultClass="String" type="pre"> 
+			select SEQ_ZY_DJXH.nextval as zpscxh from dual 
+		</selectKey> 
+	</insert>
+	
+	<select id="queryPhotoes" parameterClass="java.util.Map"
+		resultMap="wlssDjZpResMap">
+		select z.ZPSCXH as ZPSCXH,z.ZPMC as ZPMC from HY_WLSSDJ_ZP z where z.WLSS_DJXH=#wlssDjXh#
+    </select>
+    <select id="queryZpdz" parameterClass="java.util.Map"
+		resultClass="java.lang.String">
+		select z.ZPDZ from HY_WLSSDJ_ZP z where z.WLSS_DJXH=#wlssDjXh#
+    </select>
+    
+    <select id="queryPhoto" parameterClass="java.util.Map"
+		resultClass="java.lang.String">
+		select z.ZPDZ from HY_WLSSDJ_ZP z where z.ZPSCXH=#zpscxh#
+    </select>
+    
+    <delete id="deletePhoto" parameterClass="java.util.Map">
+		delete from HY_WLSSDJ_ZP z where z.ZPSCXH=#zpscxh#
+    </delete>
+     <delete id="deletePhotoes" parameterClass="java.util.Map">
+		delete from HY_WLSSDJ_ZP z where z.WLSS_DJXH=#wlssDjXh#
+    </delete>
+</sqlMap>

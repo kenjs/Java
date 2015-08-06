@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="orderCargoLastInfoDomain" type="com.cy.dctms.common.domain.OrderCargoLastInfoDomain"/>
+	
+	
+	<resultMap class="orderCargoLastInfoDomain" id="orderCargoLast_info_domain_result">
+		<result property="id" column="ID"/>
+		<result property="cargoId" column="cargo_id"/>
+		<result property="driverId" column="driver_id"/>
+		<result property="driverCode" column="driver_code"/>
+		<result property="driverName" column="driver_name"/>
+		<result property="stateType" column="state_type"/>
+		<result property="remark" column="remark"/>
+		<result property="createTime" column="create_time" />
+	</resultMap>
+	
+	<select id="query_orderCargoLast_info_count"  resultClass="Integer">
+		select count(t.id)
+		  from t_order_cargo_last_info t
+		  where t.cargo_id = #cargoId#
+	</select>
+	
+	<select id="query_orderCargoLast_info_by_page" parameterClass="java.util.Map" resultMap="orderCargoLast_info_domain_result">
+		select t.id,
+		       t.cargo_id,
+		       t.driver_id,
+				(select code from t_driver_user_info where id=t.driver_id) as driver_code,
+				(select name from t_driver_user_info where id=t.driver_id) as driver_name,
+		       t.state_type,
+		       t.remark,
+		       t.create_time
+		  from t_order_cargo_last_info t
+		  where t.cargo_id = #cargoId#	
+		  order by t.id desc
+		  limit  #start#,#pageSize#
+	</select>
+	
+	<select id="export_orderCargoLast_info" parameterClass="java.util.Map" resultMap="orderCargoLast_info_domain_result">
+		select t.id,
+		       t.cargo_id,
+		       t.driver_id,
+				(select code from t_driver_user_info where id=t.driver_id) as driver_code,
+				(select name from t_driver_user_info where id=t.driver_id) as driver_name,
+		       t.state_type,
+		       t.remark,
+		       t.create_time
+		  from t_order_cargo_last_info t
+		  where t.cargo_id = #cargoId#
+		  order by t.id desc
+	</select>
+	
+	
+</sqlMap>

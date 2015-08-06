@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.hygl.dao.BusHyglJsglSrdzMapper">
+	
+	<parameterMap class="java.util.Map" id="srDzDdParMap">
+		<parameter property="dwbm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="dwbmbz" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="khDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="khMc" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="rqQ" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="rqZ" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="ddbh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="dzztDm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="yjZtDm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="pageNum" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+		<parameter property="pageSize" javaType="java.lang.Integer" jdbcType="INTEGER" mode="IN"/>
+		<parameter property="pageCount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+		<parameter property="reccount" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+		<parameter property="dataList" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" resultMap="srDzDdResMap"/>
+	</parameterMap>
+	<resultMap class="com.cy.hygl.domain.HyJsglSrdzDomain" id="srDzDdResMap">
+		<result property="pageXh" column="PAGE_XH"/>
+		<result property="dzDjxh" column="DZ_DJXH"/>
+		<result property="jsDjxh" column="JS_DJXH"/>
+		<result property="dzztDm" column="DZZT_DM"/>
+		<result property="dzztMc" column="DZZT_MC"/>
+		<result property="khDjxh" column="KH_DJXH"/>
+		<result property="khMc" column="KHMC"/>
+		<result property="dzsr" column="DZ_SR"/>
+		<result property="dzyj" column="DZ_YJ"/>
+		<result property="dzwj" column="DZ_WJ"/>
+		<result property="jssr" column="JS_SR"/>
+		<result property="jsyj" column="JS_YJ"/>
+		<result property="jswj" column="JS_WJ"/>
+		<result property="dzje" column="DZJE"/>
+		<result property="dzcybz" column="DZ_CYBZ"/>
+		<result property="dzcyje" column="DZCYJE"/>
+		<result property="ddbh" column="DDBH"/>
+		<result property="xdrq" column="XDRQ"/>
+		<result property="hwmc" column="HWMC"/>
+		<result property="jssl" column="JSSL"/>
+		<result property="hdbh" column="HDBH"/>
+		<result property="sfd" column="SFD"/>
+		<result property="mdd" column="MDD"/>
+		<result property="sl" column="SL"/>
+		<result property="zl" column="ZL"/>
+		<result property="tj" column="TJ"/>
+		<result property="bz" column="BZ"/>
+		<result property="fhrLxr" column="FHR_LXR"/>
+		<result property="fhrLxdh" column="FHR_LXDH"/>
+		<result property="shrLxr" column="SHR_LXR"/>
+		<result property="shrLxdh" column="SHR_LXDH"/>
+		<result property="shrDz" column="SHR_DZ"/>
+		<result property="hdshFlag" column="HDSH_FLAG"/>
+		<result property="dzrMc" column="DZR_MC"/>
+		<result property="dzrq" column="DZRQ"/>
+		<result property="bmDm" column="BMDM"/>
+		<result property="bmmc" column="BMMC"/>
+		<result property="dwDm" column="DWDM"/>
+		<result property="dwmc" column="DWMC"/>
+		<result property="wsSpztDm" column="WSSPZT_DM"/>
+		<result property="wsSpztMc" column="WSSPZT_MC"/>
+		<result property="wsspxh" column="WS_SPXH"/>
+		<result property="ddDjxh" column="DD_DJXH"/>
+	</resultMap>
+	
+	<procedure id="queryJsglSrdzDdPage" parameterMap="srDzDdParMap" resultMap="srDzDdResMap">
+		{call P_HYGL_JSGL_SRDZ_DD_CX(?,?,?,?,?,?,?,?,?,?,?,?,?)}
+	</procedure>
+	
+	<procedure id="queryJsglSrdzDdHwPage" parameterMap="srDzDdParMap" resultMap="srDzDdResMap">
+		{call P_HYGL_JSGL_SRDZ_DDHW_CX(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}
+	</procedure>
+    
+     <select id="queryDzcyTempList" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.JsSrdzDzcyDomain">
+		SELECT A.DZ_DJXH AS dzDjxh,
+		       A.XH AS xh,
+		       A.DZCYJE AS dzcyje,
+		       A.DZCYYY_DM AS dzcyyyDm,
+		       (SELECT YY.DZCYYY_MC FROM DM_DZCYYY YY WHERE YY.DZCYYY_DM=A.DZCYYY_DM) dzcyyyMc,
+		       A.DZCY_CLFS_DM AS dzcyClfsDm,
+		       (SELECT FS.DZCY_CLFS_MC FROM DM_DZCY_CLFS FS WHERE FS.DZCY_CLFS_DM=A.DZCY_CLFS_DM) dzcyClfsMc,
+		       A.BZ AS bz,
+		       A.XC_JS_DJXH AS xcJsDjxh,
+		       A.WLSS_DJXH AS wlssDjxh
+		  FROM JS_SRDZ_DZCY_TEMP A 
+		  WHERE A.DZ_DJXH=#dzDjxh#
+		  ORDER by A.DZ_DJXH ASC,A.XH ASC
+    </select>
+    
+    <select id="queryDzcyList" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.JsSrdzDzcyDomain">
+		SELECT A.DZ_DJXH AS dzDjxh,
+		       A.XH AS xh,
+		       A.DZCYJE AS dzcyje,
+		       A.DZCYYY_DM AS dzcyyyDm,
+		       (SELECT YY.DZCYYY FROM QY_DZCYYY YY WHERE YY.WH_XH=A.DZCYYY_DM) dzcyyyMc,
+		       A.DZCY_CLFS_DM AS dzcyClfsDm,
+		       (SELECT FS.DZCY_CLFS_MC FROM DM_DZCY_CLFS FS WHERE FS.DZCY_CLFS_DM=A.DZCY_CLFS_DM) dzcyClfsMc,
+		       A.BZ AS bz,
+		       A.XC_JS_DJXH AS xcJsDjxh,
+		       A.WLSS_DJXH AS wlssDjxh
+		  FROM JS_SRDZ_DZCY A 
+		  WHERE A.DZ_DJXH=#dzDjxh#
+		  ORDER by A.DZ_DJXH ASC,A.XH ASC
+    </select>
+    
+    <select id="queryDzcyTempNextXh" parameterClass="java.util.Map" 
+    	resultClass="java.lang.Integer">    	
+		SELECT NVL(MAX(CY.XH),0)+1 FROM JS_SRDZ_DZCY_TEMP CY
+		WHERE CY.DZ_DJXH = #dzDjxh#
+    </select>
+    <select id="getCountSrdz" parameterClass="java.util.Map" 
+    	resultClass="java.lang.Integer">    	
+		SELECT COUNT(DZ.DZ_DJXH) FROM JS_SRDZ DZ 
+		WHERE DZ.JS_DJXH=#jsDjxh#
+		AND DZ.YXBZ='Y'
+    </select>
+    
+    <select id="getWlssxl" parameterClass="java.util.Map" 
+    	resultClass="com.cy.hygl.domain.HyJsglSrdzDomain">    	
+		select a.wlss_djxh DM,(select b.hwmc from hy_dd_hwmx b where b.dd_djxh=a.dd_djxh and b.xh=a.hwmxxh)
+				||#str1#||a.wlss_hw_sl||#str2#||a.je||#str3# MC from hy_wlssdj a 
+		where a.dd_djxh=#ddDjxh# 
+		and a.yxbz='Y'
+		and a.hwmxxh=#xh#	
+    </select>
+    <select id="queryDzcyNextXh" parameterClass="java.util.Map" 
+    	resultClass="java.lang.Integer">    	
+		SELECT NVL(MAX(CY.XH),0)+1 FROM JS_SRDZ_DZCY CY
+		WHERE CY.DZ_DJXH = #dzDjxh#
+    </select>
+    
+    <select id="selectJsSrdzByJsDjxh_1" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyJsglSrdzDomain">
+		SELECT DD.JS_DJXH as jsDjxh,DD.SS_JGBM as dwDm,
+			DD.KH_DJXH as khDjxh,(SELECT KH.KHMC FROM QY_KH_DJXX KH WHERE KH.KH_DJXH = DD.KH_DJXH) khMc,
+			DD.DDBH as ddbh,DD.XDRQ as xdrq,DD.DZ_SR as dzsr,DD.DZ_YJ as dzyj,DD.DZ_WJ as dzwj 
+		 FROM JS_DD DD
+		 WHERE DD.YXBZ='Y'
+		 AND DD.JS_DJXH=#jsDjxh#
+    </select>
+    
+    <select id="selectJsSrdzByJsDjxh_2" parameterClass="java.util.Map"
+		resultClass="com.cy.hygl.domain.HyJsglSrdzDomain">
+		SELECT DDHW.JS_DJXH as jsDjxh,
+		       DD.SS_JGBM as dwDm,
+		       DDHW.DZ_SR   as dzsr,
+		       DDHW.DZ_YJ   as dzyj,
+		       DDHW.DZ_WJ   as dzwj,
+		       DD.KHMC AS khMc,
+	           DD.DDBH ,
+	           DD.XDRQ
+		  FROM JS_DD_HWXX DDHW, HY_DD DD
+		 WHERE DDHW.DD_DJXH = DD.DD_DJXH
+		   AND DDHW.YXBZ = 'Y'
+		   AND DDHW.JS_DJXH=#jsDjxh#
+    </select>
+    
+    <select id="getDzfsDm" parameterClass="java.util.Map" resultClass="com.cy.hygl.domain.JsSrdzDomain">
+    	SELECT DZ.DZFS_DM AS dzfsDm,DZ.DZ_DJXH AS dzDjxh,DZ.JS_DJXH AS jsDjxh FROM JS_SRDZ DZ WHERE DZ.YXBZ='Y' AND DZ.JS_DJXH=#jsDjxh#
+    </select>
+    
+     <select id="getDzfsDm2" parameterClass="java.util.Map" resultClass="com.cy.hygl.domain.JsSrdzDomain">
+    	SELECT DZ.DZFS_DM AS dzfsDm,DZ.DZ_DJXH AS dzDjxh,DZ.JS_DJXH AS jsDjxh FROM JS_SRDZ DZ WHERE DZ.YXBZ='Y' AND DZ.DZ_DJXH=#jsDjxh#
+    </select>
+    
+    <parameterMap class="java.util.Map" id="callHyglJsglSrdzDdHxclParMap">
+    	<parameter property="dzDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="jgbm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="czyDjxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+    	<parameter property="rtnCode" javaType="java.lang.Integer" jdbcType="BIGINT" mode="OUT"/>
+    	<parameter property="rtnMess" javaType="java.lang.String" jdbcType="VARCHAR" mode="OUT"/>
+    </parameterMap>
+    
+    <procedure id="callHyglJsglSrdzDdHxcl" parameterMap="callHyglJsglSrdzDdHxclParMap" >
+    	{call P_HYGL_JSGL_SRDZ_DD_HXCL(?,?,?,?,?)}
+    </procedure>
+    
+    <procedure id="callHyglJsglSrdzDdhwHxcl" parameterMap="callHyglJsglSrdzDdHxclParMap">
+    	{call P_HYGL_JSGL_SRDZ_DDHW_HXCL(?,?,?,?,?)}
+    </procedure>
+    
+</sqlMap>

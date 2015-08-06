@@ -1,0 +1,369 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		<meta http-equiv="pragma" content="no-cache"/>
+		<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"/>
+		<meta http-equiv="expires" content="Wed, 26 Feb 1997 08:21:57 GMT"/>
+		<meta http-equiv="expires" content="0"/>
+		<title>运单管理</title>
+		<script src="../js/jquery/jquery.js" type=text/javascript></script>
+		<script src="../js/sys/system.js" type="text/javascript"></script>
+		<script src="../js/sys/webui/contract/header.js"></script>
+		<script src="../js/sys/webui/logo.js"></script>
+		<script src="../js/sys/webui/contract/left.js" type="text/javascript"></script>
+		<script type="text/javascript" src="../js/sys/DatePicker/WdatePicker.js"></script>
+		
+		<link href="../js/sys/ymPrompt/skin/ch/ymPrompt.css" rel="stylesheet" />
+		<link href="../css/webui/main.css" rel="stylesheet" type="text/css"/>
+		<link href="../css/webui/hgrid.css" rel="stylesheet" type="text/css"/>
+		<link href="../css/webui/commonPage.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="../js/sys/webui/hgrid.js"></script>
+		<script type="text/javascript" src="../js/sys/ymPrompt/ymPrompt.js"></script>
+		<script type="text/javascript" src="../js/themes/waybillc/waybillManager.js"></script>
+		<style type="text/css">
+		 	input[type="text"]{border-width:1px;}
+			#全部运单 input[type="text"]{width:120px}
+			#全部运单 td{border:0px;}
+			#待配载 input[type="text"],#待装车 input[type="text"],#待发车 input[type="text"],#待到车 input[type="text"],#待签收 input[type="text"]{width:100px;margin-right:10px;}
+			#待配载 td,#待装车 td,#待发车 td,#待到车 td,#待签收 td{border:0px;}
+			#待配载 span,#待装车 span,#待发车 span,#待到车 span,#待签收 span{margin-right:10px;}			
+			#stowaged tr td,#loaded tr td,#carstarted tr td,#arrived tr td,#signed tr td{
+				padding-left: 10px;
+			}
+		</style>
+	</head>
+
+<body>
+	<!-- 顶部 --开始  此处须由js动态加入-->
+	<div id="header" class="c-header" >
+
+	</div>
+	<!-- 顶部 --结束-->
+
+	<!-- LOGON --开始   此处须由js动态加入-->
+	<div id="logo" class="c-logo" >
+	
+	</div>
+	<!-- LOGON --结束-->
+	<div id="main" class="c-main">
+		<div id="left" class="c-left">
+			<div id="accordion">
+			</div>  
+		</div>
+		<div id="right" class="c-right">
+			<div class="crumbs fn-mt10 fn-cGray3">
+  				<span class="house"></span>
+  				<span class="links"><a href="../logincs/index_main" class="fn-cBlue">首页</a></span>
+  				<span class="fn-ml5 fn-mr5">&gt;</span><b>运单管理</b>
+  			</div>
+  	 		<div class="fgxDiv"></div> 
+			 <div class="tab-change-layer fn-mt10 fn-cGray3">
+				 <ul class="tab-change-title clearfix">
+					<li class="current" rel="全部运单">全部运单</li>
+					<li rel="待配载">待配载</li>
+					<li rel="已配载">待装车</li>
+					<li rel="已装车">待发车</li>
+					<li rel="已发车">待到车</li>
+					<li rel="已到车">待签收</li>
+					<li rel="已签收">已签收</li>
+				 </ul>
+			 </div>
+			 <div class="tab-change-con">
+				<div id="全部运单" style="margin:5px auto">
+					<table>
+						<tr>
+							<td class="tdright"><span style="margin-right:10px">运单号</span></td>
+							<td class="tdleft">
+								<input id="waybillnumber" type="text" class="com_input"/>
+							</td>
+							<td width="10px"></td>
+							<td>
+								<span style="margin-right:10px">发货方</span>
+								<input id="frompartyname" type="text" class="com_input" style="width:130px"/>
+							</td>
+							<td class="tdleft">
+								<span style="margin:auto 10px">分包商</span>
+								<input id="topartyname" type="text" class="com_input" style="width:130px"/>
+								<span style="margin-right: 0px; float: right; margin-top: 4px;padding-right: 5px;">客户单号</span>
+							</td>
+							<td><input id="clientnumber" type="text" class="com_input" style="width:140px"/></td>
+						</tr>
+						<tr>								
+							<td class="tdright"><span style="margin-right:10px">托运日期</span></td>
+							<td>
+								<input id="fromdate" type="text" class="Wdate comDateTime"
+									style="width: 100px; height: 18px"
+									onfocus="WdatePicker({firstDayOfWeek:1})" />
+							</td>
+							<td class="tdright"><span style="margin:auto 5px">~</span></td>
+							<td>
+								<input id="todate" type="text" class="Wdate comDateTime"
+									style="float: left; width: 100px; height: 18px"
+									onfocus="WdatePicker({firstDayOfWeek:1})" />
+								<span style="margin-right: 0px; float: right; margin-top: 4px">调度单号</span>
+							</td>
+							<td>
+								<input id="systemdispatchnumber" type="text" class="com_input" style="width:130px"/>
+								<span style="margin-right: 0px; float: right; margin-top: 4px;padding-right: 5px;">运单状态</span>
+							</td>
+							<td class="tdleft">
+								<select id="sts" onchange="stsChange(this.value);" style="height: 25px;padding-top: 4px;">
+									<option value="全部运单">全部运单</option>
+									<option value="待配载">待配载</option>
+									<option value="已配载">已配载</option>
+									<option value="已装车">已装车</option>
+									<option value="已发车">已发车</option>
+									<option value="已到车">已到车</option>
+									<option value="已签收">已签收</option>
+								</select>
+								<button class="btn-white fn-noborder" style="margin:auto 5px -1px 3px" onclick="loadQuery()">查询</button>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div id="待配载" class="fn-hide">
+					<table>
+						<tr>
+							<td class="tdright"><span>运单号</span></td>
+							<td class="tdleft">
+								<input id="waybillnumber" type="text" class="com_input"/>
+							</td>
+							<td class="tdright"><span>发货方</span></td>
+							<td class="tdleft">
+								<input id="frompartyname" type="text" class="com_input" style="width:140px;"/>
+							</td>
+							<td class="tdright"><span>托运日期</span></td>
+							<td class="tdright">
+								<input id="fromdate" type="text" style="height:18px;width:80px;margin-right:0px" 
+									class="Wdate comDateTime" onfocus="WdatePicker({firstDayOfWeek:1})"/>
+							</td>
+							<td class="tdright"><span style="margin:auto 5px">~</span></td>
+							<td class="tdright">	
+								<input id="todate" type="text" style="height:18px;width:80px;margin-right:0px" 
+									class="Wdate comDateTime" onfocus="WdatePicker({firstDayOfWeek:1})"/>
+							</td>
+						</tr>
+						<tr>
+							<td class="tdright"><span>分包商</span></td>
+							<td class="tdleft">
+								<input id="topartyname" type="text" class="com_input"/>
+								<input type="hidden" id="paperdispatchnumber" value=""/>
+								<input id="systemdispatchnumber" type="hidden"/>
+							</td>
+							<td><span style="margin-right: 0px; float: right; margin-top: 4px;padding-right: 5px;">客户单号</span></td>
+							<td><input id="clientnumber" type="text" class="com_input" style="width:140px"/></td>
+							<td>
+								<button class="btn-white fn-noborder" style="margin-left:5px" onclick="loadQuery()">查询</button>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div id="已配载" class="fn-hide">
+					<table id="stowaged">
+						<tr>
+							<td class="tdright"><span>运单号</span></td>
+							<td class="tdleft">
+								<input id="waybillnumber" type="text" class="com_input"/>
+							</td>
+							<td class="tdright"><span>发货方</span></td>
+							<td class="tdleft">
+								<input id="frompartyname" type="text" class="com_input"/>
+							</td>
+							<td class="tdright"><span>托运日期</span></td>
+							<td class="tdright">
+								<input id="fromdate" type="text" style="height:18px;width:80px;margin-right:0px" 
+									class="Wdate comDateTime" onfocus="WdatePicker({firstDayOfWeek:1})"/>							
+								<span style="margin-right:0px">&nbsp;~&nbsp;</span>
+								<input id="todate" type="text" style="height:18px;width:80px;margin-right:0px" 
+									class="Wdate comDateTime" onfocus="WdatePicker({firstDayOfWeek:1})"/>
+							</td>
+						</tr>
+						<tr>
+							<td class="tdright"><span>调度单号</span></td>
+							<td class="tdleft">
+								<input id="systemdispatchnumber" type="text" class="com_input"/>
+							</td>
+							<td class="tdright"><span>分包商</span></td>
+							<td class="tdleft">
+								<input id="topartyname" type="text" class="com_input"/>
+							</td>
+							<td><span style="margin-right: 0px; float: right; margin-top: 4px;padding-right: 5px;">客户单号</span></td>
+							<td class="tdleft">
+								<input id="clientnumber" type="text" class="com_input" style="width:140px"/>&nbsp;&nbsp;
+								<button class="btn-white fn-noborder" onclick="loadQuery()">查询</button>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div id="已装车" class="fn-hide">
+					<table id="loaded">
+						<tr>
+							<td class="tdright"><span>运单号</span></td>
+							<td class="tdleft">
+								<input id="waybillnumber" type="text" class="com_input"/>
+							</td>
+							<td class="tdright"><span>发货方</span></td>
+							<td class="tdleft">
+								<input id="frompartyname" type="text" class="com_input"/>
+							</td>
+							<td class="tdright"><span>托运日期</span></td>
+							<td class="tdright">
+								<input id="fromdate" type="text" style="height:18px;width:80px;margin-right:0px" 
+									class="Wdate comDateTime" onfocus="WdatePicker({firstDayOfWeek:1})"/>							
+								<span style="margin-right:0px">&nbsp;~&nbsp;</span>
+								<input id="todate" type="text" style="height:18px;width:80px;margin-right:0px" 
+									class="Wdate comDateTime" onfocus="WdatePicker({firstDayOfWeek:1})"/>
+							</td>
+						</tr>
+						<tr>
+							<td class="tdright"><span>调度单号</span></td>
+							<td class="tdleft">
+								<input id="systemdispatchnumber" type="text" class="com_input"/>
+							</td>
+							<td class="tdright"><span>分包商</span></td>
+							<td class="tdleft">
+								<input id="topartyname" type="text" class="com_input"/>
+							</td>
+							<td><span style="margin-right: 0px; float: right; margin-top: 4px;padding-right: 5px;">客户单号</span></td>
+							<td class="tdleft">
+								<input id="clientnumber" type="text" class="com_input" style="width:140px"/>&nbsp;&nbsp;
+								<button class="btn-white fn-noborder" onclick="loadQuery()">查询</button>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div id="已发车" class="fn-hide">
+					<table id="carstarted">
+						<tr>
+							<td class="tdright"><span>运单号</span></td>
+							<td class="tdleft">
+								<input id="waybillnumber" type="text" class="com_input"/>
+							</td>
+							<td class="tdright"><span>发货方</span></td>
+							<td class="tdleft">
+								<input id="frompartyname" type="text" class="com_input"/>
+							</td>
+							<td class="tdright"><span>托运日期</span></td>
+							<td class="tdright">
+								<input id="fromdate" type="text" style="height:18px;width:80px;margin-right:0px" 
+									class="Wdate comDateTime" onfocus="WdatePicker({firstDayOfWeek:1})"/>							
+								<span style="margin-right:0px">&nbsp;~&nbsp;</span>
+								<input id="todate" type="text" style="height:18px;width:80px;margin-right:0px" 
+									class="Wdate comDateTime" onfocus="WdatePicker({firstDayOfWeek:1})"/>
+							</td>
+						</tr>
+						<tr>
+							<td class="tdright"><span>调度单号</span></td>
+							<td class="tdleft">
+								<input id="systemdispatchnumber" type="text" class="com_input"/>
+							</td>
+							<td class="tdright"><span>分包商</span></td>
+							<td class="tdleft">
+								<input id="topartyname" type="text" class="com_input"/>
+							</td>
+							<td><span style="margin-right: 0px; float: right; margin-top: 4px;padding-right: 5px;">客户单号</span></td>
+							<td class="tdleft">
+								<input id="clientnumber" type="text" class="com_input" style="width:140px"/>&nbsp;&nbsp;
+								<button class="btn-white fn-noborder" onclick="loadQuery()">查询</button>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div id="已到车" class="fn-hide">
+					<table id="arrived">
+						<tr>
+							<td class="tdright"><span>运单号</span></td>
+							<td class="tdleft">
+								<input id="waybillnumber" type="text" class="com_input"/>
+							</td>
+							<td class="tdright"><span>发货方</span></td>
+							<td class="tdleft">
+								<input id="frompartyname" type="text" class="com_input"/>
+							</td>
+							<td class="tdright"><span>托运日期</span></td>
+							<td class="tdright">
+								<input id="fromdate" type="text" style="height:18px;width:80px;margin-right:0px" 
+									class="Wdate comDateTime" onfocus="WdatePicker({firstDayOfWeek:1})"/>							
+								<span style="margin-right:0px">&nbsp;~&nbsp;</span>
+								<input id="todate" type="text" style="height:18px;width:80px;margin-right:0px" 
+									class="Wdate comDateTime" onfocus="WdatePicker({firstDayOfWeek:1})"/>
+							</td>
+						</tr>
+						<tr>
+							<td class="tdright"><span>调度单号</span></td>
+							<td class="tdleft">
+								<input id="systemdispatchnumber" type="text" class="com_input"/>
+							</td>
+							<td class="tdright"><span>分包商</span></td>
+							<td class="tdleft">
+								<input id="topartyname" type="text" class="com_input"/>
+							</td>
+							<td><span style="margin-right: 0px; float: right; margin-top: 4px;padding-right: 5px;">客户单号</span></td>
+							<td class="tdleft">
+								<input id="clientnumber" type="text" class="com_input" style="width:140px"/>&nbsp;&nbsp;
+								<button class="btn-white fn-noborder" onclick="loadQuery()">查询</button>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div id="已签收" class="fn-hide">
+					<table id="signed">
+						<tr>
+							<td class="tdright"><span>运单号</span></td>
+							<td class="tdleft">
+								<input id="waybillnumber" type="text" class="com_input"/>
+							</td>
+							<td class="tdright"><span>发货方</span></td>
+							<td class="tdleft">
+								<input id="frompartyname" type="text" class="com_input"/>
+							</td>
+							<td class="tdright"><span>托运日期</span></td>
+							<td class="tdright">
+								<input id="fromdate" type="text" style="height:18px;width:80px;margin-right:0px" 
+									class="Wdate comDateTime" onfocus="WdatePicker({firstDayOfWeek:1})"/>							
+								<span style="margin-right:0px">&nbsp;~&nbsp;</span>
+								<input id="todate" type="text" style="height:18px;width:80px;margin-right:0px" 
+									class="Wdate comDateTime" onfocus="WdatePicker({firstDayOfWeek:1})"/>
+							</td>
+						</tr>
+						<tr>
+							<td class="tdright"><span>调度单号</span></td>
+							<td class="tdleft">
+								<input id="systemdispatchnumber" type="text" class="com_input"/>
+							</td>
+							<td class="tdright"><span>分包商</span></td>
+							<td class="tdleft">
+								<input id="topartyname" type="text" class="com_input"/>
+							</td>
+							<td><span style="margin-right: 0px; float: right; margin-top: 4px;padding-right: 5px;">客户单号</span></td>
+							<td class="tdleft">
+								<input id="clientnumber" type="text" class="com_input" style="width:140px"/>&nbsp;&nbsp;
+								<button class="btn-white fn-noborder" onclick="loadQuery()">查询</button>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+	        	<div id="hgrid_div">
+		        	<div  id="hgridDiv" style="float: left;overflow-x:scroll;width:720px;min-height:50px;">
+		  					<table id="hgrid"  style="width:990px;" cellspacing="0"></table>
+		  			</div>
+		  			<div style="width: 100px;float: left;min-height:50px;">
+		  					<table id="operation"  style="width:100px;" cellspacing="0"></table>
+		  			</div>
+	  			</div>
+		</div>
+	</div>
+	<!-- 工作区 --结束-->
+	
+	<!-- 底部 --开始  此处须由js动态加入-->
+	<div id="footer" class="c-footer">
+		
+	</div>
+	<!-- 底部 --结束-->
+<script>
+
+</script>
+</body>
+</html>

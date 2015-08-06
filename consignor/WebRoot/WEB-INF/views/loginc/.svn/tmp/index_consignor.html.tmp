@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>传化物流-会员中心</title>
+	
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3"/>
+    <meta http-equiv="description" content="this is my page"/>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    
+    <link href="../css/webui/main.css" rel="stylesheet" />	
+    <script src="../js/jquery/jquery-1.8.3.min.js" type=text/javascript></script>
+    <script src="../js/sys/webui/header.js"></script>    	
+    <script src="../js/sys/webui/logo.js"></script>   	 
+    <script src="../js/sys/webui/left.js"></script> 
+    <link href="../css/themes/consignor/index_consignor.css" rel="stylesheet" />	
+    <script src="../js/themes/consignor/index_consignor.js"></script> 
+    <script type="text/javascript" src="../js/sys/ymPrompt/ymPrompt.js"></script>
+	<link href="../js/sys/ymPrompt/skin/ch/ymPrompt.css" rel="stylesheet" />
+    
+    
+    
+    <style>
+		#main{width:998px;border:0px solid black;padding:0px;margin:0 auto;}
+	</style>
+  </head>
+  
+  <body>
+	<!-- 顶部 --开始  此处须由js动态加入-->
+	<div id="header" class="c-header" >
+	
+	</div>
+	<!-- 顶部 --结束-->
+	
+	<!-- LOGON --开始   此处须由js动态加入-->
+	<div id="logo" class="c-logo" >
+		
+	</div>
+	<!-- LOGON --结束-->
+	
+	<!-- 工作区 --开始-->
+	<div id="main">
+		<!-- 左侧菜单 --开始  此处须由js动态加入-->
+  		<div id="left" class="c-left"> 
+		</div>
+		
+		<!-- 左侧菜单 --结束-->
+			
+		<!-- 右侧工作区 --开始-->
+		<div id="right" class="c-right">
+		<div id="list">
+				<table class="table1" width="275" style="height: 120px;">
+					<tr class="tr1">
+						<td rowspan="3" class="td1">
+							<img src="../imgs/sys/common-logo.jpg" width="123px" height="90px" />
+						</td>
+						<td rowspan="3" class="td2"></td>
+						<td class="td3"><p class="serif"><span id="realname"></span><span style="display:none;" id="realnameSuffix">，欢迎您！</span></p></td>
+					</tr>
+					<tr class="tr2">
+						<td class="td3">
+							<img class="img1" src="../imgs/login/contract/email-icon.png" width="21px" height="16px" />&nbsp;<span id="email"></span>&nbsp;&nbsp;
+							<img  class="img1" src="../imgs/login/contract/tel-icon.png" width="21px" height="16px"/>&nbsp;<span id="mobilenumber"></span>
+						</td>
+					</tr>
+					<tr class="tr3">
+						<td>
+							<input class="inputs" type="text" id="waybillnumber" name="waybillnumber" onfocus="focusinput(this)" onblur="mouseoutinput(this)" value="请输入运单号"/>&nbsp;&nbsp;
+							<input type="button" id="btnquery" onclick="f_select()" name="btnquery" class="btn" value="运单查询"/>
+						</td>
+					</tr>
+				</table>
+			<div class="Layer">
+				<table class="table1">
+					<tr class="tr2" style="height: 35px;background-color: #E8E8E8;">
+						<td colspan="2" align="left"><span class="businessProcess">业务量统计</span></td>
+					</tr>
+					<tr class="tr2" style="height: 115px;">
+						<td align="left" style="width: 300px;vertical-align:top;padding-top: 30px;">
+							<span>昨日发货：<font color="#ec6110" id="yestodayCount" style="font-weight: bold;" size="2"></font>票</span>
+					</td>
+						<td align="left" style="width: 500px;vertical-align:top;padding-top: 30px;">
+							<span>本月共计发货：<font color="#ec6110" id="mouthCount" style="font-weight: bold;" size="2"></font>票</span>
+					</td>
+					</tr>
+				</table>
+			</div>
+  		</div>
+  		</div>
+	</div>
+	<!-- 底部 --开始  此处须由js动态加入-->
+	<div id="footer" class="c-footer">
+		
+	</div>
+	<!-- 底部 --结束-->
+	
+  </body>
+</html>

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.dctms.dao.MatchingDao">
+
+    <!-- 每日发送给企业或司机的短信或推送的计数器 -->
+    <resultMap type="DaySendMsgcounter" id="day_send_msgcounter_result">
+        <result property="id" column="ID"/>
+        <!-- 目标id(企业用户id 或司机id) -->
+        <result property="targetId" column="target_id"/>
+        <!-- 目标类型：0 企业用户 1 司机用户 -->
+        <result property="targetType" column="target_type"/>
+        <!-- 消息类型：0 推送消息 1 短信消息 -->
+        <result property="msgType" column="msg_type"/>
+        <!-- 当日已发送条数 -->
+        <result property="countNums" column="count_nums"/>
+    </resultMap>
+
+
+
+    <!-- 货源匹配车辆 -->
+    <resultMap type="MatchingDriverInfoDomain" id="matching_driver_info_domain_result">
+        <result property="id" column="ID"/>
+        <!-- 司机手机号码 -->
+        <result property="code" column="code"/>
+        <!-- 司机名称 -->
+        <result property="name" column="name"/>
+        <!-- 定位时间和当前时间相差多少时间（小时） -->
+        <result property="locadate" column="locadate"/>
+        <!-- 匹配规则类型 -->
+        <result property="markType" column="markType"/>
+        <!-- 车牌号码 -->
+        <result property="carNumber" column="car_number"/>
+    </resultMap>
+
+
+    <!-- 货源 -->
+    <resultMap type="OrderCargoInfoDomain" id="order_cargo_info_domain_result">
+        <result property="id" column="id"/>
+        <!-- 货物名称 -->
+        <result property="cargoName" column="cargo_name"/>
+        <!-- 货物类型 -->
+        <result property="cargoType" column="cargo_type"/>
+        <!-- 货物重量 -->
+        <result property="cargoWeight" column="cargo_weight"/>
+        <!-- 货物体积 -->
+        <result property="cargoCubage" column="cargo_cubage"/>
+        <!-- 要求装货时间 -->
+        <result property="requestStartTime" column="request_start_time"/>
+        <!-- 装货地-省 -->
+        <result property="startProvince" column="start_province"/>
+        <!-- 装货地-市 -->
+        <result property="startCity" column="start_city"/>
+        <!-- 装货地-县 -->
+        <result property="startCounty" column="start_county"/>
+        <!-- 卸货-省 -->
+        <result property="endProvince" column="end_province"/>
+        <!-- 卸货-市 -->
+        <result property="endCity" column="end_city"/>
+        <!-- 卸货-县 -->
+        <result property="endCounty" column="end_county"/>
+        <!-- 联系人 -->
+        <result property="contactName" column="contact_name"/>
+        <!-- 手机 -->
+        <result property="contactMobilephone" column="contact_mobilephone"/>
+        <!-- 企业名称 -->
+        <result property="companyName" column="company_name"/>
+        <!-- 企业ID -->
+        <result property="companyId" column="company_id"/>
+    </resultMap>
+
+
+
+
+
+
+    <!-- *******************************货源匹配车辆************************************ -->
+    <!-- 获取司机信息 -->
+    <select id="queryMatchingDriverList" parameterType="map" resultMap="matching_driver_info_domain_result" statementType="STATEMENT">
+        <![CDATA[${hsql}]]>
+    </select>
+    <!-- *******************************每日发送给企业或司机的短信或推送的计数器************************************ -->
+    <!-- 查询List对象 -->
+    <select id="queryDaySendMsgcounterList" parameterType="map" resultMap="day_send_msgcounter_result">
+        select t.id,t.target_id,t.target_type,t.msg_type,t.count_nums from t_day_send_msgcounter t
+        where
+        target_type = #{targetType}
+        and
+        msg_type = #{msgType}
+        and
+        (
+        count_nums >= #{countNums}
+        or
+        TIMESTAMPDIFF(MINUTE,last_send_time,sysdate()) <![CDATA[<]]> #{locadate}
+        )
+    </select>
+
+    <!-- 查询对象 -->
+    <select id="queryDaySendMsgcounter" parameterType="map" resultMap="day_send_msgcounter_result">
+        select t.id,t.target_id,t.target_type,t.msg_type,t.count_nums from t_day_send_msgcounter t
+        where
+        target_id = #{targetId}
+        and
+        target_type = #{targetType}
+        and
+        msg_type = #{msgType}
+    </select>
+
+    <!-- 插入 -->
+    <insert id="addDaySendMsgcounter" parameterType="DaySendMsgcounter" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_day_send_msgcounter(target_id,target_type,msg_type,count_nums)
+        VALUES
+        (#{targetId},#{targetType},#{msgType},#{countNums})
+    </insert>
+
+    <!-- 修改 -->
+    <update id="updateDaySendMsgcounter" parameterType="DaySendMsgcounter">
+        UPDATE t_day_send_msgcounter SET
+        count_nums = count_nums + 1
+        WHERE
+        target_id = #{targetId}
+        and
+        target_type = #{targetType}
+        and
+        msg_type = #{msgType}
+    </update>
+
+
+
+    <!-- 查询List对象货源 -->
+    <select id="queryOrderCargoList" resultMap="order_cargo_info_domain_result">
+        select
+        t.id,
+        t.cargo_name,
+        t.cargo_type,
+        t.cargo_weight,
+        t.cargo_cubage,
+        DATE_FORMAT(t.request_start_time,'%Y-%m-%d') as request_start_time,
+        t.start_province,
+        t.start_city,
+        t.start_county,
+        t.end_province,
+        t.end_city,
+        t.end_county,
+        t.contact_name,
+        t.contact_mobilephone,
+        t.company_name,
+        t.company_id
+        from
+        t_order_cargo_info t
+        where
+        t.sended_marketing_msg = 0
+        and
+        DATE_FORMAT(t.request_start_time,'%Y-%m-%d') <![CDATA[>=]]> DATE_FORMAT(SYSDATE(),'%Y-%m-%d')
+    </select>
+
+    <!--根据id 批量修改货源成功-->
+    <update id="updateOrderCargo" parameterType="java.util.Map">
+        <foreach collection="list" item="item" open="" separator=";" close="">
+            update t_order_cargo_info t set
+            t.sended_marketing_msg = 1
+            where t.id = #{item}
+        </foreach>
+    </update>
+
+</mapper>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="transactionLastInfoDomain" type="com.cy.dctms.common.domain.TransactionLastInfoDomain"/>
+	
+	
+	<resultMap class="transactionLastInfoDomain" id="transactionLast_info_domain_result">
+		<result property="id" column="ID"/>
+		<result property="cargoId" column="cargo_id"/>
+		<result property="driverId" column="driver_id"/>
+		<result property="transactionId" column="transaction_id"/>
+		<result property="start" column="start"/>
+		<result property="remark" column="remark"/>
+		<result property="createTime" column="create_time" />
+		<result property="driverCode" column="driver_code"/>
+		<result property="driverName" column="driver_name"/>
+	</resultMap>
+	
+	<select id="query_transactionLast_info_count"  resultClass="Integer">
+		select count(t.id)
+		  from t_transaction_last_info t
+		  where  t.transaction_id = #transactionId#  
+	</select>
+	
+	<select id="query_transactionLast_info_by_page" parameterClass="java.util.Map" resultMap="transactionLast_info_domain_result">
+		select t.id,
+		       t.cargo_id,
+		       t.driver_id,      
+				(select code from t_driver_user_info where id=t.driver_id) as driver_code,
+				(select name from t_driver_user_info where id=t.driver_id) as driver_name,
+					t.transaction_id,		       
+					t.start,
+		       t.remark,
+		       t.create_time
+		  from t_transaction_last_info t
+		   where  t.transaction_id = #transactionId#  
+		    order by t.id desc
+		  limit  #start#,#pageSize#
+	</select>
+	
+	<select id="export_transactionLast_info" parameterClass="java.util.Map" resultMap="transactionLast_info_domain_result">
+		select t.id,
+		       t.cargo_id,
+		       t.driver_id,      
+				(select code from t_driver_user_info where id=t.driver_id) as driver_code,
+				(select name from t_driver_user_info where id=t.driver_id) as driver_name,
+					t.transaction_id,		       
+					t.start,
+		       t.remark,
+		       t.create_time
+		  from t_transaction_last_info t
+		   where  t.transaction_id = #transactionId#  
+		    order by t.id desc
+	</select>
+	
+</sqlMap>

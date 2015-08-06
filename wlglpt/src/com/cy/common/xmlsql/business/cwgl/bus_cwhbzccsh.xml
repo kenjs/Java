@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.hygl.dao.BusCwhbzccshMapper">
+	<select id="selectCwHbzcCshPage" parameterClass="java.util.Map"
+		resultClass="com.cy.cwgl.domain.CwHbzcCshDomain">
+		SELECT A.CSH_DJXH AS cshDjxh,
+		       A.SS_JGBM AS ssJgbm,
+		       (select b.jc from qy_zzjg b where b.jgbm=A.ss_jgbm) as sjMc,
+		       A.ZCFL_DM AS zcflDm,
+		       (select b.zcfl_mc from dm_zcfl b where b.zcfl_dm=A.ZCFL_DM) as flMc,
+		       A.YHMC AS yhmc,
+		       A.HM AS hm,
+		       A.ZH AS zh,
+		       A.CSJE AS csje,
+		       A.QYBZ AS qybz,
+		       A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM CW_HBZC_CSH A 
+		  WHERE A.YXBZ='Y' 
+			and A.ss_jgbm=#jgbm#
+		  $orderStr$
+    </select>
+    
+    <select id="selectCwHbzcCshAll" parameterClass="java.util.Map"
+		resultClass="com.cy.cwgl.domain.CwHbzcCshDomain">
+		SELECT A.CSH_DJXH AS cshDjxh,
+		       A.SS_JGBM AS ssJgbm,
+		       (select b.jc from qy_zzjg b where b.jgbm=A.ss_jgbm) as sjMc,
+		       A.ZCFL_DM AS zcflDm,
+		       (select b.zcfl_mc from dm_zcfl b where b.zcfl_dm=A.ZCFL_DM) as flMc,
+		       A.YHMC AS yhmc,
+		       A.HM AS hm,
+		       A.ZH AS zh,
+		       A.CSJE AS csje,
+		       A.QYBZ AS qybz,
+		       A.YXBZ AS yxbz,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc
+		  FROM CW_HBZC_CSH A 
+		  WHERE A.YXBZ='Y' 
+			and A.ss_jgbm=#jgbm#
+		  ORDER by A.CSH_DJXH ASC
+    </select>
+
+	<select id="getCwHbzcCshRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.CSH_DJXH) 
+		  FROM CW_HBZC_CSH A 
+		  WHERE A.YXBZ='Y' 
+			and A.ss_jgbm=#jgbm#
+    </select>
+    
+    <select id="selectCshsjMcByJgbm" parameterClass="java.util.Map" resultClass="com.cy.cwgl.domain.CwHbzcCshDomain">
+    		select mc as sjMC from qy_zzjg where jgbm=#jgbm#
+    </select>
+    
+    <update id="stopCwglHbByDjxh" parameterClass="java.util.Map">
+    	update CW_HBZC_CSH set qybz='N' where CSH_DJXH=#djxh#
+    </update>
+    
+    <update id="startCwglHbByDjxh" parameterClass="java.util.Map">
+    	update CW_HBZC_CSH set qybz='Y' where CSH_DJXH=#djxh#
+    </update>
+    
+    <select id="checkCwYhZh" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+    	select count(*) from CW_HBZC_CSH where YHMC=#mc# and ZH=#zh# and ss_jgbm=#jgbm# and yxbz='Y'
+    </select>
+    
+    <select id="checkCwFlMc" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+    	select count(*) from CW_HBZC_CSH where zcfl_dm=#flMc# and ss_jgbm=#jgbm# and yxbz='Y'
+    </select>
+    
+    <select id="getYhCshDjxhWhenXj" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+    	select c.csh_djxh from cw_hbzc_csh c where c.zcfl_dm = 11 and c.ss_jgbm=#ssJgbm# and c.yxbz='Y' and c.qybz='Y' and rownum = 1
+    </select>
+    
+    	<!--插入数据-->
+	<insert id="insertCwHbzcye"  parameterClass="com.cy.common.bo.CwHbzcye">
+		<selectKey keyProperty="cwDjxh" resultClass="string" type="pre"> 
+			select SEQ_CW_DJXH.nextval as cwDjxh from dual 
+		</selectKey> 
+		insert into CW_HBZCYE(CW_DJXH,SS_JGBM,ZCFL_DM,YH_CSH_DJXH,JE,YXBZ)
+		values(#cwDjxh:NUMERIC#,#ssJgbm:NUMERIC#,#zcflDm:NUMERIC#,#yhCshDjxh:NUMERIC#,#je:NUMERIC#,#yxbz:VARCHAR#)
+	</insert>
+	
+	<!--插入数据-->
+	<insert id="insertCwHbzcye2"  parameterClass="com.cy.common.bo.CwHbzcye2">
+		<selectKey keyProperty="cwbdDjxh" resultClass="string" type="pre"> 
+			select SEQ_CW_DJXH.nextval as cwbdDjxh from dual 
+		</selectKey> 
+		insert into cw_hbzc_bdjl(CWBD_DJXH,SS_JGBM,ZCFL_DM,YH_CSH_DJXH,JE,
+		SM,JBR_CZY_DJXH,RQ,DJ_JGBM,BZ,YWXH,YXBZ)
+		values(#cwbdDjxh:NUMERIC#,#ssJgbm:NUMERIC#,#zcflDm:NUMERIC#,#yhCshDjxh:NUMERIC#,#je:NUMERIC#,
+		#sm:VARCHAR#,#jbrCzyDjxh:NUMERIC#,to_date(#rq:DATE#,'yyyy-MM-dd'),#djJgbm:NUMERIC#,#bz:VARCHAR#,#ywxh:VARCHAR#,#yxbz:VARCHAR#)
+	</insert>
+	
+	<update id="deleteCwHbzcyeByDjxh" parameterClass="java.util.Map">
+		update CW_HBZCYE set yxbz='N' where YH_CSH_DJXH=#cshDjxh#
+	</update>
+	
+	<parameterMap class="java.util.Map" id="cwCshparMap">
+			<parameter property="gnDm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+			<parameter property="djXh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+			<parameter property="djXh1" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+			<parameter property="djXh2" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+			<parameter property="count" javaType="java.lang.Integer" jdbcType="INTEGER" mode="OUT"/>
+			<parameter property="error" javaType="java.lang.String" jdbcType="VARCHAR" mode="OUT"/>
+	</parameterMap>
+	
+	<procedure id="checkDeleteBefore" parameterMap="cwCshparMap">
+		{call P_PUB_DELETE_CHECK(?,?,?,?,?,?)}
+	 </procedure>
+	 
+	 
+</sqlMap>

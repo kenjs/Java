@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.bggl.dao.BusBgglBggzsjMapper">
+	<select id="selectBgGzsjPage" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgGzsjDomain">
+		SELECT A.JGBM AS jgbm,
+		       A.YXQ_Q AS yxqQ,
+		       A.YXQ_Z AS yxqZ,
+		       (CASE WHEN A.YXQ_Z &lt; sysdate  THEN '1' ELSE '2' END) zt,
+		       A.AM_SBSJ_S AS amSbsjS,
+		       A.AM_SBSJ_F AS amSbsjF,
+		       A.PM_SBSJ_S AS pmSbsjS,
+		       A.PM_SBSJ_F AS pmSbsjF,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc,
+		       A.AM_SBSJ_S || ':' || A.AM_SBSJ_F sbsj, 
+       		   A.PM_SBSJ_S || ':' || A.PM_SBSJ_F xbsj
+		  FROM BG_GZSJ A 
+		  <dynamic> 
+			<isNotEmpty property="jgbm" prepend="where">
+				A.JGBM =#jgbm#
+			</isNotEmpty>
+			<isNotEmpty property="yxqZ" prepend="and">
+			    A.YXQ_Q &lt;=SYSDATE AND (A.YXQ_Z>=SYSDATE OR A.YXQ_Z IS NULL)
+			</isNotEmpty>
+		  </dynamic>
+		  $orderStr$
+    </select>
+    
+    <select id="selectBgGzsjAll" parameterClass="java.util.Map"
+		resultClass="com.cy.bggl.domain.BgGzsjDomain">
+		SELECT A.JGBM AS jgbm,
+		       A.YXQ_Q AS yxqQ,
+		       A.YXQ_Z AS yxqZ,
+		        (CASE WHEN A.YXQ_Z &lt; sysdate  THEN '1' ELSE '2' END) zt,
+		       A.AM_SBSJ_S AS amSbsjS,
+		       A.AM_SBSJ_F AS amSbsjF,
+		       A.PM_SBSJ_S AS pmSbsjS,
+		       A.PM_SBSJ_F AS pmSbsjF,
+		       A.CJR_CZY_DJXH AS cjrCzyDjxh,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH AS xgrCzyDjxh,
+		       A.XGRQ AS xgrq,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.CJR_CZY_DJXH) cjrMc,
+		       (SELECT RY.MC from QY_RYDJ RY WHERE RY.CZY_DJXH=A.XGR_CZY_DJXH) xgrMc,
+		       A.AM_SBSJ_S || ':' || A.AM_SBSJ_F sbsj, 
+       		   A.PM_SBSJ_S || ':' || A.PM_SBSJ_F xbsj
+		  FROM BG_GZSJ A 
+		  <dynamic> 
+			<isNotEmpty property="jgbm" prepend="where">
+				A.JGBM =#jgbm#
+			</isNotEmpty>
+			<isNotEmpty property="yxqZ" prepend="and">
+			    A.YXQ_Q &lt;=SYSDATE AND (A.YXQ_Z>=SYSDATE OR A.YXQ_Z IS NULL)
+			</isNotEmpty>
+		  </dynamic>
+		  ORDER by A.JGBM ASC,A.YXQ_Q ASC
+    </select>
+
+	<select id="getBgGzsjRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(A.JGBM) 
+		  FROM BG_GZSJ A 
+		  WHERE 1 = 1 
+		  <dynamic> 
+			<isNotEmpty property="jgbm" prepend="and">
+				A.JGBM =#jgbm#
+			</isNotEmpty>
+		  </dynamic>
+    </select>
+    
+	<select id="getBgGzsjLsCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		select count(*)
+		from BG_GZSJ A
+		WHERE A.JGBM =#jgbm#
+		AND ((A.YXQ_Q &lt;=to_date(#yxqQ#,'yyyy-mm-dd') AND A.YXQ_Z &gt;=to_date(#yxqQ#,'yyyy-mm-dd'))
+		 OR (A.YXQ_Q &lt;=to_date(#yxqZ#,'yyyy-mm-dd') AND A.YXQ_Z &gt;=to_date(#yxqZ#,'yyyy-mm-dd'))
+		 OR (A.YXQ_Q &gt;=to_date(#yxqQ#,'yyyy-mm-dd') AND A.YXQ_Z &lt;=to_date(#yxqZ#,'yyyy-mm-dd')))
+    </select>
+</sqlMap>

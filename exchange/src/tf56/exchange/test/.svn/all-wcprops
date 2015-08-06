@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/Project/!svn/ver/10920/exchange/branches/exchange-contractV2.2.1/src/tf56/exchange/test
+END
+ContractcTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/Project/!svn/ver/10920/exchange/branches/exchange-contractV2.2.1/src/tf56/exchange/test/ContractcTest.java
+END
+LogisticsCommunitylTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/Project/!svn/ver/10734/exchange/branches/exchange-contractV2.2.1/src/tf56/exchange/test/LogisticsCommunitylTest.java
+END
+InvoiceDaoImplTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/Project/!svn/ver/10734/exchange/branches/exchange-contractV2.2.1/src/tf56/exchange/test/InvoiceDaoImplTest.java
+END
+TestDaoImplTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/Project/!svn/ver/10734/exchange/branches/exchange-contractV2.2.1/src/tf56/exchange/test/TestDaoImplTest.java
+END
+ToPartyDaoImplTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/Project/!svn/ver/10734/exchange/branches/exchange-contractV2.2.1/src/tf56/exchange/test/ToPartyDaoImplTest.java
+END
+InternalWriteScoreDaoImplTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/Project/!svn/ver/10734/exchange/branches/exchange-contractV2.2.1/src/tf56/exchange/test/InternalWriteScoreDaoImplTest.java
+END
+CarDaoImplTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/Project/!svn/ver/10734/exchange/branches/exchange-contractV2.2.1/src/tf56/exchange/test/CarDaoImplTest.java
+END
+ElectronichubDaoImplTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/svn/Project/!svn/ver/10734/exchange/branches/exchange-contractV2.2.1/src/tf56/exchange/test/ElectronichubDaoImplTest.java
+END
+MesInterfacecDaoImplTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/svn/Project/!svn/ver/10734/exchange/branches/exchange-contractV2.2.1/src/tf56/exchange/test/MesInterfacecDaoImplTest.java
+END

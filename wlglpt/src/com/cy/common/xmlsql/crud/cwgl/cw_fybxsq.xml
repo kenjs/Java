@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">  
+<sqlMap namespace="com.cy.hygl.dao.CwFybxsqMapper">
+
+    <!--根据主键取DOMAIN-->
+	<select id="selectCwFybxsqByKey" parameterClass="java.util.Map"
+		resultClass="com.cy.cwgl.domain.CwFybxsqDomain">
+		select a.CW_DJXH as cwDjxh,a.SQR_CZY_DJXH as sqrCzyDjxh,a.SQRQ as sqrq,a.SQ_BM_DJXH as sqBmDjxh,a.SQ_DW_DJXH as sqDwDjxh,
+		a.FYJZ_DW_DJXH as fyjzDwDjxh,a.FYZF_DW_DJXH as fyzfDwDjxh,
+		(SELECT SUM(BXJE) FROM CW_FYBXSQ_MX WHERE YXBZ = 'Y' AND CW_DJXH = a.CW_DJXH) as fybxje,
+		a.BZ as bz,a.YXBZ as yxbz,
+		a.SPBZ as spbz,a.WSSPZT_DM as wsspztDm,a.WS_SPXH as wsSpxh,a.CJR_CZY_DJXH as cjrCzyDjxh,a.CJRQ as cjrq,a.SPLC_XMFL_DJXH as xmflDjxh,
+		a.XGR_CZY_DJXH as xgrCzyDjxh,a.XGRQ as xgrq,a.bxdh as bxdh from CW_FYBXSQ a  where a.CW_DJXH=#cwDjxh#
+    </select>
+
+	<!--插入数据-->
+	<insert id="insertCwFybxsq"  parameterClass="com.cy.common.bo.CwFybxsq">
+		<selectKey keyProperty="cwDjxh" resultClass="string" type="pre"> 
+			select SEQ_CW_DJXH.nextval as cwDjxh from dual 
+		</selectKey> 
+		insert into CW_FYBXSQ(CW_DJXH,SQR_CZY_DJXH,SQRQ,SQ_BM_DJXH,SQ_DW_DJXH,
+		FYJZ_DW_DJXH,FYZF_DW_DJXH,FYBXJE,BZ,YXBZ,
+		SPBZ,WSSPZT_DM,WS_SPXH,CJR_CZY_DJXH,CJRQ,
+		XGR_CZY_DJXH,XGRQ,SPLC_XMFL_DJXH,BXDH)
+		values(#cwDjxh:NUMERIC#,#sqrCzyDjxh:NUMERIC#,to_date(#sqrq:DATE#,'yyyy-MM-dd'),#sqBmDjxh:NUMERIC#,#sqDwDjxh:NUMERIC#,
+		#fyjzDwDjxh:NUMERIC#,#fyzfDwDjxh:NUMERIC#,#fybxje:NUMERIC#,#bz:VARCHAR#,#yxbz:VARCHAR#,
+		#spbz:VARCHAR#,#wsspztDm:NUMERIC#,#wsSpxh:NUMERIC#,#cjrCzyDjxh:NUMERIC#,to_date(#cjrq:DATE#,'yyyy-MM-dd'),
+		#xgrCzyDjxh:NUMERIC#,to_date(#xgrq:DATE#,'yyyy-MM-dd'),#xmflDjxh:NUMERIC#,#bxdh:VARCHAR#)
+	</insert>
+
+	<!--根据主键更新该表中其它所有字段-->
+    <update id="updateCwFybxsqByKey" parameterClass="com.cy.common.bo.CwFybxsq">
+        update CW_FYBXSQ set CW_DJXH=#cwDjxh#,SQR_CZY_DJXH=#sqrCzyDjxh#,SQRQ=to_date(#sqrq#, 'YYYY-MM-DD'),SQ_BM_DJXH=#sqBmDjxh#,SQ_DW_DJXH=#sqDwDjxh#,
+		FYJZ_DW_DJXH=#fyjzDwDjxh#,FYZF_DW_DJXH=#fyzfDwDjxh#,FYBXJE=#fybxje#,BZ=#bz#,YXBZ=#yxbz#,SPLC_XMFL_DJXH=#xmflDjxh#,
+		SPBZ=#spbz#,WSSPZT_DM=#wsspztDm#,WS_SPXH=#wsSpxh#,CJR_CZY_DJXH=#cjrCzyDjxh#,CJRQ=to_date(#cjrq#, 'YYYY-MM-DD'),
+		XGR_CZY_DJXH=#xgrCzyDjxh#,XGRQ=to_date(#xgrq#, 'YYYY-MM-DD'),BXDH=#bxdh# where CW_DJXH=#cwDjxh#
+    </update>
+    
+	<!--根据主键删除表数据：硬删除-->
+	<delete id="deleteCwFybxsqByKey" parameterClass="java.util.Map">
+		update CW_FYBXSQ set yxbz='N' where CW_DJXH=#cwDjxh#
+    </delete>
+</sqlMap>

@@ -1,0 +1,391 @@
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.i18n.reload" value="true" />
+	<constant name="struts.configuration.xml.reload" value="true" />
+	<constant name="struts.objectFactory" value="spring" />
+	<constant name="struts.ui.theme" value="simple" />
+	<constant name="struts.i18n.encoding" value="GBK" />
+	<constant name="struts.multipart.maxSize" value="16777216" />
+	<constant name="struts.custom.i18n.resources" value="/config/business" />
+
+	<!-- 系统功能 ACTION -->
+	<package name="web-function-action" extends="base-web-common" namespace="/">
+	
+	  <!-- 查询用户拥有的功能菜单权限-->
+		<action name="queryFunction" class="queryFunction" >
+				<result type="json"></result>
+		</action>
+		<!-- 查询系统功能信息列表 -->
+		<action name="queryFunctionInfo" class="queryFunctionInfo" >
+	    	<result type="json"></result>
+		</action>
+		<!-- 查询系统功能信息明细 -->
+		<action name="queryFunctionInfoMx" class="queryFunctionInfoMx" >
+	    	<result name="success">dctms/function/queryFunctionInfoMx.jsp</result>
+		</action>
+		<!-- 保存系统功能信息 -->
+		<action name="saveFunctionInfo" class="saveFunctionInfo" >
+	    	<result type="json"></result>
+		</action>
+		<!-- 删除系统功能信息 -->
+		<action name="deleteFunctionInfo" class="deleteFunctionInfo" >
+	   	<result type="json"></result>
+		</action>
+		
+	</package>
+	
+		<!-- 用户 ACTION -->
+	<package name="web-manager-action" extends="base-web-common" namespace="/">
+		<!-- 管理员登陆 -->
+		<action name="userLogin" class="managerLogin" >
+		   <result name="success" >/common/main.jsp</result>
+		  <result name="error">/login.jsp</result>
+		</action>
+		<!-- 管理员注销 -->
+		<action name="managerLogout" class="managerLogout" >
+        	<result name="success">/login.jsp</result>
+		</action>
+		<!-- 管理员修改密码 -->
+		<action name="updateManagerPassword" class="updateManagerPassword" >
+        	<result type="json"></result>
+		</action>
+		<!-- 查询管理员信息列表 -->
+		<action name="queryManagerInfo" class="queryManagerInfo" >
+        	<result type="json"></result>
+		</action>
+		<!-- 查询管理员信息明细 -->
+		<action name="queryManagerInfoMx" class="queryManagerInfoMx" >
+        	<result name="success">dctms/manager/queryManagerInfoMx.jsp</result>
+		</action>
+		<!-- 保存管理员信息 -->
+		<action name="saveManagerInfo" class="saveManagerInfo" >
+        	<result type="json"></result>
+		</action>
+		<!-- 删除管理员信息 -->
+		<action name="deleteManagerInfo" class="deleteManagerInfo" >
+        	<result type="json"></result>
+		</action>
+		<!-- 导出管理员信息 -->
+		<action name="exportManagerInfo" class="exportManagerInfo" >
+		</action>
+		
+	</package>
+	<!-- 赋权信息 ACTION -->
+	<package name="web-funRelation-action" extends="base-web-common" namespace="/">
+		<!-- 查询赋权信息列表 -->
+		<action name="queryFunRealationInfo" class="queryFunRealationInfo" >
+	    	<result name="success">dctms/funRelation/queryFunRealationInfo.jsp</result>
+		</action>
+		<!-- 保存赋权信息 -->
+		<action name="saveFunRealationInfo" class="saveFunRealationInfo" >
+	    	<result type="json"></result>
+		</action>
+	</package>
+	
+	<!-- 操作日志信息 ACTION -->
+	<package name="web-workLog-action" extends="base-web-common" namespace="/">	
+		<!-- 查询管理员操作日志信息列表 -->
+		<action name="queryManagerWorkLogInfo" class="queryManagerWorkLogInfo" >
+	    	<result type="json"></result>
+		</action>
+		<!-- 导出工作日志 -->
+	<action name="exportManagerWorkLogInfo" class="exportManagerWorkLogInfo" >
+	</action>
+	</package>
+	
+	<!-- 司机用户 ACTION -->
+	<package name="web-driverUser-action" extends="base-web-common" namespace="/">
+		<!-- 查询司机用户列表 -->
+		<action name="queryDriverUserInfo" class="queryDriverUserInfo" >
+	    	<result type="json"></result>
+		</action>
+		<!-- 审核司机用户列表 -->
+		<action name="auditDriverUserInfoList" class="auditDriverUserInfoList" >
+	    	<result type="json"></result>
+		</action>
+		<!-- 查询司机用户列表 -->
+		<action name="queryDriverUserTransactionInfo" class="queryDriverUserTransactionInfo" >
+	    	<result type="json"></result>
+		</action>
+		<!-- 查询司机存活率列表 -->
+		<action name="driverUserTotalData" class="driverUserTotalData" >
+	    	<result type="json"></result>
+		</action>
+		<!-- 查询司机用户明细 -->
+		<action name="queryDriverUserInfoMx" class="queryDriverUserInfoMx" >
+	    	<result name="success">dctms/driverUser/queryDriverUserInfoMx.jsp</result>
+		</action>
+		<!-- 保存司机用户 -->
+		<action name="saveDriverUserInfo" class="saveDriverUserInfo" >
+	    	<result type="json"></result>
+		</action>
+		<!-- 冻结和解冻司机用户 -->
+		<action name="deleteDriverUserInfo" class="deleteDriverUserInfo" >
+	   	<result type="json"></result>
+		</action>
+		<!-- 审核查询司机用户明细 -->
+		<action name="auditDriverUserInfoMx" class="queryDriverUserInfoMx" >
+	    	<result name="success">dctms/driverUser/auditDriverUserInfoMx.jsp</result>
+		</action>
+		<!-- 审核司机信息 -->
+		<action name="auditDriverUserInfo" class="auditDriverUserInfo" >
+	    	<result type="json"></result>
+		</action>
+		<!-- 导出司机 -->
+		<action name="exportDriverUserInfo" class="exportDriverUserInfo" >
+		</action>
+		<!-- 推送消息 -->
+		<action name="pushMessagerInit" class="pushMessagerInit" >
+	    	<result name="success">dctms/driverUser/pushMessager.jsp</result>
+		</action>
+		<!-- 推送消息 -->
+		<action name="pushDriverMessager" class="pushDriverMessager" >
+	    	<result type="json"></result>
+		</action>
+	</package>
+	
+	<!-- 企业 ACTION -->
+	<package name="web-webUser-action" extends="base-web-common" namespace="/">
+		<!-- 查询企业列表 -->
+		<action name="queryWebUserInfo" class="queryWebUserInfo" >
+	    	<result type="json"></result>
+		</action>
+		<!-- 查询审核企业列表 -->
+		<action name="auditWebUserInfoList" class="auditWebUserInfoList" >
+	    	<result type="json"></result>
+		</action>
+		<!-- 查询企业数据统计列表 -->
+		<action name="webUserTotalData" class="webUserTotalData" >
+	    	<result type="json"></result>
+		</action>
+		<!-- 查询企业交易记录 -->
+		<action name="queryWebUserTransactionInfo" class="queryWebUserTransactionInfo" >
+	    	<result type="json"></result>
+		</action>
+		<!-- 查询企业明细 -->
+		<action name="queryWebUserInfoMx" class="queryWebUserInfoMx" >
+	    	<result name="success">dctms/webUser/queryWebUserInfoMx.jsp</result>
+		</action>
+		<!-- 保存企业 -->
+		<action name="saveWebUserInfo" class="saveWebUserInfo" >
+	    	<result type="json"></result>
+		</action>
+		<!-- 删除企业 -->
+		<action name="deleteWebUserInfo" class="deleteWebUserInfo" >
+	   		<result type="json"></result>
+		</action>
+		<!-- 审核企业明细 -->
+		<action name="auditWebUserInfoMx" class="queryWebUserInfoMx" >
+	    	<result name="success">dctms/webUser/auditWebUserInfoMx.jsp</result>
+		</action>
+		<!-- 审核企业信息 -->
+		<action name="auditWebUserInfo" class="auditWebUserInfo" >
+	    	<result type="json"></result>
+		</action>
+		<!-- 导出企业 -->
+		<action name="exportWebUserInfo" class="exportWebUserInfo" >
+		</action>
+		<!--	批量发送消息初始化	-->
+		<action name="sendWebMessagerInit" class="sendWebMessagerInit" >
+	    	<result name="success">dctms/webUser/sendWebMessager.jsp</result>
+		</action>
+			<!--	批量发送消息	-->
+		<action name="sendWebMessager" class="sendWebMessager" >
+	    	<result type="json"></result>
+		</action>
+	</package>
+	
+	<!-- 操作日志 ACTION -->
+	<package name="web-operationLog-action" extends="base-web-common" namespace="/">
+		<!-- 查询操作日志列表 -->
+		<action name="queryOperationLog" class="queryOperationLog" >
+	    	<result type="json"></result>
+		</action>
+		<!-- 导出操作日志 -->
+		<action name="exportOperationLog" class="exportOperationLog" >
+		</action>
+	</package>
+	
+	<!-- 操作日志 ACTION -->
+	<package name="web-others-action" extends="base-web-common" namespace="/">
+		<!-- 查询操作日志列表 -->
+		<action name="baiduPush" class="baiduPush" >
+	    	<result type="json"></result>
+		</action>
+	</package>
+	
+	<!-- 司机对企业评价 ACTION -->
+	<package name="web-driverUserAssess-action" extends="base-web-common" namespace="/">
+		<!-- 查询司机对企业评价列表 -->
+		<action name="queryDriverUserAssessInfo" class="queryDriverUserAssessInfo" >
+	    	<result type="json"></result>
+		</action>
+		<!-- 查询司机对企业评价明细 -->
+		<action name="queryDriverUserAssessInfoMx" class="queryDriverUserAssessInfoMx" >
+	    	<result name="success">dctms/driverUserAssess/queryDriverUserAssessInfoMx.jsp</result>
+		</action>
+		<!-- 保存司机对企业评价 -->
+		<action name="saveDriverUserAssessInfo" class="saveDriverUserAssessInfo" >
+	    	<result type="json"></result>
+		</action>
+		<!-- 删除司机对企业评价 -->
+		<action name="deleteDriverUserAssessInfo" class="deleteDriverUserAssessInfo" >
+	   	<result type="json"></result>
+		</action>
+		<!-- 导出司机对企业评价 -->
+		<action name="exportDriverUserAssessInfo" class="exportDriverUserAssessInfo" >
+		</action>
+	</package>
+	
+	<!-- 企业对司机评价 ACTION -->
+	<package name="web-userDirverAssess-action" extends="base-web-common" namespace="/">
+		<!-- 查询企业对司机评价列表 -->
+		<action name="queryUserDriverAssessInfo" class="queryUserDriverAssessInfo" >
+	    	<result type="json"></result>
+		</action>
+		<!-- 查询企业对司机评价明细 -->
+		<action name="queryUserDriverAssessInfoMx" class="queryUserDriverAssessInfoMx" >
+	    	<result name="success">dctms/userDirverAssess/queryUserDriverAssessInfoMx.jsp</result>
+		</action>
+		<!-- 保存企业对司机评价 -->
+		<action name="saveUserDriverAssessInfo" class="saveUserDriverAssessInfo" >
+	    	<result type="json"></result>
+		</action>
+		<!-- 删除企业对司机评价 -->
+		<action name="deleteUserDriverAssessInfo" class="deleteUserDriverAssessInfo" >
+	   	<result type="json"></result>
+		</action>
+		<!-- 导出企业对司机评价 -->
+		<action name="exportUserDriverAssessInfo" class="exportUserDriverAssessInfo" >
+		</action>
+	</package>
+	
+	<!-- 交易信息 ACTION -->
+	<package name="web-transaction-action" extends="base-web-common" namespace="/">
+		<!-- 查询交易信息列表 -->
+		<action name="queryTransactionInfo" class="queryTransactionInfo" >
+	    	<result type="json"></result>
+		</action>
+		<!-- 查询交易信息明细 -->
+		<action name="queryTransactionInfoMx" class="queryTransactionInfoMx" >
+	    	<result name="success">dctms/transaction/queryTransactionInfoMx.jsp</result>
+		</action>
+		<!-- 保存交易信息 -->
+		<action name="saveTransactionInfo" class="saveTransactionInfo" >
+	    	<result type="json"></result>
+		</action>
+		<!-- 删除交易信息 -->
+		<action name="deleteTransactionInfo" class="deleteTransactionInfo" >
+	   	<result type="json"></result>
+		</action>
+		<!-- 导出交易信息 -->
+		<action name="exportTransactionInfo" class="exportTransactionInfo" >
+		</action>
+		<!-- 查询货源历史状态列表 -->
+		<action name="queryOrderCargoLastInfo" class="queryOrderCargoLastInfo" >
+	    	<result type="json"></result>
+		</action>
+		<!-- 导出货源历史状态 -->
+		<action name="exportOrderCargoLastInfo" class="exportOrderCargoLastInfo" >
+		</action>
+	</package>
+	
+	<!-- 货物信息 ACTION -->
+	<package name="web-orderCargo-action" extends="base-web-common" namespace="/">
+		<!-- 查询货物信息列表 -->
+		<action name="queryOrderCargoInfo" class="queryOrderCargoInfo" >
+	    	<result type="json"></result>
+		</action>
+		<!-- 查询货物信息明细 -->
+		<action name="queryOrderCargoInfoMx" class="queryOrderCargoInfoMx" >
+	    	<result name="success">dctms/orderCargo/queryOrderCargoInfoMx.jsp</result>
+		</action>
+		<!-- 保存货物信息 -->
+		<action name="saveOrderCargoInfo" class="saveOrderCargoInfo" >
+	    	<result type="json"></result>
+		</action>
+		<!-- 删除货物信息 -->
+		<action name="deleteOrderCargoInfo" class="deleteOrderCargoInfo" >
+	   	<result type="json"></result>
+		</action>
+		<!-- 导出货物信息 -->
+		<action name="exportOrderCargoInfo" class="exportOrderCargoInfo" >
+		</action>
+		<!-- 查询订单历史状态列表 -->
+		<action name="queryTransactionLastInfo" class="queryTransactionLastInfo" >
+	    	<result type="json"></result>
+		</action>
+		<!-- 导出订单历史状态 -->
+		<action name="exportTransactionLastInfo" class="exportTransactionLastInfo" >
+		</action>
+	</package>
+	
+	<!-- 查询存活率 ACTION -->
+	<package name="web-driverSurviveRate-action" extends="base-web-common" namespace="/">
+		<!-- 查询查询存活率列表 -->
+		<action name="queryDriverSurviveRate" class="queryDriverSurviveRate" >
+	    	<result type="json"></result>
+		</action>
+		<!-- 导出查询存活率 -->
+		<action name="exportDriverSurviveRate" class="exportDriverSurviveRate" >
+		</action>
+	</package>
+	
+	<!-- 身份证验证申请 ACTION -->
+	<package name="web-applyInfo-action" extends="base-web-common" namespace="/">
+		<!-- 查询身份证验证申请列表 -->
+		<action name="queryApplyInfo" class="queryApplyInfo" >
+	    	<result type="json"></result>
+		</action>
+		<!-- 查询身份证验证申请明细 -->
+		<action name="queryApplyInfoMx" class="queryApplyInfoMx" >
+	    	<result name="success">dctms/applyInfo/queryApplyInfoMx.jsp</result>
+		</action>
+		<!-- 保存身份证验证申请 -->
+		<action name="saveApplyInfo" class="saveApplyInfo" >
+	    	<result type="json"></result>
+		</action>
+	</package>
+	
+		<!-- 数据字典 ACTION -->
+	<package name="web-dict-action" extends="base-web-common" namespace="/">
+		<action name="getAreaDict" class="com.cy.dcts.dict.action.AreaDictInfoAction" />
+		<action name="getCarPlateTypeDict" class="com.cy.dcts.dict.action.CarPlateTypeDictInfoAction" />
+		<action name="getCarBarTypeDict" class="com.cy.dcts.dict.action.CarBarTypeDictInfoAction" />
+		<action name="getCarStateTypeDict" class="com.cy.dcts.dict.action.CarStateTypeDictInfoAction" />
+		<action name="getCarLengthDict" class="com.cy.dcts.dict.action.CarLengthDictInfoAction" />
+		<action name="getCarWeightDict" class="com.cy.dcts.dict.action.CarWeightDictInfoAction" />
+		<action name="getCarCubageDict" class="com.cy.dcts.dict.action.CarCubageDictInfoAction" />
+		<action name="getCargoTypeDict" class="com.cy.dcts.dict.action.CargoTypeInfoAction" />
+	</package>
+	
+	<package name="web-outputImage-action" extends="base-web-common" namespace="/">
+	<action name="outputImage" class="com.cy.dctms.common.action.OutputImageAction"></action>
+	</package>
+	
+		<!-- BASE ACTION -->
+	<package name="base-web-common" extends="struts-default,json-default" namespace="/" abstract="true">
+		<global-results>
+			<result name="loginMx">common/logoutMx.jsp</result>
+			<result name="pageSuccess">*.jsp</result>
+			<result name="pageError">/common/error.jsp</result>
+			<result name="success" type="json"></result>
+			<result name="error" type="json"></result>
+			<result name="excel" type="stream">  
+                <param name="contentType">  
+                    application/vnd.ms-excel  
+                </param>  
+                <param name="inputName">excelStream</param>  
+                <param name="contentDisposition">  
+                    filename="export.xls"  
+                </param>  
+                <param name="bufferSize">1024</param>  
+            </result>  
+		</global-results>
+	</package>
+	
+</struts>

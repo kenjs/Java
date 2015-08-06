@@ -1,0 +1,223 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+ 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="pragma" content="no-cache"/>
+    <meta http-equiv="Cache-Control" content="no-cache,must-revalidate"/>
+    
+    <title>详情</title>
+	
+	<link href="../css/webui/main.css" rel="stylesheet" />
+		
+    <script src="../js/jquery/jquery-1.8.3.min.js" type="text/javascript"></script>
+    <script src="../js/sys/webui/contract/header.js"></script>   
+    <script src="../js/sys/webui/logo.js"></script>   	 
+	
+    <link href="../js/sys/ymPrompt/skin/ch/ymPrompt.css" rel="stylesheet" />
+	<link href="../css/webui/hgrid.css" rel="stylesheet" />
+	<link href="../js/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" type="text/css" />
+	<link href="../css/webui/commonPage.css" rel="stylesheet" />
+	
+	<script src="../js/sys/ymPrompt/ymPrompt.js" type="text/javascript"></script>
+	<script src="../js/sys/webui/hgrid.js" type="text/javascript"></script>
+	<script src="../js/sys/webui/contract/left.js" type="text/javascript"></script>
+	<script type="text/javascript" src="../js/sys/DatePicker/WdatePicker.js"></script>
+	<script src="../js/themes/waybillamountc/waybillamountList.js"  type="text/javascript"></script>
+	<link href="../css/webui/commonPage.css" rel="stylesheet" />
+	<script type="text/javascript">
+		$(function(){
+			getWaybillid();
+			var order = getid();
+			if(order == 5){
+				$("#a_order_id").text("费用录入");
+				$("#a_order_id").attr('href','../waybillamountcs/waybillamountList?order=5');
+			} else
+			if(order == 6){
+				$("#a_order_id").text("费用确认");
+				$("#a_order_id").attr('href','../waybillamountcs/waybillamountconfirmlist?order=6');
+			}
+			f_hgrid_ini_goods();
+			$("#pagecode").val("1");
+			fillDetail("xq");
+		})
+	</script>
+	<style type="text/css">
+	 	.formTable tr td{
+	 		height: 25px;
+	 	}
+	 	.formTable tr td.titleTd{
+	 		height: 30px;
+	 		background-color: #E7E7E7;
+	 	}
+	 	.formSpan{
+	 		float: left;
+	 	}
+	 	
+	 	.formTable tr td{
+	 		height: 25px;
+	 	}
+	 	.formTable tr td.titleTd{
+	 		height: 30px;
+	 		background-color: #E7E7E7;
+	 	}
+	 	.formTable tr.titleTr td{
+	 		height: 30px;
+	 		background-color: #E7E7E7;
+	 	}
+	 	.formTable tr.yellowTr td{
+	 		background-color: #fffddd;
+	 	}
+	 	.formTable tr td.jgTd{
+	 		height: 15px;
+	 	}
+	 	.btn_sel{
+	 		width: 90px;
+	 		padding: 0 0 0 0;
+	 	}
+	 	
+	</style>
+ </head>
+  
+  <body>
+    	<!-- 顶部 --开始  此处须由js动态加入-->
+		<div id="header" class="c-header" >
+	
+		</div>
+		<!-- 顶部 --结束-->
+	
+		<!-- LOGON --开始   此处须由js动态加入-->
+		<div id="logo" class="c-logo" >
+		
+		</div>
+	<!-- LOGON --结束-->
+
+	<div id="main" class="c-main">
+		
+  		<div id="left" class="c-left">
+			<div id="accordion"> 
+			</div>  
+		</div>
+	  		<div id="right" class="c-right">
+	  			<input type="hidden" id="waybillid"/>
+	  			<input type="hidden" id="partyid" />
+  				<input type="hidden" id="frompartyid" />
+  				<input type="hidden" id="topartyid" />
+	  			<input type="hidden" id="receivablefreight"/>
+  				<input type="hidden" id="payablefreight"/>
+  				<div class="crumbs fn-mt10 fn-cGray3">
+						<span class="house"></span>
+						<span class="links"><a href="../logincs/index_main" class="fn-cBlue">首页</a>
+						<span class="fn-ml5 fn-mr5">&gt;</span><a href="../waybillamountcs/waybillamountList?order=5" id="a_order_id" class="fn-cBlue">费用录入</a>
+						<span class="fn-ml5 fn-mr5">&gt;</span><b id="xg">详情</b></span>
+				</div>
+				<div class="fgxDiv"></div>
+				<div style="padding:10px 0 10px 0;"><b class="ft-18">费用明细</b></div>
+	        	<table class="formTable" width="100%">
+	        		<tr class="titleTr">
+	        			<td>费用种类</td>
+	        			<td>运费</td>
+	        			<td  style="display: none;">保险费</td>
+	        			<td>提货费</td>
+	        			<td>送货费</td>
+	        			<td>包装费</td>
+	        			<td  style="display: none;">燃油附加费</td>
+	        			<td  style="display: none;">短信通知费</td>
+	        			<td>其他费用</td>
+	        			<td>合计（元）</td>
+	        		</tr>
+	        		<tr>
+	        			<td>应收费用</td>
+	        			<td><span class="formSpan" id="ysyf"></span></td>
+	        			<td  style="display: none;"><span class="formSpan" id="ysbxf"></span></td>
+	        			<td><span class="formSpan" id="ysthf"></span></td>
+	        			<td><span class="formSpan" id="ysshf"></span></td>
+	        			<td><span class="formSpan" id="ysbzf"></span></td>
+	        			<td  style="display: none;"><span class="formSpan" id="ysryfjf"></span></td>
+	        			<td  style="display: none;"><span class="formSpan" id="ysdxtzf"></span></td>
+	        			<td><span class="formSpan" id="ysqt"></span></td>
+	        			<td><font color="red" id="yshj"></font></td>
+	        		</tr>
+	        		<tr class="yellowTr">
+	        			<td>应付费用</td>
+	        			<td><span class="formSpan" id="yfyf"></span></td>
+	        			<td  style="display: none;"><span class="formSpan" id="yfbxf"></span></td>
+	        			<td><span class="formSpan" id="yfthf"></span></td>
+	        			<td><span class="formSpan" id="yfshf"></span></td>
+	        			<td><span class="formSpan" id="yfbzf"></span></td>
+	        			<td  style="display: none;"><span class="formSpan" id="yfryfjf"></span></td>
+	        			<td  style="display: none;"><span class="formSpan" id="yfdxtzf"></span></td>
+	        			<td><span class="formSpan" id="yfqt"></span></td>
+	        			<td><font color="red" id="yfhj"></font></td>
+	        		</tr>
+	        	</table>
+	        	<div style="padding:10px 0 10px 0;"><b class="ft-18">运单详情</b></div>
+	        	<div class="fgxDiv" style="margin-bottom: 15px;"></div>
+	        	<table class="formTable" width="100%">
+	        		<tr>
+	        			<td width="25%" class="jgTd">运单号：<a id="ydh" href=""></a></td>
+	        			<td width="25%" class="jgTd" id="khdh">客户单号：</td>
+	        			<td width="20%" class="rightTd jgTd" id="tyrq">托运日期：</td>
+	        			<td width="30%" class="rightTd jgTd" id="fbs">分派分包商：</td>
+	        		</tr>
+	        		<tr><td colspan="4" style="height: 5px"></td></tr>
+	        		<tr>
+	        			<td colspan="4" class="titleTd"><b class="ft-14">发货方信息</b></td>
+	        		</tr>
+	        		<tr><td colspan="4" class="jgTd"></td></tr>
+	        		<tr>
+	        			<td><span class="formSpan">发货方：</span><span class="formSpan" id="fhf"></span></td>
+	        			<td><span class="formSpan">发货联系人：</span><span class="formSpan" id="fhlxr"></span></td>
+	        			<td><span class="formSpan">联系电话：</span><span class="formSpan" id="fhlxdh"></span></td>
+	        			<td><span class="formSpan">手机：</span><span class="formSpan" id="fhsj"></span></td>
+	        		</tr>
+	        		<tr>
+	        			<td><span class="formSpan">发货地：</span><span class="formSpan" id="fhd"></span></td>
+	        			<td><span class="formSpan">详细地址：</span><span class="formSpan" id="fhxxdz"></span></td>
+	        			<td><span class="formSpan">距离：</span><span class="formSpan" id="jl"></span></td>
+	        			<td><span class="formSpan" style="display: none;">要求装货时间：</span><span class="formSpan" id="fhyqzhsj"></span></td>
+	        		</tr>
+	        		<tr><td colspan="4" class="jgTd"></td></tr>
+	        		<tr>
+	        			<td colspan="4" class="titleTd"><b class="ft-14">收货方信息</b></td>
+	        		</tr>
+	        		<tr><td colspan="4" class="jgTd"></td></tr>
+	        		<tr>
+	        			<td><span class="formSpan">收货方：</span><span class="formSpan" id="shf"></span></td>
+	        			<td><span class="formSpan">收货联系人：</span><span class="formSpan" id="shlxr"></span></td>
+	        			<td><span class="formSpan">联系电话：</span><span class="formSpan" id="shlxdh"></span></td>
+	        			<td><span class="formSpan">手机：</span><span class="formSpan" id="shsj"></span></td>
+	        		</tr>
+	        		<tr>
+	        			<td><span class="formSpan">收货地：</span><span class="formSpan" id="shd"></span></td>
+	        			<td><span class="formSpan">详细地址：</span><span class="formSpan" id="shxxdz"></span></td>
+	        			<td><span class="formSpan" style="display: none;">要求装货时间：</span><span class="formSpan" id="shyqzhsj"></span></td>
+	        			<td></td>
+	        		</tr>
+	        		<tr><td colspan="4" class="jgTd"></td></tr>
+	        		<tr>
+	        			<td colspan="4" class="titleTd"><b class="ft-14">服务信息</b></td>
+	        		</tr>
+	        		<tr><td colspan="4" class="jgTd"></td></tr>
+	        		<tr>
+	        			<td><span class="formSpan">结算方式：</span><span class="formSpan" id="jsfs"></span></td>
+	        			<td><span class="formSpan">收货方式：</span><span class="formSpan" id="shfs"></span></td>
+	        			<td><span class="formSpan">到货方式：</span><span class="formSpan" id="dhfs"></span></td>
+	        			<td><span class="formSpan">回单方式：</span><span class="formSpan" id="hdfs"></span></td>
+	        		</tr>
+	        		<tr>
+	        			<td><span class="formSpan">回单张数：</span><span class="formSpan" id="hdzs"></span></td>
+	        			<td></td>
+	        			<td></td>
+	        			<td></td>
+	        	    </tr>
+	        	    <!-- <tr>
+	        			<td colspan="4" class="titleTd"><b class="ft-14">货物信息</b></td>
+	        		</tr> -->
+	        	</table>
+	        	<table id="hgrid" cellspacing="0"></table>
+	        	<div class="btnDiv"><button class="btn-orange-big fn-noborder fn-cWhite ft-blod" onclick="javascript:window.close()">关闭</button></div>
+	       	</div>
+  		</div>
+  </body>
+</html>

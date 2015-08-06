@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+<typeAlias alias="DriverBusinessLineInfo" type="com.cy.dcts.common.bo.DriverBusinessLineInfo"/>
+<typeAlias alias="DriverBusinessLineInfoDomain" type="com.cy.dcts.common.domain.DriverBusinessLineInfoDomain"/>
+<resultMap class="DriverBusinessLineInfo" id="user_driver_info_result">
+  <result property="id" column="ID"/>
+  <result property="driverId" column="DRIVER_ID"/>
+  <result property="startTime" column="START_TIME"/>
+  <result property="endTime" column="END_TIME"/>
+  <result property="startProvince" column="START_PROVINCE"/>
+  <result property="startCity" column="START_CITY"/>
+  <result property="startCounty" column="START_COUNTY"/>
+  <result property="endProvince" column="END_PROVINCE"/>
+  <result property="endCity" column="END_CITY"/>
+  <result property="endCounty" column="END_COUNTY"/>
+  <result property="quoteFair" column="QUOTE_FAIR"/>
+  <result property="quoteType" column="QUOTE_TYPE"/>
+  <result property="start" column="START"/>
+  <result property="createTime" column="CREATE_TIME"/>
+  <result property="modifyTime" column="MODIFY_TIME"/>
+</resultMap>
+
+<resultMap class="DriverBusinessLineInfoDomain" id="user_driver_info_domain_result">
+  <result property="id" column="ID"/>
+  <result property="driverId" column="DRIVER_ID"/>
+  <result property="startTime" column="START_TIME"/>
+  <result property="endTime" column="END_TIME"/>
+  <result property="startProvince" column="START_PROVINCE"/>
+  <result property="startCity" column="START_CITY"/>
+  <result property="startCounty" column="START_COUNTY"/>
+  <result property="endProvince" column="END_PROVINCE"/>
+  <result property="endCity" column="END_CITY"/>
+  <result property="endCounty" column="END_COUNTY"/>
+  <result property="code" column="CODE"/><!-- 司机号码 -->
+  <result property="carNumber" column="CAR_NUMBER"/><!-- 车辆牌照 -->
+  <result property="carLength" column="CAR_LENGTH"/><!-- 车辆长 -->
+  <result property="carWeight" column="CAR_WEIGHT"/><!-- 车辆运力吨位 -->
+  <result property="carCubage" column="CAR_CUBAGE"/><!-- 车辆运力体积 -->
+  <result property="carPlateType" column="CAR_PLATE_TYPE"/><!-- 板-平板、高低板 -->
+  <result property="carBarType" column="CAR_BAR_TYPE"/><!-- 栏-高栏、低栏 -->
+  <result property="auditFlag" column="AUDIT_FLAG"/><!-- 审核标志（0:审核中,1:审核通过,-1审核未通过）-->
+  <result property="freezeFlag" column="FREEZE_FLAG"/><!-- 冻结标志（0:正常，1:冻结)-->
+  <result property="deleteFlag" column="DELETE_FLAG"/><!-- 删除标志（1:已删除,0:未删除） -->
+  <result property="carTypes" column="CAR_TYPES"/><!-- 车辆类型 -->
+  <result property="startBusinessLine" column="startBusinessLine"/><!-- 起始预约线路 -->
+  <result property="endBusinessLine" column="endBusinessLine"/><!-- 目的预约线路 -->
+</resultMap>
+
+<!-- 根据driverId查询多条预约线路 -->
+<resultMap class="DriverBusinessLineInfoDomain" id="user_driver_info_domain_List_result">
+  <result property="id" column="ID"/>
+  <result property="driverId" column="DRIVER_ID"/>
+  <result property="startTime" column="START_TIME"/>
+  <result property="endTime" column="END_TIME"/>
+  <result property="startProvince" column="START_PROVINCE"/>
+  <result property="startCity" column="START_CITY"/>
+  <result property="startCounty" column="START_COUNTY"/>
+  <result property="endProvince" column="END_PROVINCE"/>
+  <result property="endCity" column="END_CITY"/>
+  <result property="endCounty" column="END_COUNTY"/>
+  <result property="quoteFair" column="QUOTE_FAIR"/>
+  <result property="quoteType" column="QUOTE_TYPE"/>
+  <result property="start" column="START"/>
+</resultMap>
+
+	<!-- 查询首页有效的预约车源 -->
+	<select id="query_driver_business_line_info_domain_by_driverId" parameterClass="String" resultMap="user_driver_info_domain_List_result">
+		select 
+		t.id,
+		t.driver_id,
+		t.start_province,
+		t.start_city,
+		t.start_county,
+		t.end_province,
+		t.end_city,
+		t.end_county,
+		t.QUOTE_FAIR,
+		t.QUOTE_TYPE,
+		t.START,
+		date_format(t.start_time,'%Y-%m-%d') as start_time,
+		date_format(t.end_time,'%Y-%m-%d') as end_time 
+		from 
+		t_driver_business_line_info t
+		where t.START = 0 and 
+		t.driver_id = #driverId#
+		and 
+		date_format(t.END_TIME,'%Y-%m-%d') <![CDATA[>=]]> date_format(SYSDATE(),'%Y-%m-%d')
+		order by t.start_time DESC
+	</select>
+
+	<!-- 查询首页有效的预约车源 -->
+	<select id="query_driver_business_line_info_domain" parameterClass="java.util.HashMap" resultMap="user_driver_info_domain_result">
+		select 
+		t.id,t.driver_id,t.start_province,
+		t.start_city,t.start_county,t.end_province,
+		t.end_city,t.end_county,b.AUDIT_FLAG,b.FREEZE_FLAG,b.DELETE_FLAG,
+		date_format(t.start_time,'%Y/%m/%d') as start_time,
+		date_format(t.end_time,'%Y/%m/%d') as end_time,
+		b.car_number,b.CAR_BAR_TYPE,
+		b.CAR_CUBAGE,b.CAR_LENGTH,b.CAR_PLATE_TYPE,b.CAR_WEIGHT,b.code,b.CAR_TYPES,
+		Concat(t.start_province,CASE WHEN t.start_city is NULL then '' else t.start_city END) as startBusinessLine,
+		Concat(t.end_province,CASE WHEN t.end_city is NULL then '' else t.end_city END) as endBusinessLine
+		from
+		t_driver_business_line_info t LEFT JOIN t_driver_user_info b
+		on 
+		t.driver_id=b.id 
+		where
+		date_format(t.END_TIME,'%Y-%m-%d') <![CDATA[>=]]> date_format(SYSDATE(),'%Y-%m-%d')
+		<dynamic prepend="and ">
+			<isNotEmpty property="start" prepend="and ">t.START = #start#</isNotEmpty>
+			<isNotEmpty property="code" prepend="and ">b.CODE = #code#</isNotEmpty>
+			<isNotEmpty property="carNumber" prepend="and ">b.CAR_NUMBER = #carNumber#</isNotEmpty>
+			<isNotEmpty property="auditFlag" prepend="and ">b.AUDIT_FLAG = #auditFlag#</isNotEmpty>
+			<isNotEmpty property="freezeFlag" prepend="and ">b.FREEZE_FLAG = #freezeFlag#</isNotEmpty>
+			<isNotEmpty property="deleteFlag" prepend="and ">b.DELETE_FLAG = #deleteFlag#</isNotEmpty>
+			<isNotEmpty property="startTime" prepend="and ">
+			date_format(t.START_TIME,'%Y-%m-%d') <![CDATA[<=]]> date_format(#startTime#,'%Y-%m-%d') 
+			and
+			date_format(t.END_TIME,'%Y-%m-%d') <![CDATA[>=]]> date_format(#startTime#,'%Y-%m-%d') 
+			</isNotEmpty>
+			<isNotEmpty property="startProvince" prepend="and ">t.START_PROVINCE = #startProvince#</isNotEmpty>
+			<isNotEmpty property="startCity" prepend="and ">t.START_CITY = #startCity#</isNotEmpty>
+			<isNotEmpty property="startCounty" prepend="and ">t.START_COUNTY = #startCounty#</isNotEmpty>
+			<isNotEmpty property="endProvince" prepend="and ">t.END_PROVINCE = #endProvince#</isNotEmpty>
+			<isNotEmpty property="endCity" prepend="and ">t.END_CITY = #endCity#</isNotEmpty>
+			<isNotEmpty property="endCounty" prepend="and ">t.END_COUNTY = #endCounty#</isNotEmpty>
+			<isNotEmpty property="carLength" prepend="and ">b.CAR_LENGTH = #carLength#</isNotEmpty>
+			<isNotEmpty property="carPlateType" prepend="and ">b.CAR_PLATE_TYPE = #carPlateType#</isNotEmpty>
+			<isNotEmpty property="carBarType" prepend="and ">b.CAR_BAR_TYPE = #carBarType#</isNotEmpty>
+			<isNotEmpty property="carWeight" prepend="and ">b.CAR_WEIGHT = #carWeight#</isNotEmpty><!-- 车辆运力吨位 -->
+			<isNotEmpty property="carCubage" prepend="and ">b.CAR_CUBAGE = #carCubage#</isNotEmpty><!-- 车辆运力体积 -->
+		</dynamic>
+		order by t.start_time DESC
+	</select>
+	
+	
+	<!-- 预约车源查询分页 -->
+	<select id="query_driver_business_line_info_domain_byPage" parameterClass="java.util.HashMap" resultMap="user_driver_info_domain_result">
+		select 
+		t.id,t.driver_id,t.start_province,t.start_city,
+		t.start_county,t.end_province,
+		t.end_city,t.end_county,b.AUDIT_FLAG,b.FREEZE_FLAG,b.DELETE_FLAG,
+		date_format(t.start_time,'%Y/%m/%d') as start_time,
+		date_format(t.end_time,'%Y/%m/%d') as end_time,
+		b.car_number,b.CAR_BAR_TYPE,
+		b.CAR_CUBAGE,b.CAR_LENGTH,b.CAR_PLATE_TYPE,b.CAR_WEIGHT,b.code,b.CAR_TYPES,
+		Concat(t.start_province,CASE WHEN t.start_city is NULL then '' else t.start_city END) as startBusinessLine,
+		Concat(t.end_province,CASE WHEN t.end_city is NULL then '' else t.end_city END) as endBusinessLine
+		from
+		t_driver_business_line_info t LEFT JOIN t_driver_user_info b
+		on 
+		t.driver_id=b.id 
+		where
+		date_format(t.END_TIME,'%Y-%m-%d') <![CDATA[>=]]> date_format(SYSDATE(),'%Y-%m-%d')
+		<dynamic prepend="and ">
+			<isNotEmpty property="start" prepend="and ">t.START = #start#</isNotEmpty>
+			<isNotEmpty property="code" prepend="and ">b.CODE = #code#</isNotEmpty>
+			<isNotEmpty property="carNumber" prepend="and ">b.CAR_NUMBER = #carNumber#</isNotEmpty>
+			<isNotEmpty property="auditFlag" prepend="and ">b.AUDIT_FLAG = #auditFlag#</isNotEmpty>
+			<isNotEmpty property="freezeFlag" prepend="and ">b.FREEZE_FLAG = #freezeFlag#</isNotEmpty>
+			<isNotEmpty property="deleteFlag" prepend="and ">b.DELETE_FLAG = #deleteFlag#</isNotEmpty>
+			<isNotEmpty property="startTime" prepend="and ">
+			date_format(t.START_TIME,'%Y-%m-%d') <![CDATA[<=]]> date_format(#startTime#,'%Y-%m-%d') 
+			and
+			date_format(t.END_TIME,'%Y-%m-%d') <![CDATA[>=]]> date_format(#startTime#,'%Y-%m-%d') 
+			</isNotEmpty>
+			<isNotEmpty property="startProvince" prepend="and ">t.START_PROVINCE = #startProvince#</isNotEmpty>
+			<isNotEmpty property="startCity" prepend="and ">t.START_CITY = #startCity#</isNotEmpty>
+			<isNotEmpty property="startCounty" prepend="and ">t.START_COUNTY = #startCounty#</isNotEmpty>
+			<isNotEmpty property="endProvince" prepend="and ">t.END_PROVINCE = #endProvince#</isNotEmpty>
+			<isNotEmpty property="endCity" prepend="and ">t.END_CITY = #endCity#</isNotEmpty>
+			<isNotEmpty property="endCounty" prepend="and ">t.END_COUNTY = #endCounty#</isNotEmpty>
+			<isNotEmpty property="carLength" prepend="and ">b.CAR_LENGTH = #carLength#</isNotEmpty>
+			<isNotEmpty property="carPlateType" prepend="and ">b.CAR_PLATE_TYPE = #carPlateType#</isNotEmpty>
+			<isNotEmpty property="carBarType" prepend="and ">b.CAR_BAR_TYPE = #carBarType#</isNotEmpty>
+			<isNotEmpty property="carWeight" prepend="and ">b.CAR_WEIGHT = #carWeight#</isNotEmpty><!-- 车辆运力吨位 -->
+			<isNotEmpty property="carCubage" prepend="and ">b.CAR_CUBAGE = #carCubage#</isNotEmpty><!-- 车辆运力体积 -->
+		</dynamic>
+		order by t.start_time DESC LIMIT $curPage$,$pageSize$
+	</select>
+
+	<!-- 预约车源总数量 -->
+	<select id="query_driver_business_line_info_domain_byPage_count" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+			select COUNT(t.id) from 
+			t_driver_business_line_info t LEFT JOIN t_driver_user_info b
+			on 
+			t.driver_id=b.id 
+			where
+			date_format(t.END_TIME,'%Y-%m-%d') <![CDATA[>=]]> date_format(SYSDATE(),'%Y-%m-%d')
+			<dynamic prepend="and ">
+				<isNotEmpty property="start" prepend="and ">t.START = #start#</isNotEmpty>
+				<isNotEmpty property="code" prepend="and ">b.CODE = #code#</isNotEmpty>
+				<isNotEmpty property="carNumber" prepend="and ">b.CAR_NUMBER = #carNumber#</isNotEmpty>
+				<isNotEmpty property="auditFlag" prepend="and ">b.AUDIT_FLAG = #auditFlag#</isNotEmpty>
+				<isNotEmpty property="freezeFlag" prepend="and ">b.FREEZE_FLAG = #freezeFlag#</isNotEmpty>
+				<isNotEmpty property="deleteFlag" prepend="and ">b.DELETE_FLAG = #deleteFlag#</isNotEmpty>
+				<isNotEmpty property="startTime" prepend="and ">
+				date_format(t.START_TIME,'%Y-%m-%d') <![CDATA[<=]]> date_format(#startTime#,'%Y-%m-%d') 
+				and
+				date_format(t.END_TIME,'%Y-%m-%d') <![CDATA[>=]]> date_format(#startTime#,'%Y-%m-%d') 
+				</isNotEmpty>
+				<isNotEmpty property="startProvince" prepend="and ">t.START_PROVINCE = #startProvince#</isNotEmpty>
+				<isNotEmpty property="startCity" prepend="and ">t.START_CITY = #startCity#</isNotEmpty>
+				<isNotEmpty property="startCounty" prepend="and ">t.START_COUNTY = #startCounty#</isNotEmpty>
+				<isNotEmpty property="endProvince" prepend="and ">t.END_PROVINCE = #endProvince#</isNotEmpty>
+				<isNotEmpty property="endCity" prepend="and ">t.END_CITY = #endCity#</isNotEmpty>
+				<isNotEmpty property="endCounty" prepend="and ">t.END_COUNTY = #endCounty#</isNotEmpty>
+				<isNotEmpty property="carLength" prepend="and ">b.CAR_LENGTH = #carLength#</isNotEmpty>
+				<isNotEmpty property="carPlateType" prepend="and ">b.CAR_PLATE_TYPE = #carPlateType#</isNotEmpty>
+				<isNotEmpty property="carBarType" prepend="and ">b.CAR_BAR_TYPE = #carBarType#</isNotEmpty>
+				<isNotEmpty property="carWeight" prepend="and ">b.CAR_WEIGHT = #carWeight#</isNotEmpty><!-- 车辆运力吨位 -->
+				<isNotEmpty property="carCubage" prepend="and ">b.CAR_CUBAGE = #carCubage#</isNotEmpty><!-- 车辆运力体积 -->
+			</dynamic>
+	</select>
+
+</sqlMap>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.jcgl.dao.BusJcKhShMxMapper">
+
+	<parameterMap class="java.util.Map" id="khShMxMap">
+		<parameter property="jgbm" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="kh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="rqq" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="rqz" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="dataList" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" resultMap="khShMxResMap"/>
+	</parameterMap>
+	
+	<resultMap class="com.cy.jcgl.domain.JcKhShMxDomain" id="khShMxResMap">
+		<result property="ddbh" column="DDBH"/>
+		<result property="xdrq" column="XDRQ"/>
+		<result property="hwMc" column="HWMC"/>
+		<result property="sl" column="SL"/>
+		<result property="zl" column="ZL"/>
+		<result property="tj" column="TJ"/>
+		<result property="xj" column="XJ"/>
+		<result property="xf" column="XF"/>
+		<result property="df" column="DF"/>
+		<result property="hf" column="HF"/>
+		<result property="sfd" column="SFD"/>
+		<result property="mdd" column="MDD"/>
+	</resultMap>
+
+	<procedure id="queryKhShMxList" parameterMap="khShMxMap" resultMap="khShMxResMap">
+		{call P_JCGL_JYQK_SHMX(?,?,?,?,?)}
+	</procedure>
+	
+	<select id="selectQyZzGjMcByJgbm" parameterClass="java.util.Map" resultClass="string">
+		select jc from qy_zzjg jgMc where jgbm=#jgbm#
+	</select>
+</sqlMap>

@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<typeAlias alias="orderCargoInfoDomain" type="com.cy.dctms.common.domain.OrderCargoInfoDomain"/>
+	
+	
+	<resultMap class="orderCargoInfoDomain" id="orderCargo_info_domain_result">
+		<result property="id" column="ID"/>
+		<result property="cargoName" column="cargo_name"/>
+		<result property="cargoType" column="cargo_type"/>
+		<result property="cargoWeight" column="cargo_weight"/>
+		<result property="cargoCubage" column="cargo_cubage"/>
+		<result property="requestCarLength" column="request_car_length"/>
+		<result property="requestCarPlateType" column="request_car_plate_type"/>
+		<result property="requestCarBarType" column="request_car_bar_type"/>
+		<result property="freight" column="freight"/>
+		<result property="requestStartTime" column="request_start_time"/>
+		<result property="requestEndTime" column="request_end_time"/>
+		<result property="startProvince" column="start_province"/>
+		<result property="startCity" column="start_city"/>
+		<result property="startCounty" column="start_county"/>
+		<result property="startTown" column="start_town"/>
+		<result property="endProvince" column="end_province"/>
+		<result property="endCity" column="end_city"/>
+		<result property="endCounty" column="end_county"/>
+		<result property="endTown" column="end_town"/>
+		<result property="contactName" column="contact_name"/>
+		<result property="contactMobilephone" column="contact_mobilephone"/>
+		<result property="contactTelephone" column="contact_telephone"/>
+		<result property="remark" column="remark"/>
+		<result property="deletedFlag" column="deleted_flag"/>
+		<result property="deployUserid" column="deploy_userid"/>
+		<result property="modifyUserid" column="modify_userid"/>
+		<result property="companyId" column="company_id"/>
+		<result property="cargoFlag" column="cargo_flag"/>
+		<result property="cargoFlagTime" column="cargo_flag_time"/>
+		<result property="createTime" column="create_time" />
+		<result property="modifyTime" column="modify_time" />
+	</resultMap>
+	
+	<select id="query_orderCargo_info_count"  resultClass="Integer">
+		select count(t.id)
+		  from t_order_cargo_info t
+		  where  t.deleted_flag = 0
+		  <isNotEmpty prepend="and" property="id">   
+                t.id  = #id#   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="cargoName">   
+                t.cargo_name like concat('%', #cargoName# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="cargoType">   
+                t.cargo_type like concat('%', #cargoType# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="cargoWeight">   
+                t.cargo_weight like concat('%', #cargoWeight# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="cargoCubage">   
+                t.cargo_cubage like concat('%', #cargoCubage# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="requestCarLength">   
+                t.request_car_length like concat('%', #requestCarLength# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="requestCarPlateType">   
+                t.request_car_plate_type like concat('%', #requestCarPlateType# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="requestCarBarType">   
+                t.request_car_bar_type like concat('%', #requestCarBarType# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="freight">   
+                t.freight like concat('%', #freight# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="requestStartTime">   
+                t.request_start_time like concat('%', #requestStartTime# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="requestEndTime">   
+                t.request_end_time like concat('%', #requestEndTime# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="startProvince">   
+                t.start_province like concat('%', #startProvince# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="startCity">   
+                t.start_city like concat('%', #startCity# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="startCounty">   
+                t.start_county like concat('%', #startCounty# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="startTown">   
+                t.start_town like concat('%', #startTown# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="endProvince">   
+                t.end_province like concat('%', #endProvince# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="endCity">   
+                t.end_city like concat('%', #endCity# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="endCounty">   
+                t.end_county like concat('%', #endCounty# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="endTown">   
+                t.end_town like concat('%', #endTown# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="contactName">   
+                t.contact_name like concat('%', #contactName# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="contactMobilephone">   
+                t.contact_mobilephone like concat('%', #contactMobilephone# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="contactTelephone">   
+                t.contact_telephone like concat('%', #contactTelephone# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="remark">   
+                t.remark like concat('%', #remark# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="deletedFlag">   
+                t.deleted_flag like concat('%', #deletedFlag# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="deployUserid">   
+                t.deploy_userid = #deployUserid# 
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="modifyUserid">   
+                t.modify_userid like concat('%', #modifyUserid# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="companyId">   
+                t.company_id like concat('%', #companyId# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="cargoFlag">   
+                t.cargo_flag like concat('%', #cargoFlag# ,'%')   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="cargoFlagTime">   
+                t.cargo_flag_time like concat('%', #cargoFlagTime# ,'%')   
+         </isNotEmpty>	
+	</select>
+	
+	<select id="query_orderCargo_info_by_page" parameterClass="java.util.Map" resultMap="orderCargo_info_domain_result">
+		select t.id,
+		       t.cargo_name,
+		       t.cargo_type,
+		       t.cargo_weight,
+		       t.cargo_cubage,
+		       t.request_car_length,
+		       t.request_car_plate_type,
+		       t.request_car_bar_type,
+		       t.freight,
+		       t.request_start_time,
+		       t.request_end_time,
+		       t.start_province,
+		       t.start_city,
+		       t.start_county,
+		       t.start_town,
+		       t.end_province,
+		       t.end_city,
+		       t.end_county,
+		       t.end_town,
+		       t.contact_name,
+		       t.contact_mobilephone,
+		       t.contact_telephone,
+		       t.remark,
+		       t.deleted_flag,
+		       t.deploy_userid,
+		       t.modify_userid,
+		       t.company_id,
+		       t.cargo_flag,
+		       t.cargo_flag_time,
+		       t.create_time,
+		       t.modify_time
+		  from t_order_cargo_info t
+		  where  t.deleted_flag = 0
+		    <isNotEmpty prepend="and" property="id">   
+                t.id  = #id#   
+         </isNotEmpty>	
+		  <isNotEmpty prepend="and" property="cargoName">   
+                t.cargo_name like concat('%', #cargoName# ,'%')   
+         </isNotEmpty>
+		   <isNotEmpty prepend="and" property="cargoType">   
+                t.cargo_type like concat('%', #cargoType# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="cargoWeight">   
+                t.cargo_weight like concat('%', #cargoWeight# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="cargoCubage">   
+                t.cargo_cubage like concat('%', #cargoCubage# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="requestCarLength">   
+                t.request_car_length like concat('%', #requestCarLength# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="requestCarPlateType">   
+                t.request_car_plate_type like concat('%', #requestCarPlateType# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="requestCarBarType">   
+                t.request_car_bar_type like concat('%', #requestCarBarType# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="freight">   
+                t.freight like concat('%', #freight# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="requestStartTime">   
+                t.request_start_time like concat('%', #requestStartTime# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="requestEndTime">   
+                t.request_end_time like concat('%', #requestEndTime# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="startProvince">   
+                t.start_province like concat('%', #startProvince# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="startCity">   
+                t.start_city like concat('%', #startCity# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="startCounty">   
+                t.start_county like concat('%', #startCounty# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="startTown">   
+                t.start_town like concat('%', #startTown# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="endProvince">   
+                t.end_province like concat('%', #endProvince# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="endCity">   
+                t.end_city like concat('%', #endCity# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="endCounty">   
+                t.end_county like concat('%', #endCounty# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="endTown">   
+                t.end_town like concat('%', #endTown# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="contactName">   
+                t.contact_name like concat('%', #contactName# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="contactMobilephone">   
+                t.contact_mobilephone like concat('%', #contactMobilephone# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="contactTelephone">   
+                t.contact_telephone like concat('%', #contactTelephone# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="remark">   
+                t.remark like concat('%', #remark# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="deletedFlag">   
+                t.deleted_flag like concat('%', #deletedFlag# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="deployUserid">   
+                 t.deploy_userid = #deployUserid#   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="modifyUserid">   
+                t.modify_userid like concat('%', #modifyUserid# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="companyId">   
+                t.company_id like concat('%', #companyId# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="cargoFlag">   
+                t.cargo_flag like concat('%', #cargoFlag# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="cargoFlagTime">   
+                t.cargo_flag_time like concat('%', #cargoFlagTime# ,'%')   
+         </isNotEmpty>	
+         order by t.id desc
+		  limit  #start#,#pageSize#
+	</select>
+	
+	<select id="export_orderCargo_info" parameterClass="java.util.Map" resultMap="orderCargo_info_domain_result">
+		select t.id,
+		       t.cargo_name,
+		       t.cargo_type,
+		       t.cargo_weight,
+		       t.cargo_cubage,
+		       t.request_car_length,
+		       t.request_car_plate_type,
+		       t.request_car_bar_type,
+		       t.freight,
+		       t.request_start_time,
+		       t.request_end_time,
+		       t.start_province,
+		       t.start_city,
+		       t.start_county,
+		       t.start_town,
+		       t.end_province,
+		       t.end_city,
+		       t.end_county,
+		       t.end_town,
+		       t.contact_name,
+		       t.contact_mobilephone,
+		       t.contact_telephone,
+		       t.remark,
+		       t.deleted_flag,
+		       t.deploy_userid,
+		       t.modify_userid,
+		       t.company_id,
+		       t.cargo_flag,
+		       t.cargo_flag_time,
+		       t.create_time,
+		       t.modify_time
+		  from t_order_cargo_info t
+		  where  t.deleted_flag = 0
+		   <isNotEmpty prepend="and" property="id">   
+                t.id  = #id#   
+         </isNotEmpty>
+		   <isNotEmpty prepend="and" property="cargoName">   
+                t.cargo_name like concat('%', #cargoName# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="cargoType">   
+                t.cargo_type like concat('%', #cargoType# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="cargoWeight">   
+                t.cargo_weight like concat('%', #cargoWeight# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="cargoCubage">   
+                t.cargo_cubage like concat('%', #cargoCubage# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="requestCarLength">   
+                t.request_car_length like concat('%', #requestCarLength# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="requestCarPlateType">   
+                t.request_car_plate_type like concat('%', #requestCarPlateType# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="requestCarBarType">   
+                t.request_car_bar_type like concat('%', #requestCarBarType# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="freight">   
+                t.freight like concat('%', #freight# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="requestStartTime">   
+                t.request_start_time like concat('%', #requestStartTime# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="requestEndTime">   
+                t.request_end_time like concat('%', #requestEndTime# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="startProvince">   
+                t.start_province like concat('%', #startProvince# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="startCity">   
+                t.start_city like concat('%', #startCity# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="startCounty">   
+                t.start_county like concat('%', #startCounty# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="startTown">   
+                t.start_town like concat('%', #startTown# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="endProvince">   
+                t.end_province like concat('%', #endProvince# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="endCity">   
+                t.end_city like concat('%', #endCity# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="endCounty">   
+                t.end_county like concat('%', #endCounty# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="endTown">   
+                t.end_town like concat('%', #endTown# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="contactName">   
+                t.contact_name like concat('%', #contactName# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="contactMobilephone">   
+                t.contact_mobilephone like concat('%', #contactMobilephone# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="contactTelephone">   
+                t.contact_telephone like concat('%', #contactTelephone# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="remark">   
+                t.remark like concat('%', #remark# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="deletedFlag">   
+                t.deleted_flag like concat('%', #deletedFlag# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="deployUserid">   
+                 t.deploy_userid = #deployUserid# 
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="modifyUserid">   
+                t.modify_userid like concat('%', #modifyUserid# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="companyId">   
+                t.company_id like concat('%', #companyId# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="cargoFlag">   
+                t.cargo_flag like concat('%', #cargoFlag# ,'%')   
+         </isNotEmpty>	
+		   <isNotEmpty prepend="and" property="cargoFlagTime">   
+                t.cargo_flag_time like concat('%', #cargoFlagTime# ,'%')   
+         </isNotEmpty>	
+         order by t.id desc
+	</select>
+	
+	<select id="query_orderCargo_info_by_id" parameterClass="String" resultMap="orderCargo_info_domain_result">
+		select t.id,
+		       t.cargo_name,
+		       t.cargo_type,
+		       t.cargo_weight,
+		       t.cargo_cubage,
+		       t.request_car_length,
+		       t.request_car_plate_type,
+		       t.request_car_bar_type,
+		       t.freight,
+		       t.request_start_time,
+		       t.request_end_time,
+		       t.start_province,
+		       t.start_city,
+		       t.start_county,
+		       t.start_town,
+		       t.end_province,
+		       t.end_city,
+		       t.end_county,
+		       t.end_town,
+		       t.contact_name,
+		       t.contact_mobilephone,
+		       t.contact_telephone,
+		       t.remark,
+		       t.deleted_flag,
+		       t.deploy_userid,
+		       t.modify_userid,
+		       t.company_id,
+		       t.cargo_flag,
+		       t.cargo_flag_time,
+		       t.create_time,
+		       t.modify_time
+		  from t_order_cargo_info t
+		  where id = #id# and t.deleted_flag = 0
+	</select>
+	
+	<insert id="add_orderCargo_info" parameterClass="com.cy.dctms.common.bo.OrderCargoInfo">
+		insert into t_order_cargo_info (
+			cargo_name,
+			cargo_type,
+			cargo_weight,
+			cargo_cubage,
+			request_car_length,
+			request_car_plate_type,
+			request_car_bar_type,
+			freight,
+			request_start_time,
+			request_end_time,
+			start_province,
+			start_city,
+			start_county,
+			start_town,
+			end_province,
+			end_city,
+			end_county,
+			end_town,
+			contact_name,
+			contact_mobilephone,
+			contact_telephone,
+			remark,
+			deploy_userid,
+			modify_userid,
+			company_id,
+			cargo_flag,
+			cargo_flag_time,
+			create_time,
+			deleted_flag
+		) values(
+			#cargoName#,
+			#cargoType#,
+			#cargoWeight#,
+			#cargoCubage#,
+			#requestCarLength#,
+			#requestCarPlateType#,
+			#requestCarBarType#,
+			#freight#,
+			#requestStartTime#,
+			#requestEndTime#,
+			#startProvince#,
+			#startCity#,
+			#startCounty#,
+			#startTown#,
+			#endProvince#,
+			#endCity#,
+			#endCounty#,
+			#endTown#,
+			#contactName#,
+			#contactMobilephone#,
+			#contactTelephone#,
+			#remark#,
+			#deployUserid#,
+			#modifyUserid#,
+			#companyId#,
+			#cargoFlag#,
+			#cargoFlagTime#,
+			now(),
+			0
+		)
+		<selectKey resultClass="Long" keyProperty="id"> 
+			select last_insert_id() as ID from t_order_cargo_info limit 1 
+		</selectKey> 
+	
+	</insert>
+	
+	<!-- 保存司机评论信息 -->
+	<update id="modify_orderCargo_info" parameterClass="com.cy.dctms.common.bo.OrderCargoInfo">
+		update t_order_cargo_info t
+		   set 
+		   	t.cargo_name = #cargoName#,
+		   	t.cargo_type = #cargoType#,
+		   	t.cargo_weight = #cargoWeight#,
+		   	t.cargo_cubage = #cargoCubage#,
+		   	t.request_car_length = #requestCarLength#,
+		   	t.request_car_plate_type = #requestCarPlateType#,
+		   	t.request_car_bar_type = #requestCarBarType#,
+		   	t.freight = #freight#,
+		   	t.request_start_time = #requestStartTime#,
+		   	t.request_end_time = #requestEndTime#,
+		   	t.start_province = #startProvince#,
+		   	t.start_city = #startCity#,
+		   	t.start_county = #startCounty#,
+		   	t.start_town = #startTown#,
+		   	t.end_province = #endProvince#,
+		   	t.end_city = #endCity#,
+		   	t.end_county = #endCounty#,
+		   	t.end_town = #endTown#,
+		   	t.contact_name = #contactName#,
+		   	t.contact_mobilephone = #contactMobilephone#,
+		   	t.contact_telephone = #contactTelephone#,
+		   	t.remark = #remark#,
+		   	t.deploy_userid = #deployUserid#,
+		   	t.modify_userid = #modifyUserid#,
+		   	t.company_id = #companyId#,
+		   	t.cargo_flag = #cargoFlag#,
+		   	t.cargo_flag_time = #cargoFlagTime#,
+			t.modify_time = now()
+		 where t.id = #id#
+	</update>	
+	
+	<update id="delete_orderCargo_info_by_id" parameterClass="String">
+		update t_order_cargo_info t
+		   set
+		   	t.deleted_flag = 1,
+			t.modify_time = now()
+		 where t.id = #id#
+	</update>
+	
+</sqlMap>

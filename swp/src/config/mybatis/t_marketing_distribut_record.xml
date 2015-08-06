@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cy.swp.dao.MarketingDistributRecordDao">
+    <!--批量新增 分配时 分配给营销人员的记录 绑定-->
+    <insert id="addBachApply" parameterType="java.util.List">
+        insert into t_marketing_distribut_record
+        (customer_kind,customer_id,distributer_id,assister_id,distribut_time,customer_level,distribut_type)
+        values
+        <foreach collection="list" item="item" separator="," >
+            (
+            #{item.customerKind},#{item.customerId},#{item.distributerId}
+            ,#{item.assisterId},sysdate()
+            ,(select real_level from t_marketing_driver_info where id = #{item.customerId} limit 1)
+            ,#{item.distributType}
+            )
+        </foreach>
+    </insert>
+
+    <!--批量新增 司机资料被转移时，记录被转移人的记录 解绑-->
+    <insert id="addBachBeApply" parameterType="java.util.List">
+        insert into t_marketing_distribut_record
+        (customer_kind,customer_id,distributer_id,assister_id,distribut_time,customer_level,distribut_type)
+        values
+        <foreach collection="list" item="item" separator="," >
+            (
+            #{item.customerKind},#{item.customerId},#{item.distributerId}
+            ,(select assister_id from t_marketing_driver_info where id = #{item.customerId} limit 1)
+            ,sysdate()
+            ,(select real_level from t_marketing_driver_info where id = #{item.customerId} limit 1)
+            ,#{item.distributType}
+            )
+        </foreach>
+    </insert>
+
+    <!--批量新增 根据手机号码 营销人员导入时的记录 绑定-->
+    <insert id="addBachApplyByMphone" parameterType="java.util.List">
+        insert into t_marketing_distribut_record
+        (customer_kind,customer_id,distributer_id,assister_id,distribut_time,customer_level,distribut_type)
+        values
+        <foreach collection="list" item="item" separator="," >
+            (
+            #{item.customerKind}
+            ,(select id from t_marketing_driver_info where mobile_phone = #{item.mobilePhone} limit 1)
+            ,#{item.distributerId},#{item.assisterId},sysdate()
+            ,#{item.customerLevel}
+            ,#{item.distributType}
+            )
+        </foreach>
+    </insert>
+
+    <!--单条新增 通过手机号码 绑定-->
+    <insert id="add" parameterType="MarketingDistributRecord">
+        insert into t_marketing_distribut_record
+        (customer_kind,customer_id,distributer_id,assister_id,distribut_time,customer_level,distribut_type)
+        values
+        (
+        #{customerKind}
+        ,#{customerId}
+        ,#{distributerId},#{assisterId},sysdate()
+        ,#{customerLevel}
+        ,#{distributType}
+        )
+    </insert>
+</mapper>

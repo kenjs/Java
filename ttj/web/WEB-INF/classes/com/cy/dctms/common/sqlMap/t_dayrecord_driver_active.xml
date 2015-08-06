@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cy.dctms.dao.DaycountDriverActiveDao">
+    <insert id="insertDaycountDriverActive">
+        insert into t_dayrecord_driver_active(driver_id,record_day,initiative_links,passive_links,all_links)
+        values
+        <foreach collection="list" item="i" index="index" separator=",">
+            (#{i.driverId},date_add(curdate(), interval -1 day),#{i.initiativeLinks},#{i.passiveLinks},#{i.allLinks})
+        </foreach>
+    </insert>
+
+    <update id="updateDaycountDriverActive" parameterType="list">
+        <foreach collection="list" item="i" index="index" open="" close="" separator=";">
+            update t_dayrecord_driver_active
+            <set>
+                initiative_links = #{i.initiativeLinks},passive_links = #{i.passiveLinks},all_links = #{i.allLinks}
+            </set>
+            where DRIVER_ID = #{i.driverId}
+            and record_day = date_add(curdate(), interval -1 day)
+        </foreach>
+    </update>
+
+    <select id="selectDaycountDriverActive" parameterType="int" resultType="int">
+        select count(id) from  t_dayrecord_driver_active
+        where driver_id = #{driverId}
+        and record_day = date_add(curdate(), interval - 1 day)
+    </select>
+
+    <select id="selectDriverLastLocation" parameterType="int" resultType="int">
+        <![CDATA[
+        select count(ID) from t_location_collect_last_info
+        where LAST_TIME >= date_add(curdate(), interval - 1 day) and LAST_TIME < curdate()
+        AND DRIVER_ID = #{driverId}
+        ]]>
+    </select>
+
+    <select id="selectDriverDayInitiativeLinks" parameterType="int" resultType="int">
+        <![CDATA[
+        SELECT  COUNT(id)
+        FROM t_operation_log_info toli
+        WHERE toli.type = 1 AND (toli.OPERATION_TYPE <> 41 OR toli.OPERATION_TYPE <> 59) AND toli.USER_DRIVER_ID = #{value}
+        AND toli.CREATE_TIME >= date_add(curdate(), interval -1 day) AND toli.CREATE_TIME < curdate()
+        ]]>
+    </select>
+
+    <select id="selectDriverDayHuoyuanPushs" parameterType="int" resultType="int">
+        <![CDATA[
+            SELECT COUNT(id)
+            FROM t_operation_log_info toli1
+            WHERE toli1.type = 1 AND toli1.OPERATION_TYPE = 59
+              AND toli1.CREATE_TIME >= date_add(curdate(), interval -1 day)
+              AND toli1.CREATE_TIME < curdate()
+              AND toli1.USER_DRIVER_ID = #{value}
+        ]]>
+    </select>
+
+    <select id="selectDriverDayLocationUps" parameterType="int" resultType="int">
+        <![CDATA[
+          SELECT COUNT(id)
+          FROM t_location_collect_info tlci
+          WHERE tlci.CREATE_TIME >= date_add(curdate(), interval -1 day)
+            AND tlci.CREATE_TIME < curdate()
+            AND tlci.driver_id = #{value}
+        ]]>
+    </select>
+
+
+</mapper>

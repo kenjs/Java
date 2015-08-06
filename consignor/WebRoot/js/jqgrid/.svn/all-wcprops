@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/Project/!svn/ver/7387/consignor/trunk/consignor/WebRoot/js/jqgrid
+END
+jqGrid改动说明.txt
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/Project/!svn/ver/7387/consignor/trunk/consignor/WebRoot/js/jqgrid/jqGrid%E6%94%B9%E5%8A%A8%E8%AF%B4%E6%98%8E.txt
+END
+jquery.jqGrid.src.js
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/Project/!svn/ver/7387/consignor/trunk/consignor/WebRoot/js/jqgrid/jquery.jqGrid.src.js
+END
+jquery.jqGrid.min.js
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/Project/!svn/ver/7387/consignor/trunk/consignor/WebRoot/js/jqgrid/jquery.jqGrid.min.js
+END
+grid.locale-cn.js
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/Project/!svn/ver/7387/consignor/trunk/consignor/WebRoot/js/jqgrid/grid.locale-cn.js
+END

@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.dzgl.dao.BusDzglQyspwssplcszMapper">
+	<select id="selectQySpwsSplcszPage" parameterClass="java.util.Map"
+		resultClass="com.cy.dzgl.domain.QySpwsSplcszDomain">
+		SELECT BB.WS_DM AS wsDm,BB.WS_MC AS wsMc,BB.WS_JC AS wsJc,BB.XMFL_DJXH AS xmflDjxh,BB.XMFLMC AS xmflmc,
+	       BB.WSSPMS_DM AS wsspmsDm,(SELECT WSSPMS_MC FROM DM_WSSPMS DM WHERE DM.WSSPMS_DM = BB.WSSPMS_DM) wsspmsMc,
+	       BB.SM AS sm,
+	       BB.YWFL_DM,(SELECT YWFL_MC FROM DM_YWFL DM WHERE DM.YWFL_DM = BB.YWFL_DM) ywflMc,
+	       BB.YWHJ_DM,(SELECT YWHJ_MC FROM DM_YWHJ DM WHERE DM.YWHJ_DM = BB.YWHJ_DM) ywhjMc,
+	       BB.XMFLBZ AS xmflbz,
+	       AA.SPLC_SZXH AS splcSzxh,AA.SPLC AS splc,AA.ZSSX AS zssx,AA.GZRBZ AS gzrbz,AA.QZXSBZ AS qzxsbz,
+	       AA.SS_JGBM AS ssJgbm,
+	       (SELECT (CASE WHEN DM.JGLB_DM = '4' THEN DM.JC ELSE NULL END) FROM QY_ZZJG DM WHERE DM.JGBM = AA.SS_JGBM) ssJgmc,
+	       (SELECT (CASE WHEN DM.JGLB_DM = '4' THEN (SELECT JG.JC FROM QY_ZZJG JG WHERE JG.JGBM = DM.SJ_JGBM) ELSE DM.JC END) FROM QY_ZZJG DM WHERE DM.JGBM = AA.SS_JGBM) dwMc,
+	       AA.CJR_CZY_DJXH,(SELECT MC FROM QY_RYDJ DM WHERE DM.CZY_DJXH = AA.CJR_CZY_DJXH) cjrMc,
+	       AA.CJRQ AS cjrq,
+	       AA.XGR_CZY_DJXH,(SELECT MC FROM QY_RYDJ DM WHERE DM.CZY_DJXH = AA.XGR_CZY_DJXH) xgrMc,
+	       AA.XGRQ AS xgrq
+	  FROM (SELECT SPLC_SZXH,SS_JGBM,JBDM,WS_DM,XMFL_DJXH,SPLC,ZSSX,GZRBZ,QZXSBZ,CJR_CZY_DJXH,CJRQ,XGR_CZY_DJXH,XGRQ
+	          FROM (SELECT A.SPLC_SZXH,A.SS_JGBM,B.JBDM,A.WS_DM,NVL(A.XMFL_DJXH,0) XMFL_DJXH,A.SPLC,A.ZSSX,A.GZRBZ,A.QZXSBZ,
+	                       A.CJR_CZY_DJXH,A.CJRQ,A.XGR_CZY_DJXH,A.XGRQ,
+	                       ROW_NUMBER() OVER(PARTITION BY A.WS_DM,A.XMFL_DJXH ORDER BY B.JBDM DESC) RN
+	                FROM QY_SPWS_SPLCSZ A,QY_ZZJG B,QY_ZZJG C
+	                WHERE A.YXBZ = 'Y'
+	                AND B.YXBZ = 'Y'
+	                AND A.SS_JGBM = B.JGBM
+	                AND C.JGBM = #jgbm#
+	                AND C.JBDM LIKE B.JBDM || '%')
+	        WHERE RN = 1) AA,        
+	        (SELECT A.JGBM,A.WS_DM,NULL XMFLMC,0 XMFL_DJXH,A.WSSPMS_DM,B.WS_MC,B.WS_JC,B.SM,B.YWFL_DM,B.YWHJ_DM,B.XMFLBZ
+	          FROM QY_SPWS A, DM_WS B
+	         WHERE A.JGBM = #zgsbm#
+	           AND A.WS_DM = B.WS_DM
+	           AND A.YXBZ = 'Y'
+	           AND B.XMFLBZ = 'N'
+	        UNION ALL
+	        SELECT A.JGBM,A.WS_DM,C.XMFLMC XMFLMC,C.XMFL_DJXH,A.WSSPMS_DM,B.WS_MC,B.WS_JC,B.SM,B.YWFL_DM,B.YWHJ_DM,B.XMFLBZ
+	          FROM QY_SPWS A, DM_WS B,QY_SPWS_XMFL C
+	         WHERE A.JGBM = #zgsbm#
+	           AND A.WS_DM = B.WS_DM
+	           AND A.YXBZ = 'Y'
+	           AND B.XMFLBZ = 'Y'
+	           AND A.JGBM = C.JGBM
+	           AND A.WS_DM = C.WS_DM
+	           AND C.YXBZ = 'Y') BB
+	 WHERE BB.WS_DM = AA.WS_DM(+)
+	   AND BB.XMFL_DJXH = AA.XMFL_DJXH(+)
+		  <dynamic> 
+			<isNotEmpty property="wsDm" prepend="and">
+				BB.WS_DM =#wsDm#
+			</isNotEmpty>
+			<isNotEmpty property="xmflDjxh" prepend="and">
+				BB.XMFL_DJXH =#xmflDjxh#
+			</isNotEmpty>
+		  </dynamic>
+		  $orderStr$
+    </select>
+    
+    <select id="selectQySpwsSplcszAll" parameterClass="java.util.Map"
+		resultClass="com.cy.dzgl.domain.QySpwsSplcszDomain">
+		SELECT BB.WS_DM AS wsDm,BB.WS_MC AS wsMc,BB.WS_JC AS wsJc,BB.XMFL_DJXH AS xmflDjxh,BB.XMFLMC AS xmflmc,
+	       BB.WSSPMS_DM AS wsspmsDm,(SELECT WSSPMS_MC FROM DM_WSSPMS DM WHERE DM.WSSPMS_DM = BB.WSSPMS_DM) wsspmsMc,
+	       BB.SM AS sm,
+	       BB.YWFL_DM,(SELECT YWFL_MC FROM DM_YWFL DM WHERE DM.YWFL_DM = BB.YWFL_DM) ywflMc,
+	       BB.YWHJ_DM,(SELECT YWHJ_MC FROM DM_YWHJ DM WHERE DM.YWHJ_DM = BB.YWHJ_DM) ywhjMc,
+	       BB.XMFLBZ AS xmflbz,
+	       AA.SPLC_SZXH AS splcSzxh,AA.SPLC AS splc,AA.ZSSX AS zssx,AA.GZRBZ AS gzrbz,AA.QZXSBZ AS qzxsbz,
+	       AA.SS_JGBM AS ssJgbm,
+	       (SELECT (CASE WHEN DM.JGLB_DM = '4' THEN DM.JC ELSE NULL END) FROM QY_ZZJG DM WHERE DM.JGBM = AA.SS_JGBM) ssJgmc,
+	       (SELECT (CASE WHEN DM.JGLB_DM = '4' THEN (SELECT JG.JC FROM QY_ZZJG JG WHERE JG.JGBM = DM.SJ_JGBM) ELSE DM.JC END) FROM QY_ZZJG DM WHERE DM.JGBM = AA.SS_JGBM) dwMc,
+	       AA.CJR_CZY_DJXH,(SELECT MC FROM QY_RYDJ DM WHERE DM.CZY_DJXH = AA.CJR_CZY_DJXH) cjrMc,
+	       AA.CJRQ AS cjrq,
+	       AA.XGR_CZY_DJXH,(SELECT MC FROM QY_RYDJ DM WHERE DM.CZY_DJXH = AA.XGR_CZY_DJXH) xgrMc,
+	       AA.XGRQ AS xgrq
+	  FROM (SELECT SPLC_SZXH,SS_JGBM,JBDM,WS_DM,XMFL_DJXH,SPLC,ZSSX,GZRBZ,QZXSBZ,CJR_CZY_DJXH,CJRQ,XGR_CZY_DJXH,XGRQ
+	          FROM (SELECT A.SPLC_SZXH,A.SS_JGBM,B.JBDM,A.WS_DM,NVL(A.XMFL_DJXH,0) XMFL_DJXH,A.SPLC,A.ZSSX,A.GZRBZ,A.QZXSBZ,
+	                       A.CJR_CZY_DJXH,A.CJRQ,A.XGR_CZY_DJXH,A.XGRQ,
+	                       ROW_NUMBER() OVER(PARTITION BY A.WS_DM,A.XMFL_DJXH ORDER BY B.JBDM DESC) RN
+	                FROM QY_SPWS_SPLCSZ A,QY_ZZJG B,QY_ZZJG C
+	                WHERE A.YXBZ = 'Y'
+	                AND B.YXBZ = 'Y'
+	                AND A.SS_JGBM = B.JGBM
+	                AND C.JGBM = #jgbm#
+	                AND C.JBDM LIKE B.JBDM || '%')
+	        WHERE RN = 1) AA,        
+	        (SELECT A.JGBM,A.WS_DM,NULL XMFLMC,0 XMFL_DJXH,A.WSSPMS_DM,B.WS_MC,B.WS_JC,B.SM,B.YWFL_DM,B.YWHJ_DM,B.XMFLBZ
+	          FROM QY_SPWS A, DM_WS B
+	         WHERE A.JGBM = #zgsbm#
+	           AND A.WS_DM = B.WS_DM
+	           AND A.YXBZ = 'Y'
+	           AND B.XMFLBZ = 'N'
+	        UNION ALL
+	        SELECT A.JGBM,A.WS_DM,C.XMFLMC XMFLMC,C.XMFL_DJXH,A.WSSPMS_DM,B.WS_MC,B.WS_JC,B.SM,B.YWFL_DM,B.YWHJ_DM,B.XMFLBZ
+	          FROM QY_SPWS A, DM_WS B,QY_SPWS_XMFL C
+	         WHERE A.JGBM = #zgsbm#
+	           AND A.WS_DM = B.WS_DM
+	           AND A.YXBZ = 'Y'
+	           AND B.XMFLBZ = 'Y'
+	           AND A.JGBM = C.JGBM
+	           AND A.WS_DM = C.WS_DM
+	           AND C.YXBZ = 'Y') BB
+	 WHERE BB.WS_DM = AA.WS_DM(+)
+	   AND BB.XMFL_DJXH = AA.XMFL_DJXH(+)
+		  <dynamic> 
+			<isNotEmpty property="wsDm" prepend="and">
+				BB.WS_DM =#wsDm#
+			</isNotEmpty>
+			<isNotEmpty property="xmflDjxh" prepend="and">
+				BB.XMFL_DJXH =#xmflDjxh#
+			</isNotEmpty>
+		  </dynamic>
+		  ORDER by AA.SPLC_SZXH ASC
+    </select>
+
+	<select id="getQySpwsSplcszRowCount" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		SELECT count(AA.SPLC_SZXH) 
+		  FROM (SELECT SPLC_SZXH,SS_JGBM,JBDM,WS_DM,XMFL_DJXH,SPLC,ZSSX,GZRBZ,QZXSBZ,CJR_CZY_DJXH,CJRQ,XGR_CZY_DJXH,XGRQ
+		          FROM (SELECT A.SPLC_SZXH,A.SS_JGBM,B.JBDM,A.WS_DM,NVL(A.XMFL_DJXH,0) XMFL_DJXH,A.SPLC,A.ZSSX,A.GZRBZ,A.QZXSBZ,
+		                       A.CJR_CZY_DJXH,A.CJRQ,A.XGR_CZY_DJXH,A.XGRQ,
+		                       ROW_NUMBER() OVER(PARTITION BY A.WS_DM,A.XMFL_DJXH ORDER BY B.JBDM DESC) RN
+		                FROM QY_SPWS_SPLCSZ A,QY_ZZJG B,QY_ZZJG C
+		                WHERE A.YXBZ = 'Y'
+		                AND B.YXBZ = 'Y'
+		                AND A.SS_JGBM = B.JGBM
+		                AND C.JGBM = #jgbm#
+		                AND C.JBDM LIKE B.JBDM || '%')
+		        WHERE RN = 1) AA,        
+		        (SELECT A.JGBM,A.WS_DM,NULL XMFLMC,0 XMFL_DJXH,A.WSSPMS_DM,B.WS_MC,B.WS_JC,B.SM,B.YWFL_DM,B.YWHJ_DM,B.XMFLBZ
+		          FROM QY_SPWS A, DM_WS B
+		         WHERE A.JGBM = #zgsbm#
+		           AND A.WS_DM = B.WS_DM
+		           AND A.YXBZ = 'Y'
+		           AND B.XMFLBZ = 'N'
+		        UNION ALL
+		        SELECT A.JGBM,A.WS_DM,C.XMFLMC XMFLMC,C.XMFL_DJXH,A.WSSPMS_DM,B.WS_MC,B.WS_JC,B.SM,B.YWFL_DM,B.YWHJ_DM,B.XMFLBZ
+		          FROM QY_SPWS A, DM_WS B,QY_SPWS_XMFL C
+		         WHERE A.JGBM = #zgsbm#
+		           AND A.WS_DM = B.WS_DM
+		           AND A.YXBZ = 'Y'
+		           AND B.XMFLBZ = 'Y'
+		           AND A.JGBM = C.JGBM
+		           AND A.WS_DM = C.WS_DM
+		           AND C.YXBZ = 'Y') BB
+		 WHERE BB.WS_DM = AA.WS_DM(+)
+		   AND BB.XMFL_DJXH = AA.XMFL_DJXH(+)
+		  <dynamic> 
+			<isNotEmpty property="wsDm" prepend="and">
+				BB.WS_DM =#wsDm#
+			</isNotEmpty>
+			<isNotEmpty property="xmflDjxh" prepend="and">
+				BB.XMFL_DJXH =#xmflDjxh#
+			</isNotEmpty>
+		  </dynamic>
+    </select>
+    
+    <select id="querySplcszZbList" parameterClass="java.util.Map"
+    	resultClass="com.cy.dzgl.domain.QySpwsSplcszZbDomain">
+    	SELECT A.SPLC_SZXH AS splcSzxh,
+		       A.JDXH AS jdxh,
+		       A.SPJDSM AS spjdsm,
+		       A.SPJGJB_DM AS spjgjbDm,(SELECT DM.SPJGJB_MC FROM DM_SPJGJB DM WHERE DM.SPJGJB_DM=A.SPJGJB_DM)spjgjbMc,
+		       (SELECT JG.SJ_JGBM FROM QY_ZZJG JG WHERE JG.JGBM = A.SP_JGBM) AS dwDm,
+		       (SELECT JG.JC FROM QY_ZZJG JG WHERE JG.JGBM = (SELECT DM.SJ_JGBM FROM QY_ZZJG DM WHERE DM.JGBM = A.SP_JGBM)) AS dwMc,
+		       A.SP_JGBM AS spJgbm,
+		       (SELECT JG.JC FROM QY_ZZJG JG WHERE JG.JGBM = A.SP_JGBM) AS spJgmc,
+		       A.GW_DJXH AS gwDjxh,
+		       (SELECT GW.GW_MC FROM QY_GW GW WHERE GW.GW_DJXH = A.GW_DJXH) AS gwMc,
+		       A.SPHJSM AS sphjsm,
+		       A.SPYJL AS spyjl,
+		       A.SPQM AS spqm,
+		       A.YXZS_BZ AS yxzsBz,
+		       A.ZSTJ AS zstj,
+		       A.SPSX AS spsx,
+		       A.GZRBZ AS gzrbz,
+		       A.QZXS AS qzxs,
+		       A.CJR_CZY_DJXH,(SELECT MC FROM QY_RYDJ DM WHERE DM.CZY_DJXH = A.CJR_CZY_DJXH) cjrMc,
+		       A.CJRQ AS cjrq,
+		       A.XGR_CZY_DJXH,(SELECT MC FROM QY_RYDJ DM WHERE DM.CZY_DJXH = A.XGR_CZY_DJXH) xgrMc,
+		       A.XGRQ AS xgrq,
+		       A.FSBZ AS fsbz
+		  FROM QY_SPWS_SPLCSZ_ZB A 
+		  WHERE A.YXBZ='Y' 
+		  AND A.SPLC_SZXH = #splcSzxh#
+    </select>
+    
+    <select id="queryQySpwsXmflbzByKey" parameterClass="java.util.Map"
+    	resultClass="java.lang.String">
+    	select SPWS.XMFLBZ from QY_SPWS SPWS
+			WHERE SPWS.YXBZ = 'Y'
+			AND SPWS.JGBM = #jgbm#
+			AND SPWS.WS_DM = #wsDm#
+    </select>
+    <select id="selectWsxx" parameterClass="java.util.Map"
+    	resultClass="com.cy.dzgl.domain.QySpwsSplcszDomain">
+    	SELECT AA.WS_DM AS wsDm,AA.WS_MC AS wsMc,AA.WS_JC AS wsJc,AA.SM AS sm,AA.XMFL_DJXH AS xmflDjxh,AA.XMFLMC AS xmflmc,
+		       AA.WSSPMS_DM AS wsspmsDm,(SELECT WSSPMS_MC FROM DM_WSSPMS DM WHERE DM.WSSPMS_DM = AA.WSSPMS_DM) wsspmsMc,
+		       AA.YWFL_DM,(SELECT YWFL_MC FROM DM_YWFL DM WHERE DM.YWFL_DM = AA.YWFL_DM) ywflMc,
+		       AA.YWHJ_DM,(SELECT YWHJ_MC FROM DM_YWHJ DM WHERE DM.YWHJ_DM = AA.YWHJ_DM) ywhjMc
+		FROM (SELECT A.JGBM,A.WS_DM,NULL XMFLMC,NULL XMFL_DJXH,A.WSSPMS_DM,B.WS_MC,B.WS_JC,B.SM,B.YWFL_DM,B.YWHJ_DM,B.XMFLBZ
+		        FROM QY_SPWS A, DM_WS B
+		       WHERE A.JGBM = #zgsbm#
+		         AND A.WS_DM = B.WS_DM
+		         AND A.YXBZ = 'Y'
+		         AND B.XMFLBZ = 'N'
+		      UNION ALL
+		      SELECT A.JGBM,A.WS_DM,C.XMFLMC XMFLMC,C.XMFL_DJXH,A.WSSPMS_DM,B.WS_MC,B.WS_JC,B.SM,B.YWFL_DM,B.YWHJ_DM,B.XMFLBZ
+		        FROM QY_SPWS A, DM_WS B,QY_SPWS_XMFL C
+		       WHERE A.JGBM = #zgsbm#
+		         AND A.WS_DM = B.WS_DM
+		         AND A.YXBZ = 'Y'
+		         AND B.XMFLBZ = 'Y'
+		         AND A.JGBM = C.JGBM
+		         AND A.WS_DM = C.WS_DM
+		         AND C.YXBZ = 'Y') AA
+		 WHERE 1=1 
+		 <dynamic> 
+			<isNotEmpty property="wsDm" prepend="and">
+				AA.WS_DM = #wsDm#
+			</isNotEmpty>
+			<isNotEmpty property="xmflDjxh" prepend="and">
+				 AA.XMFL_DJXH = #xmflDjxh#
+			</isNotEmpty>
+		  </dynamic>
+    </select>
+    <select id="selectWssplcszByKey" parameterClass="java.util.Map"
+    	resultClass="com.cy.dzgl.domain.QySpwsSplcszDomain">
+    	SELECT A.SS_JGBM AS ssJgbm,
+		       (SELECT (CASE WHEN DM.JGLB_DM = '4' THEN DM.JC ELSE NULL END) FROM QY_ZZJG DM WHERE DM.JGBM = A.SS_JGBM) ssJgmc,
+		       (SELECT (CASE WHEN DM.JGLB_DM = '4' THEN (SELECT JG.JC FROM QY_ZZJG JG WHERE JG.JGBM = DM.SJ_JGBM) ELSE DM.JC END) FROM QY_ZZJG DM WHERE DM.JGBM = A.SS_JGBM) dwMc,
+		       A.ZSSX AS zssx,A.GZRBZ AS gzrbz,A.QZXSBZ AS qzxsbz
+		  FROM QY_SPWS_SPLCSZ A 
+		 WHERE A.SPLC_SZXH = #splcSzxh#
+    </select>
+</sqlMap>

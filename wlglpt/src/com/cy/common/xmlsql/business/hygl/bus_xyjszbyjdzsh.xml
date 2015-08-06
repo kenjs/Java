@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE sqlMap   
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.cy.cygl.dao.BusXyjsZbYjdzShMapper">
+	<parameterMap class="java.util.Map" id="parZbYjdzMap">
+		<parameter property="djxh" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="shbz" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="rqq" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="rqz" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+		<parameter property="dataList" javaType="java.sql.ResultSet" jdbcType="ORACLECURSOR" mode="OUT" resultMap="resZbYjdzMap"/>
+	</parameterMap>
+	
+	<resultMap class="com.cy.hygl.domain.XyjsZbYjdzShDomain" id="resZbYjdzMap">
+			 <result property="xh" column="XH"/>
+			<result property="wsSpxh" column="WS_SPXH"/>
+			<result property="spxh" column="SPXH"/>
+			<result property="jdxh" column="JDXH"/>
+			<result property="fsthbz" column="FSTHBZ"/>
+			<result property="fsrmc" column="FSR_MC"/>
+			<result property="fsrq" column="FSRQ"/>
+			
+			<result property="dzDjxh" column="DZ_DJXH"/>
+			<result property="pcDjxh" column="PC_DJXH"/>
+			<result property="ddDjxh" column="DD_DJXH"/>
+			<result property="xh" column="XH"/>
+			<result property="dzrq" column="DZRQ"/>
+			<result property="dzrmc" column="DZR_MC"/>
+			<result property="zrbmmc" column="zrbm_mc"/>
+			<result property="fbsmc" column="fbs_mc"/>
+			<result property="jgmc" column="jg_mc"/>
+			<result property="jsYj" column="JS_YJ"/>
+			<result property="dzje" column="DZJE"/>
+			<result property="dzcyje" column="DZCYJE"/>
+			<result property="bz" column="BZ"/>
+			<result property="pcdh" column="PCDH"/>
+			<result property="pcrq" column="PCRQ"/>
+			<result property="hwmc" column="HWMC"/>
+	</resultMap>
+	
+	<procedure id="queryListZbYjdzSh" parameterMap="parZbYjdzMap" resultMap="resZbYjdzMap">
+		{call P_HYGL_ZBYJDZSH_CX(?,?,?,?,?)}
+	</procedure>
+    
+
+
+</sqlMap>

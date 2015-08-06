@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+		<!DOCTYPE sqlMap   
+		    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"   
+		    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+		<sqlMap>
+			<typeAlias alias="managerWorkLogInfoDomain" type="com.cy.dctms.common.domain.ManagerWorkLogInfoDomain"/>
+
+			<resultMap class="managerWorkLogInfoDomain" id="workLog_info_domain_result">
+				<result property="id" column="id"/>
+				<result property="name" column="name"/>
+				<result property="tableName" column="table_name"/>
+				<result property="columnId" column="column_id"/>
+				<result property="managerId" column="manager_id"/>
+				<result property="managerName" column="manager_name"/>
+				<result property="managerCode" column="manager_code"/>
+				<result property="content" column="content"/>
+				<result property="createTime" column="create_time"/>
+				<result property="modifyTime" column="modify_time"/>
+				<result property="deleteFlag" column="delete_flag"/>
+			</resultMap>
+			
+			<select id="query_manager_workLog_info_count" parameterClass="java.util.Map" resultClass="Integer">
+				select count(t.id)
+				  from t_manager_working_log_info t ,t_manager_user_info t2
+				  where  t.delete_flag = 0  and t2.delete_flag = 0
+				  and t.manager_id = t2.id
+				   <isNotEmpty prepend="and" property="name">   
+                		t.name like concat('%', #name# ,'%')   
+		         </isNotEmpty>	
+		         <isNotEmpty prepend="and" property="managerId">   
+		                t.manager_id = #managerId#  
+		         </isNotEmpty>	
+		         <isNotEmpty prepend="and" property="managerCode">   
+		                t2.code = #managerCode# 
+		         </isNotEmpty>	
+		         <isNotEmpty prepend="and" property="managerName">   
+		                t2.name like concat('%', #managerName# ,'%')   
+		         </isNotEmpty>	
+		         <isNotEmpty prepend="and" property="columnId">   
+               			 t.column_id = #columnId#
+         		</isNotEmpty>	
+			</select>
+
+			<select id="query_manager_workLog_info_by_page" parameterClass="java.util.Map" resultMap="workLog_info_domain_result">
+				select t.id,
+				       t.name,
+				       t.table_name,
+				       t.column_id,
+				       t.manager_id,
+					   t2.code as manager_code,
+               		   t2.name as manager_name,
+				       t.content,
+				       t.create_time,
+				       t.modify_time,
+				       t.delete_flag
+				  from t_manager_working_log_info t ,t_manager_user_info t2
+				  where  t.delete_flag = 0  and t2.delete_flag = 0
+				  and t.manager_id = t2.id
+				   <isNotEmpty prepend="and" property="name">   
+                		t.name like concat('%', #name# ,'%')   
+		         </isNotEmpty>	
+		         <isNotEmpty prepend="and" property="managerId">   
+		                t.manager_id = #managerId#  
+		         </isNotEmpty>	
+		         <isNotEmpty prepend="and" property="managerCode">   
+		                t2.code = #managerCode# 
+		         </isNotEmpty>	
+		         <isNotEmpty prepend="and" property="managerName">   
+		                t2.name like concat('%', #managerName# ,'%')   
+		         </isNotEmpty>	
+		         <isNotEmpty prepend="and" property="columnId">   
+               			 t.column_id = #columnId#
+         		</isNotEmpty>	
+				  order by t.create_time desc
+				  limit  #start#,#pageSize#
+			</select>
+			
+			<select id="export_manager_workLog_info" parameterClass="java.util.Map" resultMap="workLog_info_domain_result">
+				select t.id,
+				       t.name,
+				       t.table_name,
+				       t.column_id,
+				       t.manager_id,
+					   t2.code as manager_code,
+               		   t2.name as manager_name,
+				       t.content,
+				       t.create_time,
+				       t.modify_time,
+				       t.delete_flag
+				  from t_manager_working_log_info t ,t_manager_user_info t2
+				  where  t.delete_flag = 0  and t2.delete_flag = 0
+				  and t.manager_id = t2.id
+				   <isNotEmpty prepend="and" property="name">   
+                		t.name like concat('%', #name# ,'%')   
+		         </isNotEmpty>	
+		         <isNotEmpty prepend="and" property="managerId">   
+		                t.manager_id = #managerId#  
+		         </isNotEmpty>	
+		         <isNotEmpty prepend="and" property="managerCode">   
+		                t2.code = #managerCode# 
+		         </isNotEmpty>	
+		         <isNotEmpty prepend="and" property="managerName">   
+		                t2.name like concat('%', #managerName# ,'%')   
+		         </isNotEmpty>	
+		         <isNotEmpty prepend="and" property="columnId">   
+               			 t.column_id = #columnId#
+         		</isNotEmpty>	
+				  order by t.create_time desc
+			</select>
+
+			<insert id="add_workLog_info" parameterClass="com.cy.dctms.common.bo.ManagerWorkLogInfo">
+				insert into t_manager_working_log_info (
+					name,
+					table_name,
+					manager_id,
+					column_id,
+					content,
+					create_time,
+					delete_flag
+				) values(
+					#name#,
+					#tableName#,
+					#managerId#,
+					#columnId#,
+					#content#,
+					now(),
+					0
+				)
+
+			</insert>
+
+		</sqlMap>
